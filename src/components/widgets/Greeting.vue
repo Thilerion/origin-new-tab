@@ -1,7 +1,7 @@
 <template>
-	<div>
-		<div>{{time | toTimeString(currentTimeFormat)}}</div>
-		<div>{{timeOfDayMessage}}, {{username}}.</div>
+	<div class="widget-greeting f-shadow-heavy f-align-c cursor-default">
+		<div class="time">{{time | toTimeString(currentTimeFormat)}}</div>
+		<div class="message">{{timeOfDayMessage}}, {{username}}.</div>
 	</div>
 </template>
 
@@ -69,5 +69,11 @@ export default {
 </script>
 
 <style scoped>
+.time {
+	font-size: 5rem;
+}
 
+.message {
+	font-size: 3.5rem;
+}
 </style>

@@ -47,10 +47,6 @@ export default {
 	background-size: no-repeat;
 	transform: scale(1.03);
 	box-shadow: 0 0 20vmax rgba(0,0,0,0.4) inset;
-}
-
-.background-vignette {
-	width: 100%;
-	height: 100%;
+	z-index: -1;
 }
 </style>

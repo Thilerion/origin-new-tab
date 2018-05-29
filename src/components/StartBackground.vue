@@ -1,6 +1,6 @@
 <template>
 <div class="background-image" :style="[backgroundStyle, blurStyle]">
-
+	<div class="background-vignettes"></div>
 </div>
 </template>
 
@@ -31,7 +31,7 @@ export default {
 				}
 			} else {
 				return {
-					'filter': 'contrast(0.9) brightness(0.9)'
+					'filter': 'contrast(0.95) brightness(0.95)'
 				}
 			}		
 		}
@@ -48,5 +48,11 @@ export default {
 	background-position: center;
 	background-size: no-repeat;
 	transform: scale(1.03);
+	box-shadow: 0 0 20vmax rgba(0,0,0,0.4) inset;
+}
+
+.background-vignette {
+	width: 100%;
+	height: 100%;
 }
 </style>

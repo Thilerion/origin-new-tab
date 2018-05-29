@@ -1,13 +1,21 @@
 <template>
-<div class="background-image" :style="[backgroundStyle, blurStyle]"></div>
+<transition name="fade">
+<div class="background-image" :key="loadedWallpaperUrl" :style="[backgroundStyle, blurStyle]" :class="{animate: animate}"></div>
+</transition>
 </template>
 
 <script>
 export default {
+	data() {
+		return {
+			loadedWallpaperUrl: this.wallpaperUrl,
+			animate: false
+		}
+	},
 	computed: {
 		backgroundStyle() {
 			return {
-				'background-image': `url(${this.wallpaperUrl})`
+				'background-image': `url(${this.loadedWallpaperUrl})`
 			}
 		},
 		wallpaperUrl() {
@@ -15,7 +23,7 @@ export default {
 				return this.$store.getters.currentWallpaper.urls.custom;
 			}
 			catch(e) {
-				return this.$store.getters.defaultWallpaper;
+				return;
 			}
 		},
 		blur() {
@@ -33,6 +41,29 @@ export default {
 				}
 			}		
 		}
+	},
+	methods: {
+		loadNewImage(src) {
+			let self = this;
+			let img = new Image();
+			img.onload = function() {
+				self.loadedWallpaperUrl = src;
+				setTimeout(() => {
+					self.animate = true;
+				}, 1000);					
+			}
+			img.src = src;
+		}
+	},
+	beforeMount() {
+		this.loadNewImage(this.wallpaperUrl);
+	},
+	watch: {
+		wallpaperUrl(newVal, oldVal) {
+			if (newVal !== oldVal) {
+				this.loadNewImage(newVal);
+			}
+		}
 	}
 }
 </script>
@@ -48,5 +79,17 @@ export default {
 	transform: scale(1.03);
 	box-shadow: 0 0 20vmax rgba(0,0,0,0.4) inset;
 	z-index: -1;
+}
+
+.animate.fade-enter-active {
+	transition: opacity 0.75s ease-in;
+}
+
+.animate.fade-leave-active {
+	transition: opacity 1s ease-in;
+}
+
+.animate.fade-enter, .animate.fade-leave-to {
+	opacity: 0;
 }
 </style>

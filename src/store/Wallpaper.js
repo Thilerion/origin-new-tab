@@ -20,7 +20,12 @@ const wallpaperStore = {
 	mutations: {
 		enableBlur: state => state.blur = true,
 		disableBlur: state => state.blur = false,
-		setWallpapers: (state, data) => state.wallpapers = [...data, ...state.wallpapers]
+		setWallpapers: (state, data) => state.wallpapers = [...data, ...state.wallpapers],
+		nextWallpaper: state => {
+			const arLength = state.wallpapers.length;
+			const nextId = state.currentWallpaperId + 1;
+			state.currentWallpaperId = nextId % arLength;
+		}
 	},
 
 	actions: {

@@ -20,7 +20,7 @@ class Unsplash {
 		});
 	}
 
-	randomFromCollection(collection = 220388, count = 10) {
+	randomFromCollection(collection = 220388, count = 30) {
 		if (process.env.NODE_ENV === 'production') {
 			return this.http({
 				url: '/photos/random',

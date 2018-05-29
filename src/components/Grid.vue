@@ -11,10 +11,12 @@
 
 <script>
 import StartGreeting from "./widgets/Greeting.vue";
+import StartWallpaperDetails from './widgets/WallpaperDetails.vue';
 
 export default {
 	components: {
-		StartGreeting
+		StartGreeting,
+		StartWallpaperDetails
 	},
 	data() {
 		return {
@@ -24,6 +26,11 @@ export default {
 					component: 'StartGreeting',
 					row: [3, 5],
 					column: [3, 9]
+				},
+				{
+					component: 'StartWallpaperDetails',
+					row: [6, 7],
+					column: [1, 3]
 				}
 			]
 		}

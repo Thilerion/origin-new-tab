@@ -13,12 +13,12 @@ export default new Vuex.Store({
 	},
 
 	state: {
-		locale: 'NL',
+		language: 'NL',
 		username: 'Michael'
 	},
 
 	getters: {
-		locale: state => state.locale,
+		language: state => state.language,
 		username: state => state.username
 	},
 

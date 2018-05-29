@@ -27,13 +27,13 @@ export default {
 			return endOfMinute(this.time);
 		},
 		currentTimeFormat() {
-			return this.$store.getters.currentTimeFormat;
+			return this.$store.getters.timeFormat;
 		},
 		timeOfDay() {
 			return getTimeOfDay(this.time);
 		},
 		timeOfDayMessage() {
-			return this.$store.getters.localizedMessages.timeOfDay[this.timeOfDay];
+			return this.$store.getters.welcomeMessages.timeOfDay[this.timeOfDay];
 		},
 		username() {
 			return this.$store.getters.username;
@@ -63,9 +63,6 @@ export default {
 	filters: {
 		toTimeString(dateObject, formatString) {
 			return formatTime(dateObject, formatString);
-		},
-		toTimeOfDayString(dateObject) {
-
 		}
 	}
 }

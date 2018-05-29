@@ -6,7 +6,7 @@ import Greeting from './Greeting'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
 	modules: {
 		Wallpaper,
 		Greeting
@@ -31,3 +31,7 @@ export default new Vuex.Store({
 	}
 
 })
+
+store.dispatch('getWallpapers');
+
+export default store;

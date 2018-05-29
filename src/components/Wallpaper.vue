@@ -4,11 +4,6 @@
 
 <script>
 export default {
-	props: {
-		source: {
-			type: String
-		}
-	},
 	computed: {
 		backgroundStyle() {
 			return {
@@ -16,7 +11,12 @@ export default {
 			}
 		},
 		wallpaperUrl() {
-			return this.source || this.$store.getters.defaultWallpaper;
+			try {
+				return this.$store.getters.currentWallpaper.urls.custom;
+			}
+			catch(e) {
+				return this.$store.getters.defaultWallpaper;
+			}
 		},
 		blur() {
 			return this.$store.getters.isBlurred;

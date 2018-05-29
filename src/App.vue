@@ -1,19 +1,19 @@
 <template>
 	<div id="app">
 		<StartWallpaper/>
-		<StartGreeting/>
+		<StartGrid/>
 	</div>
 </template>
 
 <script>
 import StartWallpaper from "./components/Wallpaper.vue";
-import StartGreeting from "./components/greeting/Greeting.vue";
+import StartGrid from './components/Grid.vue'
 
 export default {
 	name: "app",
 	components: {
 		StartWallpaper,
-		StartGreeting
+		StartGrid
 	}
 };
 </script>

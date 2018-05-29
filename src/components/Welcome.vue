@@ -1,7 +1,6 @@
 <template>
 	<div>
-		<div>{{time | toTimeString}}</div>
-		<div>{{msUntilMinute}}</div>
+		<div>{{time | toTimeString(currentTimeFormat)}}</div>
 	</div>
 </template>
 
@@ -23,6 +22,9 @@ export default {
 		},
 		minuteEndsAt() {
 			return endOfMinute(this.time);
+		},
+		currentTimeFormat() {
+			return this.$store.getters.currentTimeFormat;
 		}
 	},
 	methods: {
@@ -47,8 +49,8 @@ export default {
 		this.timeout = null;
 	},
 	filters: {
-		toTimeString(dateObject) {
-			return formatTime(dateObject, 'HH:mm:ss');
+		toTimeString(dateObject, formatString) {
+			return formatTime(dateObject, formatString);
 		}
 	}
 }

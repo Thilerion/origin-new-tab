@@ -10,7 +10,7 @@ import formatTime from 'date-fns/format';
 import endOfMinute from 'date-fns/end_of_minute';
 import diffInMs from 'date-fns/difference_in_milliseconds';
 
-import getTimeOfDay from '../utils/timeOfDay';
+import getTimeOfDay from '@/utils/timeOfDay';
 
 const TIMEOUT_MARGIN = 20; //ms
 
@@ -33,7 +33,7 @@ export default {
 			return getTimeOfDay(this.time);
 		},
 		timeOfDayMessage() {
-			return this.$store.getters.welcomeMessages.timeOfDay[this.timeOfDay];
+			return this.$store.getters.greetingMessages.timeOfDay[this.timeOfDay];
 		},
 		username() {
 			return this.$store.getters.username;

@@ -1,19 +1,19 @@
 <template>
 	<div id="app">
 		<StartWallpaper/>
-		<StartWelcome/>
+		<StartGreeting/>
 	</div>
 </template>
 
 <script>
 import StartWallpaper from "./components/Wallpaper.vue";
-import StartWelcome from "./components/Welcome.vue";
+import StartGreeting from "./components/greeting/Greeting.vue";
 
 export default {
 	name: "app",
 	components: {
 		StartWallpaper,
-		StartWelcome
+		StartGreeting
 	}
 };
 </script>

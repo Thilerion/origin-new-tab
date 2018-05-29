@@ -70,7 +70,7 @@ export default {
 
 <style scoped>
 .time {
-	font-size: 5rem;
+	font-size: 8rem;
 }
 
 .message {

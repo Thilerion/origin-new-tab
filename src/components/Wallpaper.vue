@@ -32,12 +32,12 @@ export default {
 		blurStyle() {
 			if (this.blur) {
 				return {
-					'filter': 'contrast(0.9) brightness(0.9) blur(20px)',
+					'filter': 'contrast(0.9) brightness(0.90) blur(20px)',
 					'transform': 'scale(1.1)'
 				}
 			} else {
 				return {
-					'filter': 'contrast(0.95) brightness(0.95)'
+					'filter': 'contrast(0.92) brightness(0.85)'
 				}
 			}		
 		}

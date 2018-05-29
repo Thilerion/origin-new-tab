@@ -30,7 +30,7 @@ export default {
 				{
 					component: 'StartWallpaperDetails',
 					row: [6, 7],
-					column: [1, 3]
+					column: [1, 4]
 				}
 			]
 		}

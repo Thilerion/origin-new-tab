@@ -10,5 +10,24 @@ export default new Vuex.Store({
 	modules: {
 		Wallpaper,
 		Welcome
+	},
+
+	state: {
+		locale: 'NL',
+		username: 'Michael'
+	},
+
+	getters: {
+		locale: state => state.locale,
+		username: state => state.username
+	},
+
+	mutations: {
+
+	},
+
+	actions: {
+
 	}
+
 })

@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<div>{{time | toTimeString(currentTimeFormat)}}</div>
+		<div>{{timeOfDayMessage}}, {{username}}.</div>
 	</div>
 </template>
 
@@ -8,6 +9,8 @@
 import formatTime from 'date-fns/format';
 import endOfMinute from 'date-fns/end_of_minute';
 import diffInMs from 'date-fns/difference_in_milliseconds';
+
+import getTimeOfDay from '../utils/timeOfDay';
 
 const TIMEOUT_MARGIN = 20; //ms
 
@@ -25,6 +28,15 @@ export default {
 		},
 		currentTimeFormat() {
 			return this.$store.getters.currentTimeFormat;
+		},
+		timeOfDay() {
+			return getTimeOfDay(this.time);
+		},
+		timeOfDayMessage() {
+			return this.$store.getters.localizedMessages.timeOfDay[this.timeOfDay];
+		},
+		username() {
+			return this.$store.getters.username;
 		}
 	},
 	methods: {
@@ -51,6 +63,9 @@ export default {
 	filters: {
 		toTimeString(dateObject, formatString) {
 			return formatTime(dateObject, formatString);
+		},
+		toTimeOfDayString(dateObject) {
+
 		}
 	}
 }

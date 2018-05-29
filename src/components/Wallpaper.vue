@@ -1,7 +1,5 @@
 <template>
-<div class="background-image" :style="[backgroundStyle, blurStyle]">
-	<div class="background-vignettes"></div>
-</div>
+<div class="background-image" :style="[backgroundStyle, blurStyle]"></div>
 </template>
 
 <script>
@@ -14,11 +12,11 @@ export default {
 	computed: {
 		backgroundStyle() {
 			return {
-				'background-image': `url(${this.backgroundUrl})`
+				'background-image': `url(${this.wallpaperUrl})`
 			}
 		},
-		backgroundUrl() {
-			return this.source || this.$store.getters.defaultBackground;
+		wallpaperUrl() {
+			return this.source || this.$store.getters.defaultWallpaper;
 		},
 		blur() {
 			return this.$store.getters.isBlurred;

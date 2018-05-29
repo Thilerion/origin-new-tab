@@ -1,16 +1,16 @@
 <template>
 	<div id="app">
-		<StartBackground/>
+		<StartWallpaper/>
 	</div>
 </template>
 
 <script>
-import StartBackground from "./components/StartBackground.vue";
+import StartWallpaper from "./components/Wallpaper.vue";
 
 export default {
 	name: "app",
 	components: {
-		StartBackground
+		StartWallpaper
 	}
 };
 </script>

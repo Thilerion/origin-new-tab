@@ -1,12 +1,12 @@
-const backgroundStore = {
+const wallpaperStore = {
 
 	state: {
-		defaultBackground: require('@/assets/wallpaper/default_wallpaper.jpg'),
+		defaultWallpaper: require('@/assets/wallpaper/default_wallpaper.jpg'),
 		blur: false
 	},
 
 	getters: {
-		defaultBackground: state => state.defaultBackground,
+		defaultWallpaper: state => state.defaultWallpaper,
 		isBlurred: state => state.blur
 	},
 
@@ -21,4 +21,4 @@ const backgroundStore = {
 
 }
 
-export default backgroundStore;
+export default wallpaperStore;

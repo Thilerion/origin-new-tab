@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import Background from './Background'
+import Wallpaper from './Wallpaper'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
 	modules: {
-		Background
+		Wallpaper
 	}
 })

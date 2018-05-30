@@ -12,11 +12,13 @@
 <script>
 import StartGreeting from "./widgets/Greeting.vue";
 import StartWallpaperDetails from './widgets/WallpaperDetails.vue';
+import StartQuote from './widgets/Quote.vue';
 
 export default {
 	components: {
 		StartGreeting,
-		StartWallpaperDetails
+		StartWallpaperDetails,
+		StartQuote
 	},
 	data() {
 		return {
@@ -24,13 +26,18 @@ export default {
 			[
 				{
 					component: 'StartGreeting',
-					row: [3, 5],
-					column: [3, 9]
+					row: [7, 13],
+					column: [1, 13]
 				},
 				{
 					component: 'StartWallpaperDetails',
-					row: [6, 7],
-					column: [1, 4]
+					row: [19, 21],
+					column: [1, 5]
+				},
+				{
+					component: 'StartQuote',
+					row: [2, 4],
+					column: [3, 9]
 				}
 			]
 		}
@@ -56,8 +63,8 @@ export default {
 <style>
 .grid {
 	display: grid;
-	grid-template-columns: repeat(10, minmax(100px, 1fr));
-	grid-template-rows: repeat(6, minmax(100px, 1fr));
+	grid-template-columns: repeat(10, 1fr);
+	grid-template-rows: repeat(20, 1fr);
 	height: 100vh;
 	width: 100vw;
 	overflow: hidden;

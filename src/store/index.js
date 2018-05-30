@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 
 import Wallpaper from './Wallpaper'
 import Greeting from './Greeting'
+import Quote from './Quote'
+
 import { initWatchers, loadFromStorage } from './api';
 
 Vue.use(Vuex)
@@ -12,7 +14,8 @@ const store = new Vuex.Store({
 
 	modules: {
 		Wallpaper,
-		Greeting
+		Greeting,
+		Quote
 	},
 
 	state: {
@@ -43,6 +46,10 @@ const store = new Vuex.Store({
 			let userData = loadFromStorage('user');
 			if (userData) dispatch('userSet', userData);
 			else dispatch('userLoadFailed');
+
+			let quoteData = loadFromStorage('quote');
+			if (quoteData) dispatch('quoteSet', quoteData);
+			else dispatch('quoteLoadFailed');
 		},
 		userSet({ commit }, userData) {
 			commit('setUsername', userData.username);

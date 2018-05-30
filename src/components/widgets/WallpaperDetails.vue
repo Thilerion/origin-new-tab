@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-wallpaper-details f-shadow-heavy" v-if="wallpaperInitialized">
+	<div class="widget-wallpaper-details f-shadow-medium" v-if="wallpaperInitialized">
 		<div class="row-bottom">
 			<div class="buttons" v-if="!usingDefaultWallpaper">
 				<button class="load-btn" @click="nextWallpaper">
@@ -87,10 +87,9 @@ export default {
 
 <style scoped>
 .widget-wallpaper-details {
-	width: 100%;
-	min-height: 6rem;
-	align-self: end;
-	justify-self: stretch;
+	min-width: 70%;
+	align-self: stretch;
+	justify-self: start;
 	opacity: 0.5;
 	font-size: 0.875rem;
 	display: inline-flex;

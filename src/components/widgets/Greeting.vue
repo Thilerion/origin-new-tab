@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-greeting f-shadow-heavy f-align-c cursor-default">
+	<div class="widget-greeting f-shadow-medium f-align-c cursor-default">
 		<div class="time">{{time | toTimeString(currentTimeFormat)}}</div>
 		
 		<div

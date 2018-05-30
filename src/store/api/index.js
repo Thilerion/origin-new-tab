@@ -14,6 +14,11 @@ const initWatchers = (store) => {
 	store.watch((state, getters) => getters.userWatch, (newValue, oldValue) => {
 		console.log("WATCHER: ", newValue);
 		saveToStorage('user', newValue);
+	}, { deep: true });
+	
+	store.watch((state, getters) => getters.quoteWatch, (newValue, oldValue) => {
+		console.log("WATCHER: ", newValue);
+		saveToStorage('quote', newValue);
 	}, {deep: true});
 }
 

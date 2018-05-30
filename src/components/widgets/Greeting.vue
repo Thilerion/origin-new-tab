@@ -1,7 +1,10 @@
 <template>
 	<div class="widget-greeting f-shadow-heavy f-align-c cursor-default">
 		<div class="time">{{time | toTimeString(currentTimeFormat)}}</div>
-		<div class="message">{{timeOfDayMessage}}, {{username}}.</div>
+		
+		<div
+			class="message"
+		>{{timeOfDayMessage}}, {{username}}.</div>
 	</div>
 </template>
 
@@ -75,5 +78,21 @@ export default {
 
 .message {
 	font-size: 3.5rem;
+	position: relative;
+	user-select: none;
+}
+
+.message > span {
+	font-size: inherit;
+}
+
+.input-wrapper {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	font-size: inherit;
+	overflow: hidden;
 }
 </style>

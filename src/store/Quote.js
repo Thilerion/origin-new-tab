@@ -14,7 +14,7 @@ const quoteStore = {
 
 	getters: {
 		quoteWatch: state => state.quoteData,
-		quoteLoaded: state => state.quoteData.randomQuote.length === 2
+		quoteLoaded: state => (state.quoteData.randomQuote.quote && state.quoteData.randomQuote.author)
 	},
 
 	mutations: {

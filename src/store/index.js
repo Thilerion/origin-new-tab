@@ -17,8 +17,8 @@ const store = new Vuex.Store({
 
 	state: {
 		user: {
-			language: 'NL',
-			username: 'Michael'
+			language: '',
+			username: ''
 		}		
 	},
 

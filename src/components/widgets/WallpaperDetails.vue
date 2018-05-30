@@ -26,28 +26,13 @@ export default {
 			return this.$store.getters.currentWallpaper;
 		},
 		location() {
-			try {
-				return this.currentWallpaper.location.title;
-			}
-			catch(e) {
-				return "";
-			}
+			return this.currentWallpaper.location;
 		},
 		takenBy() {
-			try {
-				return this.currentWallpaper.user.name;
-			}
-			catch(e) {
-				return "";
-			}
+			return this.currentWallpaper.user;
 		},
 		userLink() {
-			try {
-				return `${this.currentWallpaper.user.links.html}?utm_source=23899&utm_medium=referral`;
-			}
-			catch(e) {
-				return "";
-			}
+			return `${this.currentWallpaper.urlUser}?utm_source=23899&utm_medium=referral`;
 		}
 	},
 	methods: {

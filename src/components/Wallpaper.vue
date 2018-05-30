@@ -24,7 +24,7 @@ export default {
 			} else if (this.$store.getters.failedLoadingWallpaper === null) {
 				return;
 			} else {
-				return this.$store.getters.currentWallpaper.urls.custom;
+				return this.$store.getters.currentWallpaper.url;
 			}
 		},
 		blur() {

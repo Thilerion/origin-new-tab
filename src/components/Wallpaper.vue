@@ -1,66 +1,59 @@
 <template>
-<transition name="fade">
-<div class="background-image" :key="loadedWallpaperUrl" :style="[backgroundStyle, blurStyle]" :class="{animate: animate}"></div>
-</transition>
+	<transition name="fade">
+		<div
+			v-if="wallpaperInitialized"
+			class="background-image"
+			:key="wallpaperSource"
+			:style="[backgroundStyle]"
+			:class="{animate: animate}"
+		></div>
+	</transition>
 </template>
 
 <script>
 export default {
 	data() {
 		return {
-			loadedWallpaperUrl: this.wallpaperUrl,
-			animate: false
+			animate: false,
+			loadedImageSource: null
 		}
 	},
 	computed: {
 		backgroundStyle() {
-			return {
-				'background-image': `url(${this.loadedWallpaperUrl})`
-			}
+			if (!this.loadedImageSource) return;
+			return {'background-image': `url(${this.loadedImageSource})`};
 		},
-		wallpaperUrl() {
-			if (this.$store.getters.failedLoadingWallpaper === true) {
-				return this.$store.getters.defaultWallpaper;
-			} else if (this.$store.getters.failedLoadingWallpaper === null) {
-				return;
-			} else {
-				return this.$store.getters.currentWallpaper.url;
-			}
+		wallpaperSource() {
+			let cur = this.$store.getters.currentWallpaper;
+			if (!cur || !cur.url) return "";
+
+			return cur.url;
 		},
-		blur() {
-			return this.$store.getters.isBlurred;
-		},
-		blurStyle() {
-			if (this.blur) {
-				return {
-					'filter': 'contrast(0.9) brightness(0.90) blur(20px)',
-					'transform': 'scale(1.1)'
-				}
-			} else {
-				return {
-					'filter': 'contrast(0.92) brightness(0.85)'
-				}
-			}		
+		wallpaperInitialized() {
+			return this.$store.getters.wallpaperInitialized;
 		}
 	},
 	methods: {
 		loadNewImage(src) {
-			let self = this;
-			let img = new Image();
-			img.onload = function() {
-				self.loadedWallpaperUrl = src;
-				setTimeout(() => {
-					self.animate = true;
-				}, 1000);					
+			this.isLoaded = false;
+			const image = new Image();
+
+			image.onload = () => {
+				this.loadedImageSource = src;
+				if (!this.animate) {
+					setTimeout(() => {
+						this.animate = true;
+					}, 1000);
+				}
 			}
-			img.src = src;
+			image.src = src;
 		}
 	},
 	beforeMount() {
 		this.loadNewImage(this.wallpaperUrl);
 	},
 	watch: {
-		wallpaperUrl(newVal, oldVal) {
+		wallpaperSource(newVal, oldVal) {
 			if (newVal !== oldVal) {
 				this.loadNewImage(newVal);
 			}
@@ -80,6 +73,7 @@ export default {
 	transform: scale(1.03);
 	box-shadow: 0 0 20vmax rgba(0,0,0,0.4) inset;
 	z-index: -1;
+	filter: contrast(0.92) brightness(0.85);
 }
 
 .animate.fade-enter-active {

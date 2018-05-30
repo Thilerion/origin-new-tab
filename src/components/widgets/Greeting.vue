@@ -5,7 +5,7 @@
 		<div
 			class="message"
 			@dblclick="editUsername"
-		>{{timeOfDayMessage}}, <span class="username" v-if="!isEditingUsername">{{username}}</span><input class="username-input" v-else v-model="usernameInput" @keyup.enter="saveUsername"><span class="input-help">Druk op [enter] om op te slaan</span>.</div>
+		>{{timeOfDayMessage}}, <span class="username" v-if="!isEditingUsername">{{username}}</span><input class="username-input" v-else v-focus v-model="usernameInput" @keyup.enter="saveUsername"><span class="input-help">Druk op [enter] om op te slaan</span>.</div>
 	</div>
 </template>
 

@@ -4,6 +4,12 @@ import store from './store/'
 
 import './assets/style/base.css';
 
+Vue.directive('focus', {
+	inserted(el) {
+		el.focus();
+	}
+})
+
 Vue.config.productionTip = false
 
 new Vue({

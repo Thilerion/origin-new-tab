@@ -58,7 +58,8 @@ export default {
 	},
 	methods: {
 		nextWallpaper() {
-			this.$store.commit('nextWallpaper');
+			if (this.usingDefaultWallpaper) this.$store.commit('nextWallpaper');
+			else this.retryLoadWallpapers();
 		},
 		retryLoadWallpapers() {
 			this.$store.dispatch('getWallpapersFromCollection');
@@ -112,8 +113,9 @@ export default {
 
 .attribution {
 	font-size: 0.875rem;
+	margin-left: 10px;
 	line-height: 18px;
-	transform: translateX(-18px);
+	transform: translateX(-28px);
 	transition: all .3s ease-out;
 }
 
@@ -126,7 +128,7 @@ export default {
 	min-width: 18px;
 	height: 18px;
 	opacity: 0;
-	transform: translateX(18px);	
+	transform: translateX(5px);	
 	transition: all .3s ease-out;
 }
 

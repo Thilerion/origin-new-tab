@@ -25,9 +25,12 @@ export default {
 		},
 		wallpaperSource() {
 			let cur = this.$store.getters.currentWallpaper;
-			if (!cur || !cur.url) return "";
-
-			return cur.url;
+			try {
+				return cur.url;
+			}
+			catch(e) {
+				return "";
+			}
 		},
 		wallpaperInitialized() {
 			return this.$store.getters.wallpaperInitialized;
@@ -35,6 +38,7 @@ export default {
 	},
 	methods: {
 		loadNewImage(src) {
+			console.log("Loading new image source", src);
 			this.isLoaded = false;
 			const image = new Image();
 
@@ -50,11 +54,11 @@ export default {
 		}
 	},
 	beforeMount() {
-		this.loadNewImage(this.wallpaperUrl);
+		this.loadNewImage(this.wallpaperSource);
 	},
 	watch: {
 		wallpaperSource(newVal, oldVal) {
-			if (newVal !== oldVal) {
+			if (newVal) {				
 				this.loadNewImage(newVal);
 			}
 		}

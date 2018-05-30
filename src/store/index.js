@@ -13,25 +13,32 @@ const store = new Vuex.Store({
 	},
 
 	state: {
-		language: 'NL',
-		username: 'Michael'
+		user: {
+			language: 'NL',
+			username: 'Michael'
+		}		
 	},
 
 	getters: {
-		language: state => state.language,
-		username: state => state.username
+		language: state => state.user.language,
+		username: state => state.user.username
 	},
 
 	mutations: {
-
+		setUser: (state, userData) => state.user = {...state.user, ...userData}
 	},
 
 	actions: {
+		initializeFromStorage({ commit, dispatch }) {
+			const user = localStorage.getItem('sp_user');
+			if (user) commit('setUser', JSON.parse(user));
 
+			dispatch('getWallpapersFromStorage');
+		}
 	}
 
 })
 
-store.dispatch('getWallpapersFromCollection');
+store.dispatch('initializeFromStorage');
 
 export default store;

@@ -33,23 +33,31 @@ const wallpaperStore = {
 	},
 
 	mutations: {
-		setWallpapers: (state, data) => state.wallpapers = data,
+		setWallpapers: (state, data) => {
+			state.wallpapers = data
+		},
 		nextWallpaper: state => {
 			const arLength = state.wallpapers.length;
 			const nextId = state.currentWallpaperId + 1;
 			state.currentWallpaperId = nextId % arLength;
 		},
-		setWallpaperLoadSuccess: (state, status) => state.wallpaperLoadSuccess = !!status
+		setWallpaperLoadSuccess: (state, status) => state.wallpaperLoadSuccess = !!status,
+		setWallpaperData: (state, {wallpapers, collection, currentWallpaperId}) => {
+			state.wallpapers = wallpapers;
+			state.collection = collection;
+			state.currentWallpaperId = currentWallpaperId;
+		}
 	},
 
 	actions: {
-		async getWallpapersFromCollection({ state, commit }) {
+		async getWallpapersFromServer({ state, commit, dispatch }) {
 			try {
 				const collection = state.collection;
 				let res = await axios.get(`http://localhost:3000/wallpapers/${collection}`);
 				
 				if (res.data.success) {
 					commit('setWallpapers', res.data.data);
+					dispatch('saveWallpapersToStorage');
 					commit('setWallpaperLoadSuccess', true);
 				} else {
 					throw new Error('failed loading wallpapers');
@@ -59,6 +67,24 @@ const wallpaperStore = {
 				console.warn(e);
 				commit('setWallpaperLoadSuccess', false);
 			}
+		},
+		getWallpapersFromStorage({ commit, dispatch }) {
+			const wallpapers = localStorage.getItem('sp_wallpapers');
+			if (wallpapers) {				
+				commit('setWallpaperData', JSON.parse(wallpapers));
+				commit('setWallpaperLoadSuccess', true);
+			} else {
+				console.log("Failed to get wallpapers from storage");
+				dispatch('getWallpapersFromServer');
+			}
+		},
+		saveWallpapersToStorage({state}) {
+			const wallpapers = {
+				wallpapers: state.wallpapers,
+				collection: state.collection,
+				currentWallpaperId: state.currentWallpaperId
+			}
+			localStorage.setItem('sp_wallpapers', JSON.stringify(wallpapers));
 		}
 	}
 

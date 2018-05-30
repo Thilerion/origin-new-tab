@@ -58,11 +58,11 @@ export default {
 	},
 	methods: {
 		nextWallpaper() {
-			if (this.usingDefaultWallpaper) this.$store.commit('nextWallpaper');
+			if (!this.usingDefaultWallpaper) this.$store.commit('nextWallpaper');
 			else this.retryLoadWallpapers();
 		},
 		retryLoadWallpapers() {
-			this.$store.dispatch('getWallpapersFromCollection');
+			this.$store.dispatch('getWallpapersFromServer');
 		}
 	}
 }

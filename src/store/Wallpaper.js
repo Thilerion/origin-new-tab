@@ -12,9 +12,11 @@ const wallpaperStore = {
 			urlRaw: require('@/assets/wallpaper/default_wallpaper.jpg')
 		},
 		wallpaperLoadSuccess: null,
-		collection: 220388,
-		wallpapers: [],
-		currentWallpaperId: 0
+		wallpaperData: {
+			wallpapers: [],
+			currentWallpaperId: 0,
+			collection: 220388
+		}
 	},
 
 	getters: {
@@ -26,27 +28,33 @@ const wallpaperStore = {
 			if (loaded === false) {
 				return state.defaultWallpaper;
 			}
-			return state.wallpapers[state.currentWallpaperId];
+			return state.wallpaperData.wallpapers[state.wallpaperData.currentWallpaperId];
+		},
+		wallpaperWatch: state => {
+			return state.wallpaperData;
 		},
 		wallpaperLoadSuccess: state => state.wallpaperLoadSuccess,
 		wallpaperInitialized: state => state.wallpaperLoadSuccess != null
 	},
 
 	mutations: {
-		setWallpapers: (state, data) => {
-			state.wallpapers = data
+		setWallpapers: (state, data) => state.wallpaperData.wallpapers = data,
+		setCurrentWallpaperId(state, id) {
+			if (state.wallpaperData.wallpapers.length - 1 < id < 0) {
+				state.wallpaperData.currentWallpaperId = 0;
+			} else if (!id) {
+				state.wallpaperData.currentWallpaperId = 0;
+			} else {
+				state.wallpaperData.currentWallpaperId = id;
+			}			
 		},
+		setCollection: (state, col) => state.wallpaperData.collection = col,
 		nextWallpaper: state => {
-			const arLength = state.wallpapers.length;
-			const nextId = state.currentWallpaperId + 1;
-			state.currentWallpaperId = nextId % arLength;
+			const arLength = state.wallpaperData.wallpapers.length;
+			const nextId = state.wallpaperData.currentWallpaperId + 1;
+			state.wallpaperData.currentWallpaperId = nextId % arLength;
 		},
-		setWallpaperLoadSuccess: (state, status) => state.wallpaperLoadSuccess = !!status,
-		setWallpaperData: (state, {wallpapers, collection, currentWallpaperId}) => {
-			state.wallpapers = wallpapers;
-			state.collection = collection;
-			state.currentWallpaperId = currentWallpaperId;
-		}
+		setWallpaperLoadSuccess: (state, status) => state.wallpaperLoadSuccess = !!status
 	},
 
 	actions: {
@@ -57,7 +65,6 @@ const wallpaperStore = {
 				
 				if (res.data.success) {
 					commit('setWallpapers', res.data.data);
-					dispatch('saveWallpapersToStorage');
 					commit('setWallpaperLoadSuccess', true);
 				} else {
 					throw new Error('failed loading wallpapers');
@@ -68,23 +75,20 @@ const wallpaperStore = {
 				commit('setWallpaperLoadSuccess', false);
 			}
 		},
-		getWallpapersFromStorage({ commit, dispatch }) {
-			const wallpapers = localStorage.getItem('sp_wallpapers');
-			if (wallpapers) {				
-				commit('setWallpaperData', JSON.parse(wallpapers));
+		wallpaperSet({ commit, dispatch }, {wallpapers, currentWallpaperId, collection}) {
+			console.log("Wallpaper Set");
+			console.log(!!wallpapers, !!currentWallpaperId, !!collection);
+			if (wallpapers && currentWallpaperId && collection) {
+				commit('setWallpapers', wallpapers);
+				commit('setCurrentWallpaperId', currentWallpaperId);
+				commit('setCollection', collection);
 				commit('setWallpaperLoadSuccess', true);
 			} else {
-				console.log("Failed to get wallpapers from storage");
-				dispatch('getWallpapersFromServer');
+				dispatch('wallpaperLoadFailed');
 			}
 		},
-		saveWallpapersToStorage({state}) {
-			const wallpapers = {
-				wallpapers: state.wallpapers,
-				collection: state.collection,
-				currentWallpaperId: state.currentWallpaperId
-			}
-			localStorage.setItem('sp_wallpapers', JSON.stringify(wallpapers));
+		wallpaperLoadFailed({ commit, dispatch }) {
+			dispatch('getWallpapersFromServer');
 		}
 	}
 

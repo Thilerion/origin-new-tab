@@ -22,19 +22,25 @@ const store = new Vuex.Store({
 		user: {
 			language: '',
 			username: ''
-		}		
+		},
+		editingUsername: false
 	},
 
 	getters: {
 		language: state => state.user.language,
 		username: state => state.user.username,
-		userWatch: state => state.user
+		userWatch: state => state.user,
+		isEditingUsername: state => state.editingUsername
 	},
 
 	mutations: {
 		setUser: (state, userData) => state.user = { ...state.user, ...userData },
-		setUsername: (state, username) => state.user.username = username,
-		setLanguage: (state, language) => state.user.language = language
+		setUsername: (state, username) => {
+			state.editingUsername = false;
+			state.user.username = username
+		},
+		setLanguage: (state, language) => state.user.language = language,
+		setEditingUsername: (state, bool) => state.editingUsername = !!bool
 	},
 
 	actions: {
@@ -57,7 +63,8 @@ const store = new Vuex.Store({
 		},
 		userLoadFailed({ commit }) {
 			console.warn("SETTING DEFAULT USER DATA");
-			commit('setUser', { username: "Michael", language: 'NL' });
+			commit('setLanguage', 'NL');
+			commit('setEditingUsername', true);
 		}
 	}
 

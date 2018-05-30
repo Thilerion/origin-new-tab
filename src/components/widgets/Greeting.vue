@@ -4,7 +4,8 @@
 		
 		<div
 			class="message"
-		>{{timeOfDayMessage}}, {{username}}.</div>
+			@dblclick="editUsername"
+		>{{timeOfDayMessage}}, <span class="username" v-if="!isEditingUsername">{{username}}</span><input class="username-input" v-else v-model="usernameInput" @keyup.enter="saveUsername"><span class="input-help">Druk op [enter] om op te slaan</span>.</div>
 	</div>
 </template>
 
@@ -18,10 +19,13 @@ import getTimeOfDay from '@/utils/timeOfDay';
 const TIMEOUT_MARGIN = 20; //ms
 
 export default {
-	data: () => ({
-		time: new Date(),
-		timeout: null
-	}),
+	data() {
+		return {
+			time: new Date(),
+			timeout: null,
+			usernameInput: this.username
+		}		
+	},
 	computed: {
 		msUntilMinute() {
 			return diffInMs(this.minuteEndsAt, this.time);
@@ -40,6 +44,9 @@ export default {
 		},
 		username() {
 			return this.$store.getters.username;
+		},
+		isEditingUsername() {
+			return this.$store.getters.isEditingUsername;
 		}
 	},
 	methods: {
@@ -54,6 +61,13 @@ export default {
 				this.setNewTimeout();
 			}, delay);
 			this.timeout = timeout;
+		},
+		editUsername() {
+			this.usernameInput = this.username;
+			this.$store.commit('setEditingUsername', true);
+		},
+		saveUsername() {
+			this.$store.commit('setUsername', this.usernameInput);
 		}
 	},
 	beforeMount() {
@@ -76,14 +90,14 @@ export default {
 	font-size: 8rem;
 }
 
+.username {
+	font-size: inherit;
+}
+
 .message {
 	font-size: 3.5rem;
 	position: relative;
 	user-select: none;
-}
-
-.message > span {
-	font-size: inherit;
 }
 
 .input-wrapper {
@@ -94,5 +108,30 @@ export default {
 	height: 100%;
 	font-size: inherit;
 	overflow: hidden;
+}
+
+.username-input {
+	padding: 1rem;
+	font-size: 2rem;
+	vertical-align: middle;
+	background: none;
+	border: none;
+	border-bottom: 4px solid white;
+	outline: none;
+	color: inherit;
+	position: relative;
+}
+
+.input-help {
+	font-size: 14px;
+	position: absolute;
+	opacity: 0;
+	right: 0.8rem;
+	bottom: -1.25rem;
+	transition: opacity .2s ease;
+}
+
+.username-input:focus + .input-help {
+	opacity: 1;
 }
 </style>

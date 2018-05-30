@@ -30,7 +30,9 @@ const store = new Vuex.Store({
 		language: state => state.user.language,
 		username: state => state.user.username,
 		userWatch: state => state.user,
-		isEditingUsername: state => state.editingUsername
+		isEditingUsername(state) {
+			return state.editingUsername || !state.user.username;
+		}
 	},
 
 	mutations: {

@@ -63,5 +63,6 @@ export default {
 	overflow: hidden;
 	align-items: center;
 	justify-items: center;
+	padding: .5em;
 }
 </style>

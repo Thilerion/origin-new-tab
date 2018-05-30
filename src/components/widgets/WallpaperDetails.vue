@@ -1,16 +1,16 @@
 <template>
 	<div class="widget-wallpaper-details">
 		<div class="load-success" v-if="!usingDefaultWallpaper">
-			<div class="visible">
+			<div class="hoverable">
+				<button @click="nextWallpaper">Volgende</button>
 				<p>{{location}}</p>
+			</div>
+			<div class="visible">
 				<p><a :href="userLink">{{takenBy}}</a> / <a href="https://unsplash.com/?utm_source=23899&utm_medium=referral">Unsplash</a></p>
 			</div>
-			<div class="hoverable">
-				<button @click="nextWallpaper">Next</button>
-			</div>
 		</div>
-		<div class="load-failed" v-else>
-			<button @click="retryLoadWallpapers">Retry loading wallpapers</button>
+		<div class="load-failed hoverable" v-else>
+			<button @click="retryLoadWallpapers">Laad achtergronden</button>
 		</div>				
 	</div>
 </template>
@@ -65,5 +65,15 @@ export default {
 .widget-wallpaper-details {
 	width: 100%;
 	align-self: end;
+	opacity: 0.5;
+}
+
+.hoverable {
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.widget-wallpaper-details:hover .hoverable {
+	opacity: 1;
 }
 </style>

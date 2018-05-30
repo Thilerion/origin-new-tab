@@ -1,12 +1,17 @@
 <template>
 	<div class="widget-wallpaper-details">
-		<div class="visible">
-			<p>{{location}}</p>
-			<p v-if="!!currentWallpaper"><a :href="userLink">{{takenBy}}</a> / <a href="https://unsplash.com/?utm_source=23899&utm_medium=referral">Unsplash</a></p>
+		<div class="load-success" v-if="!usingDefaultWallpaper">
+			<div class="visible">
+				<p>{{location}}</p>
+				<p><a :href="userLink">{{takenBy}}</a> / <a href="https://unsplash.com/?utm_source=23899&utm_medium=referral">Unsplash</a></p>
+			</div>
+			<div class="hoverable">
+				<button @click="nextWallpaper">Next</button>
+			</div>
 		</div>
-		<div class="hoverable">
-			<button @click="nextWallpaper">Next</button>
-		</div>		
+		<div class="load-failed" v-else>
+			<button @click="retryLoadWallpapers">Retry loading wallpapers</button>
+		</div>				
 	</div>
 </template>
 
@@ -21,21 +26,36 @@ export default {
 			return this.$store.getters.currentWallpaper;
 		},
 		location() {
-			if (this.currentWallpaper && this.currentWallpaper.location) {
+			try {
 				return this.currentWallpaper.location.title;
 			}
-			return "";
+			catch(e) {
+				return "";
+			}
 		},
 		takenBy() {
-			return this.currentWallpaper.user.name;
+			try {
+				return this.currentWallpaper.user.name;
+			}
+			catch(e) {
+				return "";
+			}
 		},
 		userLink() {
-			return `${this.currentWallpaper.user.links.html}?utm_source=23899&utm_medium=referral`;
+			try {
+				return `${this.currentWallpaper.user.links.html}?utm_source=23899&utm_medium=referral`;
+			}
+			catch(e) {
+				return "";
+			}
 		}
 	},
 	methods: {
 		nextWallpaper() {
 			this.$store.commit('nextWallpaper');
+		},
+		retryLoadWallpapers() {
+			this.$store.dispatch('getWallpapersFromCollection');
 		}
 	}
 }

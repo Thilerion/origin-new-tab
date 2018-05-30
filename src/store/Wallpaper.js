@@ -1,5 +1,4 @@
-import Unsplash from './api/wallpaper';
-const unsplash = new Unsplash();
+import { getWallpapersFromCollection } from './api/wallpapers';
 
 const wallpaperStore = {
 
@@ -26,7 +25,7 @@ const wallpaperStore = {
 	mutations: {
 		enableBlur: state => state.blur = true,
 		disableBlur: state => state.blur = false,
-		setWallpapers: (state, data) => state.wallpapers = [...data, ...state.wallpapers],
+		setWallpapers: (state, data) => state.wallpapers = data,
 		nextWallpaper: state => {
 			const arLength = state.wallpapers.length;
 			const nextId = state.currentWallpaperId + 1;
@@ -36,12 +35,15 @@ const wallpaperStore = {
 	},
 
 	actions: {
-		async getWallpapers({commit}) {		
+		async getWallpapersFromCollection({ commit }) {
 			try {
-				let wallpapers = await unsplash.randomFromCollection();
-				console.log(wallpapers);
-				commit('setWallpapers', wallpapers.data);
-				commit('setStatusLoadingWallpaper', false);
+				let wp = await getWallpapersFromCollection();
+				if (wp.data.success) {
+					commit('setWallpapers', wp.data.data);
+					commit('setStatusLoadingWallpaper', false);
+				} else {
+					throw new Error('failed loading wallpapers');
+				}				
 			}
 			catch (e) {
 				console.warn(e);

@@ -19,11 +19,12 @@ export default {
 			}
 		},
 		wallpaperUrl() {
-			try {
-				return this.$store.getters.currentWallpaper.urls.custom;
-			}
-			catch(e) {
+			if (this.$store.getters.failedLoadingWallpaper === true) {
+				return this.$store.getters.defaultWallpaper;
+			} else if (this.$store.getters.failedLoadingWallpaper === null) {
 				return;
+			} else {
+				return this.$store.getters.currentWallpaper.urls.custom;
 			}
 		},
 		blur() {

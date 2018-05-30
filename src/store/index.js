@@ -32,6 +32,6 @@ const store = new Vuex.Store({
 
 })
 
-store.dispatch('getWallpapers');
+store.dispatch('getWallpapersFromCollection');
 
 export default store;

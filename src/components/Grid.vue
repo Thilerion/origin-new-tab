@@ -32,7 +32,7 @@ export default {
 				{
 					component: 'StartWallpaperDetails',
 					row: [19, 21],
-					column: [1, 4]
+					column: [1, 5]
 				},
 				{
 					component: 'StartQuote',

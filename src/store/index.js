@@ -36,6 +36,14 @@ const store = new Vuex.Store({
 			let wallpaperData = loadFromStorage('wallpaper');
 			if (wallpaperData) dispatch('wallpaperSet', wallpaperData);
 			else dispatch('wallpaperLoadFailed');
+
+			let userData = loadFromStorage('user');
+			if (userData) dispatch('userSet', userData);
+			else dispatch('userLoadFailed');
+		},
+		userLoadFailed({ commit }) {
+			console.warn("SETTING DEFAULT USER DATA");
+			commit('setUser', { user: "Michael", language: 'NL' });
 		}
 	}
 

@@ -30,7 +30,7 @@ export default {
 	font-size: 1.25rem;
 	margin-bottom: 0.25em;
 	padding-right: 2em;
-	text-align-last: right;
+	text-align: center;
 	letter-spacing: 0.1px;
 	word-spacing: 0.7px;
 }

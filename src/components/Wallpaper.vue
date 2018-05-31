@@ -34,6 +34,9 @@ export default {
 		},
 		wallpaperInitialized() {
 			return this.$store.getters.wallpaperInitialized;
+		},
+		nextWallpaperUrl() {
+			return this.$store.getters.nextWallpaperUrl;
 		}
 	},
 	methods: {
@@ -49,19 +52,28 @@ export default {
 						this.animate = true;
 					}, 1000);
 				}
-				const preloadImage = new Image();
-				preloadImage.src = this.$store.getters.nextWallpaperUrl;
 			}
 			image.src = src;
+		},
+		preloadImage(src) {
+			let preloadImage = new Image();
+			preloadImage.src = src;
 		}
 	},
 	beforeMount() {
 		this.loadNewImage(this.wallpaperSource);
+		this.preloadImage(this.nextWallpaperUrl);
 	},
 	watch: {
 		wallpaperSource(newVal, oldVal) {
 			if (newVal) {				
 				this.loadNewImage(newVal);
+			}
+		},
+		nextWallpaperUrl(newVal, oldVal) {
+			if (newVal !== oldVal && newVal !== this.wallpaperSource) {
+				console.log(newVal + '\n', oldVal + '\n', this.wallpaperSource + '\n');
+				this.preloadImage(newVal);
 			}
 		}
 	}

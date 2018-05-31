@@ -13,8 +13,7 @@
 import formatTime from 'date-fns/format';
 import endOfMinute from 'date-fns/end_of_minute';
 import diffInMs from 'date-fns/difference_in_milliseconds';
-
-import getTimeOfDay from '@/utils/timeOfDay';
+import getHours from 'date-fns/get_hours';
 
 const TIMEOUT_MARGIN = 20; //ms
 
@@ -37,7 +36,7 @@ export default {
 			return this.$store.getters.timeFormat;
 		},
 		timeOfDay() {
-			return getTimeOfDay(this.time);
+			return this.getTimeOfDay(this.time);
 		},
 		timeOfDayMessage() {
 			return this.$store.getters.greetingMessages.timeOfDay[this.timeOfDay];
@@ -68,6 +67,14 @@ export default {
 		},
 		saveUsername() {
 			this.$store.commit('setUsername', this.usernameInput);
+		},
+		getTimeOfDay(date = new Date()) {
+			// morning: 5 - 12, day: 12 - 18, evening: 18 - 00, night: 00 - 5
+			const hours = getHours(date);
+			if (hours < 5) return 3;
+			if (hours < 12) return 0;
+			if (hours < 18) return 1;
+			return 2;
 		}
 	},
 	beforeMount() {

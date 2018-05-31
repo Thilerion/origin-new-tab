@@ -1,6 +1,6 @@
 <template>
-	<div class="widget-weather f-shadow-medium" v-show="fresh" @click="showExtended = !showExtended">
-		<StartClimacon :icon="currently.icon" class="icon f-shadow-light"></StartClimacon>
+	<div class="widget-weather f-shadow-medium" v-if="fresh" @click="showExtended = !showExtended">
+		<StartClimacon v-if="icon" :icon="icon" class="icon f-shadow-light"></StartClimacon>
 		<p class="temperature">{{currently.temperature | roundNumber}} &deg;</p>
 		<p class="summary">{{currently.summary}}</p>
 		<p class="location">{{addressCity}}</p>
@@ -40,6 +40,9 @@ export default {
 		},
 		addressCity() {
 			return this.$store.getters.addressCity;
+		},
+		icon() {
+			if (this.currently) return this.currently.icon;
 		}
 	},
 	watch: {

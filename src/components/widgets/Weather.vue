@@ -106,7 +106,6 @@ export default {
 }
 
 .extended {
-	background: black;
 	position: absolute;
 	top: 0;
 	left: 0;

@@ -54,7 +54,19 @@ const wallpaperStore = {
 			const nextId = state.wallpaperData.currentWallpaperId + 1;
 			state.wallpaperData.currentWallpaperId = nextId % arLength;
 		},
-		setWallpaperLoadSuccess: (state, status) => state.wallpaperLoadSuccess = !!status
+		setWallpaperLoadSuccess: (state, status) => state.wallpaperLoadSuccess = !!status,
+		disableCurrentWallpaper(state) {
+			if (state.wallpaperData.wallpapers.length < 2) {
+				console.warn("Can't hide if only 1 wallpaper is left.");
+			} else {
+				const index = state.wallpaperData.currentWallpaperId;
+
+				if (state.wallpaperData.wallpapers.length - 1 === index) {
+					state.wallpaperData.currentWallpaperId -= 1;				
+				}				
+				state.wallpaperData.wallpapers.splice(index, 1);
+			}
+		}
 	},
 
 	actions: {

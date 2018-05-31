@@ -2,18 +2,24 @@
 	<div class="widget-wallpaper-details f-shadow-medium" v-if="wallpaperInitialized">
 		<div class="row-bottom">
 			<div class="buttons" v-if="!usingDefaultWallpaper">
-				<button class="load-btn" @click="nextWallpaper">
+				<button class="load-btn" @click="nextWallpaper" alt="Next wallpaper">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 						<path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
 						<path d="M0 0h24v24H0z" fill="none"/>
 					</svg>
 				</button>
-				<a :href="downloadUrl" class="dl-btn" target="_blank">
+				<a :href="downloadUrl" class="dl-btn" target="_blank" alt="Download wallpaper">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 						<path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"/>
 						<path fill="none" d="M0 0h24v24H0z"/>
 					</svg>
 				</a>
+				<button class="hide-btn" @click="hideWallpaper" alt="Hide wallpaper">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+						<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+						<path d="M0 0h24v24H0z" fill="none"/>
+					</svg>
+				</button>
 			</div>
 
 			<p
@@ -80,6 +86,9 @@ export default {
 		},
 		retryLoadWallpapers() {
 			this.$store.dispatch('getWallpapersFromServer');
+		},
+		hideWallpaper() {
+			this.$store.commit('disableCurrentWallpaper');
 		}
 	}
 }
@@ -119,9 +128,9 @@ export default {
 
 .buttons {
 	display: flex;
-	align-items: flex-end;
+	align-items:center;
 	justify-content: space-between;
-	width: 41px;
+	width: calc(18px * 3 + 4px * 2);
 }
 
 .widget-wallpaper-details:hover .buttons {
@@ -135,19 +144,19 @@ export default {
 
 .attribution {
 	font-size: 0.875rem;
-	margin-left: 10px;
+	margin-left: 4px;
 	line-height: 18px;
-	transform: translateX(-51px);
+	transform: translateX(-62px);
 	transition: all .3s ease-out;
 }
 
 .buttons {
 	opacity: 0;
 	transition: all .3s ease-out;
-	transform: translateX(25%);
+	transform: translateX(35%);
 }
 
-.load-btn, .dl-btn {
+.load-btn, .dl-btn, .hide-btn {
 	font-size: 0.75rem;
 	background: none;
 	color: white;
@@ -158,7 +167,7 @@ export default {
 	display: inline-block;
 }
 
-.load-btn > svg, .dl-btn > svg {
+.load-btn > svg, .dl-btn > svg, .hide-btn > svg {
 	width: 18px;
 	height: 18px;
 	fill: currentColor;

@@ -1,6 +1,6 @@
 <template>
 	<div class="widget-weather f-shadow-medium" v-if="fresh">
-		<StartClimacon :icon="currently.icon" class="icon"></StartClimacon>
+		<StartClimacon :icon="currently.icon" class="icon f-shadow-light"></StartClimacon>
 		<p class="temperature">{{currently.temperature | roundNumber}} &deg;</p>
 		<p class="summary">{{currently.summary}}</p>
 		<p class="location">{{location.bestAddress}}</p>

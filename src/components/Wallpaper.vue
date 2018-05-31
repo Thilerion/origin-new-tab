@@ -3,7 +3,7 @@
 		<div
 			v-if="wallpaperInitialized"
 			class="background-image"
-			:key="wallpaperSource"
+			:key="loadedImageSource"
 			:style="[backgroundStyle]"
 			:class="{animate: animate}"
 		></div>

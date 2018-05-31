@@ -27,7 +27,7 @@ import differenceInDays from 'date-fns/difference_in_calendar_days';
 import format from 'date-fns/format';
 import nlLocale from 'date-fns/locale/nl';
 
-const BG_COLORS = ['#111111','#1c1c1c','#262626','#323232','#3d3d3d','#494949','#555555'];
+const BG_COLORS = ['#333333','#464646','#575757','#6b6b6b','#7f7f7f','#949494','#aaaaaa'];
 
 export default {
 	components: {

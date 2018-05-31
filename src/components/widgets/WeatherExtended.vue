@@ -6,7 +6,9 @@
 				<div class="forecast-item-background overlay-1" :style="{'background-color': bgColors[index]}"></div>
 				<div class="forecast-item-background overlay-2" :style="{'background-color': bgColors[index]}"></div>
 				<div class="forecast-item-content">
-					<StartClimacon class="small-climacon" :icon="icons[index]" />
+					<StartClimacon class="small-climacon" :icon="day.icon" />
+					<p class="day">{{day.time | formatDate}}</p>
+					<p class="temperatures">{{day.temperatureHigh | roundNumber}}&deg; <span class="night">{{day.temperatureLow | roundNumber}}&deg;</span></p>
 				</div>
 			</li>
 		</ul>
@@ -17,11 +19,10 @@
 import StartClimacon from '../shared/Climacon.vue';
 
 import differenceInDays from 'date-fns/difference_in_calendar_days';
-import { clearTimeout } from 'timers';
+import format from 'date-fns/format';
+import nlLocale from 'date-fns/locale/nl';
 
 const BG_COLORS = ['#111111','#1c1c1c','#262626','#323232','#3d3d3d','#494949','#555555'];
-
-const ICONS = ['partly-cloudy-day', 'clear-night', 'clear-day', 'wind', 'snow', 'cloudy', 'partly-cloudy-day'];
 
 export default {
 	components: {
@@ -38,8 +39,7 @@ export default {
 	},
 	data() {
 		return {
-			bgColors: BG_COLORS,
-			icons: ICONS
+			bgColors: BG_COLORS
 		}
 	},
 	computed: {
@@ -61,6 +61,20 @@ export default {
 		},
 		backgroundImage() {
 			return {'background-image': `url(${this.$store.getters.currentWallpaper.url})`};
+		}
+	},
+	filters: {
+		roundNumber(n) {
+			return Math.round(n);
+		},
+		formatDate(time) {
+			const ms = time * 1000;
+			const diff = differenceInDays(new Date(ms), new Date());
+
+			if (diff === 0) return 'Vandaag';
+			if (diff === 1) return 'Morgen';
+
+			return format(new Date(ms), 'dd D MMM', {locale: nlLocale});
 		}
 	}
 }
@@ -131,13 +145,44 @@ export default {
 .forecast-item-content {
 	position: relative;
 	z-index: 10;
-	font-size: 12px;
+	font-size: 0.875rem;	
 	padding: 0.35rem;
+	padding-right: 0.5rem;
+	padding-left: 0.25rem;
 	margin-top: 1px;
 	height: 4rem;
+	display: grid;
+	grid-template-columns: 3.25rem auto;
+	grid-template-rows: repeat(2, 1fr);
 }
 
 .small-climacon {
-	height: 100%;
+	width: 2.5rem;
+	grid-row: 1 / 3;
+	grid-column: 1;
+	align-self: center;
+	justify-self: center;
+}
+
+.day, .temperatures {
+	grid-column: 2;
+	justify-self: stretch;
+	text-align: left;
+	align-self: center;
+	margin-left: 0.2rem;
+}
+
+.day {
+	grid-row: 1;
+}
+
+.temperatures {
+	grid-row: 2;
+}
+
+.temperatures .night {
+	font-size: 0.75rem;
+	opacity: 0.7;
+	margin-left: 0.2rem;
 }
 </style>

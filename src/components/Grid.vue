@@ -13,12 +13,14 @@
 import StartGreeting from "./widgets/Greeting.vue";
 import StartWallpaperDetails from './widgets/WallpaperDetails.vue';
 import StartQuote from './widgets/Quote.vue';
+import StartWeather from './widgets/Weather.vue';
 
 export default {
 	components: {
 		StartGreeting,
 		StartWallpaperDetails,
-		StartQuote
+		StartQuote,
+		StartWeather
 	},
 	data() {
 		return {
@@ -38,6 +40,11 @@ export default {
 					component: 'StartQuote',
 					row: [2, 4],
 					column: [3, 9]
+				},
+				{
+					component: 'StartWeather',
+					row: [1, 6],
+					column: [9, 11]
 				}
 			]
 		}

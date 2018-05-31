@@ -25,7 +25,10 @@ const weatherStore = {
 				apiData: state.apiData
 			}
 		},
-		weatherDataFresh: state => (new Date().getTime() - state.apiData.lastRetrieved) < WEATHER_EXP
+		weatherDataFresh: state => (new Date().getTime() - state.apiData.lastRetrieved) < WEATHER_EXP,
+		forecast: state => state.apiData.forecast,
+		location: state => state.apiData.location,
+		fresh: state => new Date().getTime() - state.apiData.lastRetrieved < WEATHER_EXP
 	},
 
 	mutations: {

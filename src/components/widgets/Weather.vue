@@ -1,11 +1,11 @@
 <template>
-	<div class="widget-weather f-shadow-medium" v-if="fresh" @click="showExtended = !showExtended">
+	<div class="widget-weather f-shadow-medium" v-if="fresh" @click="extend">
 		<StartClimacon v-if="icon" :icon="icon" class="icon f-shadow-light"></StartClimacon>
 		<p class="temperature">{{currently.temperature | roundNumber}} &deg;</p>
 		<p class="summary">{{currently.summary}}</p>
 		<p class="location">{{addressCity}}</p>
 		<div class="row-extended">
-			<StartWeatherExtended class="extended" v-if="showExtended" :forecast="forecast.daily" />
+			<StartWeatherExtended class="extended" v-show="showExtended" :forecast="forecast.daily" />
 		</div>		
 	</div>
 </template>
@@ -43,6 +43,11 @@ export default {
 		},
 		icon() {
 			if (this.currently) return this.currently.icon;
+		}
+	},
+	methods: {
+		extend() {
+			this.showExtended = !this.showExtended;
 		}
 	},
 	watch: {

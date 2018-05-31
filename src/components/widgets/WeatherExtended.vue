@@ -93,10 +93,11 @@ export default {
 	padding-left: 5px;
 	padding-right: 5px;
 	padding-bottom: 5px;
+	will-change: opacity;
 }
 
 .background-image {
-	position:fixed;
+	position:absolute;
 	top: -10%;
 	left: -10%;
 	height: 120%;
@@ -104,7 +105,7 @@ export default {
 	background-attachment: fixed;
 	background-size: cover;
 	background-position: center;
-	filter: blur(10px) contrast(0.7) brightness(0.95) saturate(130%);
+	filter: blur(8px) contrast(0.7) brightness(0.95) saturate(130%);
 	z-index: -1;
 }
 

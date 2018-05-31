@@ -26,6 +26,10 @@ export default {
 </script>
 
 <style scoped>
+.widget-quote {
+	cursor: default;	
+}
+
 .quote {
 	font-size: 1.25rem;
 	margin-bottom: 0.25em;

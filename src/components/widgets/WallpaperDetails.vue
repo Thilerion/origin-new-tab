@@ -104,6 +104,7 @@ export default {
 	display: inline-flex;
 	flex-direction: column-reverse;
 	transition: all .3s ease-out;
+	user-select: none;
 }
 
 .widget-wallpaper-details:hover {

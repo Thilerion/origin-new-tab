@@ -94,6 +94,9 @@ export default {
 	padding-right: 5px;
 	padding-bottom: 5px;
 	will-change: opacity;
+	--transition-dur: 0.6s;
+	--transition-dur1: 0.3s;
+	--transition-dur2: 0.3s;
 }
 
 .background-image {
@@ -121,11 +124,11 @@ export default {
 }
 
 .slide-list-enter-active {
-	transition: opacity .6s ease-in .4s;
+	transition: opacity var(--transition-dur2) ease-in var(--transition-dur1);
 }
 
 .slide-list-leave-active {
-	transition: opacity 1s ease-out; 
+	transition: opacity var(--transition-dur) ease-out; 
 }
 
 .slide-list-enter, .slide-list-leave-to {
@@ -134,7 +137,7 @@ export default {
 
 .slide-list-enter-active .forecast-list, .slide-list-leave-active .forecast-list {
 	transition-property: transform;
-	transition-duration: 1s;
+	transition-duration: var(--transition-dur);
 	transition-timing-function: ease-in-out;
 }
 

@@ -65,6 +65,7 @@ export default {
 
 <style scoped>
 .widget-weather {
+	user-select: none;
 	padding-top: 0.25rem;
 	padding-right: 0.75rem;
 	position: relative;

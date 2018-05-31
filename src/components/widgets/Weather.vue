@@ -57,6 +57,8 @@ export default {
 
 <style scoped>
 .widget-weather {
+	padding-top: 0.25rem;
+	padding-right: 0.75rem;
 	position: relative;
 	justify-self: end;
 	align-self: start;
@@ -108,8 +110,7 @@ export default {
 .extended {
 	position: absolute;
 	top: 0;
-	left: 0;
-	width: 100%;
-	height: 50vh;
+	left: -5px;
+	right: -5px;
 }
 </style>

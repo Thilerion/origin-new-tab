@@ -1,7 +1,10 @@
 <template>
+<transition name="slide-list" appear>
 	<div class="widget-weather-extended">		
+		
 		<ul class="forecast-list">
 			<div class="background-image" :style="backgroundImage"></div>
+			
 			<li class="forecast-item" v-for="(day, index) in forecastDays" :key="day.time">
 				<div class="forecast-item-background overlay-1" :style="{'background-color': bgColors[index]}"></div>
 				<div class="forecast-item-background overlay-2" :style="{'background-color': bgColors[index]}"></div>
@@ -12,7 +15,9 @@
 				</div>
 			</li>
 		</ul>
+		
 	</div>
+	</transition>
 </template>
 
 <script>
@@ -82,11 +87,16 @@ export default {
 
 <style scoped>
 .widget-weather-extended {
-	padding-top: 0.5rem;
+	margin-top: 0.5rem;
+	position: relative;
+	overflow: hidden;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
 }
 
 .background-image {
-	position:absolute;
+	position:fixed;
 	top: -10%;
 	left: -10%;
 	height: 120%;
@@ -100,10 +110,35 @@ export default {
 
 .forecast-list {
 	position: relative;
-	list-style: none;
 	border-radius: 4px;
+	list-style: none;
+	height: 100%;
 	overflow: hidden;
-	box-shadow: 0 2px 5px 0px rgba(0,0,0,0.2);
+	opacity: 1;
+	box-shadow: 0 1px 2px 1px rgba(0,0,0,0.3);	
+	will-change: transform;
+}
+
+.slide-list-enter-active {
+	transition: opacity .6s ease-in .4s;
+}
+
+.slide-list-leave-active {
+	transition: opacity 1s ease-out; 
+}
+
+.slide-list-enter, .slide-list-leave-to {
+	opacity: 0.4;
+}
+
+.slide-list-enter-active .forecast-list, .slide-list-leave-active .forecast-list {
+	transition-property: transform;
+	transition-duration: 1s;
+	transition-timing-function: ease-in-out;
+}
+
+.slide-list-enter .forecast-list, .slide-list-leave-to .forecast-list {
+	transform: translateY(-103%);
 }
 
 .forecast-item {

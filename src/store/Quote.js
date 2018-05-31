@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-// const QUOTE_EXP = 6 * 60 * 60 * 1000; //6 uur
-const QUOTE_EXP = 40000;
+const QUOTE_EXP = 6 * 60 * 60 * 1000; //6 uur
 
 const quoteStore = {
 

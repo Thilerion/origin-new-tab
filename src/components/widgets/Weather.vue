@@ -1,6 +1,6 @@
 <template>
 	<div class="widget-weather f-shadow-medium" v-if="fresh">
-		<span class="icon">Icon</span>
+		<StartClimacon :icon="currently.icon" class="icon"></StartClimacon>
 		<p class="temperature">{{currently.temperature | roundNumber}} &deg;</p>
 		<p class="summary">{{currently.summary}}</p>
 		<p class="location">{{location.bestAddress}}</p>
@@ -8,7 +8,12 @@
 </template>
 
 <script>
+import StartClimacon from '../shared/Climacon.vue';
+
 export default {
+	components: {
+		StartClimacon
+	},
 	data() {
 		return {
 			fresh: this.$store.getters.fresh
@@ -48,14 +53,16 @@ export default {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	grid-template-rows: auto auto auto;
-	grid-row-gap: 0.2rem;
+	grid-row-gap: 0.2em;
+	grid-column-gap: 0.2em;
 	cursor: default;
 }
 
 .icon {
 	grid-column: 1;
 	grid-row: 1;
-	text-align: center;
+	height: 3.5em;
+	width: 5.25em;
 	align-self: center;
 }
 
@@ -63,7 +70,8 @@ export default {
 	grid-column: 2;
 	grid-row: 1;
 	text-align: center;
-	font-size: 2rem;
+	align-self: center;
+	font-size: 2.75rem;
 }
 
 .summary {
@@ -79,5 +87,9 @@ export default {
 	font-size: 82.5%;
 	color: rgba(255,255,255,1);
 	font-weight: 300;
+}
+
+.summary, .location {
+	margin-left: 1rem;
 }
 </style>

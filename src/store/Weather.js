@@ -28,6 +28,11 @@ const weatherStore = {
 		weatherDataFresh: state => (new Date().getTime() - state.apiData.lastRetrieved) < WEATHER_EXP,
 		forecast: state => state.apiData.forecast,
 		location: state => state.apiData.location,
+		address: state => state.apiData.location.bestAddress,
+		addressCity(state) {
+			let address = state.apiData.location.bestAddress;
+			return address.split(',')[0];
+		},
 		fresh: state => new Date().getTime() - state.apiData.lastRetrieved < WEATHER_EXP
 	},
 

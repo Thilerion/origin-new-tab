@@ -3,7 +3,7 @@
 		<StartClimacon :icon="currently.icon" class="icon f-shadow-light"></StartClimacon>
 		<p class="temperature">{{currently.temperature | roundNumber}} &deg;</p>
 		<p class="summary">{{currently.summary}}</p>
-		<p class="location">{{location.bestAddress}}</p>
+		<p class="location">{{addressCity}}</p>
 	</div>
 </template>
 
@@ -31,6 +31,9 @@ export default {
 		},
 		currently() {
 			return this.forecast.currently;
+		},
+		addressCity() {
+			return this.$store.getters.addressCity;
 		}
 	},
 	watch: {
@@ -84,7 +87,7 @@ export default {
 	grid-column: 1 / 3;
 	grid-row: 3;
 	text-align: center;
-	font-size: 82.5%;
+	font-size: 87.5%;
 	color: rgba(255,255,255,1);
 	font-weight: 300;
 }

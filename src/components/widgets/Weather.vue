@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-weather f-shadow-medium" v-if="fresh" @click="showExtended = !showExtended">
+	<div class="widget-weather f-shadow-medium" v-show="fresh" @click="showExtended = !showExtended">
 		<StartClimacon :icon="currently.icon" class="icon f-shadow-light"></StartClimacon>
 		<p class="temperature">{{currently.temperature | roundNumber}} &deg;</p>
 		<p class="summary">{{currently.summary}}</p>

@@ -5,7 +5,9 @@
 			<li class="forecast-item" v-for="(day, index) in forecastDays" :key="day.time">
 				<div class="forecast-item-background overlay-1" :style="{'background-color': bgColors[index]}"></div>
 				<div class="forecast-item-background overlay-2" :style="{'background-color': bgColors[index]}"></div>
-				<p class="forecast-item-content">{{day.summary}}</p>
+				<div class="forecast-item-content">
+					<StartClimacon class="small-climacon" :icon="icons[index]" />
+				</div>
 			</li>
 		</ul>
 	</div>
@@ -19,7 +21,12 @@ import { clearTimeout } from 'timers';
 
 const BG_COLORS = ['#111111','#1c1c1c','#262626','#323232','#3d3d3d','#494949','#555555'];
 
+const ICONS = ['partly-cloudy-day', 'clear-night', 'clear-day', 'wind', 'snow', 'cloudy', 'partly-cloudy-day'];
+
 export default {
+	components: {
+		StartClimacon
+	},
 	props: {
 		forecast: {
 			type: Array,
@@ -31,7 +38,8 @@ export default {
 	},
 	data() {
 		return {
-			bgColors: BG_COLORS
+			bgColors: BG_COLORS,
+			icons: ICONS
 		}
 	},
 	computed: {
@@ -86,7 +94,6 @@ export default {
 
 .forecast-item {
 	position: relative;
-	height: 4rem;
 	overflow: hidden;
 }
 
@@ -127,5 +134,10 @@ export default {
 	font-size: 12px;
 	padding: 0.35rem;
 	margin-top: 1px;
+	height: 4rem;
+}
+
+.small-climacon {
+	height: 100%;
 }
 </style>

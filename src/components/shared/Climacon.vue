@@ -47,6 +47,6 @@ export default {
 }
 
 .climacon > path {
-	transform: scale(1.5) translateY(-10%);
+	transform: scale(1.5) translate(-22.5%, -10%);
 }
 </style>

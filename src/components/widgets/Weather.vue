@@ -1,22 +1,28 @@
 <template>
-	<div class="widget-weather f-shadow-medium" v-if="fresh">
+	<div class="widget-weather f-shadow-medium" v-if="fresh" @click="showExtended = !showExtended">
 		<StartClimacon :icon="currently.icon" class="icon f-shadow-light"></StartClimacon>
 		<p class="temperature">{{currently.temperature | roundNumber}} &deg;</p>
 		<p class="summary">{{currently.summary}}</p>
 		<p class="location">{{addressCity}}</p>
+		<div class="row-extended">
+			<StartWeatherExtended class="extended" v-if="showExtended" />
+		</div>		
 	</div>
 </template>
 
 <script>
 import StartClimacon from '../shared/Climacon.vue';
+import StartWeatherExtended from './WeatherExtended.vue';
 
 export default {
 	components: {
-		StartClimacon
+		StartClimacon,
+		StartWeatherExtended
 	},
 	data() {
 		return {
-			fresh: this.$store.getters.fresh
+			fresh: this.$store.getters.fresh,
+			showExtended: false
 		}
 	},
 	computed: {
@@ -51,11 +57,12 @@ export default {
 
 <style scoped>
 .widget-weather {
+	position: relative;
 	justify-self: end;
 	align-self: start;
 	display: grid;
-	grid-template-columns: 1fr 1fr;
-	grid-template-rows: auto auto auto;
+	grid-template-columns: auto auto;
+	grid-template-rows: auto auto auto auto;
 	grid-row-gap: 0.2em;
 	grid-column-gap: 0.2em;
 	cursor: default;
@@ -65,7 +72,7 @@ export default {
 	grid-column: 1;
 	grid-row: 1;
 	height: 3.5em;
-	width: 5.25em;
+	width: 3.5em;
 	align-self: center;
 }
 
@@ -92,7 +99,18 @@ export default {
 	font-weight: 300;
 }
 
-.summary, .location {
-	margin-left: 1rem;
+.row-extended {
+	grid-row: 4;
+	grid-column: 1 / 3;
+	position: relative;
+}
+
+.extended {
+	background: black;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50vh;
 }
 </style>

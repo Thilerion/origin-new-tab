@@ -49,6 +49,8 @@ export default {
 						this.animate = true;
 					}, 1000);
 				}
+				const preloadImage = new Image();
+				preloadImage.src = this.$store.getters.nextWallpaperUrl;
 			}
 			image.src = src;
 		}

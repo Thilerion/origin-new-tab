@@ -35,7 +35,16 @@ const wallpaperStore = {
 		},
 		wallpaperLoadSuccess: state => state.wallpaperLoadSuccess,
 		wallpaperInitialized: state => state.wallpaperLoadSuccess != null,
-		wallpaperColor: (state, getters) => getters.currentWallpaper.color
+		wallpaperColor: (state, getters) => getters.currentWallpaper.color,
+		nextWallpaperId: state => {
+			let length = state.wallpaperData.wallpapers.length;
+			let cur = state.wallpaperData.currentWallpaperId;
+
+			let next = (cur + 1) % length;
+			console.log(next);
+			return next;
+		},
+		nextWallpaperUrl: (state, getters) => state.wallpaperData.wallpapers[getters.nextWallpaperId].url
 	},
 
 	mutations: {

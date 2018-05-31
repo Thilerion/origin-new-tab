@@ -59,6 +59,10 @@ export default {
 </script>
 
 <style scoped>
+.widget-weather-extended {
+	padding-top: 0.5rem;
+}
+
 .background-image {
 	position:absolute;
 	top: -10%;
@@ -68,7 +72,7 @@ export default {
 	background-attachment: fixed;
 	background-size: cover;
 	background-position: center;
-	filter: blur(10px) contrast(0.5) brightness(1.1);
+	filter: blur(10px) contrast(0.7) brightness(0.95) saturate(130%);
 	z-index: -1;
 }
 
@@ -77,6 +81,7 @@ export default {
 	list-style: none;
 	border-radius: 4px;
 	overflow: hidden;
+	box-shadow: 0 2px 5px 0px rgba(0,0,0,0.2);
 }
 
 .forecast-item {
@@ -96,17 +101,19 @@ export default {
 .forecast-item:not(:first-of-type) .overlay-1::before {
 	position: absolute;
 	content: "";
-	width: 80%;
-	left: 10%;
+	width: 100%;
+	left: 0%;
 	top: 0;
 	height: 1px;
 	background: rgba(255,255,255,0.1);
+	filter: blur(1px);
+	transform: translateY(-1px);
 }
 
 .overlay-1 {
 	z-index: -1;
 	mix-blend-mode: hard-light;
-	opacity: 0.9;
+	opacity: 1;
 }
 
 .overlay-2 {

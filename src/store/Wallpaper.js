@@ -34,7 +34,8 @@ const wallpaperStore = {
 			return state.wallpaperData;
 		},
 		wallpaperLoadSuccess: state => state.wallpaperLoadSuccess,
-		wallpaperInitialized: state => state.wallpaperLoadSuccess != null
+		wallpaperInitialized: state => state.wallpaperLoadSuccess != null,
+		wallpaperColor: (state, getters) => getters.currentWallpaper.color
 	},
 
 	mutations: {

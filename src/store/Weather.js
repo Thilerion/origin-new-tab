@@ -1,4 +1,5 @@
 import axios from 'axios';
+import API_URL from './api/config.api';
 
 const WEATHER_EXP = 3 * 60 * 60 * 1000; //3 uur
 
@@ -92,7 +93,7 @@ function getPosition() {
 
 async function getWeatherData(latitude, longitude) {
 	try {
-		let res = await axios.get(`http://localhost:3000/forecast/${latitude}/${longitude}`);
+		let res = await axios.get(`${API_URL}/forecast/${latitude}/${longitude}`);
 		return res.data;
 	}
 	catch (e) {

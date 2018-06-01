@@ -1,4 +1,5 @@
 import axios from 'axios';
+import API_URL from './api/config.api';
 
 const QUOTE_EXP = 6 * 60 * 60 * 1000; //6 uur
 
@@ -35,7 +36,7 @@ const quoteStore = {
 		},
 		async getQuoteFromServer({commit}) {
 			try {
-				let res = await axios.get(`http://localhost:3000/quote`);
+				let res = await axios.get(`${API_URL}/quote`);
 				if (res.data.success) {
 					let q = {
 						randomQuote: res.data.data,

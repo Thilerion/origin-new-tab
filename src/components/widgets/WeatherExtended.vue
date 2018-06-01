@@ -65,7 +65,11 @@ export default {
 			return this.$store.getters.wallpaperColor;
 		},
 		backgroundImage() {
+			if (!this.wallpaperUrlAvailable) return;
 			return {'background-image': `url(${this.$store.getters.currentWallpaper.url})`};
+		},
+		wallpaperUrlAvailable() {
+			return this.$store.getters.wallpaperLoadSuccess !== null;
 		}
 	},
 	filters: {

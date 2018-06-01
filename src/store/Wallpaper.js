@@ -1,4 +1,5 @@
 import axios from 'axios';
+import API_URL from './api/config.api';
 
 const wallpaperStore = {
 
@@ -38,13 +39,21 @@ const wallpaperStore = {
 		wallpaperColor: (state, getters) => getters.currentWallpaper.color,
 		nextWallpaperId: state => {
 			let length = state.wallpaperData.wallpapers.length;
+			if (length === 0) return 0;
 			let cur = state.wallpaperData.currentWallpaperId;
 
 			let next = (cur + 1) % length;
 			console.log(next);
 			return next;
 		},
-		nextWallpaperUrl: (state, getters) => state.wallpaperData.wallpapers[getters.nextWallpaperId].url
+		nextWallpaperUrl: (state, getters) => {
+			try {
+				return state.wallpaperData.wallpapers[getters.nextWallpaperId].url;
+			}
+			catch (e) {
+				return "";
+			}			
+		}
 	},
 
 	mutations: {
@@ -61,6 +70,7 @@ const wallpaperStore = {
 		setCollection: (state, col) => state.wallpaperData.collection = col,
 		nextWallpaper: state => {
 			const arLength = state.wallpaperData.wallpapers.length;
+			if (!arLength) state.wallpaperData.currentWallpaperId = 0;
 			const nextId = state.wallpaperData.currentWallpaperId + 1;
 			state.wallpaperData.currentWallpaperId = nextId % arLength;
 		},
@@ -83,7 +93,7 @@ const wallpaperStore = {
 		async getWallpapersFromServer({ state, commit, dispatch }) {
 			try {
 				const collection = state.collection;
-				let res = await axios.get(`http://localhost:3000/wallpapers/${collection}`);
+				let res = await axios.get(`${API_URL}/wallpapers/${collection}`);
 				
 				if (res.data.success) {
 					commit('setWallpapers', res.data.data);

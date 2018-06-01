@@ -31,12 +31,16 @@ const wallpaperStore = {
 			}
 			return state.wallpaperData.wallpapers[state.wallpaperData.currentWallpaperId];
 		},
+		collection: state => state.wallpaperData.collection,
 		wallpaperWatch: state => {
 			return state.wallpaperData;
 		},
 		wallpaperLoadSuccess: state => state.wallpaperLoadSuccess,
 		wallpaperInitialized: state => state.wallpaperLoadSuccess != null,
-		wallpaperColor: (state, getters) => getters.currentWallpaper.color,
+		wallpaperColor: (state, getters) => {
+			if (getters.currentWallpaper) return getters.currentWallpaper.color;
+			else return;
+		},
 		nextWallpaperId: state => {
 			let length = state.wallpaperData.wallpapers.length;
 			if (length === 0) return 0;
@@ -92,7 +96,7 @@ const wallpaperStore = {
 	actions: {
 		async getWallpapersFromServer({ state, commit, dispatch }) {
 			try {
-				const collection = state.collection;
+				const collection = state.wallpaperData.collection;
 				let res = await axios.get(`${API_URL}/wallpapers/${collection}`);
 				
 				if (res.data.success) {
@@ -110,7 +114,7 @@ const wallpaperStore = {
 		wallpaperSet({ commit, dispatch }, {wallpapers, currentWallpaperId, collection}) {
 			console.log("Wallpaper Set");
 			console.log(!!wallpapers, !!currentWallpaperId, !!collection);
-			if (wallpapers && currentWallpaperId && collection) {
+			if (wallpapers && currentWallpaperId >= 0 && collection) {
 				commit('setWallpapers', wallpapers);
 				commit('setCurrentWallpaperId', currentWallpaperId);
 				commit('setCollection', collection);

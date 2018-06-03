@@ -46,7 +46,7 @@ export default {
 	fill: currentColor;
 }
 
-.climacon > path {
+.climacon path {
 	transform: scale(1.5) translate(-22.5%, -10%);
 }
 

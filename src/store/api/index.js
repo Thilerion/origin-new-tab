@@ -24,6 +24,11 @@ const initWatchers = (store) => {
 	store.watch((state, getters) => getters.weatherWatch, (newValue, oldValue) => {
 		console.log("WATCHER: ", newValue);
 		saveToStorage('weather', newValue);
+	}, { deep: true });
+	
+	store.watch((state, getters) => getters.newsWatch, (newValue, oldValue) => {
+		console.log("WATCHER: ", newValue);
+		saveToStorage('news', newValue);
 	}, {deep: true});
 }
 

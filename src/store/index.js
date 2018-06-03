@@ -5,6 +5,7 @@ import Wallpaper from './Wallpaper'
 import Greeting from './Greeting'
 import Quote from './Quote'
 import Weather from './Weather'
+import News from './News'
 
 import { initWatchers, loadFromStorage } from './api';
 
@@ -17,7 +18,8 @@ const store = new Vuex.Store({
 		Wallpaper,
 		Greeting,
 		Quote,
-		Weather
+		Weather,
+		News
 	},
 
 	state: {
@@ -64,6 +66,10 @@ const store = new Vuex.Store({
 			let weatherData = loadFromStorage('weather');
 			if (weatherData) dispatch('weatherSet', weatherData);
 			else dispatch('weatherLoadFailed');
+
+			let newsData = loadFromStorage('news');
+			if (newsData) dispatch('newsSet', newsData);
+			else dispatch('newsLoadFailed');
 		},
 		userSet({ commit }, userData) {
 			commit('setUsername', userData.username);

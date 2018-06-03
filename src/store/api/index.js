@@ -4,32 +4,19 @@
 //dispatch to save: [moduleName]Set
 //dispatch if fail: [moduleName]LoadFailed
 
-const initWatchers = (store) => {
-	console.log("INITIALIZING WATCHERS");
-	store.watch((state, getters) => getters.wallpaperWatch, (newValue, oldValue) => {
-		console.log("WATCHER: ", {...newValue});
-		saveToStorage('wallpaper', { ...newValue });
-	}, {deep: true});
-	
-	store.watch((state, getters) => getters.userWatch, (newValue, oldValue) => {
-		console.log("WATCHER: ", newValue);
-		saveToStorage('user', newValue);
+function createWatcher(store, val) {
+	console.log("Now creating watcher for ", val);
+	store.watch((state, getters) => getters[`${val}Watch`], (newValue, oldValue) => {
+		const stringifiedValue = JSON.parse(JSON.stringify(newValue));
+		console.log(`Watcher is triggered for module ${val}, with value: `, stringifiedValue);
+		saveToStorage(val, stringifiedValue);
 	}, { deep: true });
-	
-	store.watch((state, getters) => getters.quoteWatch, (newValue, oldValue) => {
-		console.log("WATCHER: ", newValue);
-		saveToStorage('quote', newValue);
-	}, { deep: true });
-	
-	store.watch((state, getters) => getters.weatherWatch, (newValue, oldValue) => {
-		console.log("WATCHER: ", newValue);
-		saveToStorage('weather', newValue);
-	}, { deep: true });
-	
-	store.watch((state, getters) => getters.newsWatch, (newValue, oldValue) => {
-		console.log("WATCHER: ", newValue);
-		saveToStorage('news', newValue);
-	}, {deep: true});
+}
+
+const initWatchers = (store, widgets = []) => {
+	console.log("INITIALIZING WATCHERS", "Widgets to watch: ", widgets);
+
+	widgets.forEach((val) => createWatcher(store, val));
 }
 
 const saveToStorage = (moduleName, data) => {

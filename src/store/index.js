@@ -84,7 +84,7 @@ const store = new Vuex.Store({
 
 })
 
-initWatchers(store);
+initWatchers(store, ['user', 'wallpaper', 'quote', 'weather', 'news']);
 store.dispatch('initializeFromStorage');
 
 export default store;

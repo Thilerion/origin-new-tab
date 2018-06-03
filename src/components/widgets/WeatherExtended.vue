@@ -15,7 +15,7 @@
 			</li>
 			<li class="forecast-item forecast-ds">
 				<div class="forecast-item-background" :style="{'background-color': bgColors[bgColors.length - 1]}"></div>
-				<a href="https://darksky.net/poweredby/" class="forecast-ds-text">Powered by Dark Sky</a>
+				<a href="https://darksky.net/poweredby/" target="_blank" class="forecast-ds-text">Powered by Dark Sky</a>
 			</li>
 		</ul>
 		

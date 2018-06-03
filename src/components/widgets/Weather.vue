@@ -76,7 +76,7 @@ export default {
 	grid-template-rows: auto auto auto auto;
 	grid-row-gap: 0.2em;
 	grid-column-gap: 0.2em;
-	cursor: default;
+	cursor: pointer;
 }
 
 .icon {
@@ -114,6 +114,7 @@ export default {
 	grid-row: 4;
 	grid-column: 1 / 3;
 	position: relative;
+	cursor: default;
 }
 
 .extended {

@@ -6,13 +6,16 @@
 			<div class="background-image" :style="backgroundImage"></div>
 			
 			<li class="forecast-item" v-for="(day, index) in forecastDays" :key="day.time">
-				<div class="forecast-item-background overlay-1" :style="{'background-color': bgColors[index]}"></div>
-				<div class="forecast-item-background overlay-2" :style="{'background-color': bgColors[index]}"></div>
+				<div class="forecast-item-background" :style="{'background-color': bgColors[index]}"></div>
 				<div class="forecast-item-content">
 					<StartClimacon class="small-climacon" :icon="day.icon" />
 					<p class="day">{{day.time | formatDate}}</p>
 					<p class="temperatures">{{day.temperatureHigh | roundNumber}}&deg; <span class="night">{{day.temperatureLow | roundNumber}}&deg;</span></p>
 				</div>
+			</li>
+			<li class="forecast-item forecast-ds">
+				<div class="forecast-item-background" :style="{'background-color': bgColors[bgColors.length - 1]}"></div>
+				<a href="https://darksky.net/poweredby/" class="forecast-ds-text">Powered by Dark Sky</a>
 			</li>
 		</ul>
 		
@@ -27,7 +30,7 @@ import differenceInDays from 'date-fns/difference_in_calendar_days';
 import format from 'date-fns/format';
 import nlLocale from 'date-fns/locale/nl';
 
-const BG_COLORS = ['#333333','#464646','#575757','#6b6b6b','#7f7f7f','#949494','#aaaaaa'];
+const BG_COLORS = ['#333333','#444444','#565656','#6a6a6a','#7d7d7d','#919191','#a6a6a6','#bbbbbb'];
 
 export default {
 	components: {
@@ -158,8 +161,11 @@ export default {
 	position: absolute;
 	left: 0;
 	top: 0;
-	height: 100%;
-	width: 100%;	
+	right: 0;
+	bottom: 0;
+	z-index: -1;
+	mix-blend-mode: hard-light;
+	opacity: 1;
 }
 
 .forecast-item:not(:first-of-type) .overlay-1::before {
@@ -172,17 +178,6 @@ export default {
 	background: rgba(255,255,255,0.1);
 	filter: blur(1px);
 	transform: translateY(-1px);
-}
-
-.overlay-1 {
-	z-index: -1;
-	mix-blend-mode: hard-light;
-	opacity: 1;
-}
-
-.overlay-2 {
-	z-index: 0;
-	opacity: 0;
 }
 
 .forecast-item-content {
@@ -227,5 +222,19 @@ export default {
 	font-size: 0.75rem;
 	opacity: 0.7;
 	margin-left: 0.2rem;
+}
+
+.forecast-ds-text {
+	display: inline-block;
+	font-size: 11px;
+	line-height: 1.4;
+	opacity: 0.9;
+	padding: 0.25em 0.5em;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.forecast-ds-text:hover {
+	text-decoration: underline;
 }
 </style>

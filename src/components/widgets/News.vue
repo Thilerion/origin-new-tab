@@ -1,13 +1,12 @@
 <template>
-	<div class="widget-news">
+	<div class="widget-news f-shadow-heavy">
 		<div class="news-item-wrapper clip-edges f-shadow-heavy">
 			<transition :name="transitionName">
 				<a :href="news[showItem].url" class="news-item" :key="showItem">{{news[showItem].title}}</a>
 			</transition>
-		</div>
-		
-		<button @click="prev">-</button>
-		<button @click="next">+</button>
+		</div>	
+		<button class="news-scroll-btn scroll-prev" @click="prev">&lt;</button>	
+		<button class="news-scroll-btn scroll-next" @click="next">&gt;</button>
 	</div>
 </template>
 
@@ -46,17 +45,19 @@ export default {
 	width: 100%;
 	max-width: 45rem;
 	position: relative;
+	display: flex;
 }
 
 .news-item-wrapper {
 	width: 100%;
-	height: 1.5rem;
+	height: 2.5rem;
 	position: relative;
 	overflow: hidden;
+	background: rgba(0,0,0,0.1);
 }
 
 .clip-edges {
-	mask-image: linear-gradient(90deg, transparent 0px, black 2rem, black calc(100% - 2rem), transparent 100%);
+	mask-image: linear-gradient(90deg, transparent 0rem, black 2rem, black calc(100% - 2rem), transparent calc(100% - 0rem));
 }
 
 .clip-edges > .news-item {
@@ -70,7 +71,7 @@ export default {
 	width: 100%;
 	position: absolute;
 	top: 0;
-	line-height: 1.5rem;
+	line-height: 2.5rem;
 	text-decoration: none;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -81,27 +82,38 @@ export default {
 	text-decoration: underline;
 }
 
-.slide-news-next-enter-active, .slide-news-next-leave-active {
-	transition: transform 1s ease;
+.slide-news-next-enter-active, .slide-news-next-leave-active, .slide-news-prev-enter-active, .slide-news-prev-leave-active {
+	transition: transform 2s ease-in-out;
 }
 
-.slide-news-next-leave-to {
+.slide-news-next-leave-to, .slide-news-prev-enter {
 	transform: translateX(-100%);
 }
 
-.slide-news-next-enter {
+.slide-news-next-enter, .slide-news-prev-leave-to {
 	transform: translateX(100%);
 }
 
-.slide-news-prev-enter-active, .slide-news-prev-leave-active {
-	transition: transform 1s ease;
+.news-scroll-btn {
+	background: none;
+	border: none;
+	color: inherit;
+	text-shadow: inherit;
+	position: absolute;
+	font-size:1.5em;
+	padding: 0;
+	top: 0;
+	bottom: 0;
+	vertical-align: middle;
+	line-height: 1em;
+	min-width: 1rem;
 }
 
-.slide-news-prev-leave-to {
-	transform: translateX(100%);
+.news-scroll-btn.scroll-prev {
+	left: 0;
 }
 
-.slide-news-prev-enter {
-	transform: translateX(-100%);
+.news-scroll-btn.scroll-next {
+	right: 0;
 }
 </style>

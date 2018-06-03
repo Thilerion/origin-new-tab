@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-greeting f-shadow-medium f-align-c cursor-default">
+	<div class="widget-greeting widget-no-select f-shadow-medium f-align-c cursor-default">
 		<div class="time">{{time | toTimeString(currentTimeFormat)}}</div>
 		
 		<div
@@ -104,7 +104,6 @@ export default {
 .message {
 	font-size: 3.5rem;
 	position: relative;
-	user-select: none;
 }
 
 .input-wrapper {

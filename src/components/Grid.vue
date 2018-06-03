@@ -5,6 +5,7 @@
 			:key="widget"
 			:is="widget"
 			:style="widgetGridPlacement[index]"
+			class="widget"
 		/>
 	</div>
 </template>
@@ -86,5 +87,9 @@ export default {
 	justify-items: center;
 	padding: .75em .5em;
 	grid-row-gap: 1rem;
+}
+
+.widget-no-select {
+	user-select: none;
 }
 </style>

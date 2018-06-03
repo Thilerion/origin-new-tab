@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-wallpaper-details f-shadow-medium" v-if="wallpaperInitialized">
+	<div class="widget-wallpaper-details widget-no-select f-shadow-medium" v-if="wallpaperInitialized">
 		<div class="row-bottom">
 			<div class="buttons" v-if="!usingDefaultWallpaper">
 				<button class="load-btn" @click="nextWallpaper" alt="Next wallpaper">
@@ -101,7 +101,6 @@ export default {
 	display: inline-flex;
 	flex-direction: column-reverse;
 	transition: all .3s ease-out;
-	user-select: none;
 }
 
 .widget-wallpaper-details:hover {
@@ -111,6 +110,7 @@ export default {
 .location {
 	opacity: 0;
 	transition: all .3s ease-out;
+	user-select: text;
 }
 
 .widget-wallpaper-details:hover .location {

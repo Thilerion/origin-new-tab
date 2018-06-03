@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-weather f-shadow-medium" v-if="fresh" @click="extend">
+	<div class="widget-weather f-shadow-medium widget-no-select" v-if="fresh" @click="extend">
 		<StartClimacon v-if="icon" :icon="icon" class="icon f-shadow-light"></StartClimacon>
 		<p class="temperature">{{currently.temperature | roundNumber}} &deg;</p>
 		<p class="summary">{{currently.summary}}</p>
@@ -65,7 +65,6 @@ export default {
 
 <style scoped>
 .widget-weather {
-	user-select: none;
 	padding-top: 0.25rem;
 	padding-right: 0.75rem;
 	position: relative;

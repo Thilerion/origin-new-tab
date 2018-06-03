@@ -2,7 +2,7 @@
 	<div class="widget-news f-shadow-heavy" @mouseover="mouseOver = true" @mouseout="mouseOver = false">
 		<div class="news-item-wrapper clip-edges f-shadow-heavy">
 			<transition :name="transitionName">
-				<a :href="news[showItem].url" class="news-item" :key="showItem" target="_blank" rel="noopener" :class="{faster: fasterTransition}">{{news[showItem].title}}</a>
+				<a v-if="showItem != null" :href="news[showItem].url" class="news-item" :key="showItem" target="_blank" rel="noopener" :class="{faster: fasterTransition}">{{news[showItem].title}}</a>
 			</transition>
 		</div>	
 		<button class="news-scroll-btn scroll-prev" @click="prev(true)">&lt;</button>	
@@ -14,7 +14,7 @@
 export default {
 	data() {
 		return {
-			showItem: 0,
+			showItem: null,
 			dir: null,
 			mouseOver: false,
 			timeout: null,
@@ -69,9 +69,15 @@ export default {
 		stopTimeout() {
 			clearTimeout(this.timeout);
 			this.timeout = null;
+		},
+		loadRandomArticle() {
+			const amount = this.news.length;
+			this.showItem = Math.floor(Math.random() * amount);
+			console.log("Random news item: ", this.showItem);
 		}
 	},
 	beforeMount() {
+		this.loadRandomArticle();
 		this.startTimeout();
 	},
 	beforeDestroy() {

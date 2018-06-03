@@ -1,12 +1,12 @@
 <template>
-	<div class="widget-news f-shadow-heavy">
+	<div class="widget-news f-shadow-heavy" @mouseover="mouseOver = true" @mouseout="mouseOver = false">
 		<div class="news-item-wrapper clip-edges f-shadow-heavy">
 			<transition :name="transitionName">
-				<a :href="news[showItem].url" class="news-item" :key="showItem">{{news[showItem].title}}</a>
+				<a :href="news[showItem].url" class="news-item" :key="showItem" target="_blank" rel="noopener" :class="{faster: fasterTransition}">{{news[showItem].title}}</a>
 			</transition>
 		</div>	
-		<button class="news-scroll-btn scroll-prev" @click="prev">&lt;</button>	
-		<button class="news-scroll-btn scroll-next" @click="next">&gt;</button>
+		<button class="news-scroll-btn scroll-prev" @click="prev(true)">&lt;</button>	
+		<button class="news-scroll-btn scroll-next" @click="next(true)">&gt;</button>
 	</div>
 </template>
 
@@ -15,7 +15,12 @@ export default {
 	data() {
 		return {
 			showItem: 0,
-			dir: null
+			dir: null,
+			mouseOver: false,
+			timeout: null,
+			transitionDurationDefault: '2000',
+			transitionDurationFast: '1000',
+			fasterTransition: false
 		}
 	},
 	computed: {
@@ -27,15 +32,50 @@ export default {
 		}
 	},
 	methods: {
-		next() {
-			this.dir = 'next';
-			this.showItem = (this.showItem + 1) % this.news.length
+		next(faster) {
+			this.fasterTransition = !!faster;
+			this.$nextTick(() => {
+				this.dir = 'next';
+				this.showItem = (this.showItem + 1) % this.news.length
+				this.restartTimeout();
+			});			
 		},
-		prev() {
-			this.dir = 'prev';
-			if (this.showItem === 0) this.showItem = this.news.length - 1;
-			else this.showItem -= 1;
+		prev(faster) {
+			this.fasterTransition = !!faster;
+			this.$nextTick(() => {
+				this.dir = 'prev';
+				if (this.showItem === 0) this.showItem = this.news.length - 1;
+				else this.showItem -= 1;
+				this.restartTimeout();
+			});						
+		},
+		startTimeout() {
+			let timeout = setTimeout(() => {
+				const windowHasFocus = document.hasFocus();
+				if (!this.mouseOver && windowHasFocus) {
+					this.next(false);
+				} else {
+					console.log("Not going to next news message: hovering.");
+					this.restartTimeout();
+				}
+			}, 6000);
+			this.timeout = timeout;
+		},
+		restartTimeout() {
+			clearTimeout(this.timeout);
+			this.timeout = null;
+			this.startTimeout();
+		},
+		stopTimeout() {
+			clearTimeout(this.timeout);
+			this.timeout = null;
 		}
+	},
+	beforeMount() {
+		this.startTimeout();
+	},
+	beforeDestroy() {
+		this.stopTimeout();
 	}
 }
 </script>
@@ -46,6 +86,10 @@ export default {
 	max-width: 45rem;
 	position: relative;
 	display: flex;
+}
+
+.widget-news.mouseover {
+	color: green;
 }
 
 .news-item-wrapper {
@@ -83,7 +127,13 @@ export default {
 }
 
 .slide-news-next-enter-active, .slide-news-next-leave-active, .slide-news-prev-enter-active, .slide-news-prev-leave-active {
-	transition: transform 2s ease-in-out;
+	transition-property: transform;
+	transition-timing-function: ease-in-out;
+	transition-duration: 2s;
+}
+
+.faster {
+	transition-duration: 1s;
 }
 
 .slide-news-next-leave-to, .slide-news-prev-enter {

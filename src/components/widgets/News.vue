@@ -51,11 +51,10 @@ export default {
 		startTimeout() {
 			let timeout = setTimeout(() => {
 				const windowHasFocus = document.hasFocus();
-
 				if (!windowHasFocus) {
 					this.restartTimeout();
 				} else if (this.mouseOver) {
-					console.log("Not going to next news message: hovering.");
+					console.log("Not going to next news message; user is hovering the news widget.");
 					this.restartTimeout();
 				} else {
 					this.next(false);

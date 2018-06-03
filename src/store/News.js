@@ -49,9 +49,10 @@ const newsStore = {
 		async getNewsFromServer({ commit, dispatch }) {
 			try {
 				let res = await axios.get(`${API_URL}/news`);
+				let data = res.data.data;
 				
 				if (res.data.success) {
-					commit('setNewNewsArticles', res.data.res);
+					commit('setNewNewsArticles', data);
 				} else {
 					throw new Error('failed loading news from server');
 				}				

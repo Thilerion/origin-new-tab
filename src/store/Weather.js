@@ -94,7 +94,7 @@ function getPosition() {
 async function getWeatherData(latitude, longitude) {
 	try {
 		let res = await axios.get(`${API_URL}/forecast/${latitude}/${longitude}`);
-		return res.data;
+		return res.data.data;
 	}
 	catch (e) {
 		console.warn(e);

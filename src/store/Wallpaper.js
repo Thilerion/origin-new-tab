@@ -117,7 +117,8 @@ const wallpaperStore = {
 				commit('setWallpaperLoadSuccess', false);
 			}
 		},
-		wallpaperSet({ commit, dispatch }, {wallpapers, currentWallpaperId, collection, expires}) {
+		wallpaperSet(context, { wallpapers, currentWallpaperId, collection, expires }) {
+			const { commit, dispatch } = context;
 			console.log("Wallpaper Set");
 			console.log(!!wallpapers, !!currentWallpaperId, !!collection, !!expires);
 			

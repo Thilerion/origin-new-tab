@@ -9,10 +9,22 @@ import News from './News'
 
 import { initWatchers, initFromStorage } from './api';
 
+import createPersistedState from './utils/persist';
+
 Vue.use(Vuex)
+
+const widgets = [
+	'user',
+	'wallpaper',
+	'quote',
+	'weather',
+	'news'
+]
 
 const store = new Vuex.Store({
 	strict: process.env.NODE_ENV !== 'development',
+
+	plugins: [createPersistedState('sp_', widgets)],
 
 	modules: {
 		Wallpaper,
@@ -28,13 +40,7 @@ const store = new Vuex.Store({
 			username: ''
 		},
 		editingUsername: false,
-		widgets: [
-			'user',
-			'wallpaper',
-			'quote',
-			'weather',
-			'news'
-		]
+		widgets
 	},
 
 	getters: {
@@ -71,7 +77,9 @@ const store = new Vuex.Store({
 
 })
 
-initWatchers(store, store.getters.widgets);
-initFromStorage(store, store.getters.widgets);
+// initWatchers(store, store.getters.widgets);
+// initFromStorage(store, store.getters.widgets);
+
+console.log(store.wallpaperFromStorage());
 
 export default store;

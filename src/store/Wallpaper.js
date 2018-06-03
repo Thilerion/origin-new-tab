@@ -16,7 +16,8 @@ const wallpaperStore = {
 		wallpaperData: {
 			wallpapers: [],
 			currentWallpaperId: 0,
-			collection: 220388
+			//540518 (spectrum), 220388 (standard), 334800 (reflections), 1457745 (moody landscapes), 289662 (great outdoors)
+			collection: 1457745
 		}
 	},
 

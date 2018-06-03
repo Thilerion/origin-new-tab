@@ -30,7 +30,7 @@ import differenceInDays from 'date-fns/difference_in_calendar_days';
 import format from 'date-fns/format';
 import nlLocale from 'date-fns/locale/nl';
 
-const BG_COLORS = ['#333333','#444444','#565656','#6a6a6a','#7d7d7d','#919191','#a6a6a6','#bbbbbb'];
+const BG_COLORS = ['#333333','#434343','#525252','#636363','#747474','#868686','#989898','#aaaaaa'];
 
 export default {
 	components: {
@@ -168,17 +168,23 @@ export default {
 	opacity: 1;
 }
 
-.forecast-item:not(:first-of-type) .overlay-1::before {
+.forecast-item:not(:first-of-type) .forecast-item-background::before {
 	position: absolute;
-	content: "";
-	width: 100%;
-	left: 0%;
+	content: "";	
+	left: 0;
 	top: 0;
-	height: 1px;
+	right: 0;
+	height: 5px;
 	background: rgba(255,255,255,0.1);
 	filter: blur(1px);
 	transform: translateY(-1px);
+	opacity: 0;
 }
+
+.forecast-item:not(:first-of-type) .forecast-item-background {
+	box-shadow: inset 0 7px 15px -9px rgba(255,255,255,0.1);
+}
+
 
 .forecast-item-content {
 	position: relative;

@@ -84,6 +84,7 @@ export default {
 	overflow: hidden;
 	align-items: center;
 	justify-items: center;
-	padding: .5em;
+	padding: .75em .5em;
+	grid-row-gap: 1rem;
 }
 </style>

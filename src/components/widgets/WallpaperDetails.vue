@@ -32,10 +32,13 @@
 			>Photo from <a :href="unsplashUrl" target="_blank">Unsplash</a></p>
 		</div>		
 
+		<transition name="fade-location" mode="out-in">
 		<p
 			v-if="currentWallpaper.location"
 			class="location"
+			:key="currentWallpaper.location"
 		>{{currentWallpaper.location}}</p>
+		</transition>
 	</div>
 </template>
 
@@ -77,6 +80,9 @@ export default {
 			catch(e) {
 				return;
 			}
+		},
+		hasLocation() {
+			return !!this.currentWallpaper.location;
 		}
 	},
 	methods: {
@@ -174,5 +180,11 @@ export default {
 	fill: currentColor;
 }
 
+.fade-location-enter-active, .fade-location-leave-active {
+	transition: opacity 0.2s;
+}
 
+.fade-location-enter, .fade-location-leave-to {
+	opacity: 0!important;
+}
 </style>

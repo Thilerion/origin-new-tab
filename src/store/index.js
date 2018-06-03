@@ -7,7 +7,7 @@ import Quote from './Quote'
 import Weather from './Weather'
 import News from './News'
 
-import { initWatchers, loadFromStorage } from './api';
+import { initWatchers, initFromStorage } from './api';
 
 Vue.use(Vuex)
 
@@ -27,7 +27,14 @@ const store = new Vuex.Store({
 			language: '',
 			username: ''
 		},
-		editingUsername: false
+		editingUsername: false,
+		widgets: [
+			'user',
+			'wallpaper',
+			'quote',
+			'weather',
+			'news'
+		]
 	},
 
 	getters: {
@@ -36,7 +43,8 @@ const store = new Vuex.Store({
 		userWatch: state => state.user,
 		isEditingUsername(state) {
 			return state.editingUsername || !state.user.username;
-		}
+		},
+		widgets: state => state.widgets
 	},
 
 	mutations: {
@@ -50,27 +58,6 @@ const store = new Vuex.Store({
 	},
 
 	actions: {
-		initializeFromStorage({ commit, dispatch }) {
-			let wallpaperData = loadFromStorage('wallpaper');
-			if (wallpaperData) dispatch('wallpaperSet', wallpaperData);
-			else dispatch('wallpaperLoadFailed');
-
-			let userData = loadFromStorage('user');
-			if (userData) dispatch('userSet', userData);
-			else dispatch('userLoadFailed');
-
-			let quoteData = loadFromStorage('quote');
-			if (quoteData) dispatch('quoteSet', quoteData);
-			else dispatch('quoteLoadFailed');
-
-			let weatherData = loadFromStorage('weather');
-			if (weatherData) dispatch('weatherSet', weatherData);
-			else dispatch('weatherLoadFailed');
-
-			let newsData = loadFromStorage('news');
-			if (newsData) dispatch('newsSet', newsData);
-			else dispatch('newsLoadFailed');
-		},
 		userSet({ commit }, userData) {
 			commit('setUsername', userData.username);
 			commit('setLanguage', userData.language);
@@ -84,7 +71,7 @@ const store = new Vuex.Store({
 
 })
 
-initWatchers(store, ['user', 'wallpaper', 'quote', 'weather', 'news']);
-store.dispatch('initializeFromStorage');
+initWatchers(store, store.getters.widgets);
+initFromStorage(store, store.getters.widgets);
 
 export default store;

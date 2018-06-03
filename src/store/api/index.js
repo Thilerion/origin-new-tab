@@ -19,6 +19,21 @@ const initWatchers = (store, widgets = []) => {
 	widgets.forEach((val) => createWatcher(store, val));
 }
 
+const initFromStorage = (store, widgets = []) => {
+	console.log("INITIALIZING LOADING FROM STORAGE", "Widgets to load: ", widgets);
+
+	widgets.forEach((val) => {
+		let data = loadFromStorage(val);
+		if (data) {
+			console.log("Data retrieved from storage for widget", val);
+			store.dispatch(`${val}Set`, data);
+		} else {
+			console.warn("Unable to load data from storage for widget", val);
+			store.dispatch(`${val}LoadFailed`);
+		}
+	});
+}
+
 const saveToStorage = (moduleName, data) => {
 	const key = `sp_${moduleName}`;
 	window.localStorage.setItem(key, JSON.stringify(data));
@@ -34,4 +49,4 @@ const loadFromStorage = (moduleName) => {
 	}
 }
 
-export { initWatchers, loadFromStorage };
+export { initWatchers, loadFromStorage, initFromStorage };

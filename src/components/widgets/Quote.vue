@@ -2,7 +2,10 @@
 	<div v-if="quoteLoaded" class="widget-quote f-shadow-heavy">
 		<p class="quote f-align-l"><span class="q-mark q-mark-top f-shadow-medium">‟ </span>{{quote.randomQuote.quote | removeDot}}<span class="q-mark q-mark-bot f-shadow-medium">&nbsp;„</span></p>
 		<p class="author f-align-r f-style-italic">~ {{quote.randomQuote.author}}</p>	
-		<StartSvgIcon icon="close"/>
+		<button class="reload-btn" @click="reloadQuote">
+			<StartSvgIcon icon="refresh"/>
+		</button>
+		
 	</div>
 </template>
 
@@ -14,6 +17,11 @@ export default {
 		},
 		quote() {
 			return this.$store.getters.quoteWatch;
+		}
+	},
+	methods: {
+		reloadQuote() {
+			this.$store.dispatch('getQuoteFromServer');
 		}
 	},
 	filters: {
@@ -28,7 +36,13 @@ export default {
 
 <style scoped>
 .widget-quote {
-	cursor: default;	
+	justify-self: stretch;
+	align-self: stretch;
+	cursor: default;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .quote {
@@ -53,5 +67,25 @@ export default {
 .q-mark-top {
 	position: relative;
 	top: 0.35rem;
+}
+
+.reload-btn {
+	position: absolute;
+	padding: 0;
+	margin: 0;
+	background: none;
+	border: none;
+	color: inherit;
+	top: 20%;
+	right: -3px;
+	min-width: 18px;
+	width: 18px;
+	height: 18px;
+	opacity: 0;
+	transition: opacity .2s ease;
+}
+
+.widget-quote:hover .reload-btn {
+	opacity: 1;
 }
 </style>

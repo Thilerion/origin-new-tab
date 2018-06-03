@@ -4,6 +4,9 @@ import store from './store/'
 
 import './assets/style/base.css';
 
+import StartSvgIcon from './components/shared/SvgIcon';
+Vue.component('StartSvgIcon', StartSvgIcon);
+
 Vue.directive('focus', {
 	inserted(el) {
 		el.focus();

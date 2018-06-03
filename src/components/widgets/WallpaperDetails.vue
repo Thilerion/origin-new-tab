@@ -34,12 +34,7 @@
 </template>
 
 <script>
-import StartSvgIcon from '../shared/SvgIcon';
-
 export default {
-	components: {
-		StartSvgIcon
-	},
 	data() {
 		return {
 			unsplashBaseUrl: "https://unsplash.com/",

@@ -17,7 +17,8 @@ const wallpaperStore = {
 			wallpapers: [],
 			currentWallpaperId: 0,
 			//540518 (spectrum), 220388 (standard), 334800 (reflections), 1457745 (moody landscapes), 289662 (great outdoors)
-			collection: 1457745
+			collection: 1457745,
+			expires: null
 		}
 	},
 
@@ -58,11 +59,13 @@ const wallpaperStore = {
 			catch (e) {
 				return "";
 			}			
-		}
+		},
+		wallpaperDataExpires: state => state.wallpaperData.expires < new Date().getTime()
 	},
 
 	mutations: {
 		setWallpapers: (state, data) => state.wallpaperData.wallpapers = data,
+		setWallpaperExpires: (state, n) => state.wallpaperData.expires = n,
 		setCurrentWallpaperId(state, id) {
 			if (state.wallpaperData.wallpapers.length - 1 < id < 0) {
 				state.wallpaperData.currentWallpaperId = 0;
@@ -101,7 +104,9 @@ const wallpaperStore = {
 				let res = await axios.get(`${API_URL}/wallpapers/${collection}`);
 				
 				if (res.data.success) {
+					console.log("WALLPAPER DATA: ", res.data);
 					commit('setWallpapers', res.data.data);
+					commit('setWallpaperExpires', res.data.expires);
 					commit('setWallpaperLoadSuccess', true);
 				} else {
 					throw new Error('failed loading wallpapers');
@@ -112,13 +117,21 @@ const wallpaperStore = {
 				commit('setWallpaperLoadSuccess', false);
 			}
 		},
-		wallpaperSet({ commit, dispatch }, {wallpapers, currentWallpaperId, collection}) {
+		wallpaperSet({ commit, dispatch }, {wallpapers, currentWallpaperId, collection, expires}) {
 			console.log("Wallpaper Set");
-			console.log(!!wallpapers, !!currentWallpaperId, !!collection);
-			if (wallpapers && currentWallpaperId >= 0 && collection) {
+			console.log(!!wallpapers, !!currentWallpaperId, !!collection, !!expires);
+			
+			if (!expires) {
+				console.warn('No expiry date set on wallpaper data');
+				dispatch('wallpaperLoadFailed');
+			} if (expires < new Date().getTime()) {
+				console.warn('Wallpaper data has expired');
+				dispatch('wallpaperLoadFailed');
+			} else if (wallpapers && currentWallpaperId >= 0 && collection && expires) {
 				commit('setWallpapers', wallpapers);
 				commit('setCurrentWallpaperId', currentWallpaperId);
 				commit('setCollection', collection);
+				commit('setWallpaperExpires', expires);
 				commit('setWallpaperLoadSuccess', true);
 			} else {
 				dispatch('wallpaperLoadFailed');

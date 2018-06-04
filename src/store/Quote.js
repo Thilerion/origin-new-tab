@@ -13,7 +13,6 @@ const quoteStore = {
 
 	getters: {
 		quoteWatch: state => state.quoteData,
-		quoteLoaded: state => (state.quoteData.randomQuote.quote && state.quoteData.randomQuote.author),
 		quoteDataLoaded: state => state.dataLoaded
 	},
 

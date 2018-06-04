@@ -91,7 +91,7 @@ export default {
 	transform: scale(1.03);
 	box-shadow: 0 0 20vmax rgba(0,0,0,0.4) inset;
 	z-index: -1;
-	filter: contrast(0.92) brightness(0.95);
+	filter: contrast(0.95) brightness(0.85);
 }
 
 .animate.fade-enter-active {

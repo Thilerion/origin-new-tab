@@ -7,11 +7,13 @@ import Quote from './Quote'
 import Weather from './Weather'
 import News from './News'
 
-import createPersistedState from './utils/persist';
-
 Vue.use(Vuex)
 
-const widgets = [
+import createPersistedState from './utils/persist';
+import widgetsApi from './api/index';
+const userApi = widgetsApi.user;
+
+const widgetsList = [
 	'user',
 	'wallpaper',
 	'quote',
@@ -22,7 +24,7 @@ const widgets = [
 const store = new Vuex.Store({
 	strict: process.env.NODE_ENV !== 'development',
 
-	plugins: [createPersistedState('sp_', widgets)],
+	plugins: [createPersistedState('sp_', widgetsList)],
 
 	modules: {
 		Wallpaper,
@@ -38,7 +40,7 @@ const store = new Vuex.Store({
 			username: ''
 		},
 		editingUsername: false,
-		widgets
+		widgets: widgetsList
 	},
 
 	getters: {
@@ -67,7 +69,7 @@ const store = new Vuex.Store({
 			commit('setLanguage', 'NL');
 			commit('setEditingUsername', true);
 		},
-		userSet({ commit }, {username = "", language = ""}) {
+		userSetFromStorage({ commit }, { username = "", language = "" }) {
 			console.warn("USER data loaded, committing now...");
 			commit('setUsername', username);
 			commit('setLanguage', language);

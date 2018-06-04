@@ -43,8 +43,8 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 				//expired: [widgetName]StorageLoadExpired
 				store.dispatch(`${widget}StorageLoadExpired`, data);
 			} else {
-				//everything ok: [widgetName]Set
-				store.dispatch(`${widget}Set`, data);
+				//everything ok: [widgetName]SetFromStorage
+				store.dispatch(`${widget}SetFromStorage`, data);
 			}
 		});
 	}

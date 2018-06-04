@@ -1,7 +1,5 @@
-import axios from 'axios';
-import API_URL from './api/config.api';
-
-const WEATHER_EXP = 3 * 60 * 60 * 1000; //3 uur
+import widgetsApi from './api/index';
+const weatherApi = widgetsApi.weather;
 
 const weatherStore = {
 
@@ -36,7 +34,7 @@ const weatherStore = {
 			state.locationLocal.latitude = latitude;
 			state.locationLocal.longitude = longitude;
 		},
-		setApiData(state, { location, forecast, expires }) {
+		setWeatherData(state, { expires, location, forecast }) {
 			state.apiData.expires = expires;
 			state.apiData.location = { ...location };
 			state.apiData.forecast = { ...forecast };
@@ -48,22 +46,35 @@ const weatherStore = {
 			console.warn('Getting location now');
 			commit('setLocalLocation', await getPosition());			
 		},
-		async weatherLoadFailed({ state, dispatch, commit }) {
-			console.warn('Weather load has failed, now getting location and setting api data');
-			await dispatch('getLocalLocation');
-			const { latitude, longitude } = state.locationLocal;
-			console.warn('Now setting api data after failing');
-			commit('setApiData', await getWeatherData(latitude, longitude));
+		async getWeatherFromServer({state, dispatch}) {
+			try {
+				await dispatch('getLocalLocation');
+				const { latitude, longitude } = state.locationLocal;
+				let url = weatherApi.url.get(latitude, longitude);				
+				let data = await weatherApi.request(url);				
+				console.log("Data from weather actions 'getFromServer': ", data);
+				dispatch('weatherSetFromApi', data);
+			}
+			catch (e) {
+				console.warn("ERROR IN GETTER FROM SERVER: ", e);
+			}
 		},
 		weatherStorageLoadFailed({ dispatch }) {
-			dispatch('weatherLoadFailed');
+			dispatch('getWeatherFromServer');
 		},
 		weatherStorageLoadExpired({ dispatch }, data) {
 			//should commit data if getting from server fails
-			dispatch('weatherLoadFailed');
+			dispatch('getWeatherFromServer');
 		},
-		weatherSet({ commit }, data) {
-			commit('setApiData', data);
+		weatherSetFromStorage({ commit }, localData) {
+			const { location, forecast, expires } = localData;
+			commit('setWeatherData', { expires, location, forecast });
+		},
+		weatherSetFromApi({ commit }, apiData) {
+			const { expires } = apiData;
+			const location = apiData.data.location;
+			const forecast = apiData.data.forecast;
+			commit('setWeatherData', { expires, location, forecast });
 		}
 	}
 
@@ -79,16 +90,6 @@ function getPosition() {
 		}, (err) => {
 			console.warn("Error in retrieving location. ", err);
 			reject(err);
-		}, { timeout: 5000, maximumAge: WEATHER_EXP });
+		}, { timeout: 5000 });
 	})
-}
-
-async function getWeatherData(latitude, longitude) {
-	try {
-		let res = await axios.get(`${API_URL}/forecast/${latitude}/${longitude}`);
-		return res.data.data;
-	}
-	catch (e) {
-		console.warn(e);
-	}
 }

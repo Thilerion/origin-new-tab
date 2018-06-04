@@ -1,5 +1,5 @@
-import axios from 'axios';
-import API_URL from './api/config.api';
+import widgetsApi from './api/index';
+const wallpaperApi = widgetsApi.wallpaper;
 
 const wallpaperStore = {
 
@@ -64,7 +64,7 @@ const wallpaperStore = {
 	},
 
 	mutations: {
-		setWallpapers: (state, data) => state.wallpaperData.wallpapers = data,
+		setWallpapers: (state, data) => state.wallpaperData.wallpapers = [...data],
 		setWallpaperExpires: (state, n) => state.wallpaperData.expires = n,
 		setCurrentWallpaperId(state, id) {
 			if (state.wallpaperData.wallpapers.length - 1 < id < 0) {
@@ -94,26 +94,25 @@ const wallpaperStore = {
 				}				
 				state.wallpaperData.wallpapers.splice(index, 1);
 			}
+		},
+		setWallpaperData(state, { wallpapers, expires, currentWallpaperId, collection }) {
+			state.wallpaperData.wallpapers = [...wallpapers];
+			state.wallpaperData.expires = expires;
+			state.wallpaperData.currentWallpaperId = currentWallpaperId;
+			state.wallpaperData.collection = collection;
 		}
 	},
 
 	actions: {
-		async getWallpapersFromServer({ state, commit, dispatch }) {
+		async getWallpapersFromServer({ getters, commit, dispatch }) {
 			try {
-				const collection = state.wallpaperData.collection;
-				let res = await axios.get(`${API_URL}/wallpapers/${collection}`);
-				
-				if (res.data.success) {
-					console.log("WALLPAPER DATA: ", res.data);
-					commit('setWallpapers', res.data.data);
-					commit('setWallpaperExpires', res.data.expires);
-					commit('setWallpaperLoadSuccess', true);
-				} else {
-					throw new Error('failed loading wallpapers');
-				}				
+				let url = wallpaperApi.url.get(getters.collection);				
+				let data = await wallpaperApi.request(url);				
+				console.log("Data from wallpaper actions 'getFromServer': ", data);
+				dispatch('wallpaperSetFromApi', data);
 			}
 			catch (e) {
-				console.warn(e);
+				console.warn("ERROR IN GETTER FROM SERVER: ", e);
 				commit('setWallpaperLoadSuccess', false);
 			}
 		},
@@ -124,12 +123,20 @@ const wallpaperStore = {
 			//should commit data if getting from server fails
 			dispatch('getWallpapersFromServer');
 		},
-		wallpaperSet({commit}, data) {
+		wallpaperSetFromStorage({commit}, localData) {
+			console.warn("WALLPAPER data loaded, committing now...");
+			const { wallpapers = [], expires, currentWallpaperId = 0, collection } = localData;
+			const commitData = { wallpapers, expires, currentWallpaperId, collection };
+			commit('setWallpaperData', commitData);
+			commit('setWallpaperLoadSuccess', true);
+		},
+		wallpaperSetFromApi({ commit }, apiData) {
 			console.warn("WALLPAPER data loaded, committing now...");			
-			commit('setWallpapers', data.wallpapers);
-			commit('setWallpaperExpires', data.expires);
-			commit('setCurrentWallpaperId', data.currentWallpaperId);
-			commit('setCollection', data.collection);
+			const { data: wallpapers = [], expires } = apiData;
+			commit('setWallpapers', wallpapers);
+			commit('setWallpaperExpires', expires);
+			commit('setCurrentWallpaperId', Math.floor(Math.random() * wallpapers.length));
+			commit('setWallpaperLoadSuccess', true);
 		}
 	}
 

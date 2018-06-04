@@ -1,52 +1,69 @@
-//PERSISTED STATE
+import axios from 'axios';
+import BASE_URL from './config.api';
 
-//propertyToWatch: [moduleName]Watch
-//dispatch to save: [moduleName]Set
-//dispatch if fail: [moduleName]LoadFailed
-
-function createWatcher(store, val) {
-	console.log("Now creating watcher for ", val);
-	store.watch((state, getters) => getters[`${val}Watch`], (newValue, oldValue) => {
-		const stringifiedValue = JSON.parse(JSON.stringify(newValue));
-		console.log(`Watcher is triggered for module ${val}, with value: `, stringifiedValue);
-		saveToStorage(val, stringifiedValue);
-	}, { deep: true });
+const axiosOptions = {
+	timeout: 2000
 }
 
-const initWatchers = (store, widgets = []) => {
-	console.log("INITIALIZING WATCHERS", "Widgets to watch: ", widgets);
-
-	widgets.forEach((val) => createWatcher(store, val));
-}
-
-const initFromStorage = (store, widgets = []) => {
-	console.log("INITIALIZING LOADING FROM STORAGE", "Widgets to load: ", widgets);
-
-	widgets.forEach((val) => {
-		let data = loadFromStorage(val);
-		if (data) {
-			console.log("Data retrieved from storage for widget", val);
-			store.dispatch(`${val}Set`, data);
-		} else {
-			console.warn("Unable to load data from storage for widget", val);
-			store.dispatch(`${val}LoadFailed`);
+const widgets = {
+	'user': {
+		api: false,
+	},
+	'wallpaper': {
+		api: true,
+		url: {
+			required: ['collection'],
+			get(collection) {
+				return `${BASE_URL}/wallpapers/${collection}`
+			}
+		},
+		async request(url) {
+			let data = await axios.get(url, axiosOptions);
+			console.log("DATA IN API FILE: ", data);
+			return data.data;
 		}
-	});
-}
-
-const saveToStorage = (moduleName, data) => {
-	const key = `sp_${moduleName}`;
-	window.localStorage.setItem(key, JSON.stringify(data));
-}
-
-const loadFromStorage = (moduleName) => {
-	const key = `sp_${moduleName}`;
-	const retrieved = window.localStorage.getItem(key);
-	if (retrieved) {
-		return JSON.parse(retrieved);
-	} else {
-		return null;
+	},
+	'quote': {
+		api: true,
+		url: {
+			required: [],
+			get() {
+				return `${BASE_URL}/quote`
+			}
+		},
+		async request(url) {
+			let data = await axios.get(url, axiosOptions);
+			console.log("DATA IN API FILE: ", data);
+			return data.data;
+		}
+	},
+	'weather': {
+		api: true,
+		url: {
+			required: ['latitude', 'longitude'],
+			get(latitude, longitude) {
+				return `${BASE_URL}/forecast/${latitude}/${longitude}`
+			}
+		},
+		async request(url) {
+			let data = await axios.get(url, axiosOptions);
+			console.log("DATA IN API FILE: ", data);
+			return data.data;
+		}
+	},
+	'news': {
+		api: true,
+		url: {
+			required: [],
+			get() {
+				return `${BASE_URL}/news`
+			}
+		},
+		async request(url) {
+			let data = await axios.get(url, axiosOptions);
+			console.log("DATA IN API FILE: ", data);
+			return data.data;
+		}
 	}
-}
-
-export { initWatchers, loadFromStorage, initFromStorage };
+};
+export default widgets;

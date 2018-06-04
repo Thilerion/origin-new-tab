@@ -1,7 +1,5 @@
-import axios from 'axios';
-import API_URL from './api/config.api';
-
-const NEWS_EXP = 2 * 60 * 60 * 1000; //2 uur
+import widgetsApi from './api/index';
+const newsApi = widgetsApi.news;
 
 const newsStore = {
 
@@ -18,25 +16,22 @@ const newsStore = {
 	},
 
 	mutations: {
-		setNewsArticles(state, data) {
-			state.newsData.articles = data.articles;
+		setNewsArticles(state, {articles, expires}) {
+			state.newsData.articles = [...articles];
+			state.newsData.expires = expires;
 		}
 	},
 
 	actions: {
-		async getNewsFromServer({ commit, dispatch }) {
+		async getNewsFromServer({ dispatch }) {
 			try {
-				let res = await axios.get(`${API_URL}/news`);
-				let data = res.data.data;
-				
-				if (res.data.success) {
-					commit('setNewsArticles', data);
-				} else {
-					throw new Error('failed loading news from server');
-				}				
+				let url = newsApi.url.get();				
+				let data = await newsApi.request(url);				
+				console.log("Data from news actions 'getFromServer': ", data);
+				dispatch('newsSetFromApi', data);
 			}
 			catch (e) {
-				console.warn(e);
+				console.warn("ERROR IN GETTER FROM SERVER: ", e);
 			}
 		},
 		newsStorageLoadFailed({ dispatch }) {
@@ -46,8 +41,15 @@ const newsStore = {
 			//should commit data if getting from server fails
 			dispatch('getNewsFromServer');					
 		},
-		newsSet({ commit }, data) {
-			commit('setNewsArticles', data);
+		newsSetFromStorage({ commit }, localData) {
+			const { articles = [], expires } = localData;
+			commit('setNewsArticles', { articles, expires });
+		},
+		newsSetFromApi({ commit }, apiData) {
+			const { data: articles = [], expires } = apiData;
+			console.log("Articles, expires, apiData (from news)");
+			console.log(articles, expires, apiData);
+			commit('setNewsArticles', { articles, expires });
 		}
 	}
 

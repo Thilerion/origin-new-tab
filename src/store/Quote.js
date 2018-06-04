@@ -1,13 +1,11 @@
-import axios from 'axios';
-import API_URL from './api/config.api';
-
-const QUOTE_EXP = 6 * 60 * 60 * 1000; //6 uur
+import widgetsApi from './api/index';
+const quoteApi = widgetsApi.quote;
 
 const quoteStore = {
 
 	state: {
 		quoteData: {
-			randomQuote: [],
+			randomQuote: {},
 			expires: null
 		}
 	},
@@ -18,25 +16,22 @@ const quoteStore = {
 	},
 
 	mutations: {
-		setQuote: (state, q) => state.quoteData = q
+		setQuote: (state, { randomQuote, expires }) => {
+			state.quoteData.randomQuote = { ...randomQuote };
+			state.quoteData.expires = expires;
+		}
 	},
 
 	actions: {
-		async getQuoteFromServer({commit}) {
+		async getQuoteFromServer({dispatch}) {
 			try {
-				let res = await axios.get(`${API_URL}/quote`);
-				if (res.data.success) {
-					let q = {
-						randomQuote: res.data.data,
-						dateRetrieved: new Date().getTime()
-					};
-					commit('setQuote', q);					
-				} else {
-					throw new Error('failed loading quote');
-				}
+				let url = quoteApi.url.get();				
+				let data = await quoteApi.request(url);				
+				console.log("Data from quote actions 'getFromServer': ", data);
+				dispatch('quoteSetFromApi', data);
 			}
 			catch (e) {
-				console.warn(e);
+				console.warn("ERROR IN GETTER FROM SERVER: ", e);
 			}
 		},
 		quoteStorageLoadFailed({ dispatch }) {
@@ -46,8 +41,13 @@ const quoteStore = {
 			//should commit data if getting from server fails
 			dispatch('getQuoteFromServer');
 		},
-		quoteSet({ commit }, data) {
-			commit('setQuote', data);
+		quoteSetFromStorage({ commit }, localData) {
+			const { randomQuote, expires } = localData;
+			commit('setQuote', { randomQuote, expires });
+		},
+		quoteSetFromApi({ commit }, apiData) {
+			const { data: randomQuote, expires } = apiData;
+			commit('setQuote', { randomQuote, expires });
 		}
 	}
 

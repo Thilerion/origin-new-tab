@@ -25,7 +25,7 @@ const quoteStore = {
 	},
 
 	actions: {
-		async getQuoteFromServer({dispatch}) {
+		async getQuoteFromServer({dispatch}, commitOnFail) {
 			try {
 				let url = quoteApi.url.get();				
 				let data = await quoteApi.request(url);				
@@ -34,6 +34,12 @@ const quoteStore = {
 			}
 			catch (e) {
 				console.warn("ERROR IN GETTER FROM SERVER: ", e);
+				if (commitOnFail) {
+					console.warn("However, data was found in storage (although outdated) which will now be committed.");
+					dispatch('quoteSetFromStorage', commitOnFail);
+				} else {
+					console.warn("Also, no data was found in localStorage.");
+				}
 			}
 		},
 		quoteStorageLoadFailed({ dispatch }) {
@@ -41,7 +47,7 @@ const quoteStore = {
 		},
 		quoteStorageLoadExpired({ dispatch }, data) {
 			//should commit data if getting from server fails
-			dispatch('getQuoteFromServer');
+			dispatch('getQuoteFromServer', data);
 		},
 		quoteSetFromStorage({ commit }, localData) {
 			const { randomQuote, expires } = localData;

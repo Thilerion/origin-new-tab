@@ -33,6 +33,7 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 	}
 
 	function isExpired(expiryDate) {
+		// return true;
 		return expiryDate - new Date().getTime() < 0;
 	}
 

@@ -5,7 +5,7 @@
 		<p class="summary">{{currently.summary}}</p>
 		<p class="location">{{addressCity}}</p>
 		<div class="row-extended">
-			<StartWeatherExtended class="extended" v-show="showExtended" :forecast="forecast.daily" />
+			<StartWeatherExtended class="extended" v-show="showExtended && weatherDataLoaded" :forecast="forecast.daily" />
 		</div>		
 	</div>
 </template>

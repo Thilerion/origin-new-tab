@@ -7,8 +7,6 @@ import Quote from './Quote'
 import Weather from './Weather'
 import News from './News'
 
-import { initWatchers, initFromStorage } from './api';
-
 import createPersistedState from './utils/persist';
 
 Vue.use(Vuex)
@@ -64,22 +62,18 @@ const store = new Vuex.Store({
 	},
 
 	actions: {
-		userSet({ commit }, userData) {
-			commit('setUsername', userData.username);
-			commit('setLanguage', userData.language);
-		},
-		userLoadFailed({ commit }) {
-			console.warn("SETTING DEFAULT USER DATA");
+		userStorageLoadFailed({ commit }) {
+			console.warn("Setting default USER data.");
 			commit('setLanguage', 'NL');
 			commit('setEditingUsername', true);
+		},
+		userSet({ commit }, {username = "", language = ""}) {
+			console.warn("USER data loaded, committing now...");
+			commit('setUsername', username);
+			commit('setLanguage', language);
 		}
 	}
 
 })
-
-// initWatchers(store, store.getters.widgets);
-// initFromStorage(store, store.getters.widgets);
-
-console.log(store.wallpaperFromStorage());
 
 export default store;

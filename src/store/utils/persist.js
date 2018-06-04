@@ -37,10 +37,13 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 			
 			let data = store[`${widget}FromStorage`]();
 			if (!data) {
+				//no data: [widgetName]StorageLoadFailed
 				store.dispatch(`${widget}StorageLoadFailed`);
 			} else if (data.expires && isExpired(data.expires)) {
+				//expired: [widgetName]StorageLoadExpired
 				store.dispatch(`${widget}StorageLoadExpired`, data);
 			} else {
+				//everything ok: [widgetName]Set
 				store.dispatch(`${widget}Set`, data);
 			}
 		});

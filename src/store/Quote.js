@@ -8,7 +8,7 @@ const quoteStore = {
 	state: {
 		quoteData: {
 			randomQuote: [],
-			dateRetrieved: null
+			expires: null
 		}
 	},
 
@@ -22,18 +22,6 @@ const quoteStore = {
 	},
 
 	actions: {
-		quoteSet({ commit, dispatch }, quoteData) {
-			if (quoteData && quoteData.randomQuote && quoteData.dateRetrieved) {
-				let timeSinceQuote = new Date().getTime() - quoteData.dateRetrieved;
-				if (timeSinceQuote > QUOTE_EXP) dispatch('quoteLoadFailed');
-				else commit('setQuote', quoteData);
-			} else {
-				dispatch('quoteLoadFailed');
-			}
-		},
-		quoteLoadFailed({ commit, dispatch }) {
-			dispatch('getQuoteFromServer');
-		},
 		async getQuoteFromServer({commit}) {
 			try {
 				let res = await axios.get(`${API_URL}/quote`);
@@ -50,6 +38,16 @@ const quoteStore = {
 			catch (e) {
 				console.warn(e);
 			}
+		},
+		quoteStorageLoadFailed({ dispatch }) {
+			dispatch('getQuoteFromServer');
+		},
+		quoteStorageLoadExpired({ dispatch }, data) {
+			//should commit data if getting from server fails
+			dispatch('getQuoteFromServer');
+		},
+		quoteSet({ commit }, data) {
+			commit('setQuote', data);
 		}
 	}
 

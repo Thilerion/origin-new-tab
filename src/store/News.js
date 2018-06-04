@@ -7,7 +7,7 @@ const newsStore = {
 
 	state: {
 		newsData: {
-			lastRetrieved: null,
+			expires: null,
 			articles: []
 		}
 	},
@@ -18,41 +18,19 @@ const newsStore = {
 	},
 
 	mutations: {
-		setNewNewsArticles(state, data) {
-			state.newsData.articles = data.articles;
-			state.newsData.lastRetrieved = new Date().getTime();
-		},
 		setNewsArticles(state, data) {
 			state.newsData.articles = data.articles;
-			state.newsData.lastRetrieved = data.lastRetrieved;
 		}
 	},
 
 	actions: {
-		newsLoadFailed({dispatch}) {
-			console.warn("News load failed");
-			dispatch('getNewsFromServer');
-		},
-		newsSet({state, commit, dispatch}, data) {
-			const newsDataAge = new Date().getTime() - data.lastRetrieved;
-
-			let dur = new Date(newsDataAge).toISOString().substr(11, 8);
-			console.warn("Age of news data: ", dur);
-
-			if (newsDataAge > NEWS_EXP) {
-				dispatch('getNewsFromServer');
-				console.warn("News was outdated. Getting new news from server");
-			} else {
-				commit('setNewsArticles', data);
-			}			
-		},
 		async getNewsFromServer({ commit, dispatch }) {
 			try {
 				let res = await axios.get(`${API_URL}/news`);
 				let data = res.data.data;
 				
 				if (res.data.success) {
-					commit('setNewNewsArticles', data);
+					commit('setNewsArticles', data);
 				} else {
 					throw new Error('failed loading news from server');
 				}				
@@ -60,6 +38,16 @@ const newsStore = {
 			catch (e) {
 				console.warn(e);
 			}
+		},
+		newsStorageLoadFailed({ dispatch }) {
+			dispatch('getNewsFromServer');
+		},
+		newsStorageLoadExpired({ dispatch }, data) {
+			//should commit data if getting from server fails
+			dispatch('getNewsFromServer');					
+		},
+		newsSet({ commit }, data) {
+			commit('setNewsArticles', data);
 		}
 	}
 

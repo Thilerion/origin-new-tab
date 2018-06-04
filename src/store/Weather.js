@@ -12,7 +12,7 @@ const weatherStore = {
 		},
 
 		apiData: {
-			lastRetrieved: null,
+			expires: null,
 			location: {},
 			forecast: {}
 		}
@@ -20,13 +20,7 @@ const weatherStore = {
 	},
 
 	getters: {
-		weatherWatch: state => {
-			return {
-				locationLocal: state.locationLocal,
-				apiData: state.apiData
-			}
-		},
-		weatherDataFresh: state => (new Date().getTime() - state.apiData.lastRetrieved) < WEATHER_EXP,
+		weatherWatch: state => state.apiData,
 		forecast: state => state.apiData.forecast,
 		location: state => state.apiData.location,
 		address: state => state.apiData.location.bestAddress,
@@ -34,7 +28,7 @@ const weatherStore = {
 			let address = state.apiData.location.bestAddress;
 			if (typeof address === 'String') return address.split(',')[0];
 		},
-		fresh: state => new Date().getTime() - state.apiData.lastRetrieved < WEATHER_EXP
+		expires: state => state.apiData.expires
 	},
 
 	mutations: {
@@ -42,8 +36,8 @@ const weatherStore = {
 			state.locationLocal.latitude = latitude;
 			state.locationLocal.longitude = longitude;
 		},
-		setApiData(state, { location, forecast, lastRetrieved = new Date().getTime() }) {
-			state.apiData.lastRetrieved = lastRetrieved;
+		setApiData(state, { location, forecast, expires }) {
+			state.apiData.expires = expires;
 			state.apiData.location = { ...location };
 			state.apiData.forecast = { ...forecast };
 		}
@@ -61,17 +55,15 @@ const weatherStore = {
 			console.warn('Now setting api data after failing');
 			commit('setApiData', await getWeatherData(latitude, longitude));
 		},
-		weatherSet({ dispatch, commit }, weatherData) {
-			let fresh = new Date().getTime() - weatherData.apiData.lastRetrieved < WEATHER_EXP;
-			console.warn('Setting weather from storage. Freshness is: ', fresh);
-			if (fresh) {
-				console.warn('It is fresh, so committing to store.');
-				commit('setLocalLocation', weatherData.locationLocal);
-				commit('setApiData', weatherData.apiData);
-			} else {
-				console.warn('It is not fresh, so dispatching the weatherLoadFailed');
-				dispatch('weatherLoadFailed');
-			}
+		weatherStorageLoadFailed({ dispatch }) {
+			dispatch('weatherLoadFailed');
+		},
+		weatherStorageLoadExpired({ dispatch }, data) {
+			//should commit data if getting from server fails
+			dispatch('weatherLoadFailed');
+		},
+		weatherSet({ commit }, data) {
+			commit('setApiData', data);
 		}
 	}
 

@@ -117,29 +117,19 @@ const wallpaperStore = {
 				commit('setWallpaperLoadSuccess', false);
 			}
 		},
-		wallpaperSet(context, { wallpapers, currentWallpaperId, collection, expires }) {
-			const { commit, dispatch } = context;
-			console.log("Wallpaper Set");
-			console.log(!!wallpapers, !!currentWallpaperId, !!collection, !!expires);
-			
-			if (!expires) {
-				console.warn('No expiry date set on wallpaper data');
-				dispatch('wallpaperLoadFailed');
-			} if (expires < new Date().getTime()) {
-				console.warn('Wallpaper data has expired');
-				dispatch('wallpaperLoadFailed');
-			} else if (wallpapers && currentWallpaperId >= 0 && collection && expires) {
-				commit('setWallpapers', wallpapers);
-				commit('setCurrentWallpaperId', currentWallpaperId);
-				commit('setCollection', collection);
-				commit('setWallpaperExpires', expires);
-				commit('setWallpaperLoadSuccess', true);
-			} else {
-				dispatch('wallpaperLoadFailed');
-			}
-		},
-		wallpaperLoadFailed({ commit, dispatch }) {
+		wallpaperStorageLoadFailed({dispatch}) {
 			dispatch('getWallpapersFromServer');
+		},
+		wallpaperStorageLoadExpired({dispatch}, data) {
+			//should commit data if getting from server fails
+			dispatch('getWallpapersFromServer');
+		},
+		wallpaperSet({commit}, data) {
+			console.warn("WALLPAPER data loaded, committing now...");			
+			commit('setWallpapers', data.wallpapers);
+			commit('setWallpaperExpires', data.expires);
+			commit('setCurrentWallpaperId', data.currentWallpaperId);
+			commit('setCollection', data.collection);
 		}
 	}
 

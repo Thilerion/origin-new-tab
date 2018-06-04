@@ -3,14 +3,20 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 	// no data in store: [widgetName]StorageLoadFailed
 	// expired: [widgetName]StorageLoadExpired
 
-	function createWatcher(store, val) {
-		console.log("Now creating watcher for ", val);
-		store.watch((state, getters) => getters[`${val}Watch`], (newValue, oldValue) => {
-			const stringifiedValue = JSON.parse(JSON.stringify(newValue));
-			console.log(`Watcher is triggered for module ${val}, with value: `, stringifiedValue);
-			saveToStorage(val, stringifiedValue);
-		}, { deep: true });
+	const toWatch = (val) => (state, getters) => getters[`${val}Watch`];
+
+	const watchCallback = (val) => (newValue, oldValue) => {
+		console.log(`Watcher is triggered for module ${val}.`);
+		saveToStorage(val, newValue);
 	}
+
+	function createWatcher(store, val) {
+		console.log(`Creating watcher for ${val}`);
+
+		store.watch(toWatch(val), watchCallback(val), { deep: true });
+	}
+
+	
 
 	function saveToStorage(widget, data) {
 		const key = `${storagePrefix}${widget}`;

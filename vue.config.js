@@ -10,3 +10,10 @@ module.exports = {
 	}
 }
 */
+
+module.exports = {
+	configureWebpack: {
+		//https://webpack.js.org/configuration/devtool/
+		//devtool: 'eval-source-map'
+	}
+}

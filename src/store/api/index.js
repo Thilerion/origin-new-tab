@@ -2,7 +2,7 @@ import axios from 'axios';
 import BASE_URL from './config.api';
 
 const axiosOptions = {
-	timeout: 2000
+	timeout: 6000
 }
 
 const widgets = {

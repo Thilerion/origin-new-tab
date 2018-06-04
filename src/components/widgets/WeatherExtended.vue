@@ -8,7 +8,7 @@
 			<li class="forecast-item" v-for="(day, index) in forecastDays" :key="day.time">
 				<div class="forecast-item-background" :style="{'background-color': bgColors[index]}"></div>
 				<div class="forecast-item-content">
-					<StartClimacon class="small-climacon" :icon="day.icon" />
+					<StartClimacon class="small-climacon" :icon="day.icon" no-night />
 					<p class="day">{{day.time | formatDate}}</p>
 					<p class="temperatures">{{day.temperatureHigh | roundNumber}}&deg; <span class="night">{{day.temperatureLow | roundNumber}}&deg;</span></p>
 				</div>

@@ -2,7 +2,7 @@
 	<div class="widget-news f-shadow-heavy" @mouseover="mouseOver = true" @mouseout="mouseOver = false" v-if="newsDataLoaded">
 		<div class="news-item-wrapper clip-edges f-shadow-heavy">
 			<transition :name="transitionName">
-				<a v-if="showItem != null" :href="shuffledArray[showItem].url" class="news-item" :key="showItem" target="_blank" rel="noopener" :class="{faster: fasterTransition}">{{shuffledArray[showItem].title}}</a>
+				<a v-if="showItem != null" :href="news[showItem].url" class="news-item" :key="showItem" target="_blank" rel="noopener" :class="{faster: fasterTransition}">{{news[showItem].title}}</a>
 			</transition>
 		</div>	
 		<button class="news-scroll-btn scroll-prev" @click="prev(true)">&lt;</button>	
@@ -15,7 +15,6 @@ export default {
 	data() {
 		return {
 			showItem: null,
-			shuffledArray: [],
 			dir: null,
 			mouseOver: false,
 			timeout: null,
@@ -78,18 +77,9 @@ export default {
 			const amount = this.news.length;
 			this.showItem = Math.floor(Math.random() * amount);
 			console.log("Random news item: ", this.showItem);
-		},
-		shuffleArray(arr) {
-			let shuffled = [...arr];
-			for (let i = shuffled.length - 1; i > 0; i--) {
-				const j = Math.floor(Math.random() * (i + 1));
-				[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-			}
-			this.shuffledArray = [...shuffled];
 		}
 	},
 	beforeMount() {
-		this.shuffleArray(this.news);
 		this.loadRandomArticle();
 		this.startTimeout();
 	},

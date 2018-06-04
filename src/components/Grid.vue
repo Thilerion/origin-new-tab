@@ -1,12 +1,15 @@
 <template>
 	<div class="grid">
-		<component
+		<WidgetFadeIn
 			v-for="(widget, index) of widgetNames"
 			:key="widget"
+		>
+		<component			
 			:is="widget"
 			:style="widgetGridPlacement[index]"
 			class="widget"
 		/>
+		</WidgetFadeIn>
 	</div>
 </template>
 

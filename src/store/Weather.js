@@ -14,9 +14,7 @@ const weatherStore = {
 			location: {},
 			forecast: {}
 		},
-
 		dataLoaded: false
-
 	},
 
 	getters: {
@@ -49,7 +47,7 @@ const weatherStore = {
 			console.warn('Getting location now');
 			commit('setLocalLocation', await getPosition());			
 		},
-		async getWeatherFromServer({state, dispatch}) {
+		async getWeatherFromServer({state, dispatch}, commitOnFail) {
 			try {
 				await dispatch('getLocalLocation');
 				const { latitude, longitude } = state.locationLocal;
@@ -60,14 +58,20 @@ const weatherStore = {
 			}
 			catch (e) {
 				console.warn("ERROR IN GETTER FROM SERVER: ", e);
+				if (commitOnFail) {
+					console.warn("However, data was found in storage (although outdated) which will now be committed.");
+					dispatch('weatherSetFromStorage', commitOnFail);
+				} else {
+					//TODO: set load failure?
+					console.warn("Also, no data was found in localStorage.");
+				}
 			}
 		},
 		weatherStorageLoadFailed({ dispatch }) {
 			dispatch('getWeatherFromServer');
 		},
 		weatherStorageLoadExpired({ dispatch }, data) {
-			//should commit data if getting from server fails
-			dispatch('getWeatherFromServer');
+			dispatch('getWeatherFromServer', data);
 		},
 		weatherSetFromStorage({ commit }, localData) {
 			const { location, forecast, expires } = localData;

@@ -1,7 +1,7 @@
 <template>
 	<transition name="fade">
 		<div
-			v-if="wallpaperInitialized"
+			v-if="showWallpaper"
 			class="background-image"
 			:key="loadedImageSource"
 			:style="[backgroundStyle]"
@@ -32,8 +32,8 @@ export default {
 				return "";
 			}
 		},
-		wallpaperInitialized() {
-			return this.$store.getters.wallpaperInitialized;
+		showWallpaper() {
+			return this.$store.getters.showWallpaper;
 		},
 		nextWallpaperUrl() {
 			return this.$store.getters.nextWallpaperUrl;

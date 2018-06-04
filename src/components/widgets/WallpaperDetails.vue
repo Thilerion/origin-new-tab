@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-wallpaper-details widget-no-select f-shadow-medium" v-if="wallpaperInitialized">
+	<div class="widget-wallpaper-details widget-no-select f-shadow-medium" v-if="showWallpaper">
 		<div class="row-bottom">
 			<div class="buttons" v-if="!usingDefaultWallpaper">
 				<button class="load-btn" @click="nextWallpaper" alt="Next wallpaper">
@@ -20,6 +20,7 @@
 			<p
 				v-else
 				class="attribution"
+				:class="{'default-wallpaper': usingDefaultWallpaper}"
 			>Photo from <a :href="unsplashUrl" target="_blank">Unsplash</a></p>
 		</div>		
 
@@ -43,8 +44,7 @@ export default {
 	},
 	computed: {
 		usingDefaultWallpaper() {
-			if (this.$store.getters.failedLoadingWallpaper) return true;
-			return false;
+			return this.$store.getters.showDefaultWallpaper;
 		},
 		currentWallpaper() {
 			return this.$store.getters.currentWallpaper;
@@ -60,8 +60,8 @@ export default {
 		unsplashUrl() {
 			return `${this.unsplashBaseUrl}${this.unsplashReferralSuffix}`;
 		},
-		wallpaperInitialized() {
-			return this.$store.getters.wallpaperInitialized;
+		showWallpaper() {
+			return this.$store.getters.showWallpaper;
 		},
 		downloadUrl() {
 			try {
@@ -136,7 +136,7 @@ export default {
 	transform: translateX(0);
 }
 
-.widget-wallpaper-details:hover .attribution {
+.widget-wallpaper-details:hover .attribution, .attribution.default-wallpaper {
 	transform: translateX(0);
 }
 

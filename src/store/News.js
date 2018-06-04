@@ -7,18 +7,21 @@ const newsStore = {
 		newsData: {
 			expires: null,
 			articles: []
-		}
+		},
+		dataLoaded: false
 	},
 
 	getters: {
 		newsWatch: state => state.newsData,
-		newsArticles: state => state.newsData.articles
+		newsArticles: state => state.newsData.articles,
+		newsDataLoaded: state => state.dataLoaded
 	},
 
 	mutations: {
 		setNewsArticles(state, {articles, expires}) {
 			state.newsData.articles = [...articles];
 			state.newsData.expires = expires;
+			state.dataLoaded = true;
 		}
 	},
 

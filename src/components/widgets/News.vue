@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-news f-shadow-heavy" @mouseover="mouseOver = true" @mouseout="mouseOver = false">
+	<div class="widget-news f-shadow-heavy" @mouseover="mouseOver = true" @mouseout="mouseOver = false" v-if="newsDataLoaded">
 		<div class="news-item-wrapper clip-edges f-shadow-heavy">
 			<transition :name="transitionName">
 				<a v-if="showItem != null" :href="shuffledArray[showItem].url" class="news-item" :key="showItem" target="_blank" rel="noopener" :class="{faster: fasterTransition}">{{shuffledArray[showItem].title}}</a>
@@ -28,6 +28,9 @@ export default {
 		},
 		transitionName() {
 			return `slide-news-${this.dir}`;
+		},
+		newsDataLoaded() {
+			return this.$store.getters.newsDataLoaded;
 		}
 	},
 	methods: {

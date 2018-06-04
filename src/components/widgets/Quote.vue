@@ -13,7 +13,7 @@
 export default {
 	computed: {
 		quoteLoaded() {
-			return this.$store.getters.quoteLoaded;
+			return this.$store.getters.quoteDataLoaded;
 		},
 		quote() {
 			return this.$store.getters.quoteWatch;

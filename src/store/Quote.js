@@ -7,18 +7,21 @@ const quoteStore = {
 		quoteData: {
 			randomQuote: {},
 			expires: null
-		}
+		},
+		dataLoaded: false
 	},
 
 	getters: {
 		quoteWatch: state => state.quoteData,
-		quoteLoaded: state => (state.quoteData.randomQuote.quote && state.quoteData.randomQuote.author)
+		quoteLoaded: state => (state.quoteData.randomQuote.quote && state.quoteData.randomQuote.author),
+		quoteDataLoaded: state => state.dataLoaded
 	},
 
 	mutations: {
 		setQuote: (state, { randomQuote, expires }) => {
 			state.quoteData.randomQuote = { ...randomQuote };
 			state.quoteData.expires = expires;
+			state.dataLoaded = true;
 		}
 	},
 

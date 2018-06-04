@@ -12,7 +12,8 @@ const wallpaperStore = {
 			urlDownload: require('@/assets/wallpaper/default_wallpaper.jpg'),
 			urlRaw: require('@/assets/wallpaper/default_wallpaper.jpg')
 		},
-		wallpaperLoadSuccess: null,
+		dataLoaded: false,
+		dataLoadFailure: false,
 		wallpaperData: {
 			wallpapers: [],
 			currentWallpaperId: 0,
@@ -23,22 +24,22 @@ const wallpaperStore = {
 	},
 
 	getters: {
-		currentWallpaper: state => {
-			const loaded = state.wallpaperLoadSuccess;
-			if (loaded === null) {
-				return;
-			}
-			if (loaded === false) {
+		showDefaultWallpaper: state => !state.dataLoaded && state.dataLoadFailure,
+		showExternalWallpaper: state => state.dataLoaded && !state.dataLoadFailure,
+		showWallpaper: state => state.dataLoaded || state.dataLoadFailure,
+		currentWallpaper: (state, getters) => {
+			if (getters.showDefaultWallpaper) {
 				return state.defaultWallpaper;
 			}
-			return state.wallpaperData.wallpapers[state.wallpaperData.currentWallpaperId];
+			if (getters.showExternalWallpaper) {
+				return state.wallpaperData.wallpapers[state.wallpaperData.currentWallpaperId];
+			}
+			return;
 		},
 		collection: state => state.wallpaperData.collection,
 		wallpaperWatch: state => {
 			return state.wallpaperData;
 		},
-		wallpaperLoadSuccess: state => state.wallpaperLoadSuccess,
-		wallpaperInitialized: state => state.wallpaperLoadSuccess != null,
 		wallpaperColor: (state, getters) => {
 			if (getters.currentWallpaper) return getters.currentWallpaper.color;
 			else return;
@@ -59,8 +60,7 @@ const wallpaperStore = {
 			catch (e) {
 				return "";
 			}			
-		},
-		wallpaperDataExpires: state => state.wallpaperData.expires < new Date().getTime()
+		}
 	},
 
 	mutations: {
@@ -82,7 +82,6 @@ const wallpaperStore = {
 			const nextId = state.wallpaperData.currentWallpaperId + 1;
 			state.wallpaperData.currentWallpaperId = nextId % arLength;
 		},
-		setWallpaperLoadSuccess: (state, status) => state.wallpaperLoadSuccess = !!status,
 		disableCurrentWallpaper(state) {
 			if (state.wallpaperData.wallpapers.length < 2) {
 				console.warn("Can't hide if only 1 wallpaper is left.");
@@ -100,7 +99,9 @@ const wallpaperStore = {
 			state.wallpaperData.expires = expires;
 			state.wallpaperData.currentWallpaperId = currentWallpaperId;
 			state.wallpaperData.collection = collection;
-		}
+		},
+		setWallpaperLoadFailure: state => state.dataLoadFailure = true,
+		setWallpaperLoaded: state => state.dataLoaded = true
 	},
 
 	actions: {
@@ -113,7 +114,7 @@ const wallpaperStore = {
 			}
 			catch (e) {
 				console.warn("ERROR IN GETTER FROM SERVER: ", e);
-				commit('setWallpaperLoadSuccess', false);
+				commit('setWallpaperLoadFailure');							
 			}
 		},
 		wallpaperStorageLoadFailed({dispatch}) {
@@ -128,7 +129,7 @@ const wallpaperStore = {
 			const { wallpapers = [], expires, currentWallpaperId = 0, collection } = localData;
 			const commitData = { wallpapers, expires, currentWallpaperId, collection };
 			commit('setWallpaperData', commitData);
-			commit('setWallpaperLoadSuccess', true);
+			commit('setWallpaperLoaded');			
 		},
 		wallpaperSetFromApi({ commit }, apiData) {
 			console.warn("WALLPAPER data loaded, committing now...");			
@@ -136,7 +137,7 @@ const wallpaperStore = {
 			commit('setWallpapers', wallpapers);
 			commit('setWallpaperExpires', expires);
 			commit('setCurrentWallpaperId', Math.floor(Math.random() * wallpapers.length));
-			commit('setWallpaperLoadSuccess', true);
+			commit('setWallpaperLoaded');
 		}
 	}
 

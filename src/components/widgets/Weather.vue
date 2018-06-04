@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-weather f-shadow-medium widget-no-select" @click="extend">
+	<div class="widget-weather f-shadow-medium widget-no-select" @click="extend" v-if="weatherDataLoaded">
 		<StartClimacon v-if="icon" :icon="icon" class="icon f-shadow-light"></StartClimacon>
 		<p class="temperature">{{currently.temperature | roundNumber}} &deg;</p>
 		<p class="summary">{{currently.summary}}</p>
@@ -39,6 +39,9 @@ export default {
 		},
 		icon() {
 			if (this.currently) return this.currently.icon;
+		},
+		weatherDataLoaded() {
+			return this.$store.getters.weatherDataLoaded;
 		}
 	},
 	methods: {

@@ -13,7 +13,9 @@ const weatherStore = {
 			expires: null,
 			location: {},
 			forecast: {}
-		}
+		},
+
+		dataLoaded: false
 
 	},
 
@@ -26,7 +28,7 @@ const weatherStore = {
 			let address = state.apiData.location.bestAddress;
 			if (typeof address === 'String') return address.split(',')[0];
 		},
-		expires: state => state.apiData.expires
+		weatherDataLoaded: state => state.dataLoaded
 	},
 
 	mutations: {
@@ -38,6 +40,7 @@ const weatherStore = {
 			state.apiData.expires = expires;
 			state.apiData.location = { ...location };
 			state.apiData.forecast = { ...forecast };
+			state.dataLoaded = true;
 		}
 	},
 

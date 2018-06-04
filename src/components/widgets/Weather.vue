@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-weather f-shadow-medium widget-no-select" v-if="fresh" @click="extend">
+	<div class="widget-weather f-shadow-medium widget-no-select" @click="extend">
 		<StartClimacon v-if="icon" :icon="icon" class="icon f-shadow-light"></StartClimacon>
 		<p class="temperature">{{currently.temperature | roundNumber}} &deg;</p>
 		<p class="summary">{{currently.summary}}</p>
@@ -21,16 +21,12 @@ export default {
 	},
 	data() {
 		return {
-			fresh: this.$store.getters.fresh,
 			showExtended: false
 		}
 	},
 	computed: {
 		forecast() {
 			return this.$store.getters.forecast;
-		},
-		computeFresh() {
-			return this.$store.getters.fresh;
 		},
 		location() {
 			return this.$store.getters.location;
@@ -48,11 +44,6 @@ export default {
 	methods: {
 		extend() {
 			this.showExtended = !this.showExtended;
-		}
-	},
-	watch: {
-		computeFresh(newValue, oldValue) {
-			if (newValue === true) this.fresh = true;
 		}
 	},
 	filters: {

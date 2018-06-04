@@ -104,6 +104,7 @@ export default {
 	--transition-dur: 0.6s;
 	--transition-dur1: 0.3s;
 	--transition-dur2: 0.3s;
+	--transition-dur3: 0.45s;
 }
 
 .background-image {
@@ -135,11 +136,11 @@ export default {
 }
 
 .slide-list-leave-active {
-	transition: opacity var(--transition-dur) ease-out; 
+	transition: opacity var(--transition-dur3) ease-out, transform var(--transition-dur) ease-in-out; 
 }
 
 .slide-list-enter, .slide-list-leave-to {
-	opacity: 0.4;
+	opacity: 0.2!important;
 }
 
 .slide-list-enter-active .forecast-list, .slide-list-leave-active .forecast-list {

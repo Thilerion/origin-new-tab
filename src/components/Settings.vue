@@ -9,7 +9,7 @@
 		<main class="settings-content">
 			<div class="setting-wrap">
 				<label class="f-weight-heavy">Naam</label>
-				<input v-model="currentSettings.name" type="text">
+				<input v-model="currentSettings.name" type="text" class="input">
 			</div>
 			<div class="setting-wrap">
 				<label class="f-weight-heavy">Taal</label>
@@ -33,15 +33,19 @@
 			</div>
 			<div class="setting-wrap">
 				<label class="f-weight-heavy">Achtergrond collectie</label>
+				<div class="select">
 				<select v-model="currentSettings.wallpaperCollection">
 					<option v-for="col in settingsOptions.wallpaper.wallpaperCollection" :key="col.id" :value="col.id">{{col.name}}</option>
 				</select>
+				</div>
 			</div>
 			<div class="setting-wrap">
 				<label class="f-weight-heavy">Quote categorie</label>
+				<div class="select">
 				<select v-model="currentSettings.quoteCategory" class="quote-option">
 					<option v-for="cat in settingsOptions.quote.quoteCategory" :key="cat" :value="cat" class="quote-option">{{cat}}</option>
 				</select>
+				</div>				
 			</div>
 			<button @click="saveSettings" class="save-btn">Opslaan</button>
 		</main>
@@ -157,9 +161,7 @@ export default {
 }
 
 .setting-wrap > input {
-	border: none;
-	border-radius: 2px;
-	padding: 0.25em 0.25em;
+	
 }
 
 .setting-input:not(:last-of-type) {

@@ -25,9 +25,9 @@
 					<input type="radio" v-model="currentSettings.fontSize">
 					<span class="setting-input-label">Standaard</span>
 				</div>
-				<div class="setting-input">
-					<input type="range" :class="{'range-disabled': disableFontSizeSlider}" :min="settingsOptions.user.fontSize.min" :max="settingsOptions.user.fontSize.max" v-model="currentSettings.fontSize">
-					<span v-show="!disableFontSizeSlider" class="setting-input-label">{{currentSettings.fontSize}}px</span>
+				<div class="setting-input font-size-range">
+					<input type="range" class="slider is-circle" :class="{'range-disabled': disableFontSizeSlider}" :min="settingsOptions.user.fontSize.min" :max="settingsOptions.user.fontSize.max" v-model="currentSettings.fontSize">
+					<div :class="{'hide-label': !!disableFontSizeSlider}" class="setting-input-label">{{currentSettings.fontSize}}px</div>
 				</div>
 				
 			</div>
@@ -39,11 +39,11 @@
 			</div>
 			<div class="setting-wrap">
 				<label class="f-weight-heavy">Quote categorie</label>
-				<select v-model="currentSettings.quoteCategory">
-					<option v-for="cat in settingsOptions.quote.quoteCategory" :key="cat" :value="cat">{{cat}}</option>
+				<select v-model="currentSettings.quoteCategory" class="quote-option">
+					<option v-for="cat in settingsOptions.quote.quoteCategory" :key="cat" :value="cat" class="quote-option">{{cat}}</option>
 				</select>
 			</div>
-			<button @click="saveSettings">Opslaan</button>
+			<button @click="saveSettings" class="save-btn">Opslaan</button>
 		</main>
 	</div>
 </template>
@@ -176,7 +176,37 @@ export default {
 	margin-left: 0.25rem;
 }
 
-input[type="range"].range-disabled {
+input[type="range"].slider {
+	flex: 1 1 100%;
+}
+
+input[type="range"].slider.range-disabled {
 	opacity: 0.5;
+}
+
+.setting-input.font-size-range {
+	display: flex;
+	align-items: center;
+	width: 100%;
+}
+
+.font-size-range .setting-input-label {
+	flex: 0 0 3rem;
+	text-align: right;
+}
+
+.font-size-range .setting-input-label.hide-label {
+	opacity: 0;
+}
+
+.quote-option {
+	text-transform: capitalize;
+}
+
+.save-btn {
+	display: block;
+	padding: 0.5rem 0.75rem;
+	border-radius: 4px;
+	margin: 2rem auto 0;
 }
 </style>

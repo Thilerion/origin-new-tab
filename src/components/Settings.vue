@@ -105,19 +105,24 @@ export default {
 		saveSettings() {
 			let settingsToSave = {};
 			for (let setting in this.currentSettings) {
-				if (this.currentSettings[setting] !== this.initialSettings[setting]) {
-					settingsToSave[setting] = this.currentSettings[setting];
+				let after = JSON.stringify(this.currentSettings[setting]);
+				let before = JSON.stringify(this.initialSettings[setting]);
+				console.log(after, before);
+				if (before !== after) {
+					settingsToSave[setting] = JSON.parse(after);
 				};
 			}
-			settingsToSave.activeWidgets = this.currentSettings.activeWidgets;
 			this.$store.dispatch('saveSettings', settingsToSave);
 			this.closeSettings();
+		},
+		deepClone(obj) {
+			return JSON.parse(JSON.stringify(obj));
 		}
 	},
 	created() {
 		let currentSettings = this.$store.getters.currentSettings;
-		this.currentSettings = {...currentSettings};
-		this.initialSettings = {...currentSettings};
+		this.currentSettings = this.deepClone(currentSettings);
+		this.initialSettings = this.deepClone(currentSettings);
 		console.log(this.currentSettings);
 	},
 	beforeDestroy() {

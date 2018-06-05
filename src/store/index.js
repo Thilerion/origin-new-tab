@@ -14,6 +14,8 @@ import createPersistedState from './utils/persist';
 import widgetsApi from './api/index';
 const userApi = widgetsApi.user;
 
+import { defaultSettings } from './defaultUserSettings';
+
 const widgetsList = [
 	'user',
 	'wallpaper',
@@ -40,7 +42,8 @@ const store = new Vuex.Store({
 		user: {
 			language: '',
 			username: '',
-			fontSize: 16
+			fontSize: 16,
+			activeWidgets: defaultSettings.user.activeWidgets
 		},
 		editingUsername: false,
 		widgets: widgetsList,
@@ -56,6 +59,7 @@ const store = new Vuex.Store({
 			return state.editingUsername || !state.user.username;
 		},
 		widgets: state => state.widgets,
+		activeWidgets: state => state.user.activeWidgets,
 		showSettings: state => state.showSettings
 	},
 

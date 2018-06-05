@@ -8,6 +8,9 @@
 		"newtab": "index.html"
 	},
 	"permissions": [
-		"geolocation"
+		"geolocation",
+		"topSites",
+		"storage",
+		"chrome://favicon/"
 	]
   }

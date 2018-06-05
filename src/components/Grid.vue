@@ -21,6 +21,7 @@ import StartQuote from './widgets/Quote.vue';
 import StartWeather from './widgets/Weather.vue';
 import StartNews from './widgets/News.vue';
 import StartSettingsButton from './SettingsButton.vue';
+import StartTopPages from './widgets/TopPages.vue';
 
 export default {
 	components: {
@@ -29,7 +30,8 @@ export default {
 		StartQuote,
 		StartWeather,
 		StartNews,
-		StartSettingsButton
+		StartSettingsButton,
+		StartTopPages
 	},
 	data() {
 		return {
@@ -70,6 +72,12 @@ export default {
 					name: 'settingsButton',
 					row: [20, 21],
 					column: [10, 11]
+				},
+				{
+					component: 'StartTopPages',
+					name: 'topPages',
+					row: [14, 20],
+					column: [3, 9]
 				}
 			]
 		}

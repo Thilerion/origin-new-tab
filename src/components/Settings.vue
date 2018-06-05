@@ -21,8 +21,13 @@
 			<div class="setting-wrap">
 				<label class="f-weight-heavy">Text grootte</label>
 				<div class="setting-input">
-					<input type="range" :min="settingsOptions.user.fontSize.min" :max="settingsOptions.user.fontSize.max" v-model="currentSettings.fontSize">
-					<span class="setting-input-label">{{currentSettings.fontSize}}px</span>
+					<!-- no value on this input to bind it to 'null' -->
+					<input type="radio" v-model="currentSettings.fontSize">
+					<span class="setting-input-label">Standaard</span>
+				</div>
+				<div class="setting-input">
+					<input type="range" :class="{'font-size-range-disabled': disableFontSizeSlider}" :min="settingsOptions.user.fontSize.min" :max="settingsOptions.user.fontSize.max" v-model="currentSettings.fontSize">
+					<span v-show="!disableFontSizeSlider" class="setting-input-label">{{currentSettings.fontSize}}px</span>
 				</div>
 				
 			</div>
@@ -65,6 +70,11 @@ export default {
 	computed: {
 		showSettings() {
 			return this.$store.getters.showSettings;
+		},
+		disableFontSizeSlider() {
+			const isDefault = this.currentSettings.fontSize === null;
+			console.log(this.currentSettings.fontSize, isDefault);
+			return isDefault;
 		}
 	},
 	methods: {
@@ -77,7 +87,7 @@ export default {
 				console.log(this.currentSettings[setting], this.initialSettings[setting], this.currentSettings[setting] !== this.initialSettings[setting]);
 				if (this.currentSettings[setting] !== this.initialSettings[setting]) {
 					settingsToSave[setting] = this.currentSettings[setting];
-				}
+				};
 			}
 			this.$store.dispatch('saveSettings', settingsToSave);
 			this.closeSettings();
@@ -146,6 +156,10 @@ export default {
 	border: none;
 	border-radius: 2px;
 	padding: 0.25em 0.25em;
+}
+
+.setting-input:not(:last-of-type) {
+	margin-bottom: 0.25rem;
 }
 
 .setting-radio {

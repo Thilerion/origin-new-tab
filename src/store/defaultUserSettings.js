@@ -3,8 +3,8 @@ const defaultSettings = {
 		name: "",
 		// [nl, en]
 		language: "nl",
-		// range: 10-20, or 100%
-		fontSize: '100%',
+		// range: 10-20, or null (which resets to 100% in base css file)
+		fontSize: null,
 		activeWidgets: [
 			'greeting',
 			'news',

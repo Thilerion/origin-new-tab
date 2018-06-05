@@ -25,7 +25,7 @@ const settingsStore = {
 		saveSettings({ commit, dispatch }, { name, language, fontSize, wallpaperCollection, quoteCategory }) {
 			if (name) commit('setUsername', name);			
 			if (language) commit('setLanguage', language);
-			if (fontSize) commit('setFontSize', fontSize);
+			if (fontSize !== undefined) commit('setFontSize', fontSize);
 			if (wallpaperCollection) dispatch('setWallpaperCollection', wallpaperCollection);
 			if (quoteCategory) commit('setQuoteCategory', quoteCategory);			
 		} 

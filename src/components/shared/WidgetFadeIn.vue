@@ -14,7 +14,7 @@ export default {
 
 <style>
 .widget-fade-in-enter-active {
-	transition: opacity 0.2s ease;
+	transition: opacity 0.3s ease;
 }
 
 .widget-fade-in-enter {

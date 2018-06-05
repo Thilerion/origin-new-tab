@@ -71,6 +71,7 @@ const store = new Vuex.Store({
 		},
 		setLanguage: (state, language) => state.user.language = language,
 		setFontSize: (state, fontSize) => state.user.fontSize = fontSize,
+		setActiveWidgets: (state, widgets) => state.user.activeWidgets = [...widgets],
 		setEditingUsername: (state, bool) => state.editingUsername = !!bool,
 		toggleSettings(state, bool) {
 			if (bool) state.showSettings = bool;
@@ -84,12 +85,14 @@ const store = new Vuex.Store({
 			commit('setLanguage', 'nl');
 			commit('setFontSize', null);
 			commit('setEditingUsername', true);
+			commit('setActiveWidgets', defaultSettings.user.activeWidgets);
 		},
-		userSetFromStorage({ commit }, { username = "", language = "", fontSize = null }) {
+		userSetFromStorage({ commit }, { username = "", language = "", fontSize = null, activeWidgets = defaultSettings.user.activeWidgets }) {
 			console.warn("USER data loaded, committing now...");
 			commit('setUsername', username);
 			commit('setLanguage', language);
-			commit('setFontSize', fontSize)
+			commit('setFontSize', fontSize);
+			commit('setActiveWidgets', activeWidgets);
 		}
 	}
 

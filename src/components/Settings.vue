@@ -7,45 +7,50 @@
 			<h2 class="f-weight-light">Instellingen</h2>
 		</header>
 		<main class="settings-content">
-			<div class="setting-wrap">
-				<label class="f-weight-heavy">Naam</label>
-				<input v-model="currentSettings.name" type="text" class="input">
-			</div>
-			<div class="setting-wrap">
-				<label class="f-weight-heavy">Taal</label>
-				<div class="setting-radio" v-for="lang in settingsOptions.user.language" :key="lang.id">
-					<input type="radio" :value="lang.id" v-model="currentSettings.language">
-					<span class="setting-radio-label">{{lang.name}}</span>
-				</div>				
-			</div>
-			<div class="setting-wrap">
-				<label class="f-weight-heavy">Text grootte</label>
-				<div class="setting-input">
-					<!-- no value on this input to bind it to 'null' -->
-					<input type="radio" v-model="currentSettings.fontSize">
-					<span class="setting-input-label">Standaard</span>
+			<div class="grid-col-1">
+				<div class="setting-wrap">
+					<label class="f-weight-heavy">Naam</label>
+					<input v-model="currentSettings.name" type="text" class="input">
 				</div>
-				<div class="setting-input font-size-range">
-					<input type="range" class="slider is-circle" :class="{'range-disabled': disableFontSizeSlider}" :min="settingsOptions.user.fontSize.min" :max="settingsOptions.user.fontSize.max" v-model="currentSettings.fontSize">
-					<div :class="{'hide-label': !!disableFontSizeSlider}" class="setting-input-label">{{currentSettings.fontSize}}px</div>
+				<div class="setting-wrap">
+					<label class="f-weight-heavy">Taal</label>
+					<div class="setting-radio" v-for="lang in settingsOptions.user.language" :key="lang.id">
+						<input type="radio" :value="lang.id" v-model="currentSettings.language">
+						<span class="setting-radio-label">{{lang.name}}</span>
+					</div>				
 				</div>
-				
-			</div>
-			<div class="setting-wrap">
-				<label class="f-weight-heavy">Achtergrond collectie</label>
-				<div class="select">
-				<select v-model="currentSettings.wallpaperCollection">
-					<option v-for="col in settingsOptions.wallpaper.wallpaperCollection" :key="col.id" :value="col.id">{{col.name}}</option>
-				</select>
+				<div class="setting-wrap">
+					<label class="f-weight-heavy">Text grootte</label>
+					<div class="setting-input">
+						<!-- no value on this input to bind it to 'null' -->
+						<input type="radio" v-model="currentSettings.fontSize">
+						<span class="setting-input-label">Standaard</span>
+					</div>
+					<div class="setting-input font-size-range">
+						<input type="range" class="slider is-circle" :class="{'range-disabled': disableFontSizeSlider}" :min="settingsOptions.user.fontSize.min" :max="settingsOptions.user.fontSize.max" v-model="currentSettings.fontSize">
+						<div :class="{'hide-label': !!disableFontSizeSlider}" class="setting-input-label">{{currentSettings.fontSize}}px</div>
+					</div>
+					
+				</div>
+				<div class="setting-wrap">
+					<label class="f-weight-heavy">Achtergrond collectie</label>
+					<div class="select">
+					<select v-model="currentSettings.wallpaperCollection">
+						<option v-for="col in settingsOptions.wallpaper.wallpaperCollection" :key="col.id" :value="col.id">{{col.name}}</option>
+					</select>
+					</div>
+				</div>
+				<div class="setting-wrap">
+					<label class="f-weight-heavy">Quote categorie</label>
+					<div class="select">
+					<select v-model="currentSettings.quoteCategory" class="quote-option">
+						<option v-for="cat in settingsOptions.quote.quoteCategory" :key="cat" :value="cat" class="quote-option">{{cat}}</option>
+					</select>
+					</div>				
 				</div>
 			</div>
-			<div class="setting-wrap">
-				<label class="f-weight-heavy">Quote categorie</label>
-				<div class="select">
-				<select v-model="currentSettings.quoteCategory" class="quote-option">
-					<option v-for="cat in settingsOptions.quote.quoteCategory" :key="cat" :value="cat" class="quote-option">{{cat}}</option>
-				</select>
-				</div>				
+			<div class="grid-col-2">
+
 			</div>
 			<button @click="saveSettings" class="save-btn">Opslaan</button>
 		</main>
@@ -63,14 +68,16 @@ export default {
 				language: "",
 				fontSize: "",
 				wallpaperCollection: "",
-				quoteCategory: ""
+				quoteCategory: "",
+				activeWidgets: ""
 			},
 			initialSettings: {
 				name: "",
 				language: "",
 				fontSize: "",
 				wallpaperCollection: "",
-				quoteCategory: ""
+				quoteCategory: "",
+				activeWidgets: ""
 			},
 			settingsOptions: {...settingsOptions}
 		}
@@ -134,7 +141,7 @@ export default {
 
 .settings-header {
 	font-size: 2rem;
-	margin-bottom: 1rem;
+	margin-bottom: 2rem;
 	flex: 0 0 auto;
 }
 
@@ -144,6 +151,23 @@ export default {
 	max-width: 700px;
 	margin: 0 auto;
 	flex: 1 1 auto;
+	height: 100%;
+	display: grid;
+	align-items: start;
+	justify-content: start;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr 1fr;
+	grid-column-gap: 100px;
+}
+
+.grid-col-1 {
+	grid-column: 1;
+	grid-row: 1;
+}
+
+.grid-col-2 {
+	grid-column: 2;
+	grid-row: 1;
 }
 
 .setting-wrap {
@@ -158,10 +182,6 @@ export default {
 
 .setting-wrap > label {
 	margin-bottom: 0.25rem;
-}
-
-.setting-wrap > input {
-	
 }
 
 .setting-input:not(:last-of-type) {
@@ -206,6 +226,7 @@ input[type="range"].slider.range-disabled {
 }
 
 .save-btn {
+	grid-column: 1 / 3;
 	display: block;
 	padding: 0.5rem 0.75rem;
 	border-radius: 4px;

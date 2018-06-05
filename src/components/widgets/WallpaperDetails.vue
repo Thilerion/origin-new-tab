@@ -2,13 +2,13 @@
 	<div class="widget-wallpaper-details widget-no-select f-shadow-medium" v-if="showWallpaper">
 		<div class="row-bottom">
 			<div class="buttons" v-if="!usingDefaultWallpaper">
-				<button class="load-btn" @click="nextWallpaper" alt="Next wallpaper">
+				<button class="icon-btn load-btn" @click="nextWallpaper" alt="Next wallpaper">
 					<StartSvgIcon icon="refresh"/>
 				</button>
-				<a :href="downloadUrl" class="dl-btn" target="_blank" alt="Download wallpaper">
+				<a :href="downloadUrl" class="icon-btn dl-btn" target="_blank" alt="Download wallpaper">
 					<StartSvgIcon icon="download"/>
 				</a>
-				<button class="hide-btn" @click="hideWallpaper" alt="Hide wallpaper">
+				<button class="icon-btn hide-btn" @click="hideWallpaper" alt="Hide wallpaper">
 					<StartSvgIcon icon="close"/>
 				</button>
 			</div>

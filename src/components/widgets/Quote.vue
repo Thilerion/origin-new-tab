@@ -2,7 +2,7 @@
 	<div v-if="quoteLoaded" class="widget-quote widget-no-select f-shadow-heavy">
 		<p class="quote f-align-l"><span class="q-mark q-mark-top f-shadow-medium">‟ </span>{{quote.randomQuote.quote | removeDot}}<span class="q-mark q-mark-bot f-shadow-medium">&nbsp;„</span></p>
 		<p class="author f-align-r f-style-italic">~ {{quote.randomQuote.author}}</p>	
-		<button class="reload-btn" @click="reloadQuote">
+		<button class="icon-btn reload-btn" @click="reloadQuote">
 			<StartSvgIcon icon="refresh"/>
 		</button>
 		

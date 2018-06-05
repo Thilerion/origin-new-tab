@@ -5,8 +5,8 @@
 				<a v-if="showItem != null" :href="news[showItem].url" class="news-item" :key="showItem" target="_blank" rel="noopener" :class="{faster: fasterTransition}">{{news[showItem].title}}</a>
 			</transition>
 		</div>	
-		<button class="news-scroll-btn scroll-prev" @click="prev(true)">&lt;</button>	
-		<button class="news-scroll-btn scroll-next" @click="next(true)">&gt;</button>
+		<button class="icon-btn news-scroll-btn scroll-prev" @click="prev(true)">&lt;</button>	
+		<button class="icon-btn news-scroll-btn scroll-next" @click="next(true)">&gt;</button>
 	</div>
 </template>
 

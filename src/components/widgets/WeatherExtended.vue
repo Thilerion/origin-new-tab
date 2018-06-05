@@ -72,7 +72,7 @@ export default {
 			return {'background-image': `url(${this.$store.getters.currentWallpaper.url})`};
 		},
 		wallpaperUrlAvailable() {
-			return this.$store.getters.wallpaperLoadSuccess !== null;
+			return this.$store.getters.showWallpaper;
 		}
 	},
 	filters: {

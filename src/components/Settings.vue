@@ -105,11 +105,14 @@ export default {
 		saveSettings() {
 			let settingsToSave = {};
 			for (let setting in this.currentSettings) {
-				let after = JSON.stringify(this.currentSettings[setting]);
-				let before = JSON.stringify(this.initialSettings[setting]);
-				console.log(after, before);
-				if (before !== after) {
-					settingsToSave[setting] = JSON.parse(after);
+
+				const hasChanged = !this.deepEquals(
+					this.currentSettings[setting],
+					this.initialSettings[setting]
+				);
+
+				if (hasChanged) {
+					settingsToSave[setting] = this.currentSettings[setting];
 				};
 			}
 			this.$store.dispatch('saveSettings', settingsToSave);
@@ -117,6 +120,9 @@ export default {
 		},
 		deepClone(obj) {
 			return JSON.parse(JSON.stringify(obj));
+		},
+		deepEquals(a, b) {
+			return JSON.stringify(a) === JSON.stringify(b);
 		}
 	},
 	created() {

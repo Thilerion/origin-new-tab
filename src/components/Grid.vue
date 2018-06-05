@@ -1,13 +1,14 @@
 <template>
 	<div class="grid">
 		<WidgetFadeIn
-			v-for="(widget, index) of widgetNames"
-			:key="widget"
+			v-for="(widget, index) of grid"
+			:key="widget.name"
 		>
 		<component			
-			:is="widget"
+			:is="widget.component"
 			:style="widgetGridPlacement[index]"
 			class="widget"
+			v-if="isWidgetActive(widget.name)"
 		/>
 		</WidgetFadeIn>
 	</div>
@@ -36,31 +37,37 @@ export default {
 			[
 				{
 					component: 'StartGreeting',
+					name: 'greeting',
 					row: [7, 13],
 					column: [1, 13]
 				},
 				{
 					component: 'StartWallpaperDetails',
+					name: 'wallpaperDetails',
 					row: [19, 21],
 					column: [1, 5]
 				},
 				{
 					component: 'StartQuote',
+					name: 'quote',
 					row: [2, 4],
 					column: [3, 9]
 				},
 				{
 					component: 'StartWeather',
+					name: 'weather',
 					row: [1, 6],
 					column: [9, 11]
 				},
 				{
 					component: 'StartNews',
+					name: 'news',
 					row: [1, 2],
 					column: [3, 9]
 				},
 				{
 					component: 'StartSettingsButton',
+					name: 'settingsButton',
 					row: [20, 21],
 					column: [10, 11]
 				}
@@ -71,6 +78,9 @@ export default {
 		widgetNames() {
 			return this.grid.map(val => val.component);
 		},
+		activeWidgets() {
+			return this.$store.getters.activeWidgets;
+		},
 		widgetGridPlacement() {
 			return this.grid.map(val => {
 				return {
@@ -80,6 +90,13 @@ export default {
 					'grid-column-end': val.column[1]
 				}
 			})
+		}
+	},
+	methods: {
+		isWidgetActive(name) {
+			let widgetInActiveWidgets = this.activeWidgets.find(w => w.name === name);
+			if (!widgetInActiveWidgets) return true;
+			else return widgetInActiveWidgets.active;
 		}
 	}
 }

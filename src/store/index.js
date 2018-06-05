@@ -14,6 +14,8 @@ import createPersistedState from './utils/persist';
 import widgetsApi from './api/index';
 const userApi = widgetsApi.user;
 
+import { defaultSettings } from './defaultUserSettings';
+
 const widgetsList = [
 	'user',
 	'wallpaper',
@@ -40,7 +42,8 @@ const store = new Vuex.Store({
 		user: {
 			language: '',
 			username: '',
-			fontSize: 16
+			fontSize: 16,
+			activeWidgets: defaultSettings.user.activeWidgets
 		},
 		editingUsername: false,
 		widgets: widgetsList,
@@ -56,6 +59,7 @@ const store = new Vuex.Store({
 			return state.editingUsername || !state.user.username;
 		},
 		widgets: state => state.widgets,
+		activeWidgets: state => state.user.activeWidgets,
 		showSettings: state => state.showSettings
 	},
 
@@ -67,6 +71,7 @@ const store = new Vuex.Store({
 		},
 		setLanguage: (state, language) => state.user.language = language,
 		setFontSize: (state, fontSize) => state.user.fontSize = fontSize,
+		setActiveWidgets: (state, widgets) => state.user.activeWidgets = [...widgets],
 		setEditingUsername: (state, bool) => state.editingUsername = !!bool,
 		toggleSettings(state, bool) {
 			if (bool) state.showSettings = bool;
@@ -80,12 +85,14 @@ const store = new Vuex.Store({
 			commit('setLanguage', 'nl');
 			commit('setFontSize', null);
 			commit('setEditingUsername', true);
+			commit('setActiveWidgets', defaultSettings.user.activeWidgets);
 		},
-		userSetFromStorage({ commit }, { username = "", language = "", fontSize = null }) {
+		userSetFromStorage({ commit }, { username = "", language = "", fontSize = null, activeWidgets = defaultSettings.user.activeWidgets }) {
 			console.warn("USER data loaded, committing now...");
 			commit('setUsername', username);
 			commit('setLanguage', language);
-			commit('setFontSize', fontSize)
+			commit('setFontSize', fontSize);
+			commit('setActiveWidgets', activeWidgets);
 		}
 	}
 

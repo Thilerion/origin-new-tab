@@ -41,9 +41,11 @@ const settingsOptions = {
 			{ name: 'Reflections', id: 334800 },
 			{ name: 'Moody Landscapes', id: 1457745 },
 			{ name: 'Great Outdoors', id: 289662 },
-			{ name: 'Road Less Travelled', id: 410546 },
-			
+			{ name: 'Road Less Travelled', id: 410546 }			
 		]
+	},
+	quote: {
+		quoteCategory: ['motivinspirational', 'movies', 'famous']
 	}
 };
 

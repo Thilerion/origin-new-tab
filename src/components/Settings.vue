@@ -33,11 +33,15 @@
 			</div>
 			<div class="setting-wrap">
 				<label class="f-weight-heavy">Achtergrond collectie</label>
-				<input v-model="currentSettings.wallpaperCollection" type="text">
+				<select v-model="currentSettings.wallpaperCollection">
+					<option v-for="col in settingsOptions.wallpaper.wallpaperCollection" :key="col.id" :value="col.id">{{col.name}}</option>
+				</select>
 			</div>
 			<div class="setting-wrap">
 				<label class="f-weight-heavy">Quote categorie</label>
-				<input v-model="currentSettings.quoteCategory" type="text">
+				<select v-model="currentSettings.quoteCategory">
+					<option v-for="cat in settingsOptions.quote.quoteCategory" :key="cat" :value="cat">{{cat}}</option>
+				</select>
 			</div>
 			<button @click="saveSettings">Opslaan</button>
 		</main>

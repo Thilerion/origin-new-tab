@@ -17,6 +17,9 @@ export default {
 		},
 		quote() {
 			return this.$store.getters.quoteWatch;
+		},
+		quoteCategory() {
+			return this.$store.getters.quoteCategory;
 		}
 	},
 	methods: {
@@ -29,6 +32,13 @@ export default {
 			if (str.endsWith('.')) {
 				return str.slice(0, -1);
 			} else return str;
+		}
+	},
+	watch: {
+		quoteCategory(newValue, oldValue) {
+			if (newValue !== oldValue) {
+				this.reloadQuote();
+			}
 		}
 	}
 }

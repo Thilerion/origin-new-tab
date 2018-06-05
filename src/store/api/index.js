@@ -27,7 +27,8 @@ const widgets = {
 		api: true,
 		url: {
 			required: [],
-			get() {
+			get(quoteCategory) {
+				if (quoteCategory) return `${BASE_URL}/quote/${quoteCategory}`
 				return `${BASE_URL}/quote`
 			}
 		},

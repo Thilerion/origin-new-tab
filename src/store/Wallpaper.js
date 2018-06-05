@@ -14,6 +14,7 @@ const wallpaperStore = {
 		},
 		dataLoaded: false,
 		dataLoadFailure: false,
+		reloadingWallpapers: false,
 		wallpaperData: {
 			wallpapers: [],
 			currentWallpaperId: 0,
@@ -26,7 +27,7 @@ const wallpaperStore = {
 	getters: {
 		showDefaultWallpaper: state => !state.dataLoaded && state.dataLoadFailure,
 		showExternalWallpaper: state => state.dataLoaded && !state.dataLoadFailure,
-		showWallpaper: state => state.dataLoaded || state.dataLoadFailure,
+		showWallpaper: state => (state.dataLoaded || state.dataLoadFailure) && !state.reloadingWallpapers,
 		currentWallpaper: (state, getters) => {
 			if (getters.showDefaultWallpaper) {
 				return state.defaultWallpaper;
@@ -75,7 +76,9 @@ const wallpaperStore = {
 				state.wallpaperData.currentWallpaperId = id;
 			}			
 		},
-		setCollection: (state, col) => state.wallpaperData.collection = col,
+		setCollection: (state, col) => {
+			state.wallpaperData.collection = col;
+		},
 		nextWallpaper: state => {
 			const arLength = state.wallpaperData.wallpapers.length;
 			if (!arLength) state.wallpaperData.currentWallpaperId = 0;
@@ -100,8 +103,9 @@ const wallpaperStore = {
 			state.wallpaperData.currentWallpaperId = currentWallpaperId;
 			state.wallpaperData.collection = collection;
 		},
-		setWallpaperLoadFailure: state => state.dataLoadFailure = true,
-		setWallpaperLoaded: state => state.dataLoaded = true
+		setWallpaperLoadFailure: (state, bool = true) => state.dataLoadFailure = bool,
+		setWallpaperLoaded: (state, bool = true) => state.dataLoaded = bool,
+		setReloadingWallpapers: (state, bool) => state.reloadingWallpapers = bool
 	},
 
 	actions: {
@@ -143,6 +147,14 @@ const wallpaperStore = {
 			commit('setWallpaperExpires', expires);
 			commit('setCurrentWallpaperId', Math.floor(Math.random() * wallpapers.length));
 			commit('setWallpaperLoaded');
+		},
+		setWallpaperCollection({ commit, dispatch }, col) {
+			commit('setReloadingWallpapers', true);
+			commit('setWallpaperLoadFailure', false);
+			commit('setWallpaperLoaded', false);
+			commit('setCollection', col);
+			dispatch('getWallpapersFromServer');
+			commit('setReloadingWallpapers', false);
 		}
 	}
 

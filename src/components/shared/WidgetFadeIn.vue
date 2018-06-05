@@ -1,6 +1,6 @@
 <template>
 	<transition
-		name="widget-fade-in"
+		:name="transitionName"
 	>
 		<slot/>
 	</transition>
@@ -8,16 +8,32 @@
 
 <script>
 export default {
-
+	props: {
+		fadein: {
+			type: Boolean,
+			default: true
+		},
+		fadeout: {
+			type: Boolean,
+			default: false
+		}
+	},
+	computed: {
+		transitionName() {
+			if (this.fadein && this.fadeout) return 'widget-fade';
+			if (this.fadein && !this.fadeout) return 'widget-fadein';
+			if (!this.fadein && this.fadeout) return 'widget-fadeout';
+		}
+	}
 }
 </script>
 
 <style>
-.widget-fade-in-enter-active {
-	transition: opacity 0.2s ease;
+.widget-fadein-enter-active, .widget-fade-enter-active, .widget-fade-leave-active, .widget-fadeout-leave-active {
+	transition: opacity 0.3s ease;
 }
 
-.widget-fade-in-enter {
+.widget-fadein-enter, .widget-fade-enter, .widget-fade-leave-to, .widget-fadeout-leave-to {
 	opacity: 0;
 }
 </style>

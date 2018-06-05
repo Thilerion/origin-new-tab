@@ -6,6 +6,7 @@ import Greeting from './Greeting'
 import Quote from './Quote'
 import Weather from './Weather'
 import News from './News'
+import Settings from './Settings'
 
 Vue.use(Vuex)
 
@@ -31,26 +32,31 @@ const store = new Vuex.Store({
 		Greeting,
 		Quote,
 		Weather,
-		News
+		News,
+		Settings
 	},
 
 	state: {
 		user: {
 			language: '',
-			username: ''
+			username: '',
+			fontSize: '100%'
 		},
 		editingUsername: false,
-		widgets: widgetsList
+		widgets: widgetsList,
+		showSettings: false
 	},
 
 	getters: {
 		language: state => state.user.language,
 		username: state => state.user.username,
+		fontSize: state => state.user.fontSize,
 		userWatch: state => state.user,
 		isEditingUsername(state) {
 			return state.editingUsername || !state.user.username;
 		},
-		widgets: state => state.widgets
+		widgets: state => state.widgets,
+		showSettings: state => state.showSettings
 	},
 
 	mutations: {
@@ -60,7 +66,12 @@ const store = new Vuex.Store({
 			state.user.username = username
 		},
 		setLanguage: (state, language) => state.user.language = language,
-		setEditingUsername: (state, bool) => state.editingUsername = !!bool
+		setFontSize: (state, fontSize) => state.user.fontSize = fontSize,
+		setEditingUsername: (state, bool) => state.editingUsername = !!bool,
+		toggleSettings(state, bool) {
+			if (bool) state.showSettings = bool;
+			else state.showSettings = !state.showSettings;
+		}
 	},
 
 	actions: {

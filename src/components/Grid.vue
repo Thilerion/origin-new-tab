@@ -19,6 +19,7 @@ import StartWallpaperDetails from './widgets/WallpaperDetails.vue';
 import StartQuote from './widgets/Quote.vue';
 import StartWeather from './widgets/Weather.vue';
 import StartNews from './widgets/News.vue';
+import StartSettingsButton from './SettingsButton.vue';
 
 export default {
 	components: {
@@ -26,7 +27,8 @@ export default {
 		StartWallpaperDetails,
 		StartQuote,
 		StartWeather,
-		StartNews
+		StartNews,
+		StartSettingsButton
 	},
 	data() {
 		return {
@@ -56,6 +58,11 @@ export default {
 					component: 'StartNews',
 					row: [1, 2],
 					column: [3, 9]
+				},
+				{
+					component: 'StartSettingsButton',
+					row: [20, 21],
+					column: [10, 11]
 				}
 			]
 		}

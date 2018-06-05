@@ -26,15 +26,8 @@ a {
 }
 
 button {
-	background: hsl(0, 0%, 97%);
-	border: 1px solid hsl(0, 0%, 30%);
-	color: hsl(0, 0%, 25%);
-	border-radius: 2px;
-	padding: 0.25em 0.5em;
-	min-width: 3em;
 	cursor: pointer;
 	outline: none;
-	transition: all 100ms;
 	text-transform: uppercase;
 	font-size: 87.5%;
 	font-weight: 700;
@@ -42,14 +35,32 @@ button {
 	font-family: inherit;
 }
 
-button:hover {
+button:not(.icon-btn) {
+	background: hsl(0, 0%, 97%);
+	border: 1px solid hsl(0, 0%, 30%);
+	color: hsl(0, 0%, 25%);
+	border-radius: 2px;
+	padding: 0.25em 0.5em;
+	min-width: 3em;
+	transition: all 100ms;
+}
+
+button:not(.icon-btn):hover {
 	background: hsl(0, 0%, 25%);
 	color: hsl(0, 0%, 90%);
 }
 
-button:active {
+button:not(.icon-btn):active {
 	background: hsl(0, 0%, 35%);
 	color: hsl(0, 0%, 90%);
+}
+
+button.icon-btn {
+	margin: 0;
+	padding: 0;
+	background: none;
+	border: none;
+	color: inherit;
 }
 
 div, span, article, aside, footer, header, nav, section, table, thead, tbody, tfoot, tr, th, td {

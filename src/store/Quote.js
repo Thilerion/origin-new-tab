@@ -6,13 +6,15 @@ const quoteStore = {
 	state: {
 		quoteData: {
 			randomQuote: {},
-			expires: null
+			expires: null,
+			quoteCategory: 'motivinspirational'
 		},
 		dataLoaded: false
 	},
 
 	getters: {
 		quoteWatch: state => state.quoteData,
+		quoteCategory: state => state.quoteData.quoteCategory,
 		quoteDataLoaded: state => state.dataLoaded
 	},
 
@@ -21,6 +23,9 @@ const quoteStore = {
 			state.quoteData.randomQuote = { ...randomQuote };
 			state.quoteData.expires = expires;
 			state.dataLoaded = true;
+		},
+		setQuoteCategory(state, cat) {
+			state.quoteData.quoteCategory = cat;
 		}
 	},
 
@@ -50,8 +55,9 @@ const quoteStore = {
 			dispatch('getQuoteFromServer', data);
 		},
 		quoteSetFromStorage({ commit }, localData) {
-			const { randomQuote, expires } = localData;
+			const { randomQuote, expires, quoteCategory = 'motivinspirational' } = localData;
 			commit('setQuote', { randomQuote, expires });
+			commit('setQuoteCategory', quoteCategory);
 		},
 		quoteSetFromApi({ commit }, apiData) {
 			const { data: randomQuote, expires } = apiData;

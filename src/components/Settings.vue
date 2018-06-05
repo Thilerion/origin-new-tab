@@ -50,7 +50,13 @@
 				</div>
 			</div>
 			<div class="grid-col-2">
-
+				<div class="setting-wrap">
+					<label class="f-weight-heavy">Widgets</label>
+					<div class="setting-check" v-for="widget in currentSettings.activeWidgets" :key="widget.name">
+						<input type="checkbox" :value="widget.name" v-model="widget.active">
+						<span class="setting-check-label">{{widget.name}}</span>
+					</div>
+				</div>
 			</div>
 			<button @click="saveSettings" class="save-btn">Opslaan</button>
 		</main>
@@ -99,11 +105,11 @@ export default {
 		saveSettings() {
 			let settingsToSave = {};
 			for (let setting in this.currentSettings) {
-				console.log(this.currentSettings[setting], this.initialSettings[setting], this.currentSettings[setting] !== this.initialSettings[setting]);
 				if (this.currentSettings[setting] !== this.initialSettings[setting]) {
 					settingsToSave[setting] = this.currentSettings[setting];
 				};
 			}
+			settingsToSave.activeWidgets = this.currentSettings.activeWidgets;
 			this.$store.dispatch('saveSettings', settingsToSave);
 			this.closeSettings();
 		}
@@ -188,14 +194,15 @@ export default {
 	margin-bottom: 0.25rem;
 }
 
-.setting-radio {
+.setting-radio, .setting-check {
 	display: flex;
 	align-items: center;
 	margin-bottom: 0.25rem;
 }
 
-.setting-radio-label {
+.setting-radio-label, .setting-check-label {
 	margin-left: 0.25rem;
+	text-transform: capitalize;
 }
 
 input[type="range"].slider {

@@ -77,7 +77,7 @@ const store = new Vuex.Store({
 	actions: {
 		userStorageLoadFailed({ commit }) {
 			console.warn("Setting default USER data.");
-			commit('setLanguage', 'NL');
+			commit('setLanguage', 'nl');
 			commit('setEditingUsername', true);
 		},
 		userSetFromStorage({ commit }, { username = "", language = "" }) {

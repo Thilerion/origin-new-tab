@@ -2,7 +2,9 @@
 	<div id="app">
 		<StartWallpaper/>
 		<StartGrid/>
-		<StartSettings/>
+		<WidgetFadeIn fadein fadeout>		
+			<StartSettings v-if="showSettings" />
+		</WidgetFadeIn>
 	</div>
 </template>
 
@@ -17,6 +19,11 @@ export default {
 		StartWallpaper,
 		StartGrid,
 		StartSettings
+	},
+	computed: {
+		showSettings() {
+			return this.$store.getters.showSettings;
+		}
 	}
 };
 </script>

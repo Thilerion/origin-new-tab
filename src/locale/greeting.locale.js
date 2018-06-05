@@ -1,8 +1,8 @@
 export default {
-	NL: {
+	nl: {
 		timeOfDay: ['Goedemorgen', 'Hallo', 'Goedenavond', 'Goedenacht']
 	},
-	EN: {
+	en: {
 		timeOfDay: ['Good morning', "Hi", 'Good evening', 'Good night']
 	}
 }

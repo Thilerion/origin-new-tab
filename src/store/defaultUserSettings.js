@@ -1,4 +1,4 @@
-export default {
+const defaultSettings = {
 	user: {
 		name: "",
 		// [nl, en]
@@ -25,3 +25,27 @@ export default {
 		category: "motivinspirational"
 	}	
 }
+
+const settingsOptions = {
+	user: {
+		language: [{ name: 'Nederlands', id: 'nl'}, { name: 'English', id: 'en'}],
+		fontSize: {
+			min: 10,
+			max: 20,
+			default: '100%'
+		}
+	},
+	wallpaper: {
+		wallpaperCollection: [
+			{ name: 'General', id: 220388 },
+			{ name: 'Spectrum', id: 540518 },
+			{ name: 'Reflections', id: 334800 },
+			{ name: 'Moody Landscapes', id: 1457745 },
+			{ name: 'Great Outdoors', id: 289662 },
+			{ name: 'Road Less Travelled', id: 410546 },
+			
+		]
+	}
+};
+
+export { settingsOptions, defaultSettings };

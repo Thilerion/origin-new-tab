@@ -1,6 +1,5 @@
 <template>
-<WidgetFadeIn fadein fadeout>
-	<div class="settings-page" v-if="showSettings">
+	<div class="settings-page">
 		<button class="close-btn icon-btn" @click="closeSettings">
 			<StartSvgIcon icon="close" size="36px" />
 		</button>
@@ -14,7 +13,10 @@
 			</div>
 			<div class="setting-wrap">
 				<label class="f-weight-heavy">Taal</label>
-				<input v-model="currentSettings.language" type="text">
+				<span v-for="lang in settingsOptions.user.language" :key="lang.id">
+					<input type="radio" :value="lang.id" v-model="currentSettings.language">
+					{{lang.name}}
+				</span>				
 			</div>
 			<div class="setting-wrap">
 				<label class="f-weight-heavy">Text grootte</label>
@@ -31,10 +33,11 @@
 			<button @click="saveSettings">Opslaan</button>
 		</main>
 	</div>
-</WidgetFadeIn>
 </template>
 
 <script>
+import {settingsOptions} from '../store/defaultUserSettings';
+
 export default {
 	data() {
 		return {
@@ -51,7 +54,8 @@ export default {
 				fontSize: "",
 				wallpaperCollection: "",
 				quoteCategory: ""
-			}		
+			},
+			settingsOptions: {...settingsOptions}
 		}
 	},
 	computed: {
@@ -72,6 +76,7 @@ export default {
 				}
 			}
 			this.$store.dispatch('saveSettings', settingsToSave);
+			this.closeSettings();
 		}
 	},
 	created() {
@@ -79,6 +84,10 @@ export default {
 		this.currentSettings = {...currentSettings};
 		this.initialSettings = {...currentSettings};
 		console.log(this.currentSettings);
+	},
+	beforeDestroy() {
+		this.initialSettings = {};
+		console.log("Destroying");
 	}
 }
 </script>

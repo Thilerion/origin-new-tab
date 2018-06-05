@@ -26,7 +26,7 @@
 					<span class="setting-input-label">Standaard</span>
 				</div>
 				<div class="setting-input">
-					<input type="range" :class="{'font-size-range-disabled': disableFontSizeSlider}" :min="settingsOptions.user.fontSize.min" :max="settingsOptions.user.fontSize.max" v-model="currentSettings.fontSize">
+					<input type="range" :class="{'range-disabled': disableFontSizeSlider}" :min="settingsOptions.user.fontSize.min" :max="settingsOptions.user.fontSize.max" v-model="currentSettings.fontSize">
 					<span v-show="!disableFontSizeSlider" class="setting-input-label">{{currentSettings.fontSize}}px</span>
 				</div>
 				
@@ -170,5 +170,9 @@ export default {
 
 .setting-radio-label {
 	margin-left: 0.25rem;
+}
+
+input[type="range"].range-disabled {
+	opacity: 0.5;
 }
 </style>

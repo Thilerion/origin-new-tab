@@ -13,14 +13,18 @@
 			</div>
 			<div class="setting-wrap">
 				<label class="f-weight-heavy">Taal</label>
-				<span v-for="lang in settingsOptions.user.language" :key="lang.id">
+				<div class="setting-radio" v-for="lang in settingsOptions.user.language" :key="lang.id">
 					<input type="radio" :value="lang.id" v-model="currentSettings.language">
-					{{lang.name}}
-				</span>				
+					<span class="setting-radio-label">{{lang.name}}</span>
+				</div>				
 			</div>
 			<div class="setting-wrap">
 				<label class="f-weight-heavy">Text grootte</label>
-				<input v-model="currentSettings.fontSize" type="text">
+				<div class="setting-input">
+					<input type="range" :min="settingsOptions.user.fontSize.min" :max="settingsOptions.user.fontSize.max" v-model="currentSettings.fontSize">
+					<span class="setting-input-label">{{currentSettings.fontSize}}px</span>
+				</div>
+				
 			</div>
 			<div class="setting-wrap">
 				<label class="f-weight-heavy">Achtergrond collectie</label>
@@ -135,12 +139,22 @@ export default {
 }
 
 .setting-wrap > label {
-	margin-bottom: 0.25em;
+	margin-bottom: 0.25rem;
 }
 
 .setting-wrap > input {
 	border: none;
 	border-radius: 2px;
 	padding: 0.25em 0.25em;
+}
+
+.setting-radio {
+	display: flex;
+	align-items: center;
+	margin-bottom: 0.25rem;
+}
+
+.setting-radio-label {
+	margin-left: 0.25rem;
 }
 </style>

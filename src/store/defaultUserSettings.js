@@ -31,8 +31,7 @@ const settingsOptions = {
 		language: [{ name: 'Nederlands', id: 'nl'}, { name: 'English', id: 'en'}],
 		fontSize: {
 			min: 10,
-			max: 20,
-			default: '100%'
+			max: 22
 		}
 	},
 	wallpaper: {

@@ -40,7 +40,7 @@ const store = new Vuex.Store({
 		user: {
 			language: '',
 			username: '',
-			fontSize: '100%'
+			fontSize: 16
 		},
 		editingUsername: false,
 		widgets: widgetsList,
@@ -78,12 +78,14 @@ const store = new Vuex.Store({
 		userStorageLoadFailed({ commit }) {
 			console.warn("Setting default USER data.");
 			commit('setLanguage', 'nl');
+			commit('setFontSize', null);
 			commit('setEditingUsername', true);
 		},
-		userSetFromStorage({ commit }, { username = "", language = "" }) {
+		userSetFromStorage({ commit }, { username = "", language = "", fontSize = null }) {
 			console.warn("USER data loaded, committing now...");
 			commit('setUsername', username);
 			commit('setLanguage', language);
+			commit('setFontSize', fontSize)
 		}
 	}
 

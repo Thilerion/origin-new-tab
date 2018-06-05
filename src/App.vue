@@ -23,7 +23,27 @@ export default {
 	computed: {
 		showSettings() {
 			return this.$store.getters.showSettings;
+		},
+		fontSize() {
+			return this.$store.getters.fontSize;
 		}
+	},
+	methods: {
+		setDocumentFontSize(px) {
+			if (!px) {
+				document.documentElement.style.fontSize = ``;
+			} else {
+				document.documentElement.style.fontSize = `${px}px`;
+			}			
+		}
+	},
+	watch: {
+		fontSize(newValue, oldValue) {
+			this.setDocumentFontSize(newValue);
+		}
+	},
+	beforeMount() {
+		this.setDocumentFontSize(this.fontSize);
 	}
 };
 </script>

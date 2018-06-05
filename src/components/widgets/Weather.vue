@@ -1,7 +1,7 @@
 <template>
 	<div class="widget-weather f-shadow-medium widget-no-select" @click="extend" v-if="weatherDataLoaded">
 		<StartClimacon v-if="icon" :icon="icon" class="icon f-shadow-light"></StartClimacon>
-		<p class="temperature">{{currently.temperature | roundNumber}} &deg;</p>
+		<p class="temperature">{{currently.temperature | roundNumber}}&nbsp;&deg;</p>
 		<p class="summary">{{currently.summary}}</p>
 		<p class="location">{{addressCity}}</p>
 		<div class="row-extended">

@@ -60,6 +60,8 @@ const wallpaperStore = {
 		currentExternalWallpaper: (state, getters) => state.wallpaperData.wallpapers[getters.currentWallpaperId] || null,
 		wallpaperCollection: state => state.wallpaperData.collection,
 
+		wallpapersLength: state => state.wallpaperData.wallpapers.length || 0,
+
 		nextWallpaperId(state, getters) {
 			const l = state.wallpaperData.wallpapers.length;
 			if (l === 0) return 0;
@@ -67,13 +69,14 @@ const wallpaperStore = {
 		},
 		nextWallpaperUrl: (state, getters) => {
 			if (getters.showDefaultWallpaper) return state.defaultWallpaper.url;
+			else if (!state.dataLoaded) return;
 			return state.wallpaperData.wallpapers[getters.nextWallpaperId].url;
 		}
 	},
 
 	mutations: {
 		setDataLoaded(state, loaded) {
-			state.dataLoaded = !!loaded;
+			state.dataLoaded = loaded;
 		},
 		setWallpaperImageLoaded(state, loaded) {
 			state.wallpaperLoaded = loaded;
@@ -82,7 +85,7 @@ const wallpaperStore = {
 			//TODO: maybe spread for reactivity??
 			state.wallpaperData.wallpapers = deepClone(wps);
 		},
-		setCurrentWallpaperId(state, id = 0) {
+		setWallpaperId(state, id = 0) {
 			state.wallpaperData.currentWallpaperId = id;
 		},
 		setWallpaperCollection(state, collection) {
@@ -92,7 +95,9 @@ const wallpaperStore = {
 			state.wallpaperData.expires = expiresOn;
 		},
 		setWallpaperLastSet(state, lastSet) {
+			console.warn("Wallpaper last set WAS: ", state.wallpaperData.idLastSet);
 			state.wallpaperData.idLastSet = lastSet;
+			console.warn("Wallpaper last set NOW: ", state.wallpaperData.idLastSet);
 		},
 		removeWallpaperFromArray(state, index) {
 			state.wallpaperData.wallpapers.splice(index, 1);
@@ -108,6 +113,7 @@ const wallpaperStore = {
 					dispatch('wallpaperSetFromApi', data);
 				})
 				.catch(err => {
+					console.log(err);
 					if (commitOnFail) {
 						console.warn("Error in retrieving data from server (wallpaper), so committing stale data to store.")
 						dispatch('wallpaperSetFromStorage', commitOnFail);
@@ -132,15 +138,14 @@ const wallpaperStore = {
 				expires,
 				currentWallpaperId = 0,
 				collection,
-				idLastSet = new Date().getTime()
+				idLastSet
 			} = localData;
 
 			//TODO: refresh to next wallpaper if lastSet is too long ago
 			commit('setWallpapers', wallpapers);
-			commit('setCurrentWallpaperId', currentWallpaperId);
+			dispatch('setCurrentWallpaperId', { id: currentWallpaperId, lastSet: idLastSet });
 			commit('setWallpaperCollection', collection);
 			commit('setWallpaperDataExpires', expires);
-			commit('setWallpaperLastSet', idLastSet);
 
 			dispatch('loadingDataSucces');
 		},
@@ -153,8 +158,7 @@ const wallpaperStore = {
 
 			commit('setWallpapers', wallpapers);
 			commit('setWallpaperDataExpires', expires);
-			commit('setCurrentWallpaperId', Math.floor(Math.random() * wallpapers.length));
-			commit('setWallpaperLastSet', new Date().getTime());
+			dispatch('setCurrentWallpaperId', {});
 
 			dispatch('loadingDataSucces');			
 		},
@@ -167,8 +171,7 @@ const wallpaperStore = {
 			//TODO: some sort of action that loads an image, and than tells the store it is loaded and can be displayed
 			dispatch('loadImageSource', getters.nextWallpaperUrl)
 				.then(() => {
-					commit('setCurrentWallpaperId', getters.nextWallpaperId);
-					commit('setWallpaperLastSet', new Date().getTime());
+					dispatch('setCurrentWallpaperId', { id: getters.nextWallpaperId });
 					commit('setWallpaperImageLoaded', true)
 				})
 				.catch(e => {
@@ -176,7 +179,7 @@ const wallpaperStore = {
 				});
 		},
 
-		hideCurrentWallpaper({ state, getters, commit }) {
+		hideCurrentWallpaper({ state, getters, commit, dispatch }) {
 			const arrayLength = state.wallpaperData.wallpapers.length;
 			const currentId = state.wallpaperData.currentWallpaperId;
 			const nextId = getters.nextWallpaperId;
@@ -188,10 +191,11 @@ const wallpaperStore = {
 			} else {
 				if (nextId === 0) {
 					console.warn("Viewing last wallpaper currently. Going to next wallpaper, and then removing the last wallpaper.");
-					commit('setCurrentWallpaperId', nextId);
+					dispatch('setCurrentWallpaperId', {id: nextId});
+				} else {
+					dispatch('setCurrentWallpaperId', {id: currentId});
 				}
 				commit('removeWallpaperFromArray', currentId);
-				commit('setWallpaperLastSet', new Date().getTime());
 			}
 		},
 
@@ -261,6 +265,14 @@ const wallpaperStore = {
 				console.log("Loading wallpaper data was succesful, so retrying the wallpaper source now.");
 				dispatch('loadingDataSucces');
 			}			
+		},
+
+		setCurrentWallpaperId({ getters, commit }, {id, lastSet}) {
+			let newId = id ? id : Math.floor(Math.random() * getters.wallpapersLength);
+			let newLastSet = lastSet ? lastSet : new Date().getTime();
+			
+			commit('setWallpaperId', newId);
+			commit('setWallpaperLastSet', newLastSet);
 		},
 
 		//TODO: legacy below this

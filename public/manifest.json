@@ -2,7 +2,7 @@
 	"name": "My Startpage",
 	"short_name": "My Startpage",
 	"manifest_version": 2,
-	"version": "0.0.1",
+	"version": "0.5",
 	"description": "My Startpage, an extension in development.",
 	"chrome_url_overrides": {
 		"newtab": "index.html"

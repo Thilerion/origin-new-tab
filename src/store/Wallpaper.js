@@ -106,6 +106,9 @@ const wallpaperStore = {
 
 	actions: {
 		getWallpapersFromServer({ getters, commit, dispatch }, commitOnFail) {
+			if (commitOnFail && commitOnFail.collection) {
+				commit('setWallpaperCollection', commitOnFail.collection);				
+			}
 			let url = wallpaperApi.url.get(getters.wallpaperCollection);
 			wallpaperApi.request(url)
 				.then(data => {
@@ -278,7 +281,7 @@ const wallpaperStore = {
 
 		setCurrentWallpaperId({ getters, commit }, {id, lastSet}) {
 			let now = new Date().getTime();
-			let newId = id ? id : Math.floor(Math.random() * getters.wallpapersLength);
+			let newId = (id != null) ? id : Math.floor(Math.random() * getters.wallpapersLength);
 			let newLastSet = lastSet ? lastSet : now;
 
 			if (lastSet && (newLastSet + WALLPAPER_CYCLE_TIMEOUT < now)) {	
@@ -287,6 +290,9 @@ const wallpaperStore = {
 				newLastSet = now;
 			}
 			
+			console.warn(`ID was: ${id}, new ID is: ${newId}`);
+			console.warn(`Amount of wallpapers is: ${getters.wallpapersLength}`);
+
 			commit('setWallpaperId', newId);
 			commit('setWallpaperLastSet', newLastSet);
 		},

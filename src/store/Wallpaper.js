@@ -23,7 +23,7 @@ const wallpaperStore = {
 			currentWallpaperId: 0,
 			collection: 1457745,
 			expires: null,
-			currentWallpaperSet: null
+			idLastSet: null
 		}
 	},
 
@@ -66,9 +66,9 @@ const wallpaperStore = {
 			return (getters.currentWallpaperId + 1) % l;
 		},
 		nextWallpaperUrl: (state, getters) => {
+			if (getters.showDefaultWallpaper) return state.defaultWallpaper.url;
 			return state.wallpaperData.wallpapers[getters.nextWallpaperId].url;
-		},
-		currentWallpaperSet: state => state.wallpaperData.currentWallpaperSet
+		}
 	},
 
 	mutations: {
@@ -92,7 +92,7 @@ const wallpaperStore = {
 			state.wallpaperData.expires = expiresOn;
 		},
 		setWallpaperLastSet(state, lastSet) {
-			state.wallpaperData.lastSet = lastSet;
+			state.wallpaperData.idLastSet = lastSet;
 		},
 		removeWallpaperFromArray(state, index) {
 			state.wallpaperData.wallpapers.splice(index, 1);
@@ -132,7 +132,7 @@ const wallpaperStore = {
 				expires,
 				currentWallpaperId = 0,
 				collection,
-				lastSet = new Date().getTime()
+				idLastSet = new Date().getTime()
 			} = localData;
 
 			//TODO: refresh to next wallpaper if lastSet is too long ago
@@ -140,7 +140,7 @@ const wallpaperStore = {
 			commit('setCurrentWallpaperId', currentWallpaperId);
 			commit('setWallpaperCollection', collection);
 			commit('setWallpaperDataExpires', expires);
-			commit('setWallpaperLastSet', lastSet);
+			commit('setWallpaperLastSet', idLastSet);
 
 			dispatch('loadingDataSucces');
 		},
@@ -154,6 +154,7 @@ const wallpaperStore = {
 			commit('setWallpapers', wallpapers);
 			commit('setWallpaperDataExpires', expires);
 			commit('setCurrentWallpaperId', Math.floor(Math.random() * wallpapers.length));
+			commit('setWallpaperLastSet', new Date().getTime());
 
 			dispatch('loadingDataSucces');			
 		},
@@ -167,6 +168,7 @@ const wallpaperStore = {
 			dispatch('loadImageSource', getters.nextWallpaperUrl)
 				.then(() => {
 					commit('setCurrentWallpaperId', getters.nextWallpaperId);
+					commit('setWallpaperLastSet', new Date().getTime());
 					commit('setWallpaperImageLoaded', true)
 				})
 				.catch(e => {
@@ -189,6 +191,7 @@ const wallpaperStore = {
 					commit('setCurrentWallpaperId', nextId);
 				}
 				commit('removeWallpaperFromArray', currentId);
+				commit('setWallpaperLastSet', new Date().getTime());
 			}
 		},
 

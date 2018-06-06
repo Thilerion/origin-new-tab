@@ -171,7 +171,8 @@ const wallpaperStore = {
 			dispatch('loadImageSource', getters.nextWallpaperUrl)
 				.then(() => {
 					dispatch('setCurrentWallpaperId', { id: getters.nextWallpaperId });
-					commit('setWallpaperImageLoaded', true)
+					commit('setWallpaperImageLoaded', true);
+					dispatch('preloadNextImage');
 				})
 				.catch(e => {
 					console.warn(e);
@@ -205,10 +206,10 @@ const wallpaperStore = {
 		loadingDataSucces({getters, commit, dispatch}) {
 			commit('setDataLoaded', true);
 			const url = getters.currentExternalWallpaper.url;
-			console.log("URL: ", url);
 			dispatch('loadImageSource', url)
 				.then(() => {
 					commit('setWallpaperImageLoaded', true);
+					dispatch('preloadNextImage');
 				})
 				.catch((err) => {
 					console.warn(err);
@@ -216,8 +217,7 @@ const wallpaperStore = {
 				});
 		},
 
-		loadImageSource: ({ }, url) => {
-			console.log("URL: ", url);			
+		loadImageSource: ({ }, url) => {		
 			return new Promise((resolve, reject) => {
 				const image = new Image();
 
@@ -252,6 +252,15 @@ const wallpaperStore = {
 
 				image.src = url;
 			})
+		},
+
+		preloadNextImage({getters}) {
+			const nextUrl = getters.nextWallpaperUrl;
+			if (getters.apiDataLoaded && nextUrl) {
+				console.warn("Preloading next wallpaper.");
+				const image = new Image();
+				image.src = nextUrl;
+			}
 		},
 
 		retryLoadingWallpapers({getters, dispatch}) {

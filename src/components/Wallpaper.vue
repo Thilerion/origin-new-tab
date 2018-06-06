@@ -39,7 +39,6 @@ export default {
 	},
 	mounted() {
 		setTimeout(() => {
-			console.warn("timeout has passed, so wallpaper will now be animated");
 			this.animate = true;
 		}, 2000);
 	}

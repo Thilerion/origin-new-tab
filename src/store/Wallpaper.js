@@ -4,6 +4,7 @@ const wallpaperApi = widgetsApi.wallpaper;
 import { deepClone } from '@/utils/deepObject';
 
 const WALLPAPER_CYCLE_TIMEOUT = 1 * 60 * 60 * 1000; //1 uur
+// const WALLPAPER_CYCLE_TIMEOUT = 10000;
 
 const wallpaperStore = {
 
@@ -95,9 +96,7 @@ const wallpaperStore = {
 			state.wallpaperData.expires = expiresOn;
 		},
 		setWallpaperLastSet(state, lastSet) {
-			console.warn("Wallpaper last set WAS: ", state.wallpaperData.idLastSet);
 			state.wallpaperData.idLastSet = lastSet;
-			console.warn("Wallpaper last set NOW: ", state.wallpaperData.idLastSet);
 		},
 		removeWallpaperFromArray(state, index) {
 			state.wallpaperData.wallpapers.splice(index, 1);
@@ -268,8 +267,15 @@ const wallpaperStore = {
 		},
 
 		setCurrentWallpaperId({ getters, commit }, {id, lastSet}) {
+			let now = new Date().getTime();
 			let newId = id ? id : Math.floor(Math.random() * getters.wallpapersLength);
-			let newLastSet = lastSet ? lastSet : new Date().getTime();
+			let newLastSet = lastSet ? lastSet : now;
+
+			if (lastSet && (newLastSet + WALLPAPER_CYCLE_TIMEOUT < now)) {	
+				console.warn("Timer has passed, current wallpaper id is cycled.");
+				newId = (newId + 1) % getters.wallpapersLength;
+				newLastSet = now;
+			}
 			
 			commit('setWallpaperId', newId);
 			commit('setWallpaperLastSet', newLastSet);

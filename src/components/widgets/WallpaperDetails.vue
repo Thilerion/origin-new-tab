@@ -13,9 +13,16 @@
 				</button>
 			</div>
 
+			<div class="buttons" v-else>
+				<button class="icon-btn load-btn" @click="nextWallpaper" alt="Retry loading wallpaper">
+					<StartSvgIcon icon="refresh"/>
+				</button>
+			</div>
+
 			<p
 				v-if="wallpaperToShow.user"
 				class="attribution f-shadow-heavy"
+				:class="{'default-wallpaper': usingDefaultWallpaper}"
 			>Photo by <a :href="userUrl" target="_blank">{{wallpaperToShow.user}}</a> on <a :href="unsplashUrl" target="_blank">Unsplash</a></p>
 			<p
 				v-else
@@ -86,7 +93,7 @@ export default {
 			else this.retryLoadWallpapers();
 		},
 		retryLoadWallpapers() {
-			this.$store.dispatch('getWallpapersFromServer');
+			this.$store.dispatch('retryLoadingWallpapers');
 		},
 		hideWallpaper() {
 			this.$store.dispatch('hideCurrentWallpaper');

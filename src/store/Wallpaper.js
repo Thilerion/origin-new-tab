@@ -78,7 +78,7 @@ const wallpaperStore = {
 			state.dataLoaded = !!loaded;
 		},
 		setWallpaperImageLoaded(state, loaded) {
-			state.wallpaperLoaded = !!loaded;
+			state.wallpaperLoaded = loaded;
 		},
 		setWallpapers(state, wps) {
 			//TODO: maybe spread for reactivity??
@@ -160,12 +160,17 @@ const wallpaperStore = {
 			dispatch('loadingDataSucces');			
 		},
 
-		goToNextWallpaper({ state, getters, commit }) {
+		goToNextWallpaper({ state, getters, commit, dispatch }) {
 			if (!state.dataLoaded) {
 				console.warn("No wallpaper data is loaded, so can't go to next.");
 				return;
 			}
+			commit('setWallpaperImageLoaded', null);
 			commit('setCurrentWallpaperId', getters.nextWallpaperId);
+			//TODO: some sort of action that loads an image, and than tells the store it is loaded and can be displayed
+			dispatch('loadImageSource', getters.currentExternalWallpaper.url)
+				.then(() => commit('setWallpaperImageLoaded', true))
+				.catch(e => commit('setWallpaperImageLoaded', false));
 		},
 
 		hideCurrentWallpaper({ state, getters, commit }) {
@@ -219,6 +224,18 @@ const wallpaperStore = {
 				}
 				image.src = url;
 			})
+		},
+
+		retryLoadingWallpapers({getters, dispatch}) {
+			if (!getters.apiDataLoaded) {
+				// if data loading failed
+				console.log("Loading wallpaper data was unsuccesful, so retrying that now.");
+				dispatch('getWallpapersFromServer');
+			} else if (!getters.wallpaperImageLoaded) {
+				// if loading the wallpaper itself failed
+				console.log("Loading wallpaper data was succesful, so retrying the wallpaper source now.");
+				dispatch('loadingDataSucces');
+			}			
 		},
 
 		//TODO: legacy below this

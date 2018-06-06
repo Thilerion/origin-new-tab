@@ -87,11 +87,6 @@ const wallpaperStore = {
 		setCurrentWallpaperId(state, id = 0) {
 			state.wallpaperData.currentWallpaperId = id;
 		},
-		increaseCurrentWallpaperId(state) {
-			const wpAmount = state.wallpaperData.wallpapers.length;
-			const currentId = state.wallpaperData.currentWallpaperId;
-			state.wallpaperData.currentWallpaperId = (currentId + 1) % wpAmount;
-		},
 		setWallpaperCollection(state, collection) {
 			state.wallpaperData.collection = collection;
 		},
@@ -103,23 +98,6 @@ const wallpaperStore = {
 		},
 		removeWallpaperFromArray(state, index) {
 			state.wallpaperData.wallpapers.splice(index, 1);
-		},
-		hideWallpaper(state) {
-			//TODO: this would be easier as actions
-			const arrayLength = state.wallpaperData.wallpapers.length;
-			const currentId = state.wallpaperData.currentWallpaperId;
-
-			if (!state.dataLoaded) {
-				console.warn("No wallpaper data is loaded, so can't hide one.");
-			} else if (arrayLength <= 1) {
-				console.warn("Can't hide if only 1 wallpaper is left.");
-			} else if ((currentId + 1) === arrayLength) {
-				console.warn("Viewing last wallpaper currently. Going to next wallpaper, and then removing the last wallpaper.");
-				state.wallpaperData.currentWallpaperId = 0;
-				state.wallpaperData.splice(-1);
-			} else {
-				state.wallpaperData.splice(currentId, 1);
-			}
 		}
 	},
 
@@ -182,26 +160,27 @@ const wallpaperStore = {
 			dispatch('loadingDataSucces');			
 		},
 
-		goToNextWallpaper({ state, commit }) {
+		goToNextWallpaper({ state, getters, commit }) {
 			if (!state.dataLoaded) {
 				console.warn("No wallpaper data is loaded, so can't go to next.");
 				return;
 			}
-			commit('increaseCurrentWallpaperId');
+			commit('setCurrentWallpaperId', getters.nextWallpaperId);
 		},
 
-		hideCurrentWallpaper({ state, commit }) {
+		hideCurrentWallpaper({ state, getters, commit }) {
 			const arrayLength = state.wallpaperData.wallpapers.length;
 			const currentId = state.wallpaperData.currentWallpaperId;
+			const nextId = getters.nextWallpaperId;
 
 			if (!state.dataLoaded) {
 				console.warn("No wallpaper data is loaded, so can't hide one.");
 			} else if (arrayLength <= 1) {
 				console.warn("Can't hide if only 1 wallpaper is left.");
 			} else {
-				if ((currentId + 1) === arrayLength) {
+				if (nextId === 0) {
 					console.warn("Viewing last wallpaper currently. Going to next wallpaper, and then removing the last wallpaper.");
-					commit('setCurrentWallpaperId', 0);
+					commit('setCurrentWallpaperId', nextId);
 				}
 				commit('removeWallpaperFromArray', currentId);
 			}

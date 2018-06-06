@@ -291,14 +291,11 @@ const wallpaperStore = {
 			commit('setWallpaperLastSet', newLastSet);
 		},
 
-		//TODO: legacy below this
 		setWallpaperCollection({ commit, dispatch }, col) {
-			commit('setReloadingWallpapers', true);
-			commit('setWallpaperLoadFailure', false);
-			commit('setWallpaperLoaded', false);
-			commit('setCollection', col);
+			commit('setDataLoaded', null);
+			commit('setWallpaperImageLoaded', null);
+			commit('setWallpaperCollection', col);
 			dispatch('getWallpapersFromServer');
-			commit('setReloadingWallpapers', false);
 		}
 	}
 

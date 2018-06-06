@@ -24,7 +24,7 @@ export default {
 			return {'background-image': `url(${this.loadedImageSource})`};
 		},
 		wallpaperSource() {
-			let cur = this.$store.getters.currentWallpaper;
+			let cur = this.$store.getters.wallpaperToShow;
 			try {
 				return cur.url;
 			}

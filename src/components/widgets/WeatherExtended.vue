@@ -66,7 +66,7 @@ export default {
 		},
 		backgroundImage() {
 			if (!this.wallpaperUrlAvailable) return;
-			return {'background-image': `url(${this.$store.getters.currentWallpaper.url})`};
+			return {'background-image': `url(${this.$store.getters.wallpaperUrl})`};
 		},
 		wallpaperUrlAvailable() {
 			return this.$store.getters.showWallpaper;

@@ -27,41 +27,38 @@ const wallpaperStore = {
 	},
 
 	getters: {
-		showDefaultWallpaper: state => !state.dataLoaded && state.dataLoadFailure,
-		showExternalWallpaper: state => state.dataLoaded && !state.dataLoadFailure,
-		showWallpaper: state => (state.dataLoaded || state.dataLoadFailure) && !state.reloadingWallpapers,
-		currentWallpaper: (state, getters) => {
-			if (getters.showDefaultWallpaper) {
-				return state.defaultWallpaper;
-			}
-			if (getters.showExternalWallpaper) {
-				return state.wallpaperData.wallpapers[state.wallpaperData.currentWallpaperId];
-			}
-			return;
-		},
-		collection: state => state.wallpaperData.collection,
-		wallpaperWatch: state => {
+		wallpaperWatch(state) {
+			//Used for the watchers, for syncing with localStorage
 			return state.wallpaperData;
 		},
-		wallpaperColor: (state, getters) => {
-			if (getters.currentWallpaper) return getters.currentWallpaper.color;
-			else return;
-		},
-		nextWallpaperId: state => {
-			let length = state.wallpaperData.wallpapers.length;
-			if (length === 0) return 0;
-			let cur = state.wallpaperData.currentWallpaperId;
 
-			let next = (cur + 1) % length;
-			return next;
+		// TODO: change how "reloadingWallpapers" works
+		showWallpaper: state => (state.dataLoaded || state.dataLoadFailure) && !state.reloadingWallpapers,
+		showDefaultWallpaper: state => !state.dataLoaded && state.dataLoadFailure,
+		showExternalWallpaper: state => state.dataLoaded && !state.dataLoadFailure && !state.reloadingWallpapers,
+
+		currentWallpaperId: state => state.wallpaperData.currentWallpaperId,
+		currentExternalWallpaper: (state, getters) => state.wallpaperData.wallpapers[getters.currentWallpaperId] || null,
+		wallpaperCollection: state => state.wallpaperData.collection,
+
+		// Replaces "currentWallpaper"
+		wallpaperToShow(state, getters) {
+			if (!getters.showWallpaper) return null;
+			if (getters.showExternalWallpaper) return getters.currentExternalWallpaper;
+			if (getters.showDefaultWallpaper && !getters.showExternalWallpaper) return state.defaultWallpaper;
+		},
+		wallpaperUrl(state, getters) {
+			return getters.wallpaperToShow ? getters.wallpaperToShow.url : null;
+		},
+
+		nextWallpaperId(state, getters) {
+			const l = state.wallpaperData.wallpapers.length;
+			if (l === 0) return 0;
+			return (getters.currentWallpaperId + 1) % l;
 		},
 		nextWallpaperUrl: (state, getters) => {
-			try {
-				return state.wallpaperData.wallpapers[getters.nextWallpaperId].url;
-			}
-			catch (e) {
-				return "";
-			}			
+			if (getters.showExternalWallpaper) return state.wallpaperData.wallpapers[getters.nextWallpaperId].url;
+			else return "";
 		},
 		currentWallpaperSet: state => state.wallpaperData.currentWallpaperSet,
 		timeUntilNextWallpaper: state => {
@@ -121,7 +118,7 @@ const wallpaperStore = {
 	actions: {
 		async getWallpapersFromServer({ getters, commit, dispatch }, commitOnFail) {
 			try {
-				let url = wallpaperApi.url.get(getters.collection);				
+				let url = wallpaperApi.url.get(getters.wallpaperCollection);				
 				let data = await wallpaperApi.request(url);				
 				dispatch('wallpaperSetFromApi', data);
 			}

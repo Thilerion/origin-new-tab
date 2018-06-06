@@ -47,7 +47,7 @@ export default {
 			return this.$store.getters.showDefaultWallpaper;
 		},
 		currentWallpaper() {
-			return this.$store.getters.currentWallpaper;
+			return this.$store.getters.wallpaperToShow;
 		},
 		userUrl() {
 			try {

@@ -1,6 +1,8 @@
 import widgetsApi from './api/index';
 const wallpaperApi = widgetsApi.wallpaper;
 
+import { deepClone } from '@/utils/deepObject';
+
 const WALLPAPER_CYCLE_TIMEOUT = 1 * 60 * 60 * 1000; //1 uur
 
 const wallpaperStore = {
@@ -8,15 +10,14 @@ const wallpaperStore = {
 	state: {
 		defaultWallpaper: {
 			url: require('@/assets/wallpaper/default_wallpaper.jpg'),
-			urlUser: "",
-			user: "",
-			location: "",
+			urlUser: "https://unsplash.com/@goodvybesdaily",
+			user: "mike anderson",
+			location: "Ganekogorta, Spain",
 			urlDownload: require('@/assets/wallpaper/default_wallpaper.jpg'),
 			urlRaw: require('@/assets/wallpaper/default_wallpaper.jpg')
 		},
-		dataLoaded: false,
-		dataLoadFailure: false,
-		reloadingWallpapers: false,
+		dataLoaded: null,
+		wallpaperLoaded: null,
 		wallpaperData: {
 			wallpapers: [],
 			currentWallpaperId: 0,
@@ -32,25 +33,34 @@ const wallpaperStore = {
 			return state.wallpaperData;
 		},
 
-		// TODO: change how "reloadingWallpapers" works
-		showWallpaper: state => (state.dataLoaded || state.dataLoadFailure) && !state.reloadingWallpapers,
-		showDefaultWallpaper: state => !state.dataLoaded && state.dataLoadFailure,
-		showExternalWallpaper: state => state.dataLoaded && !state.dataLoadFailure && !state.reloadingWallpapers,
+		apiDataLoaded: state => state.dataLoaded,
+		wallpaperImageLoaded: state => state.wallpaperLoaded,
+
+		//TODO: what if a new wallpaper is being loaded?
+		showExternalWallpaper(state) {
+			//if DataLoaded (storage or server) && image load success
+			return state.dataLoaded && state.wallpaperLoaded;
+		},
+		showDefaultWallpaper(state) {
+			//if DataLoaded === false (no external wallpaper to show)
+			//or if DataLoaded === true, but Image Load failed
+			return state.dataLoaded === false || state.wallpaperLoaded === false;
+		},
+
+		wallpaperToShow(state, getters) {
+			const wpExternal = state.wallpaperData.wallpapers[state.wallpaperData.currentWallpaperId];
+			const wpDefault = state.defaultWallpaper;
+
+			if (getters.showExternalWallpaper) return wpExternal;
+			else if (getters.showDefaultWallpaper) return wpDefault;
+			return null;
+		},
 
 		currentWallpaperId: state => state.wallpaperData.currentWallpaperId,
 		currentExternalWallpaper: (state, getters) => state.wallpaperData.wallpapers[getters.currentWallpaperId] || null,
 		wallpaperCollection: state => state.wallpaperData.collection,
 
-		// Replaces "currentWallpaper"
-		wallpaperToShow(state, getters) {
-			if (!getters.showWallpaper) return null;
-			if (getters.showExternalWallpaper) return getters.currentExternalWallpaper;
-			if (getters.showDefaultWallpaper && !getters.showExternalWallpaper) return state.defaultWallpaper;
-		},
-		wallpaperUrl(state, getters) {
-			return getters.wallpaperToShow ? getters.wallpaperToShow.url : null;
-		},
-
+		//TODO: LEGACY GETTERS BELOW
 		nextWallpaperId(state, getters) {
 			const l = state.wallpaperData.wallpapers.length;
 			if (l === 0) return 0;
@@ -60,65 +70,64 @@ const wallpaperStore = {
 			if (getters.showExternalWallpaper) return state.wallpaperData.wallpapers[getters.nextWallpaperId].url;
 			else return "";
 		},
-		currentWallpaperSet: state => state.wallpaperData.currentWallpaperSet,
-		timeUntilNextWallpaper: state => {
-			const expires = state.wallpaperData.currentWallpaperSet + WALLPAPER_CYCLE_TIMEOUT;
-			const now = new Date().getTime();
-			const msUntilNew = expires - now;
-			return `${Math.floor(msUntilNew / 1000 / 60)} minutes, ${Math.floor(msUntilNew / 1000 % 60)} seconds`
-		}
+		currentWallpaperSet: state => state.wallpaperData.currentWallpaperSet
 	},
 
 	mutations: {
-		setWallpapers: (state, data) => state.wallpaperData.wallpapers = [...data],
-		setWallpaperExpires: (state, n) => state.wallpaperData.expires = n,
-		setCurrentWallpaperId(state, id) {
-			if (state.wallpaperData.wallpapers.length - 1 < id < 0) {
-				state.wallpaperData.currentWallpaperId = 0;
-			} else if (!id) {
-				state.wallpaperData.currentWallpaperId = 0;
-			} else {
-				state.wallpaperData.currentWallpaperId = id;
-			}			
+		setDataLoaded(state, loaded) {
+			state.dataLoaded = !!loaded;
 		},
-		setCollection: (state, col) => {
-			state.wallpaperData.collection = col;
+		setWallpaperImageLoaded(state, loaded) {
+			state.wallpaperLoaded = !!loaded;
 		},
-		setCurrentWallpaperSet: (state, time = new Date().getTime()) => state.wallpaperData.currentWallpaperSet = time, 
-		nextWallpaper: state => {
-			const arLength = state.wallpaperData.wallpapers.length;
-			if (!arLength) state.wallpaperData.currentWallpaperId = 0;
-			const nextId = state.wallpaperData.currentWallpaperId + 1;
-			state.wallpaperData.currentWallpaperId = nextId % arLength;
-			state.wallpaperData.currentWallpaperSet = new Date().getTime();
+		setWallpapers(state, wps) {
+			//TODO: maybe spread for reactivity??
+			state.wallpaperData.wps = deepClone(wps);
 		},
-		disableCurrentWallpaper(state) {
-			if (state.wallpaperData.wallpapers.length < 2) {
-				console.warn("Can't hide if only 1 wallpaper is left.");
-			} else {
-				const index = state.wallpaperData.currentWallpaperId;
-
-				if (state.wallpaperData.wallpapers.length - 1 === index) {
-					state.wallpaperData.currentWallpaperId -= 1;				
-				}				
-				state.wallpaperData.wallpapers.splice(index, 1);
-			}
+		setCurrentWallpaperId(state, id = 0) {
+			state.wallpaperData.currentWallpaperId = id;
 		},
-		setWallpaperData(state, { wallpapers, expires, currentWallpaperId, collection }) {
-			state.wallpaperData.wallpapers = [...wallpapers];
-			state.wallpaperData.expires = expires;
-			state.wallpaperData.currentWallpaperId = currentWallpaperId;
+		setWallpaperCollection(state, collection) {
 			state.wallpaperData.collection = collection;
 		},
-		setWallpaperLoadFailure: (state, bool = true) => state.dataLoadFailure = bool,
-		setWallpaperLoaded: (state, bool = true) => state.dataLoaded = bool,
-		setReloadingWallpapers: (state, bool) => state.reloadingWallpapers = bool
+		setWallpaperDataExpires(state, expiresOn) {
+			state.wallpaperData.expires = expiresOn;
+		},
+		setWallpaperLastSet(state, lastSet) {
+			state.wallpaperData.lastSet = lastSet;
+		},
+		goToNextWallpaper(state) {
+			if (!state.dataLoaded) {
+				console.warn("No wallpaper data is loaded, so can't go to next.");
+				return;
+			}
+			const wpAmount = state.wallpaperData.wallpapers.length;
+			const currentId = state.wallpaperData.currentWallpaperId;
+			state.wallpaperData.currentWallpaperId = (currentId + 1) % wpAmount;
+		},
+		hideWallpaper(state) {
+			//TODO: this would be easier as actions
+			const arrayLength = state.wallpaperData.wallpapers.length;
+			const currentId = state.wallpaperData.currentWallpaperId;
+
+			if (!state.dataLoaded) {
+				console.warn("No wallpaper data is loaded, so can't hide one.");
+			} else if (arrayLength <= 1) {
+				console.warn("Can't hide if only 1 wallpaper is left.");
+			} else if ((currentId + 1) === arrayLength) {
+				console.warn("Viewing last wallpaper currently. Going to next wallpaper, and then removing the last wallpaper.");
+				state.wallpaperData.currentWallpaperId = 0;
+				state.wallpaperData.splice(-1);
+			} else {
+				state.wallpaperData.splice(currentId, 1);
+			}
+		}
 	},
 
 	actions: {
 		async getWallpapersFromServer({ getters, commit, dispatch }, commitOnFail) {
 			try {
-				let url = wallpaperApi.url.get(getters.wallpaperCollection);				
+				let url = wallpaperApi.url.get(getters.wallpaperCollection);			
 				let data = await wallpaperApi.request(url);				
 				dispatch('wallpaperSetFromApi', data);
 			}
@@ -139,14 +148,14 @@ const wallpaperStore = {
 			dispatch('getWallpapersFromServer', data);
 		},
 		wallpaperSetFromStorage({commit}, localData) {
-			const { wallpapers = [], expires, currentWallpaperId = 0, collection, currentWallpaperSet } = localData;
+			const { wallpapers = [], expires, currentWallpaperId = 0, collection, lastSet } = localData;
 			const commitData = { wallpapers, expires, currentWallpaperId, collection };
 			commit('setWallpaperData', commitData);
-			if (currentWallpaperSet && new Date().getTime() - currentWallpaperSet > WALLPAPER_CYCLE_TIMEOUT) {
+			if (lastSet && new Date().getTime() - lastSet > WALLPAPER_CYCLE_TIMEOUT) {
 				console.warn(`${WALLPAPER_CYCLE_TIMEOUT / 1000 / 60} minutes have passed since last time wallpaper has changed. Setting next wallpaper now.`);
 				commit('nextWallpaper');
 			} else {
-				commit('setCurrentWallpaperSet', currentWallpaperSet);
+				commit('setWallpaperLastSet', lastSet);
 			}			
 			commit('setWallpaperLoaded');			
 		},

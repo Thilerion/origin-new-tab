@@ -1,7 +1,7 @@
 <template>
 	<transition name="fade">
 		<div
-			v-if="showWallpaper"
+			v-if="wallpaperSource"
 			class="background-image"
 			:key="loadedImageSource"
 			:style="[backgroundStyle]"
@@ -23,17 +23,12 @@ export default {
 			if (!this.loadedImageSource) return;
 			return {'background-image': `url(${this.loadedImageSource})`};
 		},
-		wallpaperSource() {
-			let cur = this.$store.getters.wallpaperToShow;
-			try {
-				return cur.url;
-			}
-			catch(e) {
-				return "";
-			}
+		wallpaperToShow() {
+			return this.$store.getters.wallpaperToShow;
 		},
-		showWallpaper() {
-			return this.$store.getters.showWallpaper;
+		wallpaperSource() {
+			const wp = this.wallpaperToShow;
+			return (wp && wp.url) ? wp.url : null;
 		},
 		nextWallpaperUrl() {
 			return this.$store.getters.nextWallpaperUrl;

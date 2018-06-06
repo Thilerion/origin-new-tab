@@ -61,6 +61,8 @@ export default {
 			return `${this.unsplashBaseUrl}${this.unsplashReferralSuffix}`;
 		},
 		showWallpaper() {
+			//TODO
+			return false;
 			return this.$store.getters.showWallpaper;
 		},
 		downloadUrl() {

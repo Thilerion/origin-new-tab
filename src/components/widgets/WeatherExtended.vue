@@ -65,11 +65,15 @@ export default {
 			}, {})
 		},
 		backgroundImage() {
-			if (!this.wallpaperUrlAvailable) return;
-			return {'background-image': `url(${this.$store.getters.wallpaperUrl})`};
+			if (!this.wallpaperUrl) return;
+			return {'background-image': `url(${this.wallpaperUrl})`};
 		},
-		wallpaperUrlAvailable() {
-			return this.$store.getters.showWallpaper;
+		wallaperToShow() {
+			return this.$store.getters.wallpaperToShow;
+		},
+		wallpaperUrl() {
+			const wp = this.wallaperToShow;
+			return (wp && wp.url) ? wp.url : null;
 		}
 	},
 	filters: {

@@ -2,6 +2,7 @@ import widgetsApi from './api/index';
 const wallpaperApi = widgetsApi.wallpaper;
 
 import { deepClone } from '@/utils/deepObject';
+import { defaultSettings } from './defaultUserSettings';
 
 const WALLPAPER_CYCLE_TIMEOUT = 1 * 60 * 60 * 1000; //1 uur
 // const WALLPAPER_CYCLE_TIMEOUT = 10000;
@@ -22,7 +23,7 @@ const wallpaperStore = {
 		wallpaperData: {
 			wallpapers: [],
 			currentWallpaperId: 0,
-			collection: 1457745,
+			collection: defaultSettings.wallpaper.wallpaperCollection,
 			expires: null,
 			idLastSet: null
 		}

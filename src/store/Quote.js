@@ -1,13 +1,15 @@
 import widgetsApi from './api/index';
 const quoteApi = widgetsApi.quote;
 
+import { defaultSettings } from './defaultUserSettings';
+
 const quoteStore = {
 
 	state: {
 		quoteData: {
 			randomQuote: {},
 			expires: null,
-			quoteCategory: 'motivinspirational'
+			quoteCategory: defaultSettings.quote.category
 		},
 		dataLoaded: false
 	},

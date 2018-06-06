@@ -14,7 +14,7 @@ const settingsStore = {
 				name: getters.username,
 				language: getters.language,
 				fontSize: getters.fontSize,
-				wallpaperCollection: getters.collection,
+				wallpaperCollection: getters.wallpaperCollection,
 				quoteCategory: getters.quoteCategory,
 				activeWidgets: copiedWidgets
 			}

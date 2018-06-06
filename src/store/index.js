@@ -40,9 +40,9 @@ const store = new Vuex.Store({
 
 	state: {
 		user: {
-			language: '',
-			username: '',
-			fontSize: 16,
+			language: defaultSettings.user.language,
+			username: defaultSettings.user.name,
+			fontSize: defaultSettings.user.fontSize,
 			activeWidgets: defaultSettings.user.activeWidgets
 		},
 		editingUsername: false,

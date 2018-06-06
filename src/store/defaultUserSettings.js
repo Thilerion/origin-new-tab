@@ -17,7 +17,7 @@ const defaultSettings = {
 	},
 	wallpaper: {
 		// any valid unsplash collection id. maybe provide a list as well?
-		wallpaperCollection: 220388
+		wallpaperCollection: 1457745
 	},
 	quote: {
 		// [motivinspirational, movies, famous]

@@ -1,11 +1,10 @@
 <template>
-	<transition name="fade">
+	<transition :name="animateName">
 		<div
 			v-if="wallpaperSource"
 			class="background-image"
-			:key="loadedImageSource"
+			:key="wallpaperSource"
 			:style="[backgroundStyle]"
-			:class="{animate: animate}"
 		></div>
 	</transition>
 </template>
@@ -14,14 +13,13 @@
 export default {
 	data() {
 		return {
-			animate: false,
-			loadedImageSource: null
+			animate: false
 		}
 	},
 	computed: {
 		backgroundStyle() {
-			if (!this.loadedImageSource) return;
-			return {'background-image': `url(${this.loadedImageSource})`};
+			if (!this.wallpaperSource) return;
+			return {'background-image': `url(${this.wallpaperSource})`};
 		},
 		wallpaperToShow() {
 			return this.$store.getters.wallpaperToShow;
@@ -32,43 +30,18 @@ export default {
 		},
 		nextWallpaperUrl() {
 			return this.$store.getters.nextWallpaperUrl;
-		}
-	},
-	methods: {
-		loadNewImage(src) {
-			this.isLoaded = false;
-			const image = new Image();
-
-			image.onload = () => {
-				this.loadedImageSource = src;
-				if (!this.animate) {
-					setTimeout(() => {
-						this.animate = true;
-					}, 1000);
-				}
-			}
-			image.src = src;
 		},
-		preloadImage(src) {
-			let preloadImage = new Image();
-			preloadImage.src = src;
-		}
-	},
-	beforeMount() {
-		this.loadNewImage(this.wallpaperSource);
-		this.preloadImage(this.nextWallpaperUrl);
-	},
-	watch: {
-		wallpaperSource(newVal, oldVal) {
-			if (newVal) {				
-				this.loadNewImage(newVal);
-			}
-		},
-		nextWallpaperUrl(newVal, oldVal) {
-			if (newVal !== oldVal && newVal !== this.wallpaperSource) {
-				this.preloadImage(newVal);
+		animateName() {
+			if (this.wallpaperToShow && this.animate) {
+				return 'fade';
 			}
 		}
+	},
+	mounted() {
+		setTimeout(() => {
+			console.warn("timeout has passed, so wallpaper will now be animated");
+			this.animate = true;
+		}, 2000);
 	}
 }
 </script>
@@ -87,15 +60,15 @@ export default {
 	filter: contrast(0.95) brightness(0.85);
 }
 
-.animate.fade-enter-active {
+.fade-enter-active {
 	transition: opacity 0.75s ease-in;
 }
 
-.animate.fade-leave-active {
+.fade-leave-active {
 	transition: opacity 1s ease-in;
 }
 
-.animate.fade-enter, .animate.fade-leave-to {
+.fade-enter, .fade-leave-to {
 	opacity: 0;
 }
 </style>

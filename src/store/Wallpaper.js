@@ -82,10 +82,15 @@ const wallpaperStore = {
 		},
 		setWallpapers(state, wps) {
 			//TODO: maybe spread for reactivity??
-			state.wallpaperData.wps = deepClone(wps);
+			state.wallpaperData.wallpapers = deepClone(wps);
 		},
 		setCurrentWallpaperId(state, id = 0) {
 			state.wallpaperData.currentWallpaperId = id;
+		},
+		increaseCurrentWallpaperId(state) {
+			const wpAmount = state.wallpaperData.wallpapers.length;
+			const currentId = state.wallpaperData.currentWallpaperId;
+			state.wallpaperData.currentWallpaperId = (currentId + 1) % wpAmount;
 		},
 		setWallpaperCollection(state, collection) {
 			state.wallpaperData.collection = collection;
@@ -96,14 +101,8 @@ const wallpaperStore = {
 		setWallpaperLastSet(state, lastSet) {
 			state.wallpaperData.lastSet = lastSet;
 		},
-		goToNextWallpaper(state) {
-			if (!state.dataLoaded) {
-				console.warn("No wallpaper data is loaded, so can't go to next.");
-				return;
-			}
-			const wpAmount = state.wallpaperData.wallpapers.length;
-			const currentId = state.wallpaperData.currentWallpaperId;
-			state.wallpaperData.currentWallpaperId = (currentId + 1) % wpAmount;
+		removeWallpaperFromArray(state, index) {
+			state.wallpaperData.wallpapers.splice(index, 1);
 		},
 		hideWallpaper(state) {
 			//TODO: this would be easier as actions
@@ -125,47 +124,125 @@ const wallpaperStore = {
 	},
 
 	actions: {
-		async getWallpapersFromServer({ getters, commit, dispatch }, commitOnFail) {
-			try {
-				let url = wallpaperApi.url.get(getters.wallpaperCollection);			
-				let data = await wallpaperApi.request(url);				
-				dispatch('wallpaperSetFromApi', data);
-			}
-			catch (e) {
-				if (commitOnFail) {
-					console.warn("Error in getting wallpapers from server. However, old date will be committed now. ", e);					
-					dispatch('wallpaperSetFromStorage', commitOnFail);
-				} else {
-					console.warn("Error in getting wallpapers from server.", e);					
-					commit('setWallpaperLoadFailure');					
-				}
-			}
+		getWallpapersFromServer({ getters, commit, dispatch }, commitOnFail) {
+			let url = wallpaperApi.url.get(getters.wallpaperCollection);
+			wallpaperApi.request(url)
+				.then(data => {
+					console.log("Got data from wallpaper API!");
+					dispatch('wallpaperSetFromApi', data);
+				})
+				.catch(err => {
+					if (commitOnFail) {
+						console.warn("Error in retrieving data from server (wallpaper), so committing stale data to store.")
+						dispatch('wallpaperSetFromStorage', commitOnFail);
+					} else {
+						console.warn("Error in retrieving data from server (wallpaper).");
+						dispatch('loadingDataFailed');
+					}
+				});
 		},
+
 		wallpaperStorageLoadFailed({dispatch}) {
 			dispatch('getWallpapersFromServer');
 		},
+
 		wallpaperStorageLoadExpired({dispatch}, data) {
 			dispatch('getWallpapersFromServer', data);
 		},
-		wallpaperSetFromStorage({commit}, localData) {
-			const { wallpapers = [], expires, currentWallpaperId = 0, collection, lastSet } = localData;
-			const commitData = { wallpapers, expires, currentWallpaperId, collection };
-			commit('setWallpaperData', commitData);
-			if (lastSet && new Date().getTime() - lastSet > WALLPAPER_CYCLE_TIMEOUT) {
-				console.warn(`${WALLPAPER_CYCLE_TIMEOUT / 1000 / 60} minutes have passed since last time wallpaper has changed. Setting next wallpaper now.`);
-				commit('nextWallpaper');
-			} else {
-				commit('setWallpaperLastSet', lastSet);
-			}			
-			commit('setWallpaperLoaded');			
-		},
-		wallpaperSetFromApi({ commit }, apiData) {
-			const { data: wallpapers = [], expires } = apiData;
+
+		wallpaperSetFromStorage({ commit, dispatch }, localData) {
+			const {
+				wallpapers = [],
+				expires,
+				currentWallpaperId = 0,
+				collection,
+				lastSet = new Date().getTime()
+			} = localData;
+
+			//TODO: refresh to next wallpaper if lastSet is too long ago
 			commit('setWallpapers', wallpapers);
-			commit('setWallpaperExpires', expires);
-			commit('setCurrentWallpaperId', Math.floor(Math.random() * wallpapers.length));
-			commit('setWallpaperLoaded');
+			commit('setCurrentWallpaperId', currentWallpaperId);
+			commit('setWallpaperCollection', collection);
+			commit('setWallpaperDataExpires', expires);
+			commit('setWallpaperLastSet', lastSet);
+
+			dispatch('loadingDataSucces');
 		},
+
+		wallpaperSetFromApi({ commit, dispatch }, apiData) {
+			const {
+				data: wallpapers = [],
+				expires
+			} = apiData;
+
+			commit('setWallpapers', wallpapers);
+			commit('setWallpaperDataExpires', expires);
+			commit('setCurrentWallpaperId', Math.floor(Math.random() * wallpapers.length));
+
+			dispatch('loadingDataSucces');			
+		},
+
+		goToNextWallpaper({ state, commit }) {
+			if (!state.dataLoaded) {
+				console.warn("No wallpaper data is loaded, so can't go to next.");
+				return;
+			}
+			commit('increaseCurrentWallpaperId');
+		},
+
+		hideCurrentWallpaper({ state, commit }) {
+			const arrayLength = state.wallpaperData.wallpapers.length;
+			const currentId = state.wallpaperData.currentWallpaperId;
+
+			if (!state.dataLoaded) {
+				console.warn("No wallpaper data is loaded, so can't hide one.");
+			} else if (arrayLength <= 1) {
+				console.warn("Can't hide if only 1 wallpaper is left.");
+			} else {
+				if ((currentId + 1) === arrayLength) {
+					console.warn("Viewing last wallpaper currently. Going to next wallpaper, and then removing the last wallpaper.");
+					commit('setCurrentWallpaperId', 0);
+				}
+				commit('removeWallpaperFromArray', currentId);
+			}
+		},
+
+		loadingDataFailed({commit}) {
+			commit('setDataLoaded', false);
+		},
+
+		loadingDataSucces({getters, commit, dispatch}) {
+			commit('setDataLoaded', true);
+			const url = getters.currentExternalWallpaper.url;
+			console.log("URL: ", url);
+			dispatch('loadImageSource', url)
+				.then(() => {
+					commit('setWallpaperImageLoaded', true);
+				})
+				.catch((err) => {
+					console.warn(err);
+					commit('setWallpaperImageLoaded', false);
+				});
+		},
+
+		loadImageSource: ({ }, url) => {
+			console.log("URL: ", url);			
+			return new Promise((resolve, reject) => {
+				const image = new Image();
+				image.onload = () => {
+					resolve(url);
+				}
+				image.onerror = () => {
+					reject("Error loading image");
+				}
+				image.onabort = () => {
+					reject("Loading image aborted");
+				}
+				image.src = url;
+			})
+		},
+
+		//TODO: legacy below this
 		setWallpaperCollection({ commit, dispatch }, col) {
 			commit('setReloadingWallpapers', true);
 			commit('setWallpaperLoadFailure', false);

@@ -1,6 +1,8 @@
 import widgetsApi from './api/index';
 const wallpaperApi = widgetsApi.wallpaper;
 
+const WALLPAPER_CYCLE_TIMEOUT = 1 * 60 * 60 * 1000; //1 uur
+
 const wallpaperStore = {
 
 	state: {
@@ -18,9 +20,9 @@ const wallpaperStore = {
 		wallpaperData: {
 			wallpapers: [],
 			currentWallpaperId: 0,
-			//540518 (spectrum), 220388 (standard), 334800 (reflections), 1457745 (moody landscapes), 289662 (great outdoors)
 			collection: 1457745,
-			expires: null
+			expires: null,
+			currentWallpaperSet: null
 		}
 	},
 
@@ -61,6 +63,13 @@ const wallpaperStore = {
 			catch (e) {
 				return "";
 			}			
+		},
+		currentWallpaperSet: state => state.wallpaperData.currentWallpaperSet,
+		timeUntilNextWallpaper: state => {
+			const expires = state.wallpaperData.currentWallpaperSet + WALLPAPER_CYCLE_TIMEOUT;
+			const now = new Date().getTime();
+			const msUntilNew = expires - now;
+			return `${Math.floor(msUntilNew / 1000 / 60)} minutes, ${Math.floor(msUntilNew / 1000 % 60)} seconds`
 		}
 	},
 
@@ -79,11 +88,13 @@ const wallpaperStore = {
 		setCollection: (state, col) => {
 			state.wallpaperData.collection = col;
 		},
+		setCurrentWallpaperSet: (state, time = new Date().getTime()) => state.wallpaperData.currentWallpaperSet = time, 
 		nextWallpaper: state => {
 			const arLength = state.wallpaperData.wallpapers.length;
 			if (!arLength) state.wallpaperData.currentWallpaperId = 0;
 			const nextId = state.wallpaperData.currentWallpaperId + 1;
 			state.wallpaperData.currentWallpaperId = nextId % arLength;
+			state.wallpaperData.currentWallpaperSet = new Date().getTime();
 		},
 		disableCurrentWallpaper(state) {
 			if (state.wallpaperData.wallpapers.length < 2) {
@@ -135,9 +146,15 @@ const wallpaperStore = {
 		},
 		wallpaperSetFromStorage({commit}, localData) {
 			console.warn("WALLPAPER data loaded, committing now...");
-			const { wallpapers = [], expires, currentWallpaperId = 0, collection } = localData;
+			const { wallpapers = [], expires, currentWallpaperId = 0, collection, currentWallpaperSet } = localData;
 			const commitData = { wallpapers, expires, currentWallpaperId, collection };
 			commit('setWallpaperData', commitData);
+			if (currentWallpaperSet && new Date().getTime() - currentWallpaperSet > WALLPAPER_CYCLE_TIMEOUT) {
+				console.warn(`${WALLPAPER_CYCLE_TIMEOUT / 1000 / 60} minutes have passed since last time wallpaper has changed. Setting next wallpaper now.`);
+				commit('nextWallpaper');
+			} else {
+				commit('setCurrentWallpaperSet', currentWallpaperSet);
+			}			
 			commit('setWallpaperLoaded');			
 		},
 		wallpaperSetFromApi({ commit }, apiData) {

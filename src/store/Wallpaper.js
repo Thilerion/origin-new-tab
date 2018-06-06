@@ -4,9 +4,6 @@ const wallpaperApi = widgetsApi.wallpaper;
 import { deepClone } from '@/utils/deepObject';
 import { defaultSettings } from './defaultUserSettings';
 
-const WALLPAPER_CYCLE_TIMEOUT = 1 * 60 * 60 * 1000; //1 uur
-// const WALLPAPER_CYCLE_TIMEOUT = 10000;
-
 const wallpaperStore = {
 
 	state: {
@@ -25,7 +22,8 @@ const wallpaperStore = {
 			currentWallpaperId: 0,
 			collection: defaultSettings.wallpaper.wallpaperCollection,
 			expires: null,
-			idLastSet: null
+			idLastSet: null,
+			wallpaperCycleTimeout: defaultSettings.wallpaper.wallpaperCycleTimeout
 		}
 	},
 
@@ -73,6 +71,9 @@ const wallpaperStore = {
 			if (getters.showDefaultWallpaper) return state.defaultWallpaper.url;
 			else if (!state.dataLoaded) return;
 			return state.wallpaperData.wallpapers[getters.nextWallpaperId].url;
+		},
+		wallpaperCycleTimeout(state) {
+			return state.wallpaperData.wallpaperCycleTimeout;
 		}
 	},
 
@@ -99,6 +100,9 @@ const wallpaperStore = {
 		setWallpaperLastSet(state, lastSet) {
 			state.wallpaperData.idLastSet = lastSet;
 		},
+		setWallpaperCycleTimeout(state, length) {
+			state.wallpaperData.wallpaperCycleTimeout = length;
+		},
 		removeWallpaperFromArray(state, index) {
 			state.wallpaperData.wallpapers.splice(index, 1);
 		}
@@ -106,9 +110,6 @@ const wallpaperStore = {
 
 	actions: {
 		getWallpapersFromServer({ getters, commit, dispatch }, commitOnFail) {
-			if (commitOnFail && commitOnFail.collection) {
-				commit('setWallpaperCollection', commitOnFail.collection);				
-			}
 			let url = wallpaperApi.url.get(getters.wallpaperCollection);
 			wallpaperApi.request(url)
 				.then(data => {
@@ -131,7 +132,8 @@ const wallpaperStore = {
 			dispatch('getWallpapersFromServer');
 		},
 
-		wallpaperStorageLoadExpired({dispatch}, data) {
+		wallpaperStorageLoadExpired({ dispatch }, data) {
+			commit('setWallpaperCollection', commitOnFail.collection);
 			dispatch('getWallpapersFromServer', data);
 		},
 
@@ -141,11 +143,13 @@ const wallpaperStore = {
 				expires,
 				currentWallpaperId = 0,
 				collection,
-				idLastSet
+				idLastSet,
+				wallpaperCycleTimeout
 			} = localData;
 
 			//TODO: refresh to next wallpaper if lastSet is too long ago
 			commit('setWallpapers', wallpapers);
+			commit('setWallpaperCycleTimeout', wallpaperCycleTimeout);
 			dispatch('setCurrentWallpaperId', { id: currentWallpaperId, lastSet: idLastSet });
 			commit('setWallpaperCollection', collection);
 			commit('setWallpaperDataExpires', expires);
@@ -279,12 +283,12 @@ const wallpaperStore = {
 			}			
 		},
 
-		setCurrentWallpaperId({ getters, commit }, {id, lastSet}) {
+		setCurrentWallpaperId({ state, getters, commit }, {id, lastSet}) {
 			let now = new Date().getTime();
 			let newId = (id != null) ? id : Math.floor(Math.random() * getters.wallpapersLength);
 			let newLastSet = lastSet ? lastSet : now;
 
-			if (lastSet && (newLastSet + WALLPAPER_CYCLE_TIMEOUT < now)) {	
+			if (lastSet && (newLastSet + getters.wallpaperCycleTimeout < now)) {	
 				console.warn("Timer has passed, current wallpaper id is cycled.");
 				newId = (newId + 1) % getters.wallpapersLength;
 				newLastSet = now;

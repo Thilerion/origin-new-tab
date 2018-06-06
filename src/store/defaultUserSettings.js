@@ -17,7 +17,8 @@ const defaultSettings = {
 	},
 	wallpaper: {
 		// any valid unsplash collection id. maybe provide a list as well?
-		wallpaperCollection: 1457745
+		wallpaperCollection: 1457745,
+		wallpaperCycleTimeout: 1 * 60 * 60 * 1000
 	},
 	quote: {
 		// [motivinspirational, movies, famous]
@@ -41,6 +42,13 @@ const settingsOptions = {
 			{ name: 'Moody Landscapes', id: 1457745 },
 			{ name: 'Great Outdoors', id: 289662 },
 			{ name: 'Road Less Travelled', id: 410546 }			
+		],
+		wallpaperCycleTimeout: [
+			{ name: 'Altijd', value: 10 },
+			{ name: 'Elk uur', value: 1 * 60 * 60 * 1000 },
+			{ name: 'Elke 4 uur', value: 4 * 60 * 60 * 1000 },
+			{ name: 'Elke dag', value: 18 * 60 * 60 * 1000 },
+			{ name: 'Nooit', value: 100000000 }
 		]
 	},
 	quote: {

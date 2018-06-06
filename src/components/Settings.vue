@@ -41,6 +41,14 @@
 					</div>
 				</div>
 				<div class="setting-wrap">
+					<label class="f-weight-heavy">Hoe vaak een nieuwe achtergrond</label>
+					<div class="select">
+					<select v-model="currentSettings.wallpaperCycleTimeout">
+						<option v-for="opt in settingsOptions.wallpaper.wallpaperCycleTimeout" :key="opt.value" :value="opt.value">{{opt.name}}</option>
+					</select>
+					</div>
+				</div>
+				<div class="setting-wrap">
 					<label class="f-weight-heavy">Quote categorie</label>
 					<div class="select">
 					<select v-model="currentSettings.quoteCategory" class="quote-option">
@@ -75,7 +83,8 @@ export default {
 				fontSize: "",
 				wallpaperCollection: "",
 				quoteCategory: "",
-				activeWidgets: ""
+				activeWidgets: "",
+				wallpaperCycleTimeout: ""
 			},
 			initialSettings: {
 				name: "",
@@ -83,7 +92,8 @@ export default {
 				fontSize: "",
 				wallpaperCollection: "",
 				quoteCategory: "",
-				activeWidgets: ""
+				activeWidgets: "",
+				wallpaperCycleTimeout: ""
 			},
 			settingsOptions: {...settingsOptions}
 		}

@@ -94,7 +94,6 @@ export default {
 		},
 		disableFontSizeSlider() {
 			const isDefault = this.currentSettings.fontSize === null;
-			console.log(this.currentSettings.fontSize, isDefault);
 			return isDefault;
 		}
 	},
@@ -129,11 +128,9 @@ export default {
 		let currentSettings = this.$store.getters.currentSettings;
 		this.currentSettings = this.deepClone(currentSettings);
 		this.initialSettings = this.deepClone(currentSettings);
-		console.log(this.currentSettings);
 	},
 	beforeDestroy() {
 		this.initialSettings = {};
-		console.log("Destroying");
 	}
 }
 </script>

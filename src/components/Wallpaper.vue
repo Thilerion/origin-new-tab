@@ -41,7 +41,6 @@ export default {
 	},
 	methods: {
 		loadNewImage(src) {
-			console.log("Loading new image source", src);
 			this.isLoaded = false;
 			const image = new Image();
 
@@ -72,7 +71,6 @@ export default {
 		},
 		nextWallpaperUrl(newVal, oldVal) {
 			if (newVal !== oldVal && newVal !== this.wallpaperSource) {
-				console.log(newVal + '\n', oldVal + '\n', this.wallpaperSource + '\n');
 				this.preloadImage(newVal);
 			}
 		}

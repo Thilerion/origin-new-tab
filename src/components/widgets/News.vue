@@ -76,7 +76,6 @@ export default {
 		loadRandomArticle() {
 			const amount = this.news.length;
 			this.showItem = Math.floor(Math.random() * amount);
-			console.log("Random news item: ", this.showItem);
 		}
 	},
 	beforeMount() {

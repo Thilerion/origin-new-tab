@@ -53,7 +53,6 @@ const wallpaperStore = {
 			let cur = state.wallpaperData.currentWallpaperId;
 
 			let next = (cur + 1) % length;
-			console.log(next);
 			return next;
 		},
 		nextWallpaperUrl: (state, getters) => {
@@ -124,16 +123,14 @@ const wallpaperStore = {
 			try {
 				let url = wallpaperApi.url.get(getters.collection);				
 				let data = await wallpaperApi.request(url);				
-				console.log("Data from wallpaper actions 'getFromServer': ", data);
 				dispatch('wallpaperSetFromApi', data);
 			}
 			catch (e) {
-				console.warn("ERROR IN GETTER FROM SERVER: ", e);
 				if (commitOnFail) {
-					console.warn("However, data was found in storage (although outdated) which will now be committed.");
+					console.warn("Error in getting wallpapers from server. However, old date will be committed now. ", e);					
 					dispatch('wallpaperSetFromStorage', commitOnFail);
 				} else {
-					console.warn("Also, no data was found in localStorage. Therefore, now setting loadFailure.");
+					console.warn("Error in getting wallpapers from server.", e);					
 					commit('setWallpaperLoadFailure');					
 				}
 			}
@@ -145,7 +142,6 @@ const wallpaperStore = {
 			dispatch('getWallpapersFromServer', data);
 		},
 		wallpaperSetFromStorage({commit}, localData) {
-			console.warn("WALLPAPER data loaded, committing now...");
 			const { wallpapers = [], expires, currentWallpaperId = 0, collection, currentWallpaperSet } = localData;
 			const commitData = { wallpapers, expires, currentWallpaperId, collection };
 			commit('setWallpaperData', commitData);
@@ -158,7 +154,6 @@ const wallpaperStore = {
 			commit('setWallpaperLoaded');			
 		},
 		wallpaperSetFromApi({ commit }, apiData) {
-			console.warn("WALLPAPER data loaded, committing now...");			
 			const { data: wallpapers = [], expires } = apiData;
 			commit('setWallpapers', wallpapers);
 			commit('setWallpaperExpires', expires);

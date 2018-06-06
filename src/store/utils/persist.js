@@ -6,12 +6,12 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 	const toWatch = (val) => (state, getters) => getters[`${val}Watch`];
 
 	const watchCallback = (val) => (newValue, oldValue) => {
-		console.log(`Watcher is triggered for module ${val}.`);
+		console.log(`Watcher is triggered for module '${val}'.`);
 		saveToStorage(val, newValue);
 	}
 
 	function createWatcher(store, val) {
-		console.log(`Creating watcher for ${val}`);
+		console.log(`Creating watcher for '${val}'.`);
 
 		store.watch(toWatch(val), watchCallback(val), { deep: true });
 	}

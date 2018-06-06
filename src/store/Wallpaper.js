@@ -60,15 +60,13 @@ const wallpaperStore = {
 		currentExternalWallpaper: (state, getters) => state.wallpaperData.wallpapers[getters.currentWallpaperId] || null,
 		wallpaperCollection: state => state.wallpaperData.collection,
 
-		//TODO: LEGACY GETTERS BELOW
 		nextWallpaperId(state, getters) {
 			const l = state.wallpaperData.wallpapers.length;
 			if (l === 0) return 0;
 			return (getters.currentWallpaperId + 1) % l;
 		},
 		nextWallpaperUrl: (state, getters) => {
-			if (getters.showExternalWallpaper) return state.wallpaperData.wallpapers[getters.nextWallpaperId].url;
-			else return "";
+			return state.wallpaperData.wallpapers[getters.nextWallpaperId].url;
 		},
 		currentWallpaperSet: state => state.wallpaperData.currentWallpaperSet
 	},
@@ -165,12 +163,15 @@ const wallpaperStore = {
 				console.warn("No wallpaper data is loaded, so can't go to next.");
 				return;
 			}
-			commit('setWallpaperImageLoaded', null);
-			commit('setCurrentWallpaperId', getters.nextWallpaperId);
 			//TODO: some sort of action that loads an image, and than tells the store it is loaded and can be displayed
-			dispatch('loadImageSource', getters.currentExternalWallpaper.url)
-				.then(() => commit('setWallpaperImageLoaded', true))
-				.catch(e => commit('setWallpaperImageLoaded', false));
+			dispatch('loadImageSource', getters.nextWallpaperUrl)
+				.then(() => {
+					commit('setCurrentWallpaperId', getters.nextWallpaperId);
+					commit('setWallpaperImageLoaded', true)
+				})
+				.catch(e => {
+					console.warn(e);
+				});
 		},
 
 		hideCurrentWallpaper({ state, getters, commit }) {
@@ -213,15 +214,36 @@ const wallpaperStore = {
 			console.log("URL: ", url);			
 			return new Promise((resolve, reject) => {
 				const image = new Image();
-				image.onload = () => {
+
+				let loaded = () => {
+					console.log(loadTimer);
+					clearTimeout(loadTimer);
+					loadTimer = null;
+					console.log("IMAGE LOADED!");
 					resolve(url);
 				}
-				image.onerror = () => {
-					reject("Error loading image");
+
+				function errorLoading() {
+					reject('Error loading image');
 				}
-				image.onabort = () => {
+				function abortedLoading() {
 					reject("Loading image aborted");
 				}
+				function timedOutLoading() {
+					reject("Timed out");
+				}
+
+				image.addEventListener('load', loaded);
+				image.addEventListener('error', errorLoading);
+				image.addEventListener('abort', abortedLoading);
+				let loadTimer = setTimeout(() => {
+					image.removeEventListener('load', loaded);
+					image.removeEventListener('error', errorLoading);
+					image.removeEventListener('abort', abortedLoading);
+					image.src = "";
+					timedOutLoading();
+				}, 20000);
+
 				image.src = url;
 			})
 		},

@@ -81,7 +81,7 @@ export default {
 				return require('@/assets/logo.png');
 			} else {				
 				const domain = new URL(url);
-				return `chrome://favicon/size/48/${domain.origin}`;
+				return `chrome://favicon/size/32/${domain.origin}`;
 			}
 		},
 		setHoverGradient(index, e) {
@@ -105,12 +105,12 @@ export default {
 	justify-self: center;
 	display: inline-grid;
 	width: 100%;
-	max-width: calc(38em + (1em * 4));
+	max-width: calc(40em + (1em * 4));
 	justify-content: center;
 	align-items: center;
-	grid-template-columns: repeat(5, minmax(6em, 1fr));
-	grid-auto-rows: calc(32px + 1em + (2 * 1.25em));
-	grid-gap: 0.5em 0.5em;
+	grid-template-columns: repeat(5, minmax(7.5em, 1fr));
+	grid-auto-rows: calc(32px + 1.25em + (2 * 1.25em));
+	grid-gap: 0.5em 0.75em;
 }
 
 .top-page-item {
@@ -119,8 +119,8 @@ export default {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	height: calc(32px + 1em + (2 * 1.25em));
-	padding: 0.5em 0.25em;
+	height: calc(32px + 1.25em + (2 * 1.25em));
+	padding: 0.5em 0.5em;
 	overflow: hidden;
 	border-radius: 10px;
 	text-decoration: none;
@@ -135,19 +135,20 @@ export default {
 	top: var(--y);
 	width: var(--size);
 	height: var(--size);
-	background: radial-gradient(circle closest-side, rgba(255,255,255,0.2), rgba(255,255,255,0.01));
+	background: radial-gradient(circle closest-side, rgba(255,255,255,0.25), rgba(255,255,255,0.01));
   	transform: translate(-50%, -50%);
  	transition: width 1s ease, height 1s ease, opacity 1s ease;
 }
 
 .top-page-item:hover::before {
-	--size: 20em;
+	--size: 15em;
 	opacity: 1;
 	transition: width .2s ease, height .2s ease, opacity .2s ease;
 }
 
 .top-page-icon {
 	filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.2));
+	margin-bottom: 0.5em;
 }
 
 .top-page-title {	

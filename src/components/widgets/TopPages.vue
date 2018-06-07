@@ -141,7 +141,7 @@ export default {
 }
 
 .top-page-item:hover::before {
-	--size: 10em;
+	--size: 20em;
 	opacity: 1;
 	transition: width .2s ease, height .2s ease, opacity .2s ease;
 }
@@ -159,20 +159,18 @@ export default {
 	letter-spacing: 0.02em;
 	line-height: 1.25em;
 	position: relative;
+	padding-bottom: 1px;
 }
 
 .underline {
 	overflow: hidden;
 	font-size: inherit;
-	background-image: linear-gradient(to bottom, white 0%, white 100%);
-	background-repeat: no-repeat;
-	background-size: 100%;
-	background-position: 0 calc(1.25em);
-	transition: background-position 0s linear 0s;
+	text-decoration: none;
+	border-bottom: 1px solid rgba(255,255,255,0);
+	transition: border-color .1s ease .05s;
 }
 
 .top-page-item:hover .underline {
-	transition: background-position 0s linear .1s;
-	background-position: 0 calc(1.25em - 2px);
+	border-bottom: 1px solid rgba(255,255,255,1);
 }
 </style>

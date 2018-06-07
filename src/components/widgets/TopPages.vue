@@ -1,6 +1,6 @@
 <template>
 	<div class="widget-top-pages widget-no-select f-shadow-heavy">
-			<a :href="site.url" rel="noreferrer" class="top-page-item" v-for="site in topSites" :key="site.title">
+			<a :href="site.url" rel="noreferrer" class="top-page-item" v-for="(site, index) in topSites" :key="site.title" @mousemove="setHoverGradient(index, $event)" ref="linkItem">
 				<img class="top-page-icon" :src="getFavicon(site.url)" height="32" width="32">
 				<span class="top-page-title" ref="siteTitle"><span class="underline">{{site.title}}</span></span>	
 			</a>
@@ -83,6 +83,14 @@ export default {
 				const domain = new URL(url);
 				return `chrome://favicon/size/48/${domain.origin}`;
 			}
+		},
+		setHoverGradient(index, e) {
+			const item = this.$refs.linkItem[index];
+			
+			const x = e.pageX - item.offsetLeft;
+			const y = e.pageY - item.offsetTop;
+			item.style.setProperty('--x', `${x}px`);
+			item.style.setProperty('--y', `${y}px`);
 		}
 	},
 	created() {
@@ -100,12 +108,13 @@ export default {
 	max-width: calc(38em + (1em * 4));
 	justify-content: center;
 	align-items: center;
-	grid-template-columns: repeat(5, minmax(5.5em, 1fr));
+	grid-template-columns: repeat(5, minmax(6em, 1fr));
 	grid-auto-rows: calc(32px + 1em + (2 * 1.25em));
-	grid-gap: 0.5em 0.75em;
+	grid-gap: 0.5em 0.5em;
 }
 
 .top-page-item {
+	position: relative;
 	text-align: center;
 	display: flex;
 	flex-direction: column;
@@ -114,21 +123,31 @@ export default {
 	padding: 0.5em 0.25em;
 	overflow: hidden;
 	border-radius: 10px;
-	/* background-image: linear-gradient(200deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1)20%); */
-	background: linear-gradient(15deg,	rgba(255,255,255,0.0) 50%,
-										rgba(255,255,255,0.4) 100%);
-	background-position: 100% 100%;
-	background-size: 300% 300%;
-	transition: background-position .3s ease;
 	text-decoration: none;
 }
 
-.top-page-item:hover {
-	background-position: 100% 40%;	
+.top-page-item::before {
+	--size: 5em;
+	opacity: 0;
+	content: "";
+	position: absolute;
+	left: var(--x);
+	top: var(--y);
+	width: var(--size);
+	height: var(--size);
+	background: radial-gradient(circle closest-side, rgba(255,255,255,0.2), rgba(255,255,255,0.01));
+  	transform: translate(-50%, -50%);
+ 	transition: width 1s ease, height 1s ease, opacity 1s ease;
+}
+
+.top-page-item:hover::before {
+	--size: 10em;
+	opacity: 1;
+	transition: width .2s ease, height .2s ease, opacity .2s ease;
 }
 
 .top-page-icon {
-	filter:drop-shadow(1px 1px 2px rgba(0,0,0,0.2));
+	filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.2));
 }
 
 .top-page-title {	

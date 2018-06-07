@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-greeting widget-no-select f-shadow-medium f-align-c cursor-default">
+	<div class="widget-greeting widget-no-select f-shadow-heavy f-shadow-wide f-align-c cursor-default">
 		<div class="time">{{time | toTimeString(currentTimeFormat)}}</div>
 		
 		<div
@@ -92,6 +92,10 @@ export default {
 </script>
 
 <style scoped>
+.widget-greeting {
+	align-self: center;
+}
+
 .time {
 	font-size: 8rem;
 }

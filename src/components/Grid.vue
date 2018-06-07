@@ -40,7 +40,7 @@ export default {
 				{
 					component: 'StartGreeting',
 					name: 'greeting',
-					row: [7, 13],
+					row: [7, 14],
 					column: [1, 13]
 				},
 				{
@@ -52,7 +52,7 @@ export default {
 				{
 					component: 'StartQuote',
 					name: 'quote',
-					row: [2, 4],
+					row: [3, 5],
 					column: [3, 9]
 				},
 				{
@@ -64,7 +64,7 @@ export default {
 				{
 					component: 'StartNews',
 					name: 'news',
-					row: [1, 2],
+					row: [1, 3],
 					column: [3, 9]
 				},
 				{
@@ -76,7 +76,7 @@ export default {
 				{
 					component: 'StartTopPages',
 					name: 'topPages',
-					row: [14, 20],
+					row: [15, 20],
 					column: [3, 9]
 				}
 			]

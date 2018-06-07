@@ -94,6 +94,7 @@ export default {
 	max-width: 45rem;
 	position: relative;
 	display: flex;
+	align-self: start;
 }
 
 .widget-news.mouseover {

@@ -230,10 +230,8 @@ const wallpaperStore = {
 				const image = new Image();
 
 				let loaded = () => {
-					console.log(loadTimer);
 					clearTimeout(loadTimer);
 					loadTimer = null;
-					console.log("IMAGE LOADED!");
 					resolve(url);
 				}
 
@@ -265,7 +263,6 @@ const wallpaperStore = {
 		preloadNextImage({getters}) {
 			const nextUrl = getters.nextWallpaperUrl;
 			if (getters.apiDataLoaded && nextUrl) {
-				console.warn("Preloading next wallpaper.");
 				const image = new Image();
 				image.src = nextUrl;
 			}
@@ -293,9 +290,6 @@ const wallpaperStore = {
 				newId = (newId + 1) % getters.wallpapersLength;
 				newLastSet = now;
 			}
-			
-			console.warn(`ID was: ${id}, new ID is: ${newId}`);
-			console.warn(`Amount of wallpapers is: ${getters.wallpapersLength}`);
 
 			commit('setWallpaperId', newId);
 			commit('setWallpaperLastSet', newLastSet);

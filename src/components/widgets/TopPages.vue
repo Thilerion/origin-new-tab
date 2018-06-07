@@ -2,7 +2,7 @@
 	<div class="widget-top-pages widget-no-select f-shadow-heavy">
 			<div class="top-page-item" v-for="site in topSites" :key="site.title">
 				<img :src="getFavicon(site.url)" height="32" width="32">
-				<p class="top-page-title">{{site.title}}</p>
+				<p class="top-page-title" ref="siteTitle">{{site.title}}</p>		
 			</div>
 	</div>
 </template>
@@ -93,25 +93,32 @@ export default {
 
 <style scoped>
 .widget-top-pages {
-	box-shadow: 0px 0px 1px 3px white;
+	align-self: end;
 	display: inline-grid;
 	width: 100%;
-	height: 100%;
 	max-height: 100%;
 	justify-content: center;
-	grid-template-columns: repeat(5, 8rem);
-	grid-auto-rows: 1fr;
+	align-items: center;
+	grid-template-columns: repeat(5, 1fr);
+	grid-auto-rows: calc(32px + (2 * 1.25em));
 	grid-gap: 1rem 1rem;
 }
 
 .top-page-item {
-	box-shadow: 0px 0px 1px 1px rgba(255,255,255,0.2);
-	overflow: hidden;
 	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: calc(32px + (2 * 1.25em));
+	overflow: hidden;
 }
 
 .top-page-title {
-	font-size: 1em;
-	line-height: 1.1em;
+	max-height: 2.5em;
+	overflow: hidden;
+	margin: auto;
+	font-size: 0.875em;
+	letter-spacing: 0.02em;
+	line-height: 1.25em;
 }
 </style>

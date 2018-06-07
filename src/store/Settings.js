@@ -35,7 +35,7 @@ const settingsStore = {
 			if (quoteCategory) commit('setQuoteCategory', quoteCategory);
 			if (activeWidgets) commit('setActiveWidgets', activeWidgets);
 			if (wallpaperCycleTimeout) commit('setWallpaperCycleTimeout', wallpaperCycleTimeout);
-		} 
+		}
 	}
 
 }

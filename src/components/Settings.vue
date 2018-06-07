@@ -67,6 +67,7 @@
 				</div>
 			</div>
 			<button @click="saveSettings" class="save-btn">Opslaan</button>
+			<button @click="resetAllStorage" class="reset-btn">Reset alles</button>
 		</main>
 	</div>
 </template>
@@ -132,6 +133,12 @@ export default {
 		},
 		deepEquals(a, b) {
 			return JSON.stringify(a) === JSON.stringify(b);
+		},
+		resetAllStorage() {
+			let areYouSure = confirm("Weet je het zeker? Alles wordt verwijderd en moet opnieuw geladen en ingesteld worden. Alleen gebruiken als er iets niet goed werkt!");
+			if (!areYouSure) return;
+			this.$store.resetAllStorage();
+			location.reload();
 		}
 	},
 	created() {
@@ -161,6 +168,17 @@ export default {
 	position: absolute;
 	top: 0.5rem;
 	right: 0.5rem;
+}
+
+.reset-btn {
+	position: absolute;
+	left: 1em;
+	bottom: 1em;
+	opacity: 0.2;
+}
+
+.reset-btn:hover {
+	opacity: 1;
 }
 
 .settings-header {

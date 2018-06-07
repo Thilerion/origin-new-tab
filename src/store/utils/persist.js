@@ -16,6 +16,14 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 		store.watch(toWatch(val), watchCallback(val), { deep: true });
 	}
 
+	function createResetStorage(widgets) {
+		return function resetStorage() {
+			widgets.forEach(w => {
+				window.localStorage.removeItem(`${storagePrefix}${w}`);
+				console.warn("Removed localStorage item", w);
+			})			
+		}		
+	}
 	
 
 	function saveToStorage(widget, data) {
@@ -38,6 +46,8 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 	}
 
 	return function persistState(store) {
+		store.resetAllStorage = createResetStorage(widgets);
+
 		widgets.forEach(widget => {
 			createWatcher(store, widget)
 			store[`${widget}FromStorage`] = createLoadFromStorage(widget);

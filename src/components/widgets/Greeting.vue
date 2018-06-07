@@ -54,7 +54,6 @@ export default {
 		},
 		setNewTimeout() {
 			const delay = this.msUntilMinute + TIMEOUT_MARGIN;
-			console.log(`Timeout reruns in ${delay} ms`);
 			let timeout = setTimeout(() => {
 				this.setNewDate();
 				this.setNewTimeout();

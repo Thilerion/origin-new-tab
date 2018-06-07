@@ -53,17 +53,15 @@ const weatherStore = {
 				const { latitude, longitude } = state.locationLocal;
 				let url = weatherApi.url.get(latitude, longitude);				
 				let data = await weatherApi.request(url);				
-				console.log("Data from weather actions 'getFromServer': ", data);
 				dispatch('weatherSetFromApi', data);
 			}
 			catch (e) {
-				console.warn("ERROR IN GETTER FROM SERVER: ", e);
 				if (commitOnFail) {
-					console.warn("However, data was found in storage (although outdated) which will now be committed.");
+					console.warn("Error in getting weather from server. However, old date will be committed now. ", e);
 					dispatch('weatherSetFromStorage', commitOnFail);
 				} else {
 					//TODO: set load failure?
-					console.warn("Also, no data was found in localStorage.");
+					console.warn("Error in getting weather from server.", e);
 				}
 			}
 		},
@@ -97,6 +95,6 @@ function getPosition() {
 		}, (err) => {
 			console.warn("Error in retrieving location. ", err);
 			reject(err);
-		}, { timeout: 5000 });
+		}, { timeout: 20000 });
 	})
 }

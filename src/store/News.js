@@ -30,16 +30,14 @@ const newsStore = {
 			try {
 				let url = newsApi.url.get();				
 				let data = await newsApi.request(url);				
-				console.log("Data from news actions 'getFromServer': ", data);
 				dispatch('newsSetFromApi', data);
 			}
 			catch (e) {
-				console.warn("ERROR IN GETTER FROM SERVER: ", e);
 				if (commitOnFail) {
-					console.warn("However, data was found in storage (although outdated) which will now be committed.");
+					console.warn("Error in getting news from server. However, old date will be committed now. ", e);
 					dispatch('newsSetFromStorage', commitOnFail);
 				} else {
-					console.warn("Also, no data was found in localStorage.");
+					console.warn("Error in getting news from server. ", e);
 				}
 			}
 		},
@@ -56,8 +54,6 @@ const newsStore = {
 		},
 		newsSetFromApi({ commit }, apiData) {
 			const { data: articles = [], expires } = apiData;
-			console.log("Articles, expires, apiData (from news)");
-			console.log(articles, expires, apiData);
 			commit('setNewsArticles', { articles, expires });
 		}
 	}

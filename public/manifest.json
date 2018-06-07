@@ -1,9 +1,9 @@
 {
-	"name": "My Startpage",
-	"short_name": "My Startpage",
+	"name": "Origin New Tab",
+	"short_name": "Origin Tab",
 	"manifest_version": 2,
-	"version": "0.0.1",
-	"description": "My Startpage, an extension in development.",
+	"version": "0.5.2",
+	"description": "Mijn startpagina/nieuw tabblad extensie, in ontwikkeling.",
 	"chrome_url_overrides": {
 		"newtab": "index.html"
 	},

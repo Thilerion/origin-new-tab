@@ -1,13 +1,15 @@
 import widgetsApi from './api/index';
 const quoteApi = widgetsApi.quote;
 
+import { defaultSettings } from './defaultUserSettings';
+
 const quoteStore = {
 
 	state: {
 		quoteData: {
 			randomQuote: {},
 			expires: null,
-			quoteCategory: 'motivinspirational'
+			quoteCategory: defaultSettings.quote.category
 		},
 		dataLoaded: false
 	},
@@ -34,16 +36,14 @@ const quoteStore = {
 			try {
 				let url = quoteApi.url.get(getters.quoteCategory);				
 				let data = await quoteApi.request(url);				
-				console.log("Data from quote actions 'getFromServer': ", data);
 				dispatch('quoteSetFromApi', data);
 			}
 			catch (e) {
-				console.warn("ERROR IN GETTER FROM SERVER: ", e);
 				if (commitOnFail) {
-					console.warn("However, data was found in storage (although outdated) which will now be committed.");
+					console.warn("Error in getting quote from server. However, old date will be committed now. ", e);
 					dispatch('quoteSetFromStorage', commitOnFail);
 				} else {
-					console.warn("Also, no data was found in localStorage.");
+					console.warn("Error in getting quote from server.", e);
 				}
 			}
 		},

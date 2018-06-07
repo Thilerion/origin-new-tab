@@ -1,8 +1,12 @@
 import axios from 'axios';
 import BASE_URL from './config.api';
 
+function deepClone(obj) {
+	return JSON.parse(JSON.stringify(obj));
+}
+
 const axiosOptions = {
-	timeout: 6000
+	timeout: 20000
 }
 
 const widgets = {
@@ -19,7 +23,7 @@ const widgets = {
 		},
 		async request(url) {
 			let data = await axios.get(url, axiosOptions);
-			console.log("DATA IN API FILE: ", data);
+			console.log(`%cRequest complete from "WALLPAPER", with the following data:\n`, "color: white; background-color: #089108; line-height: 1.5; font-weight: bold;", deepClone(data.data));
 			return data.data;
 		}
 	},
@@ -34,7 +38,7 @@ const widgets = {
 		},
 		async request(url) {
 			let data = await axios.get(url, axiosOptions);
-			console.log("DATA IN API FILE: ", data);
+			console.log(`%cRequest complete from "QUOTE", with the following data:\n`, "color: white; background-color: #089108; line-height: 1.5; font-weight: bold;", deepClone(data.data));
 			return data.data;
 		}
 	},
@@ -48,7 +52,7 @@ const widgets = {
 		},
 		async request(url) {
 			let data = await axios.get(url, axiosOptions);
-			console.log("DATA IN API FILE: ", data);
+			console.log(`%cRequest complete from "WEATHER", with the following data:\n`, "color: white; background-color: #089108; line-height: 1.5; font-weight: bold;", deepClone(data.data));
 			return data.data;
 		}
 	},
@@ -62,7 +66,7 @@ const widgets = {
 		},
 		async request(url) {
 			let data = await axios.get(url, axiosOptions);
-			console.log("DATA IN API FILE: ", data);
+			console.log(`%cRequest complete from "NEWS", with the following data:\n`, "color: white; background-color: #089108; line-height: 1.5; font-weight: bold;", deepClone(data.data));
 			return data.data;
 		}
 	}

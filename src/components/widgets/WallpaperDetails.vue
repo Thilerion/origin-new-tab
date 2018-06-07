@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-wallpaper-details widget-no-select f-shadow-medium" v-if="showWallpaper">
+	<div class="widget-wallpaper-details widget-no-select f-shadow-medium" v-if="wallpaperSource">
 		<div class="row-bottom">
 			<div class="buttons" v-if="!usingDefaultWallpaper">
 				<button class="icon-btn load-btn" @click="nextWallpaper" alt="Next wallpaper">
@@ -13,10 +13,17 @@
 				</button>
 			</div>
 
+			<div class="buttons" v-else>
+				<button class="icon-btn load-btn" @click="nextWallpaper" alt="Retry loading wallpaper">
+					<StartSvgIcon icon="refresh"/>
+				</button>
+			</div>
+
 			<p
-				v-if="currentWallpaper.user"
+				v-if="wallpaperToShow.user"
 				class="attribution f-shadow-heavy"
-			>Photo by <a :href="userUrl" target="_blank">{{currentWallpaper.user}}</a> on <a :href="unsplashUrl" target="_blank">Unsplash</a></p>
+				:class="{'default-wallpaper': usingDefaultWallpaper}"
+			>Photo by <a :href="userUrl" target="_blank">{{wallpaperToShow.user}}</a> on <a :href="unsplashUrl" target="_blank">Unsplash</a></p>
 			<p
 				v-else
 				class="attribution"
@@ -26,10 +33,10 @@
 
 		<transition name="fade-location" mode="out-in">
 		<p
-			v-if="currentWallpaper.location"
+			v-if="wallpaperToShow.location"
 			class="location"
-			:key="currentWallpaper.location"
-		>{{currentWallpaper.location}}</p>
+			:key="wallpaperToShow.location"
+		>{{wallpaperToShow.location}}</p>
 		</transition>
 	</div>
 </template>
@@ -47,7 +54,7 @@ export default {
 			return this.$store.getters.showDefaultWallpaper;
 		},
 		currentWallpaper() {
-			return this.$store.getters.currentWallpaper;
+			return this.$store.getters.wallpaperToShow;
 		},
 		userUrl() {
 			try {
@@ -60,8 +67,12 @@ export default {
 		unsplashUrl() {
 			return `${this.unsplashBaseUrl}${this.unsplashReferralSuffix}`;
 		},
-		showWallpaper() {
-			return this.$store.getters.showWallpaper;
+		wallpaperToShow() {
+			return this.$store.getters.wallpaperToShow;
+		},
+		wallpaperSource() {
+			const wp = this.wallpaperToShow;
+			return (wp && wp.url) ? wp.url : null;
 		},
 		downloadUrl() {
 			try {
@@ -78,14 +89,14 @@ export default {
 	},
 	methods: {
 		nextWallpaper() {
-			if (!this.usingDefaultWallpaper) this.$store.commit('nextWallpaper');
+			if (!this.usingDefaultWallpaper) this.$store.dispatch('goToNextWallpaper');
 			else this.retryLoadWallpapers();
 		},
 		retryLoadWallpapers() {
-			this.$store.dispatch('getWallpapersFromServer');
+			this.$store.dispatch('retryLoadingWallpapers');
 		},
 		hideWallpaper() {
-			this.$store.commit('disableCurrentWallpaper');
+			this.$store.dispatch('hideCurrentWallpaper');
 		}
 	}
 }

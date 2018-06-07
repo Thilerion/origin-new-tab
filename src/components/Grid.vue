@@ -127,4 +127,8 @@ export default {
 .widget-no-select {
 	user-select: none;
 }
+
+.widget {
+	/* box-shadow: 0 0 2px 2px white; */
+}
 </style>

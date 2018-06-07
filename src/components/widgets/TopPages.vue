@@ -1,8 +1,8 @@
 <template>
 	<div class="widget-top-pages widget-no-select f-shadow-heavy">
 			<a :href="site.url" rel="noreferrer" class="top-page-item" v-for="site in topSites" :key="site.title">
-				<img :src="getFavicon(site.url)" height="32" width="32">
-				<span class="top-page-title" ref="siteTitle">{{site.title}}</span>		
+				<img class="top-page-icon" :src="getFavicon(site.url)" height="32" width="32">
+				<span class="top-page-title" ref="siteTitle"><span class="underline">{{site.title}}</span></span>	
 			</a>
 	</div>
 </template>
@@ -115,23 +115,45 @@ export default {
 	overflow: hidden;
 	border-radius: 10px;
 	/* background-image: linear-gradient(200deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1)20%); */
-	background: linear-gradient(12deg,	rgba(255,255,255,0.05) 40%,
-										rgba(255,255,255,0.3) 100%);
+	background: linear-gradient(15deg,	rgba(255,255,255,0.0) 50%,
+										rgba(255,255,255,0.4) 100%);
 	background-position: 100% 100%;
-	background-size: 200% 200%;
+	background-size: 300% 300%;
 	transition: background-position .3s ease;
+	text-decoration: none;
 }
 
 .top-page-item:hover {
-	background-position: 80% 35%;	
+	background-position: 100% 40%;	
 }
 
-.top-page-title {
-	max-height: 2.5em;
+.top-page-icon {
+	filter:drop-shadow(1px 1px 2px rgba(0,0,0,0.2));
+}
+
+.top-page-title {	
+	max-height: calc(2.5em + 2px);
 	overflow: hidden;
+	text-overflow: ellipsis;
 	margin: auto;
 	font-size: 0.875em;
 	letter-spacing: 0.02em;
 	line-height: 1.25em;
+	position: relative;
+}
+
+.underline {
+	overflow: hidden;
+	font-size: inherit;
+	background-image: linear-gradient(to bottom, white 0%, white 100%);
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position: 0 calc(1.25em);
+	transition: background-position 0s linear 0s;
+}
+
+.top-page-item:hover .underline {
+	transition: background-position 0s linear .1s;
+	background-position: 0 calc(1.25em - 2px);
 }
 </style>

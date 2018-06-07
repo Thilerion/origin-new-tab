@@ -15,6 +15,7 @@ import widgetsApi from './api/index';
 const userApi = widgetsApi.user;
 
 import { defaultSettings } from './defaultUserSettings';
+import { deepClone, deepMergeArray } from '../utils/deepObject';
 
 const widgetsList = [
 	'user',
@@ -90,7 +91,10 @@ const store = new Vuex.Store({
 			commit('setUsername', username);
 			commit('setLanguage', language);
 			commit('setFontSize', fontSize);
-			commit('setActiveWidgets', activeWidgets);
+			const mergedActiveWidgets = deepMergeArray(
+				deepClone(defaultSettings.user.activeWidgets),
+				deepClone(activeWidgets));
+			commit('setActiveWidgets', mergedActiveWidgets);
 		}
 	}
 

@@ -8,3 +8,11 @@ export const uniqueBy = (arr, prop) => {
 		});
 	});
 }
+
+import lodashMerge from 'lodash.merge';
+export const deepMergeArray = (arrA, arrB) => {
+	const objA = { obj: arrA };
+	const objB = { obj: arrB };
+	const merged = lodashMerge(objA, objB);
+	return merged.obj;
+}

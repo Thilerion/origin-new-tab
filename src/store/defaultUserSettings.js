@@ -6,10 +6,11 @@ const defaultSettings = {
 		// range: 10-20, or null (which resets to 100% in base css file)
 		fontSize: null,
 		activeWidgets: [
-			{name: 'greeting', active: true},
-			{name: 'news', active: true},
-			{name: 'quote', active: true},
-			{name: 'weather', active: true}
+			{ name: 'greeting', active: true },
+			{ name: 'news', active: true },
+			{ name: 'quote', active: true },
+			{ name: 'weather', active: true },
+			{ name: 'topPages', active: true }
 		]
 	},
 	weather: {

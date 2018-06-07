@@ -2,7 +2,7 @@
 	"name": "Origin New Tab",
 	"short_name": "Origin Tab",
 	"manifest_version": 2,
-	"version": "0.5.2",
+	"version": "0.6.0",
 	"description": "Mijn startpagina/nieuw tabblad extensie, in ontwikkeling.",
 	"chrome_url_overrides": {
 		"newtab": "index.html"

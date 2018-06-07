@@ -1,7 +1,7 @@
 <template>
 	<div class="widget-top-pages widget-no-select f-shadow-heavy">
 			<div class="top-page-item" v-for="site in topSites" :key="site.title">
-				<img :src="getFavicon(site.url)" height="48" width="48">
+				<img :src="getFavicon(site.url)" height="32" width="32">
 				<p class="top-page-title">{{site.title}}</p>
 			</div>
 	</div>
@@ -108,5 +108,10 @@ export default {
 	box-shadow: 0px 0px 1px 1px rgba(255,255,255,0.2);
 	overflow: hidden;
 	text-align: center;
+}
+
+.top-page-title {
+	font-size: 1em;
+	line-height: 1.1em;
 }
 </style>

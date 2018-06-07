@@ -153,7 +153,29 @@ const wallpaperStore = {
 		},
 
 		getAdditionalWallpapersFromServer({ getters, commit, dispatch }) {
-			//TODO: check for prerequisites (arrayUpdated && arrayUpdated amount)
+			if (getters.wallpapersLength > 70) {
+				console.warn("Wont load additional wallpapers because: too many wallpapers already loaded.", `${curLength} / 70`);
+				return;
+			};
+
+			const lastUpdated = getters.arrayUpdated;
+			const lastChange = getters.arrayUpdateChangeAmount;
+			const lastPercentageChange = getters.arrayUpdateChangePercentage;
+			const minTimeSince = 10 * 60 * 1000; //10 minutes
+			const now = new Date().getTime();
+
+			if (lastChange < 5) {
+				console.warn("Wont load additional wallpapers because: last change was less than 5.", lastChange);
+				return;
+			};
+			if (lastPercentageChange < 0.05) {
+				console.warn("Wont load additional wallpapers because: last percentage change was less than 5%", lastPercentageChange);
+				return;
+			};
+			if (now - (lastUpdated + minTimeSince) < 0) {
+				console.warn("Wont load additional wallpapers because: not enough time has passed since last try");
+				return;
+			};
 			
 			//setting array updated in advance, to prevent numerous retries when it fails
 			commit('setArrayUpdated');
@@ -241,7 +263,14 @@ const wallpaperStore = {
 				return;
 			}
 
-			dispatch('getAdditionalWallpapersFromServer');
+			const distanceFromEnd = (getters.wallpapersLength - 1) - getters.currentWallpaperId;
+			console.log("Distance from end: ", distanceFromEnd);
+			
+			if (distanceFromEnd < 3 && distanceFromEnd > 1) {
+				console.log("Distance from end is good. Proceeding to getAdditionalWallpapersFromServer action");
+				dispatch('getAdditionalWallpapersFromServer');
+			}
+				
 			//TODO: some sort of action that loads an image, and than tells the store it is loaded and can be displayed
 			dispatch('loadImageSource', getters.nextWallpaperUrl)
 				.then(() => {
@@ -349,7 +378,7 @@ const wallpaperStore = {
 
 		setCurrentWallpaperId({ state, getters, commit }, {id, lastSet}) {
 			let now = new Date().getTime();
-			let newId = (id != null) ? id : Math.floor(Math.random() * getters.wallpapersLength);
+			let newId = (id != null) ? id : 0;
 			let newLastSet = lastSet ? lastSet : now;
 
 			if (lastSet && (newLastSet + getters.wallpaperCycleTimeout < now)) {	

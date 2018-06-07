@@ -1,7 +1,7 @@
 import widgetsApi from './api/index';
 const wallpaperApi = widgetsApi.wallpaper;
 
-import { deepClone } from '@/utils/deepObject';
+import { deepClone, uniqueBy } from '@/utils/deepObject';
 import { defaultSettings } from './defaultUserSettings';
 
 const wallpaperStore = {
@@ -23,7 +23,10 @@ const wallpaperStore = {
 			collection: defaultSettings.wallpaper.wallpaperCollection,
 			expires: null,
 			idLastSet: null,
-			wallpaperCycleTimeout: defaultSettings.wallpaper.wallpaperCycleTimeout
+			wallpaperCycleTimeout: defaultSettings.wallpaper.wallpaperCycleTimeout,
+			//TODO: two props below
+			arrayUpdated: new Date().getTime(),
+			arrayUpdateChangeAmount: null
 		}
 	},
 
@@ -74,6 +77,16 @@ const wallpaperStore = {
 		},
 		wallpaperCycleTimeout(state) {
 			return state.wallpaperData.wallpaperCycleTimeout;
+		},
+
+		arrayUpdated(state) {
+			return state.wallpaperData.arrayUpdated;
+		},
+		arrayUpdateChangeAmount(state) {
+			return state.wallpaperData.arrayUpdateChangeAmount;
+		},
+		arrayUpdateChangePercentage(state, getters) {
+			return getters.arrayUpdateChangeAmount / getters.wallpapersLength;
 		}
 	},
 
@@ -85,8 +98,13 @@ const wallpaperStore = {
 			state.wallpaperLoaded = loaded;
 		},
 		setWallpapers(state, wps) {
-			//TODO: maybe spread for reactivity??
 			state.wallpaperData.wallpapers = deepClone(wps);
+			state.wallpaperData.arrayUpdated = new Date().getTime();
+			state.wallpaperData.arrayUpdateChangeAmount = wps.length;
+		},
+		addCombinedWallpapers(state, wps) {
+			state.wallpaperData.wallpapers = deepClone(wps);
+			state.wallpaperData.arrayUpdated = new Date().getTime();
 		},
 		setWallpaperId(state, id = 0) {
 			state.wallpaperData.currentWallpaperId = id;
@@ -105,6 +123,12 @@ const wallpaperStore = {
 		},
 		removeWallpaperFromArray(state, index) {
 			state.wallpaperData.wallpapers.splice(index, 1);
+		},
+		setArrayUpdated(state, t = new Date().getTime()) {
+			state.wallpaperData.arrayUpdated = t;
+		},
+		setArrayUpdateChangeAmount(state, amount) {
+			state.wallpaperData.arrayUpdateChangeAmount = amount;
 		}
 	},
 
@@ -128,6 +152,46 @@ const wallpaperStore = {
 				});
 		},
 
+		getAdditionalWallpapersFromServer({ getters, commit, dispatch }) {
+			//TODO: check for prerequisites (arrayUpdated && arrayUpdated amount)
+			
+			//setting array updated in advance, to prevent numerous retries when it fails
+			commit('setArrayUpdated');
+
+			let url = wallpaperApi.url.get(getters.wallpaperCollection);
+			wallpaperApi.request(url)
+				.then(data => {
+					console.log("Additional wallpapers have been loaded from API! Amount:", data.data.length);
+					dispatch('wallpaperSetAdditionalFromApi', data);
+				})
+				.catch(err => {
+					console.warn(err);
+					console.warn("New wallpapers could not be retrieved from server.");
+				});
+		},
+
+		wallpaperSetAdditionalFromApi({state, commit}, apiData) {
+			const {
+				data: wallpapers = [],
+				expires
+			} = apiData;
+
+			//first check for duplicates
+			const wpBefore = deepClone(state.wallpaperData.wallpapers);
+			const combined = wpBefore.concat(wallpapers);
+			const dupesRemoved = uniqueBy(combined, 'url');
+
+			console.log(deepClone(wpBefore), wpBefore.length, deepClone(combined), combined.length, deepClone(dupesRemoved), dupesRemoved.length);
+
+			const changeAmount = dupesRemoved.length - wpBefore.length;
+			console.log("Change amount: ", changeAmount);
+
+			commit('addCombinedWallpapers', dupesRemoved);
+			commit('setArrayUpdateChangeAmount', changeAmount);
+
+			commit('setWallpaperDataExpires', expires);
+		},
+
 		wallpaperStorageLoadFailed({dispatch}) {
 			dispatch('getWallpapersFromServer');
 		},
@@ -144,7 +208,8 @@ const wallpaperStore = {
 				currentWallpaperId = 0,
 				collection,
 				idLastSet,
-				wallpaperCycleTimeout
+				wallpaperCycleTimeout,
+				arrayUpdateChangeAmount
 			} = localData;
 
 			//TODO: refresh to next wallpaper if lastSet is too long ago
@@ -153,7 +218,7 @@ const wallpaperStore = {
 			dispatch('setCurrentWallpaperId', { id: currentWallpaperId, lastSet: idLastSet });
 			commit('setWallpaperCollection', collection);
 			commit('setWallpaperDataExpires', expires);
-
+			commit('setArrayUpdateChangeAmount', arrayUpdateChangeAmount);
 			dispatch('loadingDataSucces');
 		},
 
@@ -175,6 +240,8 @@ const wallpaperStore = {
 				console.warn("No wallpaper data is loaded, so can't go to next.");
 				return;
 			}
+
+			dispatch('getAdditionalWallpapersFromServer');
 			//TODO: some sort of action that loads an image, and than tells the store it is loaded and can be displayed
 			dispatch('loadImageSource', getters.nextWallpaperUrl)
 				.then(() => {

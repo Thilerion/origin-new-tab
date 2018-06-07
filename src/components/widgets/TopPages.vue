@@ -1,9 +1,9 @@
 <template>
 	<div class="widget-top-pages widget-no-select f-shadow-heavy">
-			<div class="top-page-item" v-for="site in topSites" :key="site.title">
+			<a :href="site.url" rel="noreferrer" class="top-page-item" v-for="site in topSites" :key="site.title">
 				<img :src="getFavicon(site.url)" height="32" width="32">
-				<p class="top-page-title" ref="siteTitle">{{site.title}}</p>		
-			</div>
+				<span class="top-page-title" ref="siteTitle">{{site.title}}</span>		
+			</a>
 	</div>
 </template>
 
@@ -94,14 +94,15 @@ export default {
 <style scoped>
 .widget-top-pages {
 	align-self: end;
+	justify-self: center;
 	display: inline-grid;
 	width: 100%;
-	max-height: 100%;
+	max-width: calc(38em + (1em * 4));
 	justify-content: center;
 	align-items: center;
-	grid-template-columns: repeat(5, 1fr);
-	grid-auto-rows: calc(32px + (2 * 1.25em));
-	grid-gap: 1rem 1rem;
+	grid-template-columns: repeat(5, minmax(5.5em, 1fr));
+	grid-auto-rows: calc(32px + 1em + (2 * 1.25em));
+	grid-gap: 0.5em 0.75em;
 }
 
 .top-page-item {
@@ -109,8 +110,20 @@ export default {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	height: calc(32px + (2 * 1.25em));
+	height: calc(32px + 1em + (2 * 1.25em));
+	padding: 0.5em 0.25em;
 	overflow: hidden;
+	border-radius: 10px;
+	/* background-image: linear-gradient(200deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1)20%); */
+	background: linear-gradient(12deg,	rgba(255,255,255,0.05) 40%,
+										rgba(255,255,255,0.3) 100%);
+	background-position: 100% 100%;
+	background-size: 200% 200%;
+	transition: background-position .3s ease;
+}
+
+.top-page-item:hover {
+	background-position: 80% 35%;	
 }
 
 .top-page-title {

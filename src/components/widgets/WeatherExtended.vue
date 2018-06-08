@@ -106,13 +106,13 @@ export default {
 	--transition-dur1: 0.3s;
 	--transition-dur2: 0.3s;
 	--transition-dur3: 0.45s;
-	min-width: 8.25em;
+	min-width: 8.5em;
 }
 
 .background-image {
 	position:fixed;
-	width: 120%;
-	height: 120%;
+	width: 150%;
+	height: 150%;
 	left: -10%;
 	top: -10%;
 	background-attachment: fixed;

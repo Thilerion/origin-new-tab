@@ -94,6 +94,7 @@ export default {
 <style scoped>
 .widget-greeting {
 	align-self: center;
+	min-width: 25rem;
 }
 
 .time {

@@ -62,7 +62,7 @@ export default {
 					component: 'StartQuote',
 					name: 'quote',
 					row: [3, 5],
-					column: [14, 28]
+					column: [11, 31]
 				},
 				{
 					component: 'StartWeather',
@@ -74,7 +74,7 @@ export default {
 					component: 'StartNews',
 					name: 'news',
 					row: [1, 3],
-					column: [14, 28]
+					column: [11, 31]
 				},
 				{
 					component: 'StartSettingsButton',
@@ -86,7 +86,7 @@ export default {
 					component: 'StartTopPages',
 					name: 'topPages',
 					row: [15, 20],
-					column: [12, 30]
+					column: [11, 31]
 				}
 			],
 			dndEnabled: false,
@@ -307,11 +307,11 @@ export default {
 }
 
 .widget {
-	box-shadow: 0 0 5px 5px rgba(255,255,255,0.1);
 	position: relative;
 }
 
 .widget.dnd {
+	position: relative;
 	box-shadow: 0 0 5px 5px rgba(255,255,255,0.5);
 	cursor:move!important;
 }

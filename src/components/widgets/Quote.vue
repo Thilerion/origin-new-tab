@@ -52,6 +52,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	min-width: 40rem;
 }
 
 .quote {

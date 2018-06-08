@@ -113,6 +113,7 @@ export default {
 	display: inline-grid;
 	width: 100%;
 	max-width: calc(40em + (1em * 4));
+	min-width: 40rem;
 	justify-content: center;
 	align-items: center;
 	grid-template-columns: repeat(5, minmax(7.5em, 1fr));

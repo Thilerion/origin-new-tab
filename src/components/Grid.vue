@@ -1,5 +1,5 @@
 <template>
-	<div class="grid">
+	<div class="grid" ref="grid">
 		<WidgetFadeIn
 			v-for="(widget, index) of grid"
 			:key="widget.name"
@@ -9,7 +9,7 @@
 			:style="widgetGridPlacement[index]"
 			class="widget"
 			v-if="isWidgetActive(widget.name)"
-			:class="{'dnd': dndEnabled}"
+			:class="{'dnd': dndEnabled, 'is-dragged': currentlyDragging.index === index}"
 			@click.native="widgetClicked"
 			:draggable="dndEnabled"
 			@drag.native="dragging(widget.name, index, $event)"
@@ -106,8 +106,8 @@ export default {
 			},
 			windowWidth: window.innerWidth,
 			windowHeight: window.innerHeight,
-			gridCols: 10,
-			gridRows: 20
+			gridCols: 0,
+			gridRows: 0
 		}
 	},
 	computed: {
@@ -210,9 +210,9 @@ export default {
 		},
 		setNewWidgetPosition(colChange, rowChange, index) {
 			const colWidth = this.currentlyDragging.initialCols[1] - this.currentlyDragging.initialCols[0];
-			const rowWidth = this.currentlyDragging.initialRows[1] - this.currentlyDragging.initialRows[0];
+			const rowHeight = this.currentlyDragging.initialRows[1] - this.currentlyDragging.initialRows[0];
 
-			let newColStart, newColEnd;
+			let newColStart, newColEnd, newRowStart, newRowEnd;
 
 
 
@@ -226,10 +226,20 @@ export default {
 				newColEnd = Math.min(this.currentlyDragging.initialCols[1] + colChange, this.gridCols + 1);
 				newColStart = newColEnd - colWidth;
 			}
-			
+
+			if (rowChange === 0) {
+				newRowStart = this.currentlyDragging.initialRows[0];
+				newRowEnd = this.currentlyDragging.initialRows[1];
+			} else if (rowChange < 0) {
+				newRowStart = Math.max(this.currentlyDragging.initialRows[0] + rowChange, 1);
+				newRowEnd = newRowStart + rowHeight;
+			} else if (rowChange > 0) {
+				newRowEnd = Math.min(this.currentlyDragging.initialRows[1] + rowChange, this.gridRows + 1);
+				newRowStart = newRowEnd - rowHeight;
+			}			
 
 			const col = [newColStart, newColEnd];
-			const row = [...this.currentlyDragging.initialRows].map(r => r + rowChange);
+			const row = [newRowStart, newRowEnd];
 
 			this.grid[index].column = [...col];
 			this.grid[index].row = [...row];
@@ -239,39 +249,13 @@ export default {
 			const rowChange = Math.round(this.rectYMoveDifference / this.gridRowHeight);
 			const index = this.currentlyDragging.index;
 
-			const [colStart, colEnd] = this.grid[index].column;
-			const [rowStart, rowEnd] = this.grid[index].row;
-
-			const maxColChange = (this.gridCols + 1 - colEnd);
-			const minColChange = (1 - colStart);
-
-			// let newColChange = 0;
-			// if (colChange >= maxColChange) {
-			// 	newColChange = maxColChange;
-			// } else if (colChange <= minColChange) {
-			// 	newColChange = minColChange;
-			// } else {
-			// 	newColChange = colChange;
-			// }
-
-			// const maxRowChange = (this.gridRows + 1 - rowEnd);
-			// const minRowchange = (1 - rowStart);
-			// let newRowChange = 0;
-			// if (rowChange >= maxRowChange) {
-			// 	newRowChange = maxRowChange;
-			// } else if (rowChange <= minRowchange) {
-			// 	newRowChange = minRowchange;
-			// } else {
-			// 	newRowChange = rowChange;
-			// }
-			
-			let newColChange = colChange;
-			let newRowChange = rowChange;
-
-			console.log(newColChange, newRowChange);
-
-			this.currentlyDragging.rowChange = newRowChange;
-			this.currentlyDragging.colChange = newColChange;
+			this.currentlyDragging.rowChange = rowChange;
+			this.currentlyDragging.colChange = colChange;
+		},
+		getCSSGridVariables() {
+			const el = this.$refs.grid;
+			this.gridCols = getComputedStyle(el).getPropertyValue('--cols');
+			this.gridRows = getComputedStyle(el).getPropertyValue('--rows');
 		}
 	},
 	watch: {
@@ -285,6 +269,11 @@ export default {
 				this.setNewWidgetPosition(this.currentlyDragging.colChange, this.currentlyDragging.rowChange, this.currentlyDragging.index);
 			}
 		}
+	},
+	beforeMount() {
+		setTimeout(() => {
+			this.getCSSGridVariables();
+		}, 0);
 	}
 }
 </script>
@@ -316,11 +305,28 @@ export default {
 	box-shadow: 0 0 5px 5px rgba(255,255,255,0.1);
 	align-self: stretch!important;
 	justify-self: stretch!important;
+	position: relative;
+}
+
+.widget::after {
+	position: absolute;
+	content: "";
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: rgba(50, 100, 200, 0);
+	transition: background-color 0.5s ease;
 }
 
 .widget.dnd {
 	box-shadow: 0 0 5px 5px rgba(255,255,255,0.5);
 	cursor:move!important;
+}
+
+.is-dragged.widget::after {
+
+	background-color: rgba(50, 100, 200, 0.4);
 }
 
 .enable-dnd-btn {

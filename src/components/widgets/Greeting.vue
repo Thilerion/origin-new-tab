@@ -100,13 +100,10 @@ export default {
 	flex-direction: column;
 }
 
-.time, .message {
-	height: 50%;
-	flex: 0 0 auto;
-}
-
 .time {
 	font-size: 8em;
+	flex: 0 0 1.2em;
+	margin-top: auto;
 }
 
 .username {
@@ -116,6 +113,8 @@ export default {
 .message {
 	font-size: 3.5em;
 	position: relative;
+	flex: 0 0 1.2em;
+	margin-bottom: auto;
 }
 
 .input-wrapper {

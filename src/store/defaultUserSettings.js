@@ -11,7 +11,7 @@ const defaultSettings = {
 				active: true,
 				row: [8, 14],
 				column: [9, 33],
-				fontSize: -2
+				fontSize: -1
 			},
 			{ 
 				name: 'news',

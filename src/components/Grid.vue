@@ -9,8 +9,15 @@
 			:style="widgetGridPlacement[index]"
 			class="widget"
 			v-if="isWidgetActive(widget.name)"
+			:class="{'dnd': dndEnabled}"
+			@click.native="widgetClicked"
+			:draggable="dndEnabled"
+			@drag.native="dragging(widget.name, index, $event)"
+			@dragend.native="dragEnd(widget.name, index, $event)"
+			@dragstart.native="dragStart(widget.name, index, $event)"
 		/>
 		</WidgetFadeIn>
+		<button class="enable-dnd-btn" @click="enableDnD">DnD</button>
 	</div>
 </template>
 
@@ -22,6 +29,8 @@ import StartWeather from './widgets/Weather.vue';
 import StartNews from './widgets/News.vue';
 import StartSettingsButton from './SettingsButton.vue';
 import StartTopPages from './widgets/TopPages.vue';
+
+import {deepClone} from '@/utils/deepObject';
 
 export default {
 	components: {
@@ -41,7 +50,7 @@ export default {
 					component: 'StartGreeting',
 					name: 'greeting',
 					row: [7, 14],
-					column: [1, 13]
+					column: [4, 8]
 				},
 				{
 					component: 'StartWallpaperDetails',
@@ -79,7 +88,26 @@ export default {
 					row: [15, 20],
 					column: [3, 9]
 				}
-			]
+			],
+			dndEnabled: true,
+			currentlyDragging: {
+				index: null,
+				name: null,
+				startRectX: null,
+				startRectY: null,
+				startX: null,
+				startY: null,
+				currentX: null,
+				currentY: null,
+				initialRows: [0, 0],
+				initialCols: [0, 0],
+				rowChange: 0,
+				colChange: 0
+			},
+			windowWidth: window.innerWidth,
+			windowHeight: window.innerHeight,
+			gridCols: 10,
+			gridRows: 20
 		}
 	},
 	computed: {
@@ -98,6 +126,26 @@ export default {
 					'grid-column-end': val.column[1]
 				}
 			})
+		},
+		rectXMoveDifference() {
+			if (this.currentlyDragging.index == null) return 0;
+			return this.currentlyDragging.currentX - this.currentlyDragging.startX;
+		},
+		rectYMoveDifference() {
+			if (this.currentlyDragging.index == null) return 0;
+			return this.currentlyDragging.currentY - this.currentlyDragging.startY;
+		},
+		gridColumnWidth() {
+			return this.windowWidth / this.gridCols;
+		},
+		gridRowHeight() {
+			return this.windowHeight / this.gridRows;
+		},
+		rowChange() {
+			return this.currentlyDragging.rowChange;
+		},
+		colChange() {
+			return this.currentlyDragging.colChange;
 		}
 	},
 	methods: {
@@ -105,6 +153,113 @@ export default {
 			let widgetInActiveWidgets = this.activeWidgets.find(w => w.name === name);
 			if (!widgetInActiveWidgets) return true;
 			else return widgetInActiveWidgets.active;
+		},
+		enableDnD() {
+			this.dndEnabled = !this.dndEnabled;
+		},
+		widgetClicked(e) {
+			console.log(e);
+			if (this.dndEnabled) {
+				e.preventDefault();
+				e.stopPropagation();
+			}
+		},
+		setCurrentlyDragging(name = null, index = null, startRectX = null, startRectY = null, startX = null, startY = null) {
+			const newCurrentlyDragging = {
+				name,
+				index,
+				startRectX,
+				startRectY,
+				startX,
+				startY,
+				currentX: startX,
+				currentY: startY,
+				initialRows: [...this.grid[index].row],
+				initialCols: [...this.grid[index].column],
+				rowChange: 0,
+				colChange: 0
+			}
+			this.currentlyDragging = {...newCurrentlyDragging};
+		},
+		setDragPosition(currentX, currentY) {
+			// console.log(deepClone(this.currentlyDragging));
+			this.currentlyDragging = {...this.currentlyDragging, currentX, currentY};
+			// console.log(deepClone(this.currentlyDragging));
+		},
+		dragStart(widgetName, index, e) {
+			const rectCoords = e.currentTarget.getBoundingClientRect();
+			const startX = e.clientX;
+			const startY = e.clientY;
+			this.setCurrentlyDragging(widgetName, index, rectCoords.x, rectCoords.y, startX, startY);
+		},
+		dragging(widgetName, index, e) {
+			const coords = e.currentTarget.getBoundingClientRect();
+			if (e.x === 0 && e.y === 0) return;
+			this.setDragPosition(e.clientX, e.clientY);
+			setTimeout(() => {
+				this.calcNewWidgetPosition();
+			}, 0);			
+		},
+		dragEnd(widgetName, index, e) {
+			console.warn(`Stopped dragging ${widgetName}`);
+			console.log(this.rectXMoveDifference, this.gridColumnWidth, Math.round(this.rectXMoveDifference / this.gridColumnWidth));
+			this.calcNewWidgetPosition();
+			this.setCurrentlyDragging();
+		},
+		setNewWidgetPosition(colChange, rowChange, index) {
+			const col = [...this.currentlyDragging.initialCols].map(c => c + colChange);
+			const row = [...this.currentlyDragging.initialRows].map(r => r + rowChange);
+
+			this.grid[index].column = [...col];
+			this.grid[index].row = [...row];
+		},
+		calcNewWidgetPosition() {
+			const colChange = Math.round(this.rectXMoveDifference / this.gridColumnWidth);
+			const rowChange = Math.round(this.rectYMoveDifference / this.gridRowHeight);
+			const index = this.currentlyDragging.index;
+
+			const [colStart, colEnd] = this.grid[index].column;
+			const [rowStart, rowEnd] = this.grid[index].row;
+
+			const maxColChange = (this.gridCols + 1 - colEnd);
+			const minColChange = (1 - colStart);
+
+			let newColChange = 0;
+			if (colChange >= maxColChange) {
+				newColChange = maxColChange;
+			} else if (colChange <= minColChange) {
+				newColChange = minColChange;
+			} else {
+				newColChange = colChange;
+			}
+
+			const maxRowChange = (this.gridRows + 1 - rowEnd);
+			const minRowchange = (1 - rowStart);
+			let newRowChange = 0;
+			if (rowChange >= maxRowChange) {
+				newRowChange = maxRowChange;
+			} else if (rowChange <= minRowchange) {
+				newRowChange = minRowchange;
+			} else {
+				newRowChange = rowChange;
+			}
+
+			console.log(newColChange, newRowChange);
+
+			this.currentlyDragging.rowChange = newRowChange;
+			this.currentlyDragging.colChange = newColChange;
+		}
+	},
+	watch: {
+		rowChange(newValue, oldValue) {
+			if (newValue != null && newValue !== oldValue) {
+				this.setNewWidgetPosition(this.currentlyDragging.colChange, this.currentlyDragging.rowChange, this.currentlyDragging.index);
+			}
+		},
+		colChange(newValue, oldValue) {
+			if (newValue != null && newValue !== oldValue) {
+				this.setNewWidgetPosition(this.currentlyDragging.colChange, this.currentlyDragging.rowChange, this.currentlyDragging.index);
+			}
 		}
 	}
 }
@@ -112,9 +267,14 @@ export default {
 
 <style>
 .grid {
+	--cols: 10;
+	--rows: 20;
+}
+
+.grid {
 	display: grid;
-	grid-template-columns: repeat(10, 1fr);
-	grid-template-rows: repeat(20, 1fr);
+	grid-template-columns: repeat(var(--cols), 1fr);
+	grid-template-rows: repeat(var(--rows), 1fr);
 	height: 100vh;
 	width: 100vw;
 	overflow: hidden;
@@ -126,5 +286,26 @@ export default {
 
 .widget-no-select {
 	user-select: none;
+}
+
+.widget {
+	box-shadow: 0 0 5px 5px rgba(255,255,255,0.1);
+	align-self: stretch!important;
+	justify-self: stretch!important;
+}
+
+.widget.dnd {
+	box-shadow: 0 0 5px 5px rgba(255,255,255,0.5);
+	cursor:move!important;
+}
+
+.enable-dnd-btn {
+	position: absolute;
+	bottom: 0.25em;
+	right: 3em;
+}
+
+.dnd * {
+	cursor: move!important;
 }
 </style>

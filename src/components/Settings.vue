@@ -64,6 +64,7 @@
 						<input type="checkbox" :value="widget.name" v-model="widget.active">
 						<span class="setting-check-label">{{widget.name}}</span>
 					</div>
+					<button class="toggle-dnd" @click="toggleDnd">Verplaats widgets</button>
 				</div>
 			</div>
 			<button @click="saveSettings" class="save-btn">Opslaan</button>
@@ -139,6 +140,10 @@ export default {
 			if (!areYouSure) return;
 			this.$store.resetAllStorage();
 			location.reload();
+		},
+		toggleDnd() {
+			this.$store.commit('toggleDnd');
+			this.saveSettings();
 		}
 	},
 	created() {
@@ -266,6 +271,13 @@ input[type="range"].slider.range-disabled {
 
 .quote-option {
 	text-transform: capitalize;
+}
+
+.toggle-dnd {
+	display: block;
+	margin: 1em auto;
+	padding: 0.5em 1em;
+	border-radius: 4px;
 }
 
 .save-btn {

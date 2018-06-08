@@ -1,7 +1,7 @@
 const settingsStore = {
 
 	state: {
-
+		dndEnabled: false
 	},
 
 	getters: {
@@ -19,11 +19,16 @@ const settingsStore = {
 				activeWidgets: copiedWidgets,
 				wallpaperCycleTimeout: getters.wallpaperCycleTimeout
 			}
-		} 
+		},
+		dndEnabled(state) {
+			return state.dndEnabled;
+		}
 	},
 
 	mutations: {
-
+		toggleDnd(state) {
+			state.dndEnabled = !state.dndEnabled;
+		}
 	},
 
 	actions: {

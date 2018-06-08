@@ -26,7 +26,7 @@
 			/>
 		</div>
 		</WidgetFadeIn>
-		<button class="enable-dnd-btn" @click="enableDnD">DnD</button>
+		<button v-if="dndEnabled" class="stop-dnd" @click="$store.commit('toggleDnd')">Klaar</button>
 	</div>
 </template>
 
@@ -98,7 +98,6 @@ export default {
 					column: [11, 31]
 				}
 			],
-			dndEnabled: false,
 			currentlyDragging: {
 				index: null,
 				startX: null,
@@ -160,6 +159,9 @@ export default {
 		},
 		showVer() {
 			return this.currentlyDragging.isCenterVertical;
+		},
+		dndEnabled() {
+			return this.$store.getters.dndEnabled;
 		}
 	},
 	methods: {
@@ -167,9 +169,6 @@ export default {
 			let widgetInActiveWidgets = this.activeWidgets.find(w => w.name === name);
 			if (!widgetInActiveWidgets) return true;
 			else return widgetInActiveWidgets.active;
-		},
-		enableDnD() {
-			this.dndEnabled = !this.dndEnabled;
 		},
 		widgetClicked(e) {
 			console.log(e);
@@ -377,12 +376,6 @@ export default {
 	opacity: 1;
 }
 
-.enable-dnd-btn {
-	position: absolute;
-	bottom: 0.25em;
-	right: 3em;
-}
-
 .dnd .widget * {
 	cursor: move!important;
 }
@@ -404,5 +397,12 @@ export default {
 	width: 100%;
 	left: 0;
 	top: calc(50% - 2px);
+}
+
+.stop-dnd {
+	position: absolute;
+	right: 5px;
+	bottom: 5px;
+	border: none!important;
 }
 </style>

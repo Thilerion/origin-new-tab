@@ -93,8 +93,9 @@ export default {
 
 <style scoped>
 .widget-greeting {
+	margin: 0 auto auto auto;
+
 	font-size: 100%;
-	align-self: center;
 	min-width: 25em;
 }
 

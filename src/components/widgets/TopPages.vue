@@ -89,7 +89,7 @@ export default {
 			https://github.com/atomiks/30-seconds-of-css/blob/master/snippets/mouse-cursor-gradient-tracking.md
 			*/
 			const item = this.$refs.linkItem[index];
-			
+
 			const x = e.pageX - e.currentTarget.offsetLeft - e.currentTarget.offsetParent.offsetLeft;
 			const y = e.pageY - e.currentTarget.offsetTop - e.currentTarget.offsetParent.offsetTop;
 
@@ -105,17 +105,14 @@ export default {
 
 <style scoped>
 .widget-top-pages {
-	align-self: end;
-	justify-self: center;
+	margin: auto auto 0 auto;
+
 	display: inline-grid;
-	width: 100%;
-	max-width: calc(40em + (1em * 4));
+	max-width: calc(35em + (1em * 4));
 	min-width: 40rem;
-	justify-content: center;
-	align-items: center;
-	grid-template-columns: repeat(5, minmax(7.5em, 1fr));
+	grid-template-columns: repeat(5, minmax(7em, 1fr));
 	grid-auto-rows: calc(32px + 1.25em + (2 * 1.25em));
-	grid-gap: 0.5em 0.75em;
+	grid-gap: 0.5em 0.25em;
 }
 
 .top-page-item {

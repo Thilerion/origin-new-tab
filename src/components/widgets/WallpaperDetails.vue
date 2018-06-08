@@ -104,9 +104,8 @@ export default {
 
 <style scoped>
 .widget-wallpaper-details {
-	min-width: 70%;
-	align-self: stretch;
-	justify-self: start;
+	margin: auto auto 0 0;
+	
 	opacity: 0.5;
 	font-size: 0.875rem;
 	display: inline-flex;

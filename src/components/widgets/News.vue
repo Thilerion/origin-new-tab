@@ -90,11 +90,12 @@ export default {
 
 <style scoped>
 .widget-news {
+	margin: 0 auto;
+	align-self: start;
 	width: 100%;
 	max-width: 45rem;
 	position: relative;
 	display: flex;
-	align-self: start;
 	min-width: 40rem;
 }
 

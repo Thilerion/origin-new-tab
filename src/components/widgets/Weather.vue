@@ -59,16 +59,15 @@ export default {
 
 <style scoped>
 .widget-weather {
+	margin: 0 0 auto auto;
+
 	padding-top: 0.25rem;
 	padding-right: 0.75rem;
 	position: relative;
-	justify-self: end;
-	align-self: start;
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: auto auto auto;
 	cursor: pointer;
-
 	font-size: 0.875rem;
 }
 

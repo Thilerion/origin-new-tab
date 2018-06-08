@@ -9,18 +9,22 @@
 			v-for="(widget, index) of grid"
 			:key="widget.name"
 		>
-		<component			
-			:is="widget.component"
-			:style="widgetGridPlacement[index]"
+		<div
 			class="widget"
+			:style="widgetGridPlacement[index]"
 			v-if="isWidgetActive(widget.name)"
 			:class="{'is-dragged': currentlyDragging.index === index}"
-			@click.native="widgetClicked"
+			@click="widgetClicked"
 			:draggable="dndEnabled"
-			@drag.native="dragging(widget.name, index, $event)"
-			@dragend.native="dragEnd(widget.name, index, $event)"
-			@dragstart.native="dragStart(widget.name, index, $event)"
-		/>
+			@drag="dragging(widget.name, index, $event)"
+			@dragend="dragEnd(widget.name, index, $event)"
+			@dragstart="dragStart(widget.name, index, $event)"
+		>
+			<component			
+				:is="widget.component"				
+				class="widget-inner"				
+			/>
+		</div>
 		</WidgetFadeIn>
 		<button class="enable-dnd-btn" @click="enableDnD">DnD</button>
 	</div>
@@ -90,7 +94,7 @@ export default {
 				{
 					component: 'StartTopPages',
 					name: 'topPages',
-					row: [14, 20],
+					row: [15, 20],
 					column: [11, 31]
 				}
 			],
@@ -197,6 +201,7 @@ export default {
 			this.checkCenter(newCurrentlyDragging.initialCols, newCurrentlyDragging.initialRows);
 		},
 		dragStart(widgetName, index, e) {
+			console.log(widgetName, index, e);
 			if (!this.dndEnabled) return;
 
 			const startX = e.clientX;
@@ -319,8 +324,8 @@ export default {
 	height: 100vh;
 	width: 100vw;
 	overflow: hidden;
-	align-items: center;
-	justify-items: center;
+	align-items: stretch;
+	justify-items: stretch;
 	padding: .75em .5em;
 	grid-row-gap: 0.5rem;
 }
@@ -348,10 +353,15 @@ export default {
 
 .widget {
 	position: relative;
+	display: flex;
+	justify-content: center;
+}
+
+.widget-inner {
+	margin: auto;
 }
 
 .dnd .widget {
-	position: relative;
 	box-shadow: 0 0 2px 5px rgba(255,255,255,0.3);
 	transition: box-shadow .2s ease, background-color .5s ease;
 	cursor:move!important;

@@ -16,13 +16,11 @@ export default {
 
 <style scoped>
 .settings-btn {
-	margin: 0;
+	margin: auto 0 0 auto;
 	padding: 0;
 	background: none;
 	border: none;
 	color: inherit;
-	align-self: end;
-	justify-self: end;
 	min-width: 24px;
 	width: 24px;
 	height: 24px;

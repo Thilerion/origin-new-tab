@@ -46,7 +46,8 @@ export default {
 
 <style scoped>
 .widget-quote {
-	align-self: start;
+	margin: auto;
+
 	cursor: default;
 	position: relative;
 	display: flex;

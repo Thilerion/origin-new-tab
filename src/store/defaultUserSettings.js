@@ -11,21 +11,21 @@ const defaultSettings = {
 				active: true,
 				row: [8, 14],
 				column: [9, 33],
-				fontSize: 1
+				fontSize: -2
 			},
 			{ 
 				name: 'news',
 				active: true,
 				row: [1, 3],
 				column: [11, 31],
-				fontSize: 1
+				fontSize: 0
 			},
 			{ 
 				name: 'quote',
 				active: true,
 				row: [3, 5],
 				column: [11, 31],
-				fontSize: 1
+				fontSize: -2
 			},
 			{ 
 				name: 'weather',
@@ -39,14 +39,14 @@ const defaultSettings = {
 				active: true,
 				row: [15, 20],
 				column: [11, 31],
-				fontSize: 1
+				fontSize: 0
 			},
 			{
 				name: 'settingsButton',
 				active: true,
 				row: [20, 21],
 				column: [40, 41],
-				fontSize: 1
+				fontSize: 0
 			},
 			{
 				name: 'wallpaperDetails',

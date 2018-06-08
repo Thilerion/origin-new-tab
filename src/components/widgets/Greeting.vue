@@ -94,7 +94,7 @@ export default {
 <style scoped>
 .widget-greeting {
 	margin: 0 auto;
-	font-size: 100%;
+	font-size: inherit;
 	min-width: 50em;
 	display: flex;
 	flex-direction: column;

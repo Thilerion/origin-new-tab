@@ -47,6 +47,7 @@ export default {
 <style scoped>
 .widget-quote {
 	margin: auto;
+	font-size: inherit;
 
 	cursor: default;
 	position: relative;

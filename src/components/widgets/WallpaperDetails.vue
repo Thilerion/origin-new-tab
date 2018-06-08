@@ -107,7 +107,7 @@ export default {
 	margin: auto auto 0 0;
 	
 	opacity: 0.5;
-	font-size: 0.875em;
+	font-size: 0.75em;
 	display: inline-flex;
 	flex-direction: column-reverse;
 	transition: all .3s ease-out;
@@ -151,7 +151,7 @@ export default {
 }
 
 .attribution {
-	font-size: 0.875em;
+	font-size: 1em;
 	margin-left: 4px;
 	line-height: 18px;
 	transform: translateX(-62px);

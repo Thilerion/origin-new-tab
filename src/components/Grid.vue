@@ -12,7 +12,7 @@
 			<div
 				v-if="draggableWidgets.findIndex(w => w.name === widget.name) > -1"
 				class="widget draggable"
-				:style="[widgetGridPlacement[index], {'font-size': widget.fontSize ? `calc(${widget.fontSize} * 1rem` : '1rem'}]"
+				:style="[widgetGridPlacement[index], {'font-size': widget.fontSize ? `calc(${widget.fontSize}px + 1rem` : '1rem'}]"
 				:class="{'is-dragged': currentlyDragging.index === index}"
 				@click="widgetClicked"
 				:draggable="dndEnabled"

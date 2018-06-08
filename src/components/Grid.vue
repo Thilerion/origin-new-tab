@@ -322,6 +322,7 @@ export default {
 	align-items: center;
 	justify-items: center;
 	padding: .75em .5em;
+	grid-row-gap: 0.5rem;
 }
 
 .grid-lines {

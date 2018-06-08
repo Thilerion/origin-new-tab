@@ -24,7 +24,7 @@ const weatherStore = {
 		address: state => state.apiData.location.bestAddress,
 		addressCity(state) {
 			let address = state.apiData.location.bestAddress;
-			if (typeof address === 'String') return address.split(',')[0];
+			if (typeof address === 'string') return address.split(',')[0];
 		},
 		weatherDataLoaded: state => state.dataLoaded
 	},

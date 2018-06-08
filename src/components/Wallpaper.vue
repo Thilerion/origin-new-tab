@@ -53,7 +53,6 @@ export default {
 	background-size: cover;
 	background-position: center;
 	background-size: no-repeat;
-	transform: scale(1.03);
 	box-shadow: inset 0 0 30vmax 5vmax rgba(0,0,0,.4);
 	z-index: -1;
 	filter: contrast(0.95) brightness(0.90);

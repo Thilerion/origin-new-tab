@@ -106,14 +106,15 @@ export default {
 	--transition-dur1: 0.3s;
 	--transition-dur2: 0.3s;
 	--transition-dur3: 0.45s;
+	min-width: 8.25em;
 }
 
 .background-image {
-	position:absolute;
-	top: -10%;
-	left: -10%;
-	height: 120%;
+	position:fixed;
 	width: 120%;
+	height: 120%;
+	left: -10%;
+	top: -10%;
 	background-attachment: fixed;
 	background-size: cover;
 	background-position: center;
@@ -200,6 +201,7 @@ export default {
 	display: grid;
 	grid-template-columns: 3.25rem auto;
 	grid-template-rows: repeat(2, 1fr);
+	white-space: nowrap;
 }
 
 .small-climacon {

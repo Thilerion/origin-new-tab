@@ -1,8 +1,8 @@
 <template>
 	<div class="widget-weather f-shadow-medium widget-no-select" @click="extend" v-if="weatherDataLoaded">
 		<StartClimacon v-if="icon" :icon="icon" class="icon f-shadow-light"></StartClimacon>
-		<p class="temperature">{{currently.temperature | roundNumber}}&nbsp;&deg;</p>
-		<p class="summary">{{currently.summary}}</p>
+		<p class="temperature">{{currently.temperature | roundNumber}}&deg;</p>
+		<!-- <p class="summary">{{currently.summary}}</p> -->
 		<p class="location">{{addressCity}}</p>
 		<div class="row-extended">
 			<StartWeatherExtended class="extended" v-show="showExtended && weatherDataLoaded" :forecast="forecast.daily" />
@@ -65,47 +65,55 @@ export default {
 	justify-self: end;
 	align-self: start;
 	display: grid;
-	grid-template-columns: auto auto;
-	grid-template-rows: auto auto auto auto;
-	grid-row-gap: 0.2em;
-	grid-column-gap: 0.2em;
+	grid-template-columns: repeat(3, 1fr);
+	grid-template-rows: auto auto auto;
 	cursor: pointer;
+
+	font-size: 0.875rem;
 }
 
 .icon {
-	grid-column: 1;
+	grid-column: 2;
 	grid-row: 1;
-	height: 3.5em;
-	width: 3.5em;
+	height: 3em;
+	width: 3em;
 	align-self: center;
+	justify-self: end;
 }
 
 .temperature {
-	grid-column: 2;
+	grid-column: 3;
 	grid-row: 1;
-	text-align: center;
+	justify-self: end;
+	text-align: right;
 	align-self: center;
-	font-size: 2.75rem;
+	font-size: 2rem;
 }
 
 .summary {
-	grid-column: 1 / 3;
+	grid-column: 1 / 4;
 	grid-row: 2;
 	text-align: center;	
+	font-size: 0.875rem;
 }
 
 .location {
-	grid-column: 1 / 3;
-	grid-row: 3;
-	text-align: center;
-	font-size: 87.5%;
+	justify-self: end;
+	grid-column: 1 / 4;
+	grid-row: 2;
+	text-align: right;
 	color: rgba(255,255,255,1);
 	font-weight: 300;
+	font-size: 0.75rem;
+	letter-spacing: 0.075em;
+	text-transform: uppercase;
+	text-align: center;
+	min-width: 5.75rem;
 }
 
 .row-extended {
-	grid-row: 4;
-	grid-column: 1 / 3;
+	grid-row: 3;
+	grid-column: 1 / 4;
 	position: relative;
 	cursor: default;
 }

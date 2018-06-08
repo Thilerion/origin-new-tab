@@ -93,10 +93,16 @@ export default {
 
 <style scoped>
 .widget-greeting {
-	margin: 0 auto auto auto;
-
+	margin: 0 auto;
 	font-size: 100%;
-	min-width: 25em;
+	min-width: 50em;
+	display: flex;
+	flex-direction: column;
+}
+
+.time, .message {
+	height: 50%;
+	flex: 0 0 auto;
 }
 
 .time {

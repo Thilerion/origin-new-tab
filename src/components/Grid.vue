@@ -59,7 +59,7 @@ export default {
 					component: 'StartGreeting',
 					name: 'greeting',
 					row: [8, 14],
-					column: [11, 31]
+					column: [9, 33]
 				},
 				{
 					component: 'StartWallpaperDetails',

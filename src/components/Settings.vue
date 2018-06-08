@@ -60,7 +60,7 @@
 			<div class="grid-col-2">
 				<div class="setting-wrap">
 					<label class="f-weight-heavy">Widgets</label>
-					<div class="setting-check" v-for="widget in currentSettings.activeWidgets" :key="widget.name">
+					<div class="setting-check" v-for="widget in widgetsCanBeDisabled" :key="widget.name">
 						<input type="checkbox" :value="widget.name" v-model="widget.active">
 						<span class="setting-check-label">{{widget.name}}</span>
 					</div>
@@ -107,6 +107,13 @@ export default {
 		disableFontSizeSlider() {
 			const isDefault = this.currentSettings.fontSize === null;
 			return isDefault;
+		},
+		widgetsCanBeDisabled() {
+			let cur = [...this.currentSettings.activeWidgets];
+			console.log(cur);
+			return cur.filter(w => {
+				return this.settingsOptions.user.activeWidgets.canBeDisabled.includes(w.name);
+			});
 		}
 	},
 	methods: {

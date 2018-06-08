@@ -6,7 +6,7 @@
 			<div class="grid-align ver" v-show="showVer"></div>
 		</div>
 		<WidgetFadeIn
-			v-for="(widget, index) of grid"
+			v-for="(widget, index) of widgets"
 			:key="widget.name"
 		>
 		<div
@@ -21,7 +21,7 @@
 			@dragstart="dragStart(widget.name, index, $event)"
 		>
 			<component			
-				:is="widget.component"				
+				:is="componentFromName(widget.name)"				
 				class="widget-inner"				
 			/>
 		</div>
@@ -40,6 +40,7 @@ import StartSettingsButton from './SettingsButton.vue';
 import StartTopPages from './widgets/TopPages.vue';
 
 import {deepClone} from '@/utils/deepObject';
+import {settingsOptions} from '@/store/defaultUserSettings';
 
 export default {
 	components: {
@@ -53,51 +54,6 @@ export default {
 	},
 	data() {
 		return {
-			grid:
-			[
-				{
-					component: 'StartGreeting',
-					name: 'greeting',
-					row: [8, 14],
-					column: [9, 33]
-				},
-				{
-					component: 'StartWallpaperDetails',
-					name: 'wallpaperDetails',
-					row: [19, 21],
-					column: [1, 13]
-				},
-				{
-					component: 'StartQuote',
-					name: 'quote',
-					row: [3, 5],
-					column: [11, 31]
-				},
-				{
-					component: 'StartWeather',
-					name: 'weather',
-					row: [1, 6],
-					column: [35, 41]
-				},
-				{
-					component: 'StartNews',
-					name: 'news',
-					row: [1, 3],
-					column: [11, 31]
-				},
-				{
-					component: 'StartSettingsButton',
-					name: 'settingsButton',
-					row: [20, 21],
-					column: [40, 41]
-				},
-				{
-					component: 'StartTopPages',
-					name: 'topPages',
-					row: [15, 20],
-					column: [11, 31]
-				}
-			],
 			currentlyDragging: {
 				index: null,
 				startX: null,
@@ -119,13 +75,13 @@ export default {
 	},
 	computed: {
 		widgetNames() {
-			return this.grid.map(val => val.component);
+			return settingsOptions.user.activeWidgets.canBeMoved;
 		},
-		activeWidgets() {
+		widgets() {
 			return this.$store.getters.activeWidgets;
 		},
 		widgetGridPlacement() {
-			return this.grid.map(val => {
+			return this.widgets.map(val => {
 				return {
 					'grid-row-start': val.row[0],
 					'grid-row-end': val.row[1],
@@ -165,10 +121,15 @@ export default {
 		}
 	},
 	methods: {
+		componentFromName(name) {
+			return `Start${name.charAt(0).toUpperCase()}${name.slice(1)}`;
+		},
 		isWidgetActive(name) {
-			let widgetInActiveWidgets = this.activeWidgets.find(w => w.name === name);
-			if (!widgetInActiveWidgets) return true;
-			else return widgetInActiveWidgets.active;
+			const canBeDisabled = settingsOptions.user.activeWidgets.canBeDisabled;
+
+			if (canBeDisabled.includes(name)) {
+				return this.widgets.find(w => w.name === name).active;
+			} else return true;
 		},
 		widgetClicked(e) {
 			console.log(e);
@@ -192,8 +153,8 @@ export default {
 				isCenterHorizontal: false
 			}
 			if (index !== null) {
-				newCurrentlyDragging.initialRows = [...this.grid[index].row];
-				newCurrentlyDragging.initialCols = [...this.grid[index].column];
+				newCurrentlyDragging.initialRows = [...this.widgets[index].row];
+				newCurrentlyDragging.initialCols = [...this.widgets[index].column];
 			}
 			
 			this.currentlyDragging = {...newCurrentlyDragging};
@@ -257,8 +218,7 @@ export default {
 
 			this.checkCenter(col, row);
 
-			this.grid[index].column = [...col];
-			this.grid[index].row = [...row];
+			this.$store.commit('setGridPosition', {index, row, col});
 		},
 		calcNewWidgetPosition() {
 			const colChange = Math.round(this.rectXMoveDifference / this.gridColumnWidth);

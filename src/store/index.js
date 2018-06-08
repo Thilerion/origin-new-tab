@@ -77,6 +77,12 @@ const store = new Vuex.Store({
 		toggleSettings(state, bool) {
 			if (bool) state.showSettings = bool;
 			else state.showSettings = !state.showSettings;
+		},
+		setGridPosition(state, { index, row, col }) {
+			//let index = state.user.activeWidgets.findIndex(w => w.name === name);
+
+			state.user.activeWidgets[index].row = [...row];
+			state.user.activeWidgets[index].column = [...col];
 		}
 	},
 

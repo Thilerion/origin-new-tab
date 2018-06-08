@@ -6,11 +6,48 @@ const defaultSettings = {
 		// range: 10-20, or null (which resets to 100% in base css file)
 		fontSize: null,
 		activeWidgets: [
-			{ name: 'greeting', active: true },
-			{ name: 'news', active: true },
-			{ name: 'quote', active: true },
-			{ name: 'weather', active: true },
-			{ name: 'topPages', active: true }
+			{ 
+				name: 'greeting',
+				active: true,
+				row: [8, 14],
+				column: [9, 33]
+			},
+			{ 
+				name: 'news',
+				active: true,
+				row: [1, 3],
+				column: [11, 31]
+			},
+			{ 
+				name: 'quote',
+				active: true,
+				row: [3, 5],
+				column: [11, 31]
+			},
+			{ 
+				name: 'weather',
+				active: true,
+				row: [1, 6],
+				column: [35, 41]
+			},
+			{ 
+				name: 'topPages',
+				active: true,
+				row: [15, 20],
+				column: [11, 31]
+			},
+			{
+				name: 'settingsButton',
+				active: true,
+				row: [20, 21],
+				column: [40, 41]
+			},
+			{
+				name: 'wallpaperDetails',
+				active: true,
+				row: [19, 21],
+				column: [1, 13]
+			}
 		]
 	},
 	weather: {
@@ -33,6 +70,10 @@ const settingsOptions = {
 		fontSize: {
 			min: 10,
 			max: 22
+		},
+		activeWidgets: {
+			canBeDisabled: ['greeting', 'news', 'quote', 'weather', 'topPages'],
+			canBeMoved: ['greeting', 'news', 'quote', 'weather', 'topPages', 'settingsButton', 'wallpaperDetails']
 		}
 	},
 	wallpaper: {
@@ -43,7 +84,6 @@ const settingsOptions = {
 			{ name: 'Moody Landscapes', id: 1457745 },
 			{ name: 'Beautiful Landscape Light', id: 477172 },
 			{ name: 'Great Outdoors', id: 289662 },
-			{ name: 'Road Less Travelled', id: 410546 },
 			{ name: 'Aerial', id: 1685892 },
 			{ name: 'Abstract Landscape/Nature', id: 1242150 },
 			{ name: 'Raindrops & Glass', id: 1410320 },

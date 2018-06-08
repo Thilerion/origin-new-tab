@@ -107,7 +107,7 @@ export default {
 	margin: auto auto 0 0;
 	
 	opacity: 0.5;
-	font-size: 0.875rem;
+	font-size: 0.875em;
 	display: inline-flex;
 	flex-direction: column-reverse;
 	transition: all .3s ease-out;
@@ -151,7 +151,7 @@ export default {
 }
 
 .attribution {
-	font-size: 0.875rem;
+	font-size: 0.875em;
 	margin-left: 4px;
 	line-height: 18px;
 	transform: translateX(-62px);
@@ -165,7 +165,7 @@ export default {
 }
 
 .load-btn, .dl-btn, .hide-btn {
-	font-size: 0.75rem;
+	font-size: 0.75em;
 	background: none;
 	color: white;
 	border: none;

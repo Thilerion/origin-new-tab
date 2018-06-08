@@ -61,14 +61,14 @@ export default {
 .widget-weather {
 	margin: 0 0 auto auto;
 
-	padding-top: 0.25rem;
-	padding-right: 0.75rem;
+	padding-top: 0.25em;
+	padding-right: 0.75em;
 	position: relative;
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: auto auto auto;
 	cursor: pointer;
-	font-size: 0.875rem;
+	font-size: 1em;
 }
 
 .icon {
@@ -86,14 +86,14 @@ export default {
 	justify-self: end;
 	text-align: right;
 	align-self: center;
-	font-size: 2rem;
+	font-size: 2em;
 }
 
 .summary {
 	grid-column: 1 / 4;
 	grid-row: 2;
 	text-align: center;	
-	font-size: 0.875rem;
+	font-size: 0.875em;
 }
 
 .location {
@@ -103,11 +103,11 @@ export default {
 	text-align: right;
 	color: rgba(255,255,255,1);
 	font-weight: 300;
-	font-size: 0.75rem;
+	font-size: 0.75em;
 	letter-spacing: 0.075em;
 	text-transform: uppercase;
 	text-align: center;
-	min-width: 5.75rem;
+	min-width: 5.75em;
 }
 
 .row-extended {

@@ -16,7 +16,7 @@ html {
 }
 
 p, ul, ol, li, h1, h2, h3, h4, label, a {
-	font-size: 1em;
+	font-size: inherit;
 	margin: 0;
 	padding: 0;
 }
@@ -64,7 +64,7 @@ button.icon-btn {
 }
 
 div, span, article, aside, footer, header, nav, section, table, thead, tbody, tfoot, tr, th, td {
-	font-size: 1rem;
+	font-size: inherit;
 	margin: 0;
 	padding: 0;
 }

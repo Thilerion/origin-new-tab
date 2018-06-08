@@ -95,7 +95,8 @@ export default {
 
 <style scoped>
 .widget-weather-extended {
-	margin-top: 0.5rem;
+	font-size: inherit;
+	margin-top: 0.5em;
 	position: relative;
 	overflow: hidden;
 	padding-left: 5px;
@@ -106,7 +107,7 @@ export default {
 	--transition-dur1: 0.3s;
 	--transition-dur2: 0.3s;
 	--transition-dur3: 0.45s;
-	min-width: 8.5em;
+	min-width: 8rem;
 }
 
 .background-image {
@@ -192,20 +193,20 @@ export default {
 .forecast-item-content {
 	position: relative;
 	z-index: 10;
-	font-size: 0.875rem;	
-	padding: 0.35rem;
-	padding-right: 0.5rem;
-	padding-left: 0.25rem;
+	font-size: 0.875em;	
+	padding: 0.35em;
+	padding-right: 0.5em;
+	padding-left: 0.25em;
 	margin-top: 1px;
-	height: 4rem;
+	height: 4em;
 	display: grid;
-	grid-template-columns: 3.25rem auto;
+	grid-template-columns: 3.25em auto;
 	grid-template-rows: repeat(2, 1fr);
 	white-space: nowrap;
 }
 
 .small-climacon {
-	width: 2.5rem;
+	width: 2.5em;
 	grid-row: 1 / 3;
 	grid-column: 1;
 	align-self: center;
@@ -217,7 +218,7 @@ export default {
 	justify-self: stretch;
 	text-align: left;
 	align-self: center;
-	margin-left: 0.2rem;
+	margin-left: 0.2em;
 }
 
 .day {
@@ -229,7 +230,7 @@ export default {
 }
 
 .temperatures .night {
-	font-size: 0.75rem;
+	font-size: 0.75em;
 	opacity: 0.7;
 	margin-left: 0.2rem;
 }

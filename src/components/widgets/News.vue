@@ -90,13 +90,18 @@ export default {
 
 <style scoped>
 .widget-news {
+	font-size: inherit;
 	margin: 0 auto;
 	align-self: start;
 	width: 100%;
-	max-width: 45rem;
+	max-width: 45em;
 	position: relative;
 	display: flex;
-	min-width: 40rem;
+	min-width: 40em;
+}
+
+.widget-news * {
+	font-size: inherit;
 }
 
 .widget-news.mouseover {
@@ -105,7 +110,7 @@ export default {
 
 .news-item-wrapper {
 	width: 100%;
-	height: 2.5rem;
+	height: 2.5em;
 	position: relative;
 	overflow: hidden;
 	background: rgba(0,0,0,0.1);
@@ -116,8 +121,8 @@ export default {
 }
 
 .clip-edges > .news-item {
-	padding-left: 2rem;
-	padding-right: 2rem;
+	padding-left: 2em;
+	padding-right: 2em;
 }
 
 .news-item {
@@ -126,7 +131,7 @@ export default {
 	width: 100%;
 	position: absolute;
 	top: 0;
-	line-height: 2.5rem;
+	line-height: 2.5em;
 	text-decoration: none;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -167,7 +172,7 @@ export default {
 	bottom: 0;
 	vertical-align: middle;
 	line-height: 1em;
-	min-width: 1rem;
+	min-width: 1em;
 }
 
 .news-scroll-btn.scroll-prev {

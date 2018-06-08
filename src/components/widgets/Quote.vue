@@ -53,11 +53,11 @@ export default {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	min-width: 40rem;
+	min-width: 40em;
 }
 
 .quote {
-	font-size: 1.25rem;
+	font-size: 1.25em;
 	margin-bottom: 0.25em;
 	padding-right: 2em;
 	text-align: center;
@@ -70,14 +70,14 @@ export default {
 }
 
 .q-mark {
-	font-size: 2rem;
-	line-height: 1.25rem;
+	font-size: 2em;
+	line-height: 0.55em;
 	color: rgba(255,255,255,0.9);
 }
 
 .q-mark-top {
 	position: relative;
-	top: 0.35rem;
+	top: 0.2em;
 }
 
 .reload-btn {

@@ -109,7 +109,7 @@ export default {
 
 	display: inline-grid;
 	max-width: calc(35em + (1em * 4));
-	min-width: 40rem;
+	min-width: 40em;
 	grid-template-columns: repeat(5, minmax(7em, 1fr));
 	grid-auto-rows: calc(32px + 1.25em + (2 * 1.25em));
 	grid-gap: 0.5em 0.25em;

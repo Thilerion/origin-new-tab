@@ -68,7 +68,8 @@ const store = new Vuex.Store({
 			if (bool) state.showSettings = bool;
 			else state.showSettings = !state.showSettings;
 		},
-		setGridPosition(state, { index, row, col }) {
+		setGridPosition(state, { name, row, col }) {
+			const index = state.user.widgets.findIndex(w => w.name === name);
 			state.user.widgets[index].row = [...row];
 			state.user.widgets[index].column = [...col];
 		}

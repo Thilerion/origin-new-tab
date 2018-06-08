@@ -6,25 +6,35 @@
 			<div class="grid-align ver" v-show="showVer"></div>
 		</div>
 		<WidgetFadeIn
-			v-for="(widget, index) of widgets"
+			v-for="(widget, index) of activeWidgets"
 			:key="widget.name"
 		>
-		<div
-			class="widget"
-			:style="widgetGridPlacement[index]"
-			v-if="isWidgetActive(widget.name)"
-			:class="{'is-dragged': currentlyDragging.index === index}"
-			@click="widgetClicked"
-			:draggable="dndEnabled"
-			@drag="dragging(widget.name, index, $event)"
-			@dragend="dragEnd(widget.name, index, $event)"
-			@dragstart="dragStart(widget.name, index, $event)"
-		>
-			<component			
-				:is="componentFromName(widget.name)"				
-				class="widget-inner"				
-			/>
-		</div>
+			<div
+				v-if="draggableWidgets.findIndex(w => w.name === widget.name) > -1"
+				class="widget draggable"
+				:style="widgetGridPlacement[index]"
+				:class="{'is-dragged': currentlyDragging.index === index}"
+				@click="widgetClicked"
+				:draggable="dndEnabled"
+				@drag="dragging(widget.name, index, $event)"
+				@dragend="dragEnd(widget.name, index, $event)"
+				@dragstart="dragStart(widget.name, index, $event)"
+			>
+				<component			
+					:is="componentFromName(widget.name)"				
+					class="widget-inner"				
+				/>
+			</div>
+			<div
+				v-else
+				class="widget"
+				:style="widgetGridPlacement[index]"
+			>
+				<component
+					:is="componentFromName(widget.name)"
+					class="widget-inner"
+				/>
+			</div>
 		</WidgetFadeIn>
 		<button v-if="dndEnabled" class="stop-dnd" @click="$store.commit('toggleDnd')">Klaar</button>
 	</div>
@@ -74,14 +84,26 @@ export default {
 		}
 	},
 	computed: {
-		widgetNames() {
-			return settingsOptions.user.widgets.canBeMoved;
-		},
 		widgets() {
 			return this.$store.getters.widgets;
 		},
+		widgetsInGrid() {
+			return this.widgets.filter(w => settingsOptions.user.widgets.displayInGrid.includes(w.name));
+		},
+		activeWidgets() {
+			return this.widgetsInGrid.filter(w => {
+				const active = w.active;
+				const canBeInactive = settingsOptions.user.widgets.canBeDisabled.includes(w.name);
+				return w.active || !canBeInactive;
+			});
+		},
+		draggableWidgets() {
+			return this.activeWidgets.filter(w => {
+				return settingsOptions.user.widgets.canBeMoved.includes(w.name);
+			})
+		},
 		widgetGridPlacement() {
-			return this.widgets.map(val => {
+			return this.activeWidgets.map(val => {
 				return {
 					'grid-row-start': val.row[0],
 					'grid-row-end': val.row[1],
@@ -118,18 +140,14 @@ export default {
 		},
 		dndEnabled() {
 			return this.$store.getters.dndEnabled;
+		},
+		currentlyDraggingName() {
+			return this.activeWidgets[this.currentlyDragging.index].name;
 		}
 	},
 	methods: {
 		componentFromName(name) {
 			return `Start${name.charAt(0).toUpperCase()}${name.slice(1)}`;
-		},
-		isWidgetActive(name) {
-			const canBeDisabled = settingsOptions.user.widgets.canBeDisabled;
-
-			if (canBeDisabled.includes(name)) {
-				return this.widgets.find(w => w.name === name).active;
-			} else return true;
 		},
 		widgetClicked(e) {
 			console.log(e);
@@ -153,8 +171,8 @@ export default {
 				isCenterHorizontal: false
 			}
 			if (index !== null) {
-				newCurrentlyDragging.initialRows = [...this.widgets[index].row];
-				newCurrentlyDragging.initialCols = [...this.widgets[index].column];
+				newCurrentlyDragging.initialRows = [...this.activeWidgets[index].row];
+				newCurrentlyDragging.initialCols = [...this.activeWidgets[index].column];
 			}
 			
 			this.currentlyDragging = {...newCurrentlyDragging};
@@ -185,7 +203,7 @@ export default {
 			this.calcNewWidgetPosition();
 			this.setCurrentlyDragging();
 		},
-		setNewWidgetPosition(colChange, rowChange, index) {
+		setNewWidgetPosition(colChange, rowChange, name) {
 			const colWidth = this.currentlyDragging.initialCols[1] - this.currentlyDragging.initialCols[0];
 			const rowHeight = this.currentlyDragging.initialRows[1] - this.currentlyDragging.initialRows[0];
 
@@ -218,7 +236,7 @@ export default {
 
 			this.checkCenter(col, row);
 
-			this.$store.commit('setGridPosition', {index, row, col});
+			this.$store.commit('setGridPosition', {name, row, col});
 		},
 		calcNewWidgetPosition() {
 			const colChange = Math.round(this.rectXMoveDifference / this.gridColumnWidth);
@@ -250,7 +268,7 @@ export default {
 		},
 		rowOrColChanged(newValue, oldValue) {
 			if (this.currentlyDragging.index != null && newValue != null && newValue !== oldValue) {
-				this.setNewWidgetPosition(this.currentlyDragging.colChange, this.currentlyDragging.rowChange, this.currentlyDragging.index);
+				this.setNewWidgetPosition(this.currentlyDragging.colChange, this.currentlyDragging.rowChange, this.currentlyDraggingName);
 			}
 		}
 	},
@@ -320,13 +338,13 @@ export default {
 	margin: auto;
 }
 
-.dnd .widget {
+.dnd .widget.draggable {
 	box-shadow: 0 0 2px 5px rgba(255,255,255,0.3);
 	transition: box-shadow .2s ease, background-color .5s ease;
 	cursor:move!important;
 }
 
-.dnd .widget:hover {
+.dnd .widget.draggable:hover {
 	box-shadow: 0 0 5px 5px rgba(60, 154, 255, 0.904);
 	background-color: rgba(50, 100, 200, 0.1);
 }
@@ -336,7 +354,7 @@ export default {
 	opacity: 1;
 }
 
-.dnd .widget * {
+.dnd .widget.draggable * {
 	cursor: move!important;
 }
 

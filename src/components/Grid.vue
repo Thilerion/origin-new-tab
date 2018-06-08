@@ -49,47 +49,47 @@ export default {
 				{
 					component: 'StartGreeting',
 					name: 'greeting',
-					row: [7, 14],
-					column: [4, 8]
+					row: [8, 13],
+					column: [14, 28]
 				},
 				{
 					component: 'StartWallpaperDetails',
 					name: 'wallpaperDetails',
 					row: [19, 21],
-					column: [1, 5]
+					column: [1, 12]
 				},
 				{
 					component: 'StartQuote',
 					name: 'quote',
 					row: [3, 5],
-					column: [3, 9]
+					column: [14, 28]
 				},
 				{
 					component: 'StartWeather',
 					name: 'weather',
 					row: [1, 6],
-					column: [9, 11]
+					column: [37, 41]
 				},
 				{
 					component: 'StartNews',
 					name: 'news',
 					row: [1, 3],
-					column: [3, 9]
+					column: [14, 28]
 				},
 				{
 					component: 'StartSettingsButton',
 					name: 'settingsButton',
 					row: [20, 21],
-					column: [10, 11]
+					column: [40, 41]
 				},
 				{
 					component: 'StartTopPages',
 					name: 'topPages',
 					row: [15, 20],
-					column: [3, 9]
+					column: [12, 30]
 				}
 			],
-			dndEnabled: true,
+			dndEnabled: false,
 			currentlyDragging: {
 				index: null,
 				name: null,
@@ -191,18 +191,24 @@ export default {
 			// console.log(deepClone(this.currentlyDragging));
 		},
 		dragStart(widgetName, index, e) {
+			if (!this.dndEnabled) return;
+
 			const rectCoords = e.currentTarget.getBoundingClientRect();
 			const startX = e.clientX;
 			const startY = e.clientY;
 			this.setCurrentlyDragging(widgetName, index, rectCoords.x, rectCoords.y, startX, startY);
 		},
 		dragging(widgetName, index, e) {
+			if (!this.dndEnabled) return;
+			
 			const coords = e.currentTarget.getBoundingClientRect();
 			if (e.x === 0 && e.y === 0) return;
 			this.setDragPosition(e.clientX, e.clientY);
 			this.calcNewWidgetPosition();		
 		},
 		dragEnd(widgetName, index, e) {
+			if (!this.dndEnabled) return;
+
 			console.warn(`Stopped dragging ${widgetName}`);
 			console.log(this.rectXMoveDifference, this.gridColumnWidth, Math.round(this.rectXMoveDifference / this.gridColumnWidth));
 			this.calcNewWidgetPosition();
@@ -280,7 +286,7 @@ export default {
 
 <style>
 .grid {
-	--cols: 10;
+	--cols: 40;
 	--rows: 20;
 }
 
@@ -294,7 +300,6 @@ export default {
 	align-items: center;
 	justify-items: center;
 	padding: .75em .5em;
-	grid-row-gap: 1rem;
 }
 
 .widget-no-select {
@@ -306,21 +311,21 @@ export default {
 	position: relative;
 }
 
-.widget::before {
-	visibility: hidden;
-	position: absolute;
-	content: "";
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	background-color: rgba(50, 100, 200, 0);
-	transition: background-color 0.5s ease, visibility 0.5s ease;
-}
-
 .widget.dnd {
 	box-shadow: 0 0 5px 5px rgba(255,255,255,0.5);
 	cursor:move!important;
+}
+
+.widget::before {
+	visibility: hidden;
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: transparent;
+	transition: visibility 0.5s ease, background-color 0.5s ease;
 }
 
 .is-dragged.widget::before {

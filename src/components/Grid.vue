@@ -1,8 +1,9 @@
 <template>
 	<div class="grid" ref="grid" :class="{'dnd': dndEnabled}">
 		<div class="grid-lines" v-if="dndEnabled">
-			<span class="grid-lines-cell" v-for="box in (gridRows * gridCols)" :key="box">
-			</span>
+			<div class="grid-lines-cell" v-for="box in (gridRows * gridCols)" :key="box"></div>
+			<div class="grid-align hor" v-show="showHor"></div>
+			<div class="grid-align ver" v-show="showVer"></div>
 		</div>
 		<WidgetFadeIn
 			v-for="(widget, index) of grid"
@@ -53,14 +54,14 @@ export default {
 				{
 					component: 'StartGreeting',
 					name: 'greeting',
-					row: [8, 13],
-					column: [14, 28]
+					row: [8, 14],
+					column: [11, 31]
 				},
 				{
 					component: 'StartWallpaperDetails',
 					name: 'wallpaperDetails',
 					row: [19, 21],
-					column: [1, 12]
+					column: [1, 13]
 				},
 				{
 					component: 'StartQuote',
@@ -72,7 +73,7 @@ export default {
 					component: 'StartWeather',
 					name: 'weather',
 					row: [1, 6],
-					column: [37, 41]
+					column: [35, 41]
 				},
 				{
 					component: 'StartNews',
@@ -89,16 +90,13 @@ export default {
 				{
 					component: 'StartTopPages',
 					name: 'topPages',
-					row: [15, 20],
+					row: [14, 20],
 					column: [11, 31]
 				}
 			],
 			dndEnabled: false,
 			currentlyDragging: {
 				index: null,
-				name: null,
-				startRectX: null,
-				startRectY: null,
 				startX: null,
 				startY: null,
 				currentX: null,
@@ -106,7 +104,9 @@ export default {
 				initialRows: [0, 0],
 				initialCols: [0, 0],
 				rowChange: 0,
-				colChange: 0
+				colChange: 0,
+				isCenterVertical: false,
+				isCenterHorizontal: false
 			},
 			windowWidth: window.innerWidth,
 			windowHeight: window.innerHeight,
@@ -150,6 +150,12 @@ export default {
 		},
 		colChange() {
 			return this.currentlyDragging.colChange;
+		},
+		showHor() {
+			return this.currentlyDragging.isCenterHorizontal;
+		},
+		showVer() {
+			return this.currentlyDragging.isCenterVertical;
 		}
 	},
 	methods: {
@@ -168,12 +174,9 @@ export default {
 				e.stopPropagation();
 			}
 		},
-		setCurrentlyDragging(name = null, index = null, startRectX = null, startRectY = null, startX = null, startY = null) {
+		setCurrentlyDragging(index = null, startX = null, startY = null) {
 			const newCurrentlyDragging = {
-				name,
 				index,
-				startRectX,
-				startRectY,
 				startX,
 				startY,
 				currentX: startX,
@@ -181,45 +184,39 @@ export default {
 				initialRows: [0, 0],
 				initialCols: [0, 0],
 				rowChange: 0,
-				colChange: 0
+				colChange: 0,
+				isCenterVertical: false,
+				isCenterHorizontal: false
 			}
 			if (index !== null) {
 				newCurrentlyDragging.initialRows = [...this.grid[index].row];
 				newCurrentlyDragging.initialCols = [...this.grid[index].column];
 			}
+			
 			this.currentlyDragging = {...newCurrentlyDragging};
-		},
-		setDragPosition(currentX, currentY) {
-			// console.log(deepClone(this.currentlyDragging));
-			this.currentlyDragging = {...this.currentlyDragging, currentX, currentY};
-			// console.log(deepClone(this.currentlyDragging));
+			this.checkCenter(newCurrentlyDragging.initialCols, newCurrentlyDragging.initialRows);
 		},
 		dragStart(widgetName, index, e) {
 			if (!this.dndEnabled) return;
 
-			const rectCoords = e.currentTarget.getBoundingClientRect();
 			const startX = e.clientX;
 			const startY = e.clientY;
 
 			let el = document.createElement('div');
-			e.dataTransfer.setDragImage(el, 0, 0);
-			
+			e.dataTransfer.setDragImage(el, 0, 0);			
 
-			this.setCurrentlyDragging(widgetName, index, rectCoords.x, rectCoords.y, startX, startY);
+			this.setCurrentlyDragging(index, startX, startY);
 		},
 		dragging(widgetName, index, e) {
 			if (!this.dndEnabled) return;
 			
-			const coords = e.currentTarget.getBoundingClientRect();
 			if (e.x === 0 && e.y === 0) return;
-			this.setDragPosition(e.clientX, e.clientY);
+			this.currentlyDragging = {...this.currentlyDragging, currentX: e.clientX, currentY: e.clientY};
 			this.calcNewWidgetPosition();		
 		},
 		dragEnd(widgetName, index, e) {
 			if (!this.dndEnabled) return;
 
-			console.warn(`Stopped dragging ${widgetName}`);
-			console.log(this.rectXMoveDifference, this.gridColumnWidth, Math.round(this.rectXMoveDifference / this.gridColumnWidth));
 			this.calcNewWidgetPosition();
 			this.setCurrentlyDragging();
 		},
@@ -228,8 +225,6 @@ export default {
 			const rowHeight = this.currentlyDragging.initialRows[1] - this.currentlyDragging.initialRows[0];
 
 			let newColStart, newColEnd, newRowStart, newRowEnd;
-
-
 
 			if (colChange === 0) {
 				newColStart = this.currentlyDragging.initialCols[0];
@@ -256,33 +251,51 @@ export default {
 			const col = [newColStart, newColEnd];
 			const row = [newRowStart, newRowEnd];
 
+			this.checkCenter(col, row);
+
 			this.grid[index].column = [...col];
 			this.grid[index].row = [...row];
 		},
 		calcNewWidgetPosition() {
 			const colChange = Math.round(this.rectXMoveDifference / this.gridColumnWidth);
 			const rowChange = Math.round(this.rectYMoveDifference / this.gridRowHeight);
-			const index = this.currentlyDragging.index;
 
 			this.currentlyDragging.rowChange = rowChange;
 			this.currentlyDragging.colChange = colChange;
+		},
+		checkCenter(widgetCols, widgetRows) {
+			let cols = this.gridCols;
+			let rows = this.gridRows;
+
+			let fromLeft = widgetCols[0] - 1;
+			let toRight = (cols + 1) - widgetCols[1];
+			let horizontal = fromLeft === toRight;
+
+			let fromTop = widgetRows[0] - 1;
+			let toBottom = (rows + 1) - widgetRows[1];
+			let vertical = fromTop === toBottom;
+
+			console.log(horizontal, vertical);
+			this.currentlyDragging.isCenterVertical = vertical;
+			this.currentlyDragging.isCenterHorizontal = horizontal;
 		},
 		getCSSGridVariables() {
 			const el = this.$refs.grid;
 			this.gridCols = parseInt(getComputedStyle(el).getPropertyValue('--cols'));
 			this.gridRows = parseInt(getComputedStyle(el).getPropertyValue('--rows'));
+		},
+		rowOrColChanged(newValue, oldValue) {
+			if (this.currentlyDragging.index != null && newValue != null && newValue !== oldValue) {
+				this.setNewWidgetPosition(this.currentlyDragging.colChange, this.currentlyDragging.rowChange, this.currentlyDragging.index);
+			}
 		}
 	},
 	watch: {
 		rowChange(newValue, oldValue) {
-			if (this.currentlyDragging.index != null && newValue != null && newValue !== oldValue) {
-				this.setNewWidgetPosition(this.currentlyDragging.colChange, this.currentlyDragging.rowChange, this.currentlyDragging.index);
-			}
+			this.rowOrColChanged(newValue, oldValue);
 		},
 		colChange(newValue, oldValue) {
-			if (this.currentlyDragging.index != null && newValue != null && newValue !== oldValue) {
-				this.setNewWidgetPosition(this.currentlyDragging.colChange, this.currentlyDragging.rowChange, this.currentlyDragging.index);
-			}
+			this.rowOrColChanged(newValue, oldValue);
 		}
 	},
 	beforeMount() {
@@ -361,5 +374,24 @@ export default {
 
 .dnd .widget * {
 	cursor: move!important;
+}
+
+.grid-align {
+	position: absolute;
+	background: rgba(0, 255, 179, 0.774);
+}
+
+.grid-align.hor {
+	width: 4px;
+	height: 100%;
+	top: 0;
+	left: calc(50% - 2px);
+}
+
+.grid-align.ver {
+	height: 4px;
+	width: 100%;
+	left: 0;
+	top: calc(50% - 2px);
 }
 </style>

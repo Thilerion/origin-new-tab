@@ -93,12 +93,13 @@ export default {
 
 <style scoped>
 .widget-greeting {
+	font-size: 100%;
 	align-self: center;
-	min-width: 25rem;
+	min-width: 25em;
 }
 
 .time {
-	font-size: 8rem;
+	font-size: 8em;
 }
 
 .username {
@@ -106,7 +107,7 @@ export default {
 }
 
 .message {
-	font-size: 3.5rem;
+	font-size: 3.5em;
 	position: relative;
 }
 
@@ -122,7 +123,8 @@ export default {
 
 .username-input {
 	padding: 1rem;
-	font-size: 2rem;
+	font-size: 0.75em;
+	width: 10em;
 	vertical-align: middle;
 	background: none;
 	border: none;

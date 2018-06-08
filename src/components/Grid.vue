@@ -1,5 +1,9 @@
 <template>
-	<div class="grid" ref="grid">
+	<div class="grid" ref="grid" :class="{'dnd': dndEnabled}">
+		<div class="grid-lines" v-if="dndEnabled">
+			<span class="grid-lines-cell" v-for="box in (gridRows * gridCols)" :key="box">
+			</span>
+		</div>
 		<WidgetFadeIn
 			v-for="(widget, index) of grid"
 			:key="widget.name"
@@ -9,7 +13,7 @@
 			:style="widgetGridPlacement[index]"
 			class="widget"
 			v-if="isWidgetActive(widget.name)"
-			:class="{'dnd': dndEnabled, 'is-dragged': currentlyDragging.index === index}"
+			:class="{'is-dragged': currentlyDragging.index === index}"
 			@click.native="widgetClicked"
 			:draggable="dndEnabled"
 			@drag.native="dragging(widget.name, index, $event)"
@@ -302,6 +306,23 @@ export default {
 	padding: .75em .5em;
 }
 
+.grid-lines {
+	display: grid;
+	grid-template-columns: repeat(var(--cols), 1fr);
+	grid-template-rows: repeat(var(--rows), 1fr);
+	justify-items: stretch;
+	position: absolute;
+	top: 0; right: 0; bottom: 0; left: 0;
+	margin: calc(.75em - 3px) calc(.5em - 3px);
+	border: 2px solid rgba(200, 227, 255, 0.2);
+}
+
+.grid-lines-cell {
+	display: block;
+	width: 100%;
+	border: 1px solid rgba(200, 227, 255, 0.2);
+}
+
 .widget-no-select {
 	user-select: none;
 }
@@ -310,10 +331,14 @@ export default {
 	position: relative;
 }
 
-.widget.dnd {
+.dnd .widget {
 	position: relative;
-	box-shadow: 0 0 5px 5px rgba(255,255,255,0.5);
+	box-shadow: 0 0 2px 5px rgba(255,255,255,0.3);
 	cursor:move!important;
+}
+
+.dnd .widget:hover {
+	box-shadow: 0 0 5px 5px rgba(60, 154, 255, 0.904);
 }
 
 .widget::before {
@@ -339,7 +364,7 @@ export default {
 	right: 3em;
 }
 
-.dnd * {
+.dnd .widget * {
 	cursor: move!important;
 }
 </style>

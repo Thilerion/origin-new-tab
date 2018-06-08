@@ -85,17 +85,14 @@ export default {
 			}
 		},
 		setHoverGradient(index, e) {
-			console.log(" HOVERING ");
-			const item = this.$refs.linkItem[index];
 			/* SOURCE
 			https://github.com/atomiks/30-seconds-of-css/blob/master/snippets/mouse-cursor-gradient-tracking.md
 			*/
-			const coords = e.currentTarget.getBoundingClientRect();
-
+			const item = this.$refs.linkItem[index];
+			
 			const x = e.pageX - e.currentTarget.offsetLeft - e.currentTarget.offsetParent.offsetLeft;
 			const y = e.pageY - e.currentTarget.offsetTop - e.currentTarget.offsetParent.offsetTop;
 
-			console.log(x, y);
 			item.style.setProperty('--x', `${x}px`);
 			item.style.setProperty('--y', `${y}px`);
 		}

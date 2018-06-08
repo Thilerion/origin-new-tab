@@ -200,6 +200,11 @@ export default {
 			const rectCoords = e.currentTarget.getBoundingClientRect();
 			const startX = e.clientX;
 			const startY = e.clientY;
+
+			let el = document.createElement('div');
+			e.dataTransfer.setDragImage(el, 0, 0);
+			
+
 			this.setCurrentlyDragging(widgetName, index, rectCoords.x, rectCoords.y, startX, startY);
 		},
 		dragging(widgetName, index, e) {
@@ -334,28 +339,18 @@ export default {
 .dnd .widget {
 	position: relative;
 	box-shadow: 0 0 2px 5px rgba(255,255,255,0.3);
+	transition: box-shadow .2s ease, background-color .5s ease;
 	cursor:move!important;
 }
 
 .dnd .widget:hover {
 	box-shadow: 0 0 5px 5px rgba(60, 154, 255, 0.904);
+	background-color: rgba(50, 100, 200, 0.1);
 }
 
-.widget::before {
-	visibility: hidden;
-	content: "";
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background-color: transparent;
-	transition: visibility 0.5s ease, background-color 0.5s ease;
-}
-
-.is-dragged.widget::before {
-	visibility: visible;
-	background-color: rgba(50, 100, 200, 0.4);
+.dnd .is-dragged.widget {
+	background-color: rgba(50, 100, 200, 0.6);
+	opacity: 1;
 }
 
 .enable-dnd-btn {

@@ -10,43 +10,50 @@ const defaultSettings = {
 				name: 'greeting',
 				active: true,
 				row: [8, 14],
-				column: [9, 33]
+				column: [9, 33],
+				fontSize: 1
 			},
 			{ 
 				name: 'news',
 				active: true,
 				row: [1, 3],
-				column: [11, 31]
+				column: [11, 31],
+				fontSize: 1
 			},
 			{ 
 				name: 'quote',
 				active: true,
 				row: [3, 5],
-				column: [11, 31]
+				column: [11, 31],
+				fontSize: 1
 			},
 			{ 
 				name: 'weather',
 				active: true,
 				row: [1, 6],
-				column: [35, 41]
+				column: [35, 41],
+				fontSize: 1
 			},
 			{ 
 				name: 'topPages',
 				active: true,
 				row: [15, 20],
-				column: [11, 31]
+				column: [11, 31],
+				fontSize: 1
 			},
 			{
 				name: 'settingsButton',
 				active: true,
 				row: [20, 21],
-				column: [40, 41]
+				column: [40, 41],
+				fontSize: 1
 			},
 			{
 				name: 'wallpaperDetails',
 				active: true,
 				row: [19, 21],
-				column: [1, 13]
+				column: [1, 13],
+				fontSize: 1
 			}
 		]
 	},

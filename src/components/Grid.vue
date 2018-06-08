@@ -12,7 +12,7 @@
 			<div
 				v-if="draggableWidgets.findIndex(w => w.name === widget.name) > -1"
 				class="widget draggable"
-				:style="widgetGridPlacement[index]"
+				:style="[widgetGridPlacement[index], {'font-size': widget.fontSize ? `calc(${widget.fontSize} * 1rem` : '1rem'}]"
 				:class="{'is-dragged': currentlyDragging.index === index}"
 				@click="widgetClicked"
 				:draggable="dndEnabled"
@@ -24,6 +24,11 @@
 					:is="componentFromName(widget.name)"				
 					class="widget-inner"				
 				/>
+				<div class="widget-font-size" v-if="dndEnabled">
+					Font-size:
+					<button @click="decreaseFont(widget.name)">-</button>
+					<button @click="increaseFont(widget.name)">+</button>
+				</div>
 			</div>
 			<div
 				v-else
@@ -270,6 +275,14 @@ export default {
 			if (this.currentlyDragging.index != null && newValue != null && newValue !== oldValue) {
 				this.setNewWidgetPosition(this.currentlyDragging.colChange, this.currentlyDragging.rowChange, this.currentlyDraggingName);
 			}
+		},
+		increaseFont(name) {
+			console.log("Increase", name);
+			this.$store.commit('increaseFontSize', name);
+		},
+		decreaseFont(name) {
+			console.log("Decrease", name);
+			this.$store.commit('decreaseFontSize', name);
 		}
 	},
 	watch: {
@@ -382,5 +395,19 @@ export default {
 	right: 5px;
 	bottom: 5px;
 	border: none!important;
+}
+
+.widget-font-size {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 4rem;
+	height: auto;
+	padding-bottom: 4px;
+	background: white;
+	color: black;
+	border-bottom-left-radius: 4px;
+	font-size: 11px;
+	text-align: center;
 }
 </style>

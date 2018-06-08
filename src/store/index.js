@@ -72,6 +72,18 @@ const store = new Vuex.Store({
 			const index = state.user.widgets.findIndex(w => w.name === name);
 			state.user.widgets[index].row = [...row];
 			state.user.widgets[index].column = [...col];
+		},
+		increaseFontSize(state, name) {
+			const index = state.user.widgets.findIndex(w => w.name === name);
+			if (state.user.widgets[index].fontSize != null) {
+				state.user.widgets[index].fontSize += 0.1;
+			}
+		},
+		decreaseFontSize(state, name) {
+			const index = state.user.widgets.findIndex(w => w.name === name);
+			if (state.user.widgets[index].fontSize != null) {
+				state.user.widgets[index].fontSize -= 0.1;
+			}
 		}
 	},
 

@@ -6,8 +6,8 @@ const settingsStore = {
 
 	getters: {
 		currentSettings(state, getters) {
-			let activeWidgetsStore = getters.activeWidgets;
-			let copiedWidgets = [...activeWidgetsStore].map(w => {
+			let widgetsStore = getters.widgets;
+			let copiedWidgets = [...widgetsStore].map(w => {
 				return { ...w };
 			})
 			return {
@@ -16,7 +16,7 @@ const settingsStore = {
 				fontSize: getters.fontSize,
 				wallpaperCollection: getters.wallpaperCollection,
 				quoteCategory: getters.quoteCategory,
-				activeWidgets: copiedWidgets,
+				widgets: copiedWidgets,
 				wallpaperCycleTimeout: getters.wallpaperCycleTimeout
 			}
 		},
@@ -32,13 +32,13 @@ const settingsStore = {
 	},
 
 	actions: {
-		saveSettings({ commit, dispatch }, { name, language, fontSize, wallpaperCollection, quoteCategory, activeWidgets, wallpaperCycleTimeout }) {
+		saveSettings({ commit, dispatch }, { name, language, fontSize, wallpaperCollection, quoteCategory, widgets, wallpaperCycleTimeout }) {
 			if (name) commit('setUsername', name);			
 			if (language) commit('setLanguage', language);
 			if (fontSize !== undefined) commit('setFontSize', fontSize);
 			if (wallpaperCollection) dispatch('setWallpaperCollection', wallpaperCollection);
 			if (quoteCategory) commit('setQuoteCategory', quoteCategory);
-			if (activeWidgets) commit('setActiveWidgets', activeWidgets);
+			if (widgets) commit('setWidgets', widgets);
 			if (wallpaperCycleTimeout) commit('setWallpaperCycleTimeout', wallpaperCycleTimeout);
 		}
 	}

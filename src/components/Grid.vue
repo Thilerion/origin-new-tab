@@ -75,10 +75,10 @@ export default {
 	},
 	computed: {
 		widgetNames() {
-			return settingsOptions.user.activeWidgets.canBeMoved;
+			return settingsOptions.user.widgets.canBeMoved;
 		},
 		widgets() {
-			return this.$store.getters.activeWidgets;
+			return this.$store.getters.widgets;
 		},
 		widgetGridPlacement() {
 			return this.widgets.map(val => {
@@ -125,7 +125,7 @@ export default {
 			return `Start${name.charAt(0).toUpperCase()}${name.slice(1)}`;
 		},
 		isWidgetActive(name) {
-			const canBeDisabled = settingsOptions.user.activeWidgets.canBeDisabled;
+			const canBeDisabled = settingsOptions.user.widgets.canBeDisabled;
 
 			if (canBeDisabled.includes(name)) {
 				return this.widgets.find(w => w.name === name).active;

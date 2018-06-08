@@ -5,7 +5,7 @@ const defaultSettings = {
 		language: "nl",
 		// range: 10-20, or null (which resets to 100% in base css file)
 		fontSize: null,
-		activeWidgets: [
+		widgets: [
 			{ 
 				name: 'greeting',
 				active: true,
@@ -71,9 +71,11 @@ const settingsOptions = {
 			min: 10,
 			max: 22
 		},
-		activeWidgets: {
+		widgets: {
 			canBeDisabled: ['greeting', 'news', 'quote', 'weather', 'topPages'],
-			canBeMoved: ['greeting', 'news', 'quote', 'weather', 'topPages', 'settingsButton', 'wallpaperDetails']
+			canBeMoved: ['greeting', 'news', 'quote', 'weather', 'topPages', 'wallpaperDetails'],
+			displayInGrid: ['greeting', 'news', 'quote', 'weather', 'topPages', 'settingsButton', 'wallpaperDetails'],
+			haveStorageModule: ['user', 'news', 'quote', 'weather', 'wallpaper']
 		}
 	},
 	wallpaper: {

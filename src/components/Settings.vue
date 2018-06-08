@@ -85,7 +85,7 @@ export default {
 				fontSize: "",
 				wallpaperCollection: "",
 				quoteCategory: "",
-				activeWidgets: "",
+				widgets: "",
 				wallpaperCycleTimeout: ""
 			},
 			initialSettings: {
@@ -94,7 +94,7 @@ export default {
 				fontSize: "",
 				wallpaperCollection: "",
 				quoteCategory: "",
-				activeWidgets: "",
+				widgets: "",
 				wallpaperCycleTimeout: ""
 			},
 			settingsOptions: {...settingsOptions}
@@ -109,10 +109,10 @@ export default {
 			return isDefault;
 		},
 		widgetsCanBeDisabled() {
-			let cur = [...this.currentSettings.activeWidgets];
+			let cur = [...this.currentSettings.widgets];
 			console.log(cur);
 			return cur.filter(w => {
-				return this.settingsOptions.user.activeWidgets.canBeDisabled.includes(w.name);
+				return this.settingsOptions.user.widgets.canBeDisabled.includes(w.name);
 			});
 		}
 	},

@@ -14,21 +14,13 @@ import createPersistedState from './utils/persist';
 import widgetsApi from './api/index';
 const userApi = widgetsApi.user;
 
-import { defaultSettings } from './defaultUserSettings';
+import { defaultSettings, settingsOptions } from './defaultUserSettings';
 import { deepClone, deepMergeArray } from '../utils/deepObject';
-
-const widgetsList = [
-	'user',
-	'wallpaper',
-	'quote',
-	'weather',
-	'news'
-]
 
 const store = new Vuex.Store({
 	strict: process.env.NODE_ENV !== 'development',
 
-	plugins: [createPersistedState('sp_', widgetsList)],
+	plugins: [createPersistedState('sp_', settingsOptions.user.widgets.haveStorageModule)],
 
 	modules: {
 		Wallpaper,
@@ -44,10 +36,9 @@ const store = new Vuex.Store({
 			language: defaultSettings.user.language,
 			username: defaultSettings.user.name,
 			fontSize: defaultSettings.user.fontSize,
-			activeWidgets: defaultSettings.user.activeWidgets
+			widgets: defaultSettings.user.widgets
 		},
 		editingUsername: false,
-		widgets: widgetsList,
 		showSettings: false
 	},
 
@@ -59,8 +50,7 @@ const store = new Vuex.Store({
 		isEditingUsername(state) {
 			return state.editingUsername || !state.user.username;
 		},
-		widgets: state => state.widgets,
-		activeWidgets: state => state.user.activeWidgets,
+		widgets: state => state.user.widgets,
 		showSettings: state => state.showSettings
 	},
 
@@ -72,17 +62,15 @@ const store = new Vuex.Store({
 		},
 		setLanguage: (state, language) => state.user.language = language,
 		setFontSize: (state, fontSize) => state.user.fontSize = fontSize,
-		setActiveWidgets: (state, widgets) => state.user.activeWidgets = [...widgets],
+		setWidgets: (state, widgets) => state.user.widgets = [...widgets],
 		setEditingUsername: (state, bool) => state.editingUsername = !!bool,
 		toggleSettings(state, bool) {
 			if (bool) state.showSettings = bool;
 			else state.showSettings = !state.showSettings;
 		},
 		setGridPosition(state, { index, row, col }) {
-			//let index = state.user.activeWidgets.findIndex(w => w.name === name);
-
-			state.user.activeWidgets[index].row = [...row];
-			state.user.activeWidgets[index].column = [...col];
+			state.user.widgets[index].row = [...row];
+			state.user.widgets[index].column = [...col];
 		}
 	},
 
@@ -91,16 +79,16 @@ const store = new Vuex.Store({
 			commit('setLanguage', 'nl');
 			commit('setFontSize', null);
 			commit('setEditingUsername', true);
-			commit('setActiveWidgets', defaultSettings.user.activeWidgets);
+			commit('setWidgets', defaultSettings.user.widgets);
 		},
-		userSetFromStorage({ commit }, { username = "", language = "", fontSize = null, activeWidgets = defaultSettings.user.activeWidgets }) {
+		userSetFromStorage({ commit }, { username = "", language = "", fontSize = null, widgets = defaultSettings.user.widgets }) {
 			commit('setUsername', username);
 			commit('setLanguage', language);
 			commit('setFontSize', fontSize);
-			const mergedActiveWidgets = deepMergeArray(
-				deepClone(defaultSettings.user.activeWidgets),
-				deepClone(activeWidgets));
-			commit('setActiveWidgets', mergedActiveWidgets);
+			const mergedWidgets = deepMergeArray(
+				deepClone(defaultSettings.user.widgets),
+				deepClone(widgets));
+			commit('setWidgets', mergedWidgets);
 		}
 	}
 

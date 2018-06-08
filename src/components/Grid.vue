@@ -174,10 +174,14 @@ export default {
 				startY,
 				currentX: startX,
 				currentY: startY,
-				initialRows: [...this.grid[index].row],
-				initialCols: [...this.grid[index].column],
+				initialRows: [0, 0],
+				initialCols: [0, 0],
 				rowChange: 0,
 				colChange: 0
+			}
+			if (index !== null) {
+				newCurrentlyDragging.initialRows = [...this.grid[index].row];
+				newCurrentlyDragging.initialCols = [...this.grid[index].column];
 			}
 			this.currentlyDragging = {...newCurrentlyDragging};
 		},
@@ -196,9 +200,7 @@ export default {
 			const coords = e.currentTarget.getBoundingClientRect();
 			if (e.x === 0 && e.y === 0) return;
 			this.setDragPosition(e.clientX, e.clientY);
-			setTimeout(() => {
-				this.calcNewWidgetPosition();
-			}, 0);			
+			this.calcNewWidgetPosition();		
 		},
 		dragEnd(widgetName, index, e) {
 			console.warn(`Stopped dragging ${widgetName}`);
@@ -207,7 +209,26 @@ export default {
 			this.setCurrentlyDragging();
 		},
 		setNewWidgetPosition(colChange, rowChange, index) {
-			const col = [...this.currentlyDragging.initialCols].map(c => c + colChange);
+			const colWidth = this.currentlyDragging.initialCols[1] - this.currentlyDragging.initialCols[0];
+			const rowWidth = this.currentlyDragging.initialRows[1] - this.currentlyDragging.initialRows[0];
+
+			let newColStart, newColEnd;
+
+
+
+			if (colChange === 0) {
+				newColStart = this.currentlyDragging.initialCols[0];
+				newColEnd = this.currentlyDragging.initialCols[1];
+			} else if (colChange < 0) {
+				newColStart = Math.max(this.currentlyDragging.initialCols[0] + colChange, 1);
+				newColEnd = newColStart + colWidth;
+			} else if (colChange > 0) {
+				newColEnd = Math.min(this.currentlyDragging.initialCols[1] + colChange, this.gridCols + 1);
+				newColStart = newColEnd - colWidth;
+			}
+			
+
+			const col = [newColStart, newColEnd];
 			const row = [...this.currentlyDragging.initialRows].map(r => r + rowChange);
 
 			this.grid[index].column = [...col];
@@ -224,25 +245,28 @@ export default {
 			const maxColChange = (this.gridCols + 1 - colEnd);
 			const minColChange = (1 - colStart);
 
-			let newColChange = 0;
-			if (colChange >= maxColChange) {
-				newColChange = maxColChange;
-			} else if (colChange <= minColChange) {
-				newColChange = minColChange;
-			} else {
-				newColChange = colChange;
-			}
+			// let newColChange = 0;
+			// if (colChange >= maxColChange) {
+			// 	newColChange = maxColChange;
+			// } else if (colChange <= minColChange) {
+			// 	newColChange = minColChange;
+			// } else {
+			// 	newColChange = colChange;
+			// }
 
-			const maxRowChange = (this.gridRows + 1 - rowEnd);
-			const minRowchange = (1 - rowStart);
-			let newRowChange = 0;
-			if (rowChange >= maxRowChange) {
-				newRowChange = maxRowChange;
-			} else if (rowChange <= minRowchange) {
-				newRowChange = minRowchange;
-			} else {
-				newRowChange = rowChange;
-			}
+			// const maxRowChange = (this.gridRows + 1 - rowEnd);
+			// const minRowchange = (1 - rowStart);
+			// let newRowChange = 0;
+			// if (rowChange >= maxRowChange) {
+			// 	newRowChange = maxRowChange;
+			// } else if (rowChange <= minRowchange) {
+			// 	newRowChange = minRowchange;
+			// } else {
+			// 	newRowChange = rowChange;
+			// }
+			
+			let newColChange = colChange;
+			let newRowChange = rowChange;
 
 			console.log(newColChange, newRowChange);
 
@@ -252,12 +276,12 @@ export default {
 	},
 	watch: {
 		rowChange(newValue, oldValue) {
-			if (newValue != null && newValue !== oldValue) {
+			if (this.currentlyDragging.index != null && newValue != null && newValue !== oldValue) {
 				this.setNewWidgetPosition(this.currentlyDragging.colChange, this.currentlyDragging.rowChange, this.currentlyDragging.index);
 			}
 		},
 		colChange(newValue, oldValue) {
-			if (newValue != null && newValue !== oldValue) {
+			if (this.currentlyDragging.index != null && newValue != null && newValue !== oldValue) {
 				this.setNewWidgetPosition(this.currentlyDragging.colChange, this.currentlyDragging.rowChange, this.currentlyDragging.index);
 			}
 		}

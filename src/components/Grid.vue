@@ -223,7 +223,7 @@ export default {
 				newColStart = Math.max(this.currentlyDragging.initialCols[0] + colChange, 1);
 				newColEnd = newColStart + colWidth;
 			} else if (colChange > 0) {
-				newColEnd = Math.min(this.currentlyDragging.initialCols[1] + colChange, this.gridCols + 1);
+				newColEnd = Math.min(this.currentlyDragging.initialCols[1] + colChange, (this.gridCols + 1));
 				newColStart = newColEnd - colWidth;
 			}
 
@@ -254,8 +254,8 @@ export default {
 		},
 		getCSSGridVariables() {
 			const el = this.$refs.grid;
-			this.gridCols = getComputedStyle(el).getPropertyValue('--cols');
-			this.gridRows = getComputedStyle(el).getPropertyValue('--rows');
+			this.gridCols = parseInt(getComputedStyle(el).getPropertyValue('--cols'));
+			this.gridRows = parseInt(getComputedStyle(el).getPropertyValue('--rows'));
 		}
 	},
 	watch: {
@@ -303,12 +303,11 @@ export default {
 
 .widget {
 	box-shadow: 0 0 5px 5px rgba(255,255,255,0.1);
-	align-self: stretch!important;
-	justify-self: stretch!important;
 	position: relative;
 }
 
-.widget::after {
+.widget::before {
+	visibility: hidden;
 	position: absolute;
 	content: "";
 	left: 0;
@@ -316,7 +315,7 @@ export default {
 	top: 0;
 	bottom: 0;
 	background-color: rgba(50, 100, 200, 0);
-	transition: background-color 0.5s ease;
+	transition: background-color 0.5s ease, visibility 0.5s ease;
 }
 
 .widget.dnd {
@@ -324,8 +323,8 @@ export default {
 	cursor:move!important;
 }
 
-.is-dragged.widget::after {
-
+.is-dragged.widget::before {
+	visibility: visible;
 	background-color: rgba(50, 100, 200, 0.4);
 }
 

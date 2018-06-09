@@ -94,7 +94,6 @@ export default {
 	margin: 0 auto;
 	align-self: start;
 	width: 100%;
-	max-width: 45em;
 	position: relative;
 	display: flex;
 	min-width: 40em;

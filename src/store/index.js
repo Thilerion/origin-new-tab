@@ -84,6 +84,27 @@ const store = new Vuex.Store({
 			if (state.user.widgets[index].fontSize != null) {
 				state.user.widgets[index].fontSize -= 1;
 			}
+		},
+		increaseWidgetWidth(state, {name, gridCols}) {
+			const index = state.user.widgets.findIndex(w => w.name === name);
+			const cols = state.user.widgets[index].column;
+
+			if (cols[0] > 1) cols[0] -= 1;
+			if (cols[1] < gridCols + 1) cols[1] += 1;
+
+			state.user.widgets[index].column = [...cols];
+		},
+		decreaseWidgetWidth(state, {name, gridCols}) {
+			const index = state.user.widgets.findIndex(w => w.name === name);
+			const cols = state.user.widgets[index].column;
+
+			const w = cols[1] - cols[0];
+			if (w <= 5) return;
+
+			cols[0] += 1;
+			cols[1] -= 1;
+
+			state.user.widgets[index].column = [...cols];
 		}
 	},
 

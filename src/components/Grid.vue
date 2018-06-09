@@ -25,8 +25,8 @@
 					class="widget-inner"				
 				/>
 				<div class="widget-font-size" v-if="dndEnabled">
-					<button class="widget-size-btn icon-btn">&#11208;&ndash;&#11207;</button>
-					<button class="widget-size-btn icon-btn">&#11207;&ndash;&#11208;</button>
+					<button class="widget-size-btn icon-btn" @click="decreaseWidgetWidth(widget.name)">&#11208;&ndash;&#11207;</button>
+					<button class="widget-size-btn icon-btn" @click="increaseWidgetWidth(widget.name)">&#11207;&ndash;&#11208;</button>
 					<button class="font-size-btn icon-btn" @click="decreaseFont(widget.name)">T-</button>
 					<button class="font-size-btn icon-btn" @click="increaseFont(widget.name)">T+</button>
 				</div>
@@ -284,6 +284,12 @@ export default {
 		decreaseFont(name) {
 			console.log("Decrease", name);
 			this.$store.commit('decreaseFontSize', name);
+		},
+		increaseWidgetWidth(name) {
+			this.$store.commit('increaseWidgetWidth', {name, gridCols: this.gridCols});
+		},
+		decreaseWidgetWidth(name) {
+			this.$store.commit('decreaseWidgetWidth', {name, gridCols: this.gridCols});
 		}
 	},
 	watch: {

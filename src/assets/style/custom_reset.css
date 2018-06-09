@@ -35,7 +35,7 @@ button {
 	font-family: inherit;
 }
 
-button:not(.icon-btn) {
+button.button {
 	background: hsl(0, 0%, 97%);
 	border: 1px solid hsl(0, 0%, 30%);
 	color: hsl(0, 0%, 25%);
@@ -45,12 +45,12 @@ button:not(.icon-btn) {
 	transition: all 100ms;
 }
 
-button:not(.icon-btn):hover {
+button.button:hover {
 	background: hsl(0, 0%, 25%);
 	color: hsl(0, 0%, 90%);
 }
 
-button:not(.icon-btn):active {
+button.button:active {
 	background: hsl(0, 0%, 35%);
 	color: hsl(0, 0%, 90%);
 }

@@ -25,9 +25,10 @@
 					class="widget-inner"				
 				/>
 				<div class="widget-font-size" v-if="dndEnabled">
-					Font-size:
-					<button @click="decreaseFont(widget.name)">-</button>
-					<button @click="increaseFont(widget.name)">+</button>
+					<button class="widget-size-btn icon-btn">&#11208;&ndash;&#11207;</button>
+					<button class="widget-size-btn icon-btn">&#11207;&ndash;&#11208;</button>
+					<button class="font-size-btn icon-btn" @click="decreaseFont(widget.name)">T-</button>
+					<button class="font-size-btn icon-btn" @click="increaseFont(widget.name)">T+</button>
 				</div>
 			</div>
 			<div
@@ -41,7 +42,7 @@
 				/>
 			</div>
 		</WidgetFadeIn>
-		<button v-if="dndEnabled" class="stop-dnd" @click="$store.commit('toggleDnd')">Klaar</button>
+		<button v-if="dndEnabled" class="stop-dnd" @click="$store.commit('toggleDnd')">✓</button>
 	</div>
 </template>
 
@@ -401,13 +402,36 @@ export default {
 	position: absolute;
 	right: 0;
 	top: 0;
-	width: 4rem;
+	padding: 2px 0.5rem;
 	height: auto;
-	padding-bottom: 4px;
 	background: white;
 	color: black;
 	border-bottom-left-radius: 4px;
 	font-size: 11px;
-	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	opacity: 0.5;
+}
+
+.widget:hover .widget-font-size {
+	opacity: 1;
+}
+
+.icon-btn.font-size-btn, .icon-btn.widget-size-btn {
+	border-radius: 4px;
+	font-size: 14px;
+	margin: 0 0.2em;
+	padding: 0 0.2em;
+}
+
+.font-size-btn:hover, .widget-size-btn:hover {
+	color: white;
+	background: black;
+}
+
+.icon-btn.widget-size-btn {
+	letter-spacing: -5px;
+	padding-right: calc(0.2em + 4px);
 }
 </style>

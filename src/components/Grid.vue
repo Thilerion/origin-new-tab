@@ -327,6 +327,15 @@ export default {
 	grid-row-gap: 0.5rem;
 }
 
+@media only screen and (max-width: 1000px) {
+	.grid {
+		display: flex;
+		max-width: 100%;
+		flex-direction: column;
+		justify-content: space-around;
+	}
+}
+
 .grid-lines {
 	display: grid;
 	grid-template-columns: repeat(var(--cols), 1fr);

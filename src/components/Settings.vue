@@ -153,10 +153,8 @@ export default {
 			this.$store.commit('toggleDnd');
 			this.saveSettings();
 		},
-		googleOAuth: () => {
-			chrome.identity.getAuthToken({interactive: true}, function(token) {
-				console.log(token);
-			});
+		googleOAuth() {
+			this.$store.dispatch('getGoogleAuthToken');
 		}
 	},
 	created() {

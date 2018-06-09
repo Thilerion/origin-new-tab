@@ -54,6 +54,7 @@ import StartWeather from './widgets/Weather.vue';
 import StartNews from './widgets/News.vue';
 import StartSettingsButton from './SettingsButton.vue';
 import StartTopPages from './widgets/TopPages.vue';
+import StartCalendar from './widgets/Calendar.vue';
 
 import {deepClone} from '@/utils/deepObject';
 import {settingsOptions} from '@/store/defaultUserSettings';
@@ -66,7 +67,8 @@ export default {
 		StartWeather,
 		StartNews,
 		StartSettingsButton,
-		StartTopPages
+		StartTopPages,
+		StartCalendar
 	},
 	data() {
 		return {

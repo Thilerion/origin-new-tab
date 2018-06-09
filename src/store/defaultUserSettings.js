@@ -54,6 +54,13 @@ const defaultSettings = {
 				row: [19, 21],
 				column: [1, 13],
 				fontSize: 1
+			},
+			{
+				name: 'calendar',
+				active: true,
+				row: [8, 14],
+				column: [1, 13],
+				fontSize: 1
 			}
 		]
 	},
@@ -79,9 +86,9 @@ const settingsOptions = {
 			max: 22
 		},
 		widgets: {
-			canBeDisabled: ['greeting', 'news', 'quote', 'weather', 'topPages'],
-			canBeMoved: ['greeting', 'news', 'quote', 'weather', 'topPages', 'wallpaperDetails'],
-			displayInGrid: ['greeting', 'news', 'quote', 'weather', 'topPages', 'settingsButton', 'wallpaperDetails'],
+			canBeDisabled: ['greeting', 'news', 'quote', 'weather', 'topPages', 'calendar'],
+			canBeMoved: ['greeting', 'news', 'quote', 'weather', 'topPages', 'wallpaperDetails', 'calendar'],
+			displayInGrid: ['greeting', 'news', 'quote', 'weather', 'topPages', 'settingsButton', 'wallpaperDetails', 'calendar'],
 			haveStorageModule: ['user', 'news', 'quote', 'weather', 'wallpaper']
 		}
 	},

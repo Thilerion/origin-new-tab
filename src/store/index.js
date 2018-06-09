@@ -7,6 +7,7 @@ import Quote from './Quote'
 import Weather from './Weather'
 import News from './News'
 import Settings from './Settings'
+import Calendar from './Calendar'
 
 Vue.use(Vuex)
 
@@ -28,7 +29,8 @@ const store = new Vuex.Store({
 		Quote,
 		Weather,
 		News,
-		Settings
+		Settings,
+		Calendar
 	},
 
 	state: {

@@ -328,7 +328,7 @@ export default {
 }
 
 @media only screen and (max-width: 1000px) {
-	.grid {
+	.grid:not(.dnd) {
 		display: flex;
 		max-width: 100%;
 		flex-direction: column;
@@ -378,7 +378,7 @@ export default {
 	background-color: rgba(50, 100, 200, 0.1);
 }
 
-.dnd .is-dragged.widget {
+.dnd .is-dragged.draggable.widget {
 	background-color: rgba(50, 100, 200, 0.6);
 	opacity: 1;
 }

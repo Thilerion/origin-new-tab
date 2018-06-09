@@ -65,6 +65,7 @@
 						<span class="setting-check-label">{{widget.name}}</span>
 					</div>
 					<button class="toggle-dnd" @click="toggleDnd">Verplaats widgets</button>
+					<button class="toggle-dnd" @click="googleOAuth">Enable Calendar Integration (Google)</button>
 				</div>
 			</div>
 			<button @click="saveSettings" class="save-btn">Opslaan</button>
@@ -151,6 +152,11 @@ export default {
 		toggleDnd() {
 			this.$store.commit('toggleDnd');
 			this.saveSettings();
+		},
+		googleOAuth: () => {
+			chrome.identity.getAuthToken({interactive: true}, function(token) {
+				console.log(token);
+			});
 		}
 	},
 	created() {

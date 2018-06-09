@@ -8,10 +8,15 @@
 		"newtab": "index.html"
 	},
 	"key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApMxI6xum0LaQ1vzQchvzzASO22yYn2IRAn6zpi4S183PnBUK97X6u7Tib4JWIVDhDOkBaT9CR3VUUFkTPzHbavHmmLMB95tBD7rCWvMgPasc8dZGa3DZ+HTUH9zg1Kez6plOBaFe0qxOdsQVwZ6G8tWoSlzIR4jQ3iBAo3Hng8TYJJ6a7cwFlyak+mlZBOhkO4Q6QHZlDK03SxAer2Ya//hrYw7RYYmEFXUyEX2b7VIhX5a4HZd60dCWWvaGyhMpAH46Q1goUbpiQUH8JP9fDzkr+33LVbP5oaGbBSoBejh+/kXwOhQ6juY7pvMuAkSyKm/jmI/i/JLtrIBsV/2r1wIDAQAB",
+	"oauth2": {
+		"client_id": "593414694540-5ik24iuid81d00t82rj5ik3hg9m5mtk6.apps.googleusercontent.com",
+		"scopes": ["https://www.googleapis.com/auth/calendar.readonly"]
+	},
 	"permissions": [
 		"geolocation",
 		"topSites",
 		"storage",
-		"chrome://favicon/"
+		"chrome://favicon/",
+		"identity"
 	]
   }

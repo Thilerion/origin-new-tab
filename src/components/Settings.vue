@@ -154,7 +154,12 @@ export default {
 			this.saveSettings();
 		},
 		googleOAuth() {
-			this.$store.dispatch('getGoogleAuthToken');
+			this.$store.dispatch('getGoogleAuthToken')
+				.then(token => {
+					this.$store.dispatch('getCalendarList');
+				}).catch(err => {
+					console.warn("This is an error handler for the thingie in settings, getting google oauth token.");
+				})
 		}
 	},
 	created() {

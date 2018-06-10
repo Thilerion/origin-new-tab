@@ -75,7 +75,7 @@ const defaultSettings = {
 	quote: {
 		// [motivinspirational, movies, famous]
 		category: "motivinspirational"
-	}	
+	}
 }
 
 const settingsOptions = {
@@ -89,7 +89,7 @@ const settingsOptions = {
 			canBeDisabled: ['greeting', 'news', 'quote', 'weather', 'topPages', 'calendar'],
 			canBeMoved: ['greeting', 'news', 'quote', 'weather', 'topPages', 'wallpaperDetails', 'calendar'],
 			displayInGrid: ['greeting', 'news', 'quote', 'weather', 'topPages', 'settingsButton', 'wallpaperDetails', 'calendar'],
-			haveStorageModule: ['user', 'news', 'quote', 'weather', 'wallpaper']
+			haveStorageModule: ['user', 'news', 'quote', 'weather', 'wallpaper', 'calendar']
 		}
 	},
 	wallpaper: {

@@ -298,6 +298,34 @@ const calendarStore = {
 		},
 		calendarSetFromStorage({commit}, calData) {
 			commit('setHasPermission', calData.permission);
+		},
+		revokeAccessToken({ getters, commit }) {
+			//https://accounts.google.com/o/oauth2/revoke?token={token}
+			//https://developers.google.com/identity/protocols/OAuth2WebServer#tokenrevoke
+			const token = getters.token;
+			if (!token) {
+				console.warn("Can't revoke access if there is no token.");
+				return;
+			}
+
+			console.log("removing cached token.");
+			chrome.identity.removeCachedAuthToken({ token }, (param) => {
+				console.log("token has been revoked");
+			})
+
+			let revoke = axios.get(`https://accounts.google.com/o/oauth2/revoke`, {
+				headers: {
+					'content-type': 'application/x-www-form-urlencoded'
+				},
+				params: {
+					token
+				}
+			}).then(data => {
+				console.log("Access revoked!");
+			}).catch(err => {
+				console.warn("Error in revokeAccessToken action");
+				console.log(err);
+			});			
 		}
 	}
 };

@@ -66,6 +66,7 @@
 					</div>
 					<button class="toggle-dnd" @click="toggleDnd">Verplaats widgets</button>
 					<button class="toggle-dnd" @click="googleOAuth">Enable Calendar Integration (Google)</button>
+					<button class="toggle-dnd" @click="$store.dispatch('revokeAccessToken')">Revoke calendar access</button>
 				</div>
 			</div>
 			<button @click="saveSettings" class="save-btn">Opslaan</button>

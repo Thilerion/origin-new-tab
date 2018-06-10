@@ -17,6 +17,7 @@
 		"topSites",
 		"storage",
 		"chrome://favicon/",
+		"https://*.google.com/*",
 		"identity"
 	]
   }

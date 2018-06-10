@@ -65,6 +65,9 @@ const store = new Vuex.Store({
 		setLanguage: (state, language) => state.user.language = language,
 		setFontSize: (state, fontSize) => state.user.fontSize = fontSize,
 		setWidgets: (state, widgets) => state.user.widgets = [...widgets],
+		setSingleWidgetActive(state, { name, active }) {
+			state.user.widgets.find(w => w.name === name).active = active;
+		},
 		setEditingUsername: (state, bool) => state.editingUsername = !!bool,
 		toggleSettings(state, bool) {
 			if (bool) state.showSettings = bool;
@@ -125,6 +128,9 @@ const store = new Vuex.Store({
 				deepClone(defaultSettings.user.widgets),
 				deepClone(widgets));
 			commit('setWidgets', mergedWidgets);
+		},
+		changeWidgetActive({ commit }, { name, active }) {
+			commit('setSingleWidgetActive', { name, active });			
 		}
 	}
 

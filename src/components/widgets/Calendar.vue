@@ -13,9 +13,14 @@
 
 <script>
 export default {
-	mounted() {
-		//this.$store.dispatch('getCalendarList');
-		this.$store.dispatch('getGoogleAuthTokenSilent');
+	created() {
+		this.$store.dispatch('getGoogleAuthTokenSilent')
+			.then(() => {
+				if (this.$store.getters.permission === false) {
+					this.$store.dispatch('changeWidgetActive', {name: 'calendar', active: false});
+					console.warn("FIRST GIVE PERMISSION BEFORE ACTIVATING THE CALENDAR WIDGET!");
+				}
+			})
 	},
 	computed: {
 		eventsUpcomingWeek() {

@@ -264,7 +264,7 @@ const calendarStore = {
 				commit('setHasPermission', true);
 				dispatch('getGoogleAuthTokenSilent');
 			} else {
-				commit('setPermission', false);
+				commit('setHasPermission', false);
 			}			
 		},
 		getGoogleAuthTokenSilent({commit}) {

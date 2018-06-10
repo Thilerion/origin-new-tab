@@ -18,6 +18,7 @@
 		"storage",
 		"chrome://favicon/",
 		"https://*.google.com/*",
-		"identity"
+		"identity",
+		"storage"
 	]
   }

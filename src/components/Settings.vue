@@ -156,11 +156,13 @@ export default {
 		},
 		googleOAuth() {
 			this.$store.dispatch('getGoogleAuthTokenInteractive')
-				.then(token => {
-					this.$store.dispatch('getCalendarList');
-				}).catch(err => {
-					console.warn("This is an error handler for the thingie in settings, getting google oauth token.");
-				})
+				.then(() => {
+					if (this.$store.getters.permission) {
+						console.log("PERMISSION GRANTED FOR CALENDAR WIDGET, CAN NOW BE ACTIVATED");
+					} else {
+						console.warn("This is an error handler for the thingie in settings, getting google oauth token.");
+					}					
+				});
 		}
 	},
 	created() {

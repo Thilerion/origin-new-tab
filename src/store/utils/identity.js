@@ -7,8 +7,7 @@ function promiseGetAuthToken(interactive = false) {
 		chrome.identity.getAuthToken({ interactive }, token => {
 			if (chrome.runtime.lastError) {
 				return reject(chrome.runtime.lastError);
-			}
-			resolve(token);
+			} else resolve(token);
 		})
 	})
 };
@@ -21,7 +20,10 @@ function promiseGetAuthToken(interactive = false) {
 
 function removeCachedAuthToken(token) {
 	return new Promise((resolve, reject) => {
-		if (!token) return reject("No token!");
+		if (!token) {
+			reject("No token!");
+			return;
+		};
 
 		chrome.identity.removeCachedAuthToken({ token }, () => {
 			if (chrome.runtime.lastError) {

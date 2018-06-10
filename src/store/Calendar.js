@@ -209,44 +209,6 @@ const calendarStore = {
 	},
 
 	actions: {
-		async getGoogleAuthToken({ commit }) {
-			if (!chrome || !chrome.identity) return;
-
-			let p = new Promise((resolve, reject) => {
-				chrome.identity.getAuthToken({ interactive: true }, function (token) {
-					if (chrome.runtime.lastError) {
-						console.warn("Chrome runtime lastError in first action:");
-						console.log(chrome.runtime.lastError);
-						reject(chrome.runtime.lastError);
-					} else if (token) {
-						commit("setToken", token);
-						resolve(token);
-					} else {
-						reject();
-					}
-				});
-			});
-			return await p;
-		},
-		async getGoogleAuthTokenOnStart({ commit }) {
-			if (!chrome || !chrome.identity) return;
-
-			let p = new Promise((resolve, reject) => {
-				chrome.identity.getAuthToken({ interactive: false }, function (token) {
-					if (chrome.runtime.lastError) {
-						console.warn("Chrome runtime lastError in second action (on start):");
-						console.log(chrome.runtime.lastError);
-						reject(chrome.runtime.lastError);
-					} else if (token) {
-						commit("setToken", token);
-						resolve(token);
-					} else {
-						reject();
-					}
-				});
-			});
-			return await p;
-		},
 		async getCalendarList({ getters, commit, dispatch }) {
 			//https://www.googleapis.com/calendar/v3/calendars/primary/events?maxResults=50&singleEvents=true&timeMin=2018-06-09T10%3A00%3A00Z
 			try {
@@ -292,57 +254,66 @@ const calendarStore = {
 				console.log(err);
 			}		
 		},
-		calendarStorageLoadFailed({commit, dispatch}) {
-			dispatch('getGoogleAuthTokenOnStart')
+
+		//NEW BELOW
+		calendarStorageLoadFailed({ commit, dispatch }) {
+			dispatch('getGoogleAuthTokenSilent');
+		},
+		calendarSetFromStorage({ commit, dispatch }, calData) {
+			if (calData.permission === true) {
+				commit('setHasPermission', true);
+				dispatch('getGoogleAuthTokenSilent');
+			} else {
+				commit('setPermission', false);
+			}			
+		},
+		getGoogleAuthTokenSilent({commit}) {
+			return getAuthTokenSilent()
 				.then(token => {
-					commit('setHasPermission', !!token);
+					commit('setToken', token);
+					commit('setHasPermission', true);
+				}).catch(err => {
+					commit('setHasPermission', false);
+					console.warn(err);
+				})
+		},
+		getGoogleAuthTokenInteractive({commit}) {
+			return getAuthTokenInteractive()
+				.then(token => {
+					commit("setToken", token);
+					commit('setHasPermission', true);
+
+				}).catch(err => {
+					commit('setHasPermission', false);
+					console.warn(err);
+				});
+		},
+		async removeAndRevokeAuthToken({ getters, dispatch }) {
+			const token = getters.token;
+			await dispatch('removeCachedAuthToken', token);
+			await dispatch('revokeAccessToken', token);
+		},
+		revokeAccessToken({ getters, commit }, token = getters.token) {
+			commit('setHasPermission', false);
+			return revokeOauthAccess(token)
+				.then(() => {
+					console.log("REVOKED ACCESS!");
+					commit('setToken', null);
 				})
 				.catch(err => {
-					console.warn("This is a catch for calendar storage load failed.");
-					console.error(err);
-					commit('setHasPermission', false);
-				})
+					console.warn(`ERROR IN REVOKING ACCESS: `, err);
+				});
 		},
-		calendarSetFromStorage({commit}, calData) {
-			commit('setHasPermission', calData.permission);
-		},
-		OLDrevokeAccessToken({ getters, commit }) {
-			//https://accounts.google.com/o/oauth2/revoke?token={token}
-			//https://developers.google.com/identity/protocols/OAuth2WebServer#tokenrevoke
-			const token = getters.token;
-			if (!token) {
-				console.warn("Can't revoke access if there is no token.");
-				return;
-			}
-
-			console.log("removing cached token.");
-			chrome.identity.removeCachedAuthToken({ token }, (param) => {
-				console.log("token has been revoked");
-			})
-
-			let revoke = axios.get(`https://accounts.google.com/o/oauth2/revoke`, {
-				headers: {
-					'content-type': 'application/x-www-form-urlencoded'
-				},
-				params: {
-					token
-				}
-			}).then(data => {
-				console.log("Access revoked!");
-			}).catch(err => {
-				console.warn("Error in revokeAccessToken action");
-				console.log(err);
-			});			
-		},
-		revokeAccessToken({ getters, commit }) {
-			return removeAndRevokeAuthToken(getters.token)
+		removeCachedAuthToken({ getters, commit }, token = getters.token) {
+			commit('setHasPermission', false);
+			return removeCachedAuthToken(token)
 				.then(() => {
 					console.log("CACHED TOKEN REMOVED!");
 					commit('setToken', null);
 				})
 				.catch(err => {
-					console.warn(`ERROR IN REMOVING CACHED TOKEN: `, err);
-				});
+					console.warn("ERROR IN REMOVING CACHED TOKEN: ", err);
+				})
 		}
 	}
 };

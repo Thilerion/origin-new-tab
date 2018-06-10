@@ -14,7 +14,8 @@
 <script>
 export default {
 	mounted() {
-		this.$store.dispatch('getCalendarList');
+		//this.$store.dispatch('getCalendarList');
+		this.$store.dispatch('getGoogleAuthTokenSilent');
 	},
 	computed: {
 		eventsUpcomingWeek() {

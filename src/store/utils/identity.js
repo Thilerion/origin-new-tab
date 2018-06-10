@@ -1,3 +1,5 @@
+import Axios from "axios";
+
 //https://github.com/GoogleDeveloperExperts/chrome-extension-google-apis/blob/master/js/background.js
 
 function promiseGetAuthToken(interactive = false) {
@@ -17,17 +19,28 @@ function promiseGetAuthToken(interactive = false) {
 //if there is no auth token =>
 //		getAuthToken
 
-const removeCachedAuthToken = function removeCachedAuthToken(token) {
+function removeCachedAuthToken(token) {
 	return new Promise((resolve, reject) => {
+		if (!token) return reject("No token!");
+
 		chrome.identity.removeCachedAuthToken({ token }, () => {
 			if (chrome.runtime.lastError) {
 				return reject(chrome.runtime.lastError);
 			}
-			resolve();
+			resolve(token);
 		})
 	})
 }
 
+function revokeOauthAccess(token) {
+	if (!token) return Promise.reject("No token, so cannot revoke OAuth access!");
+
+	return Axios.get("https://accounts.google.com/o/oauth2/revoke", {
+		headers: { 'content-type': 'application/x-www-form-urlencoded' },
+		params: { token }
+	});
+}
+
 export const getAuthTokenInteractive = () => promiseGetAuthToken(true);
 export const getAuthTokenSilent = () => promiseGetAuthToken(false);
-export const removeCachedAuthToken;
+export { removeCachedAuthToken, revokeOauthAccess };

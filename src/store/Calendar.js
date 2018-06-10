@@ -9,6 +9,13 @@ import compareAsc from "date-fns/compare_asc";
 import isEqual from 'date-fns/is_equal'
 import parse from 'date-fns/parse';
 
+import {
+	getAuthTokenInteractive,
+	getAuthTokenSilent,
+	removeCachedAuthToken,
+	revokeOauthAccess
+} from './utils/identity';
+
 const CALENDAR_FORMAT = "dddd D MMMM";
 const TIME_FORMAT = "HH:mm";
 
@@ -299,7 +306,7 @@ const calendarStore = {
 		calendarSetFromStorage({commit}, calData) {
 			commit('setHasPermission', calData.permission);
 		},
-		revokeAccessToken({ getters, commit }) {
+		OLDrevokeAccessToken({ getters, commit }) {
 			//https://accounts.google.com/o/oauth2/revoke?token={token}
 			//https://developers.google.com/identity/protocols/OAuth2WebServer#tokenrevoke
 			const token = getters.token;
@@ -326,6 +333,16 @@ const calendarStore = {
 				console.warn("Error in revokeAccessToken action");
 				console.log(err);
 			});			
+		},
+		revokeAccessToken({ getters, commit }) {
+			return removeAndRevokeAuthToken(getters.token)
+				.then(() => {
+					console.log("CACHED TOKEN REMOVED!");
+					commit('setToken', null);
+				})
+				.catch(err => {
+					console.warn(`ERROR IN REMOVING CACHED TOKEN: `, err);
+				});
 		}
 	}
 };

@@ -193,11 +193,16 @@ const calendarStore = {
 		},
 		permission(state) {
 			return state.calendarData.permission;
+		},
+		widgetIsActive(state, getters) {
+			let widgets = getters.widgets;
+			return widgets.find(w => w.name === 'calendar').active;
 		}
 	},
 
 	mutations: {
 		setToken(state, token) {
+			console.log("SETTING TOKEN: ", token);
 			state.token = token;
 		},
 		setEvents(state, events) {
@@ -210,10 +215,9 @@ const calendarStore = {
 
 	actions: {
 		async getCalendarList({ getters, commit, dispatch }) {
+			console.log("GETTING CALENDAR LIST");
 			//https://www.googleapis.com/calendar/v3/calendars/primary/events?maxResults=50&singleEvents=true&timeMin=2018-06-09T10%3A00%3A00Z
 			try {
-				await dispatch('getGoogleAuthTokenOnStart');
-
 				let x = await axios.get(
 					"https://www.googleapis.com/calendar/v3/calendars/primary/events",
 					{
@@ -256,13 +260,25 @@ const calendarStore = {
 		},
 
 		//NEW BELOW
-		calendarStorageLoadFailed({ commit, dispatch }) {
-			dispatch('getGoogleAuthTokenSilent');
+		calendarStorageLoadFailed({ getters, commit, dispatch }) {
+			dispatch('getGoogleAuthTokenSilent')
+				.then(() => {
+					if (getters.widgetIsActive && getters.token && getters.permission) {
+						console.log("Widget is active", getters.widgetIsActive, "Token is here", getters.token, "Permission is here", getters.permission, "so loading data now");
+					}
+					dispatch('getCalendarList');
+				})
 		},
-		calendarSetFromStorage({ commit, dispatch }, calData) {
+		calendarSetFromStorage({ getters, commit, dispatch }, calData) {
 			if (calData.permission === true) {
 				commit('setHasPermission', true);
-				dispatch('getGoogleAuthTokenSilent');
+				dispatch('getGoogleAuthTokenSilent')
+					.then(() => {
+						if (getters.widgetIsActive && getters.token && getters.permission) {
+							console.log("Widget is active", getters.widgetIsActive, "Token is here", getters.token, "Permission is here", getters.permission, "so loading data now");
+						}
+						dispatch('getCalendarList');
+					})
 			} else {
 				commit('setHasPermission', false);
 			}			

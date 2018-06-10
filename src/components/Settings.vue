@@ -65,7 +65,6 @@
 						<span class="setting-check-label">{{widget.name}}</span>
 					</div>
 					<button class="toggle-dnd" @click="toggleDnd">Verplaats widgets</button>
-					<button class="toggle-dnd" @click="googleOAuth">Enable Calendar Integration (Google)</button>
 					<button class="toggle-dnd" @click="$store.dispatch('removeAndRevokeAuthToken')">Revoke calendar access</button>
 				</div>
 			</div>
@@ -153,16 +152,6 @@ export default {
 		toggleDnd() {
 			this.$store.commit('toggleDnd');
 			this.saveSettings();
-		},
-		googleOAuth() {
-			this.$store.dispatch('getGoogleAuthTokenInteractive')
-				.then(() => {
-					if (this.$store.getters.permission) {
-						console.log("PERMISSION GRANTED FOR CALENDAR WIDGET, CAN NOW BE ACTIVATED");
-					} else {
-						console.warn("This is an error handler for the thingie in settings, getting google oauth token.");
-					}					
-				});
 		}
 	},
 	created() {
@@ -178,6 +167,7 @@ export default {
 
 <style scoped>
 .settings-page {
+	font-size: 1rem;
 	position: fixed;
 	width: 100vw;
 	height: 100vh;

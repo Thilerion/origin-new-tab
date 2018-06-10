@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-calendar">
+	<div class="widget-calendar" v-if="permission && token">
 		<div v-for="(day, key, index) in eventsByDay" :key="index">
 			<p class="day" :class="{today: day[0].daysFromToday === 0}">{{key}}</p>
 			<div class="event-content" :class="{currently: new Date(event.start).getTime() < new Date().getTime()}" v-for="(event, index) in day" :key="index">
@@ -9,27 +9,64 @@
 			</div>
 		</div>
 	</div>
+	<div class="widget-calendar" v-else-if="!permission">
+		<button @click="getPermission">Geef toestemming</button>
+	</div>
+	<div class="widget-calendar" v-else>
+		Probleem met laden...
+		<button @click="retryLoading">Probeer opnieuw</button>
+	</div>
 </template>
 
 <script>
 export default {
-	created() {
-		this.$store.dispatch('getGoogleAuthTokenSilent')
-			.then(() => {
-				if (this.$store.getters.permission === false) {
-					this.$store.dispatch('changeWidgetActive', {name: 'calendar', active: false});
-					console.warn("FIRST GIVE PERMISSION BEFORE ACTIVATING THE CALENDAR WIDGET!");
-				}
-			})
-	},
 	computed: {
 		eventsUpcomingWeek() {
 			return this.$store.getters.eventsUpcomingWeek;
 		},
 		eventsByDay() {
 			return this.$store.getters.eventsByDay;
+		},
+		permission() {
+			return this.$store.getters.permission;
+		},
+		token() {
+			return !!this.$store.getters.token;
+		}
+	},
+	methods: {
+		getPermission() {
+			this.$store.dispatch('getGoogleAuthTokenInteractive');
+		},
+		retryLoading() {
+			this.$store.dispatch('removeCachedAuthToken')
+				.then(() => this.$store.dispatch('getGoogleAuthTokenSilent'))
+				.then(() => this.$store.dispatch('getCalendarList'));	
 		}
 	}
+
+	/* IN CREATED:
+	this.$store.dispatch('getGoogleAuthTokenSilent')
+		.then(() => {
+			if (this.$store.getters.permission === false) {
+				this.$store.dispatch('changeWidgetActive', {name: 'calendar', active: false});
+				console.warn("FIRST GIVE PERMISSION BEFORE ACTIVATING THE CALENDAR WIDGET!");
+			}
+		})
+	*/
+
+	/* IN SETTINGS:
+	googleOAuth() {
+		this.$store.dispatch('getGoogleAuthTokenInteractive')
+			.then(() => {
+				if (this.$store.getters.permission) {
+					console.log("PERMISSION GRANTED FOR CALENDAR WIDGET, CAN NOW BE ACTIVATED");
+				} else {
+					console.warn("This is an error handler for the thingie in settings, getting google oauth token.");
+				}					
+			});
+	}
+	*/
 }
 </script>
 

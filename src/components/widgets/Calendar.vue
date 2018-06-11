@@ -1,37 +1,45 @@
 <template>
-	<div class="widget-calendar" v-if="permission && token">
-		<div v-for="(day, key, index) in eventsByDay" :key="index">
-			<p class="day" :class="{today: day[0].daysFromToday === 0}">{{key}}</p>
-			<div class="event-content" :class="{currently: new Date(event.start).getTime() < new Date().getTime()}" v-for="(event, index) in day" :key="index">
-				<div class="event-name">{{event.summary}}</div>
-				<div class="event-time event-all-day" v-if="event.allDay">Hele dag</div>
-				<div class="event-time" v-else>{{event.formattedTimeStart}} - {{event.formattedTimeEnd}}</div>
+	<div class="widget-calendar">
+
+		<div v-if="dataLoaded === false">
+			<button @click="retryLoading">Probeer opnieuw</button>
+		</div>
+
+		<div v-else-if="permission === true && dataLoaded === null">
+			Loading...
+		</div>
+
+		<div v-else-if="permission === false && dataLoaded === null">
+			<button @click="getPermission">Geef toestemming</button>
+		</div>
+
+		<div v-else-if="permission && dataLoaded">
+			<div v-for="(day, key, index) in eventsByDay" :key="index">
+				<p class="day" :class="{today: day[0].daysFromToday === 0}">{{key}}</p>
+				<div class="event-content" :class="{currently: new Date(event.start).getTime() < new Date().getTime()}" v-for="(event, index) in day" :key="index">
+					<div class="event-name">{{event.summary}}</div>
+					<div class="event-time event-all-day" v-if="event.allDay">Hele dag</div>
+					<div class="event-time" v-else>{{event.formattedTimeStart}} - {{event.formattedTimeEnd}}</div>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="widget-calendar" v-else-if="!permission">
-		<button @click="getPermission">Geef toestemming</button>
-	</div>
-	<div class="widget-calendar" v-else>
-		Probleem met laden...
-		<button @click="retryLoading">Probeer opnieuw</button>
 	</div>
 </template>
 
 <script>
 export default {
 	computed: {
-		eventsUpcomingWeek() {
-			return this.$store.getters.eventsUpcomingWeek;
-		},
 		eventsByDay() {
-			return this.$store.getters.eventsByDay;
+			return this.$store.getters.calendarEvents;
 		},
 		permission() {
-			return this.$store.getters.permission;
+			return this.$store.getters.calendarPermission;
 		},
 		token() {
-			return !!this.$store.getters.token;
+			return !!this.$store.getters.calendarToken;
+		},
+		dataLoaded() {
+			return this.$store.getters.calendarDataLoaded;
 		}
 	},
 	methods: {

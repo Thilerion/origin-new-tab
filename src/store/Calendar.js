@@ -22,7 +22,7 @@ const TIME_FORMAT = "HH:mm";
 const calendarStore = {
 	state: {
 		token: null,
-		events: [
+		events: process.env.NODE_ENV === 'development' ? [
 			{
 				start: "2018-06-09T06:30:00.000Z",
 				end: "2018-06-09T19:15:00.000Z",
@@ -112,12 +112,13 @@ const calendarStore = {
 				summary: "Verjaardag Martijn Roest (surprise)",
 				allDay: false
 			}
-		],
+		] : [],
 		calendarFormat: CALENDAR_FORMAT,
 		timeFormat: TIME_FORMAT,
 		calendarData: {
 			permission: null
-		}
+		},
+		dataLoaded: null
 	},
 
 	getters: {
@@ -194,6 +195,9 @@ const calendarStore = {
 		permission(state) {
 			return state.calendarData.permission;
 		},
+		calendarDataLoaded(state) {
+			return state.dataLoaded;
+		},
 		widgetIsActive(state, getters) {
 			let widgets = getters.widgets;
 			return widgets.find(w => w.name === 'calendar').active;
@@ -210,67 +214,77 @@ const calendarStore = {
 		},
 		setHasPermission(state, bool) {
 			state.calendarData.permission = bool;
+		},
+		setCalendarDataLoaded(state, bool) {
+			state.dataLoaded = bool;
 		}
 	},
 
 	actions: {
-		async getCalendarList({ getters, commit, dispatch }) {
-			console.log("GETTING CALENDAR LIST");
-			//https://www.googleapis.com/calendar/v3/calendars/primary/events?maxResults=50&singleEvents=true&timeMin=2018-06-09T10%3A00%3A00Z
-			try {
-				let x = await axios.get(
-					"https://www.googleapis.com/calendar/v3/calendars/primary/events",
-					{
-						params: {
-							maxResults: 10,
-							singleEvents: true,
-							orderBy: "startTime",
-							timeMin: parse("2018-06-08")
-							//timeMax: new Date(Date.parse("2018-07-08")).toISOString()
-						},
-						headers: {
-							Authorization: `Bearer ${getters.token}`
-						}
-					}
-				);
-	
-				let events = [];
-				x.data.items.forEach(event => {
-					const start = event.start.dateTime
-						? parse(event.start.dateTime).getTime()
-						: parse(event.start.date).getTime();
-					const end = event.end.dateTime
-						? parse(event.end.dateTime).getTime()
-						: parse(event.end.date).getTime();
-	
-					let eventObj = { start, end, summary: event.summary };
-	
-					if (event.start.date && !event.start.dateTime) {
-						eventObj.allDay = true;
-					} else eventObj.allDay = false;
-	
-					events.push(eventObj);
-				});
-				commit("setEvents", events);
-				console.log(events);
-			} catch (err) {
-				console.warn("Error caught in getCalendarList...");
-				console.log(err);
-			}		
-		},
-
 		//NEW BELOW
+		fetchCalendarData({}, token) {
+			return axios.get(
+				"https://www.googleapis.com/calendar/v3/calendars/primary/events",
+				{
+					params: {
+						maxResults: 10,
+						singleEvents: true,
+						orderBy: "startTime",
+						timeMin: parse("2018-06-08")
+						//timeMax: new Date(Date.parse("2018-07-08")).toISOString()
+					},
+					headers: {
+						Authorization: `Bearer ${token}`
+					}
+				}
+			);
+		},
+		parseCalendarData({}, data) {
+			let events = [];
+			console.log(data);
+			data.items.forEach(event => {
+				const start = event.start.dateTime
+					? parse(event.start.dateTime).getTime()
+					: parse(event.start.date).getTime();
+				const end = event.end.dateTime
+					? parse(event.end.dateTime).getTime()
+					: parse(event.end.date).getTime();
+
+				let eventObj = { start, end, summary: event.summary };
+
+				if (event.start.date && !event.start.dateTime) {
+					eventObj.allDay = true;
+				} else eventObj.allDay = false;
+
+				events.push(eventObj);
+			});
+			return events;
+		},
+		async getCalendarData({getters, commit, dispatch}) {
+			await dispatch('getGoogleAuthTokenSilent');
+			const token = getters.token;
+			const active = getters.widgetIsActive;
+			const permission = getters.permission;
+			
+			if (!!token && active && permission) {
+				let fetched = await dispatch('fetchCalendarData', token);
+				let parsed = dispatch('parseCalendarData', fetched.data);
+				commit("setEvents", await parsed);
+				commit("setDataLoaded", true);
+			}
+		},
 		calendarStorageLoadFailed({ getters, commit, dispatch }) {
-			dispatch('getGoogleAuthTokenSilent')
+			/*dispatch('getGoogleAuthTokenSilent')
 				.then(() => {
 					if (getters.widgetIsActive && getters.token && getters.permission) {
 						console.log("Widget is active", getters.widgetIsActive, "Token is here", getters.token, "Permission is here", getters.permission, "so loading data now");
 					}
 					dispatch('getCalendarList');
-				})
+				})*/
+			dispatch('getCalendarData');
 		},
 		calendarSetFromStorage({ getters, commit, dispatch }, calData) {
-			if (calData.permission === true) {
+			/*if (calData.permission === true) {
 				commit('setHasPermission', true);
 				dispatch('getGoogleAuthTokenSilent')
 					.then(() => {
@@ -281,24 +295,27 @@ const calendarStore = {
 					})
 			} else {
 				commit('setHasPermission', false);
-			}			
+			}*/
+			dispatch('getCalendarData');
 		},
 		getGoogleAuthTokenSilent({commit}) {
 			return getAuthTokenSilent()
 				.then(token => {
 					commit('setToken', token);
 					commit('setHasPermission', true);
+					return token;
 				}).catch(err => {
 					commit('setHasPermission', false);
 					console.warn(err);
 				})
 		},
-		getGoogleAuthTokenInteractive({commit}) {
+		getGoogleAuthTokenInteractive({commit, dispatch}) {
 			return getAuthTokenInteractive()
 				.then(token => {
 					commit("setToken", token);
 					commit('setHasPermission', true);
-
+					dispatch('getCalendarData');
+					return token;
 				}).catch(err => {
 					commit('setHasPermission', false);
 					console.warn(err);

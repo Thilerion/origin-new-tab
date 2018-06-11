@@ -317,6 +317,7 @@ export default {
 
 .grid {
 	display: grid;
+	font-size: 1em;
 	grid-template-columns: repeat(var(--cols), 1fr);
 	grid-template-rows: repeat(var(--rows), 1fr);
 	height: 100vh;
@@ -328,7 +329,7 @@ export default {
 	grid-row-gap: 0.5rem;
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 700px) {
 	.grid:not(.dnd) {
 		display: flex;
 		max-width: 100%;

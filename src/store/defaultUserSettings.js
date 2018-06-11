@@ -9,7 +9,7 @@ const defaultSettings = {
 			{ 
 				name: 'greeting',
 				active: true,
-				row: [8, 14],
+				row: [7, 13],
 				column: [9, 33],
 				fontSize: -1
 			},
@@ -17,29 +17,29 @@ const defaultSettings = {
 				name: 'news',
 				active: true,
 				row: [1, 3],
-				column: [11, 31],
-				fontSize: 0
+				column: [9, 33],
+				fontSize: -1
 			},
 			{ 
 				name: 'quote',
 				active: true,
-				row: [3, 5],
-				column: [11, 31],
+				row: [2, 4],
+				column: [9, 33],
 				fontSize: -2
 			},
 			{ 
 				name: 'weather',
 				active: true,
-				row: [1, 6],
+				row: [1, 4],
 				column: [35, 41],
-				fontSize: 1
+				fontSize: -1
 			},
 			{ 
 				name: 'topPages',
 				active: true,
-				row: [15, 20],
+				row: [16, 21],
 				column: [11, 31],
-				fontSize: 0
+				fontSize: -3
 			},
 			{
 				name: 'settingsButton',
@@ -53,14 +53,14 @@ const defaultSettings = {
 				active: true,
 				row: [19, 21],
 				column: [1, 13],
-				fontSize: 1
+				fontSize: -1
 			},
 			{
 				name: 'calendar',
-				active: true,
-				row: [8, 14],
-				column: [1, 13],
-				fontSize: 1
+				active: false,
+				row: [1, 7],
+				column: [1, 11],
+				fontSize: -1
 			}
 		]
 	},

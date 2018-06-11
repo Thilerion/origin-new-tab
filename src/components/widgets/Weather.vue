@@ -60,8 +60,6 @@ export default {
 <style scoped>
 .widget-weather {
 	margin: 0 0 auto auto;
-
-	padding-top: 0.25em;
 	padding-right: 0.75em;
 	position: relative;
 	display: grid;

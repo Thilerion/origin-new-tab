@@ -1,6 +1,9 @@
 import axios from 'axios';
 import BASE_URL from './config.api';
 
+import parse from 'date-fns/parse';
+import addDays from 'date-fns/add_days'
+
 function deepClone(obj) {
 	return JSON.parse(JSON.stringify(obj));
 }
@@ -67,6 +70,33 @@ const widgets = {
 		async request(url) {
 			let data = await axios.get(url, axiosOptions);
 			console.log(`%cRequest complete from "NEWS", with the following data:\n`, "color: white; background-color: #089108; line-height: 1.5; font-weight: bold;", deepClone(data.data));
+			return data.data;
+		}
+	},
+	'calendar': {
+		api: true,
+		url: {
+			required: [],
+			get() {
+				return "https://www.googleapis.com/calendar/v3/calendars/primary/events"
+			}
+		},
+		async request(url, token) {
+			let gCalOptions = {
+				params: {
+					maxResults: 30,
+					singleEvents: true,
+					orderBy: "startTime",
+					timeMin: parse(new Date().setHours(0, 0, 0, 0)),
+					timeMax: addDays(new Date().setHours(0, 0, 0, 0), 14)
+				},
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			};
+			let options = { ...axiosOptions, ...gCalOptions };
+			let data = await axios.get(url, options);
+			console.log(`%cRequest complete from "CALENDAR", with the following data:\n`, "color: white; background-color: #089108; line-height: 1.5; font-weight: bold;", deepClone(data.data));
 			return data.data;
 		}
 	}

@@ -1,4 +1,5 @@
-import axios from "axios";
+import widgetsApi from './api/index';
+const calendarApi = widgetsApi.calendar;
 
 import isToday from "date-fns/is_today";
 import differenceInDays from "date-fns/difference_in_calendar_days";
@@ -6,8 +7,9 @@ import format from "date-fns/format";
 import isBefore from "date-fns/is_before";
 import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 import compareAsc from "date-fns/compare_asc";
-import isEqual from 'date-fns/is_equal'
 import parse from 'date-fns/parse';
+
+import { createCalendarList, reduceCalendarList } from './utils/calendarModel';
 
 import {
 	getAuthTokenInteractive,
@@ -21,120 +23,51 @@ const TIME_FORMAT = "HH:mm";
 
 const calendarStore = {
 	state: {
-		token: null,
-		events: process.env.NODE_ENV === 'development' ? [
-			{
-				start: "2018-06-09T06:30:00.000Z",
-				end: "2018-06-09T19:15:00.000Z",
-				summary: "Ergens vandaag housewarming Wanda en Marco",
-				allDay: false
-			},
-			{
-				start: "2018-06-09T07:00:00.000Z",
-				end: "2018-06-09T15:00:00.000Z",
-				summary: "Werken",
-				allDay: false
-			},
-			{
-				start: "2018-06-11T00:00:00.000Z",
-				end: "2018-06-12T00:00:00.000Z",
-				summary:
-					"19 juni deadline opgeven ESCAN Satellite on Cognitive Enhancement",
-				allDay: true
-			},
-			{
-				start: "2018-06-11T07:00:00.000Z",
-				end: "2018-06-11T08:00:00.000Z",
-				summary:
-					"t1",
-				allDay: false
-			},
-			{
-				start: "2018-06-11T07:00:00.000Z",
-				end: "2018-06-11T10:00:00.000Z",
-				summary:
-					"t2",
-				allDay: false
-			},
-			{
-				start: "2018-06-11T06:00:00.000Z",
-				end: "2018-06-11T13:00:00.000Z",
-				summary:
-					"t3",
-				allDay: false
-			},
-			{
-				start: "2018-06-11T12:00:00.000Z",
-				end: "2018-06-12T12:00:00.000Z",
-				summary:
-					"t4",
-				allDay: true
-			},
-			{
-				start: "2018-06-12T07:00:00.000Z",
-				end: "2018-06-12T08:00:00.000Z",
-				summary: "Kapper",
-				allDay: false
-			},
-			{
-				start: "2018-06-16T07:00:00.000Z",
-				end: "2018-06-16T15:00:00.000Z",
-				summary: "Werken",
-				allDay: false
-			},
-			{
-				start: "2018-06-17T00:00:00.000Z",
-				end: "2018-06-18T00:00:00.000Z",
-				summary: "zondag 17 juni amazon prime opzeggen",
-				allDay: true
-			},
-			{
-				start: "2018-06-18T11:00:00.000Z",
-				end: "2018-06-18T13:00:00.000Z",
-				summary: "TEN Decision Making",
-				allDay: false
-			},
-			{
-				start: "2018-06-23T07:00:00.000Z",
-				end: "2018-06-23T15:00:00.000Z",
-				summary: "Werken",
-				allDay: false
-			},
-			{
-				start: "2018-06-30T07:00:00.000Z",
-				end: "2018-06-30T15:00:00.000Z",
-				summary: "Werken",
-				allDay: false
-			},
-			{
-				start: "2018-06-30T15:00:00.000Z",
-				end: "2018-06-30T19:00:00.000Z",
-				summary: "Verjaardag Martijn Roest (surprise)",
-				allDay: false
-			}
-		] : [],
+
 		calendarFormat: CALENDAR_FORMAT,
 		timeFormat: TIME_FORMAT,
-		calendarData: {
-			permission: null
+
+		token: null,
+		dataLoaded: null,
+
+		calendarWatch: {
+			permission: false
 		},
-		dataLoaded: null
+
+		events: {}
+		
 	},
 
 	getters: {
-		token(state) {
+		calendarToken(state) {
 			return state.token;
 		},
-		calendarWatch(state) {
-			return state.calendarData;
+
+		calendarEvents(state) {
+			return state.events;
 		},
+
+		calendarWatch(state) {
+			return state.calendarWatch;
+		},
+
+		calendarPermission(state) {
+			return state.calendarWatch.permission;
+		},
+
+		calendarDataLoaded(state) {
+			return state.dataLoaded;
+		},
+
+		calendarWidgetActive(state, getters) {
+			return !!(getters.widgets.find(w => w.name === 'calendar').active);
+		},
+
 		calendarFormat(state) {
 			return state.calendarFormat;
 		},
-		events(state) {
-			return state.events;
-		},
-		eventsUpcomingWeek(state) {
+		
+		OLDeventsUpcomingWeek(state) {
 			return state.events.reduce((acc, event) => {
 				//endTime later than now
 				//difference in days of startTime max 6 (today is 0)
@@ -169,7 +102,7 @@ const calendarStore = {
 				return acc;
 			}, []);
 		},
-		eventsByDay(state, getters) {
+		OLDeventsByDay(state, getters) {
 			let events = JSON.parse(JSON.stringify(getters.eventsUpcomingWeek));
 			let byDay = {};
 			events.forEach(event => {
@@ -192,112 +125,77 @@ const calendarStore = {
 			}
 			return byDay;
 		},
-		permission(state) {
-			return state.calendarData.permission;
-		},
-		calendarDataLoaded(state) {
-			return state.dataLoaded;
-		},
-		widgetIsActive(state, getters) {
-			let widgets = getters.widgets;
-			return widgets.find(w => w.name === 'calendar').active;
-		}
+
 	},
 
 	mutations: {
+
 		setToken(state, token) {
 			console.log("SETTING TOKEN: ", token);
 			state.token = token;
 		},
-		setEvents(state, events) {
-			state.events = [...events];
+
+		setCalendarEvents(state, events) {
+			state.events = { ...events };
 		},
-		setHasPermission(state, bool) {
+
+		setCalendarPermission(state, bool) {
 			state.calendarData.permission = bool;
 		},
+
 		setCalendarDataLoaded(state, bool) {
 			state.dataLoaded = bool;
 		}
+
 	},
 
 	actions: {
-		//NEW BELOW
-		fetchCalendarData({}, token) {
-			return axios.get(
-				"https://www.googleapis.com/calendar/v3/calendars/primary/events",
-				{
-					params: {
-						maxResults: 10,
-						singleEvents: true,
-						orderBy: "startTime",
-						timeMin: parse("2018-06-08")
-						//timeMax: new Date(Date.parse("2018-07-08")).toISOString()
-					},
-					headers: {
-						Authorization: `Bearer ${token}`
-					}
-				}
-			);
+		parseAndSetCalendarData({ commit }, data) {
+			const calendarList = createCalendarList(data.items);
+			const reducedList = reduceCalendarList(calendarList);
+			console.log(calendarList, reducedList);
+			commit('setCalendarEvents', reducedList);
+			commit('setCalendarDataLoaded', true);
 		},
-		parseCalendarData({}, data) {
-			let events = [];
-			console.log(data);
-			data.items.forEach(event => {
-				const start = event.start.dateTime
-					? parse(event.start.dateTime).getTime()
-					: parse(event.start.date).getTime();
-				const end = event.end.dateTime
-					? parse(event.end.dateTime).getTime()
-					: parse(event.end.date).getTime();
 
-				let eventObj = { start, end, summary: event.summary };
-
-				if (event.start.date && !event.start.dateTime) {
-					eventObj.allDay = true;
-				} else eventObj.allDay = false;
-
-				events.push(eventObj);
-			});
-			return events;
-		},
-		async getCalendarData({getters, commit, dispatch}) {
-			await dispatch('getGoogleAuthTokenSilent');
-			const token = getters.token;
-			const active = getters.widgetIsActive;
-			const permission = getters.permission;
-			
-			if (!!token && active && permission) {
-				let fetched = await dispatch('fetchCalendarData', token);
-				let parsed = dispatch('parseCalendarData', fetched.data);
-				commit("setEvents", await parsed);
-				commit("setDataLoaded", true);
+		async getCalendarFromServer({ getters, commit, dispatch }) {
+			try {
+				const url = calendarApi.url.get();
+				const token = getters.calendarToken;
+				let data = await calendarApi.request(url, token);
+				//TODO: do something with data
+				dispatch('parseAndSetCalendarData', data);				
+			}
+			catch (e) {
+				console.warn("Error in getting data from server", e);
+				commit('setCalendarDataLoaded', false);
 			}
 		},
-		calendarStorageLoadFailed({ getters, commit, dispatch }) {
-			/*dispatch('getGoogleAuthTokenSilent')
-				.then(() => {
-					if (getters.widgetIsActive && getters.token && getters.permission) {
-						console.log("Widget is active", getters.widgetIsActive, "Token is here", getters.token, "Permission is here", getters.permission, "so loading data now");
-					}
-					dispatch('getCalendarList');
-				})*/
-			dispatch('getCalendarData');
+
+		calendarStorageLoadFailed({dispatch}) {
+			dispatch('initiateCalendarModule');
 		},
-		calendarSetFromStorage({ getters, commit, dispatch }, calData) {
-			/*if (calData.permission === true) {
-				commit('setHasPermission', true);
-				dispatch('getGoogleAuthTokenSilent')
-					.then(() => {
-						if (getters.widgetIsActive && getters.token && getters.permission) {
-							console.log("Widget is active", getters.widgetIsActive, "Token is here", getters.token, "Permission is here", getters.permission, "so loading data now");
-						}
-						dispatch('getCalendarList');
-					})
+
+		calendarSetFromStorage({commit, dispatch}, calData) {
+			commit('setCalendarPermission', calData.permission);
+			dispatch('initiateCalendarModule');
+		},
+
+		async initiateCalendarModule({getters, dispatch}) {
+			if (!getters.calendarWidgetActive) return;
+
+			//GET TOKEN SILENT
+			//if succes, SET TOKEN, and FETCH DATA
+			//if error, SET PERMISSION FALSE
+			await dispatch('getGoogleAuthTokenSilent');
+			if (getters.calendarToken) {
+				console.log("Got token! Getting data from server now.");
+				dispatch('getCalendarFromServer');
 			} else {
-				commit('setHasPermission', false);
-			}*/
-			dispatch('getCalendarData');
+				console.log("Could not get token");
+			}
 		},
+
 		getGoogleAuthTokenSilent({commit}) {
 			return getAuthTokenSilent()
 				.then(token => {
@@ -306,6 +204,7 @@ const calendarStore = {
 					return token;
 				}).catch(err => {
 					commit('setHasPermission', false);
+					commit('setToken', null);
 					console.warn(err);
 				})
 		},
@@ -318,6 +217,7 @@ const calendarStore = {
 					return token;
 				}).catch(err => {
 					commit('setHasPermission', false);
+					commit('setToken', null);
 					console.warn(err);
 				});
 		},
@@ -332,6 +232,7 @@ const calendarStore = {
 				.then(() => {
 					console.log("REVOKED ACCESS!");
 					commit('setToken', null);
+					return true;
 				})
 				.catch(err => {
 					console.warn(`ERROR IN REVOKING ACCESS: `, err);
@@ -343,6 +244,7 @@ const calendarStore = {
 				.then(() => {
 					console.log("CACHED TOKEN REMOVED!");
 					commit('setToken', null);
+					return true;
 				})
 				.catch(err => {
 					console.warn("ERROR IN REMOVING CACHED TOKEN: ", err);

@@ -51,7 +51,7 @@ import isWithinRange from 'date-fns/is_within_range'
 export default {
 	computed: {
 		eventsByDay() {
-			return this.$store.getters.calendarEvents;
+			return this.$store.getters.calenderEventsMaxAmount;
 		},
 		permission() {
 			return this.$store.getters.calendarPermission;
@@ -104,6 +104,7 @@ export default {
 	text-align: left;
 	font-size: calc(1em - 2px);
 	max-width: 20em;
+	padding: .75em;
 }
 
 .calendar-day-wrapper {

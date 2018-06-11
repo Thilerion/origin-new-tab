@@ -47,6 +47,32 @@ const calendarStore = {
 			return state.events;
 		},
 
+		calenderEventsMaxAmount(state) {
+			const MAX_AMOUNT = 3;
+			let reduced = {};
+			let currentAmount = 0;
+			let firstDayAdded = false;
+			const events = state.events;
+
+			for (let i = 0; i < 14 && currentAmount < MAX_AMOUNT; i++) {
+				if (events[i]) {
+					if (!firstDayAdded) {
+						reduced[i] = events[i];
+						currentAmount += events[i].length;
+					} else {
+						events[i].forEach(e => {
+							if (currentAmount < MAX_AMOUNT) {
+								currentAmount += 1;
+								if (reduced[i]) reduced[i].push(e);
+								else reduced[i] = [e];
+							}						
+						})
+					}					
+				}
+			}
+			return reduced;
+		},
+
 		calendarWatch(state) {
 			return state.calendarData;
 		},

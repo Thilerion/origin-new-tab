@@ -6,6 +6,7 @@ function promiseGetAuthToken(interactive = false) {
 	return new Promise((resolve, reject) => {
 		chrome.identity.getAuthToken({ interactive }, token => {
 			if (chrome.runtime.lastError) {
+				console.log("Chrome runtime last error: ", chrome.runtime.lastError);
 				return reject(chrome.runtime.lastError);
 			} else resolve(token);
 		})

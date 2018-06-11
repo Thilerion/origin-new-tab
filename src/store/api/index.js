@@ -95,9 +95,23 @@ const widgets = {
 				}
 			};
 			let options = { ...axiosOptions, ...gCalOptions };
-			let data = await axios.get(url, options);
-			console.log(`%cRequest complete from "CALENDAR", with the following data:\n`, "color: white; background-color: #089108; line-height: 1.5; font-weight: bold;", deepClone(data.data));
-			return data.data;
+			
+			try {
+				let data = await axios.get(url, options);
+				console.log(`%cRequest complete from "CALENDAR", with the following data:\n`, "color: white; background-color: #089108; line-height: 1.5; font-weight: bold;", deepClone(data.data));
+				return data.data;
+			}
+			catch (err) {
+				//error status: err.response.status
+				//error message if google error: err.response.data.error.message
+				if (err.response) {
+					console.log(`Error in getting 'CALENDAR' data with status ${err.response.status}: ${err.response.data.error.message}.`);
+
+					throw new Error(`${err.response.status}: ${err.response.data.error.message}`);
+				} else {
+					throw new Error("Error in 'CALENDAR' data request.");
+				}
+			}			
 		}
 	}
 };

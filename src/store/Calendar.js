@@ -72,7 +72,6 @@ const calendarStore = {
 	mutations: {
 
 		setCalendarToken(state, token) {
-			console.log("SETTING TOKEN: ", token);
 			state.token = token;
 		},
 
@@ -94,7 +93,6 @@ const calendarStore = {
 		parseAndSetCalendarData({ commit }, data) {
 			const calendarList = createCalendarList(data.items);
 			const reducedList = reduceCalendarList(calendarList);
-			console.log(calendarList, reducedList);
 			commit('setCalendarEvents', reducedList);
 			commit('setCalendarDataLoaded', true);
 		},
@@ -136,10 +134,9 @@ const calendarStore = {
 			//if error, SET PERMISSION FALSE
 			await dispatch('getGoogleAuthTokenSilent');
 			if (getters.calendarToken) {
-				console.log("Got token! Getting data from server now.");
 				dispatch('getCalendarFromServer');
 			} else {
-				console.log("Could not get token");
+				console.warn("Could not get token");
 			}
 		},
 
@@ -152,7 +149,7 @@ const calendarStore = {
 				}).catch(err => {
 					commit('setCalendarPermission', false);
 					commit('setCalendarToken', null);
-					console.warn(err);
+					console.warn(err.message);
 				})
 		},
 		getGoogleAuthTokenInteractive({commit, dispatch}) {
@@ -165,7 +162,7 @@ const calendarStore = {
 				}).catch(err => {
 					commit('setCalendarPermission', false);
 					commit('setCalendarToken', null);
-					console.warn(err);
+					console.warn(err.message);
 				});
 		},
 		async removeAndRevokeAuthToken({ getters, dispatch }) {
@@ -184,7 +181,7 @@ const calendarStore = {
 			commit('setCalendarDataLoaded', null);
 			return revokeOauthAccess(token)
 				.then(() => {
-					console.log("REVOKED ACCESS!");
+					console.warn("REVOKED ACCESS!");
 					commit('setCalendarToken', null);
 					return true;
 				})
@@ -197,7 +194,7 @@ const calendarStore = {
 			commit('setCalendarPermission', false);
 			return removeCachedAuthToken(token)
 				.then(() => {
-					console.log("CACHED TOKEN REMOVED!");
+					console.warn("CACHED TOKEN REMOVED!");
 					commit('setCalendarToken', null);
 					return true;
 				})

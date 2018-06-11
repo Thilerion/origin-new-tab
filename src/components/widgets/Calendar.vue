@@ -50,29 +50,6 @@ export default {
 			this.$store.dispatch('retryLoading');
 		}
 	}
-
-	/* IN CREATED:
-	this.$store.dispatch('getGoogleAuthTokenSilent')
-		.then(() => {
-			if (this.$store.getters.permission === false) {
-				this.$store.dispatch('changeWidgetActive', {name: 'calendar', active: false});
-				console.warn("FIRST GIVE PERMISSION BEFORE ACTIVATING THE CALENDAR WIDGET!");
-			}
-		})
-	*/
-
-	/* IN SETTINGS:
-	googleOAuth() {
-		this.$store.dispatch('getGoogleAuthTokenInteractive')
-			.then(() => {
-				if (this.$store.getters.permission) {
-					console.log("PERMISSION GRANTED FOR CALENDAR WIDGET, CAN NOW BE ACTIVATED");
-				} else {
-					console.warn("This is an error handler for the thingie in settings, getting google oauth token.");
-				}					
-			});
-	}
-	*/
 }
 </script>
 

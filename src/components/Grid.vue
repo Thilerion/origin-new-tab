@@ -158,7 +158,6 @@ export default {
 			return `Start${name.charAt(0).toUpperCase()}${name.slice(1)}`;
 		},
 		widgetClicked(e) {
-			console.log(e);
 			if (this.dndEnabled) {
 				e.preventDefault();
 				e.stopPropagation();

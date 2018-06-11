@@ -160,7 +160,7 @@ const calendarStore = {
 				.then(token => {
 					commit("setCalendarToken", token);
 					commit('setCalendarPermission', true);
-					dispatch('getCalendarData');
+					dispatch('initiateCalendarModule');
 					return token;
 				}).catch(err => {
 					commit('setCalendarPermission', false);
@@ -173,6 +173,12 @@ const calendarStore = {
 			await dispatch('removeCachedAuthToken', token);
 			await dispatch('revokeAccessToken', token);
 		},
+
+		retryLoading({dispatch}) {
+			dispatch('removeCachedAuthToken')
+				.then(() => dispatch('initiateCalendarModule'));
+		},
+
 		revokeAccessToken({ getters, commit }, token = getters.calendarToken) {
 			commit('setCalendarPermission', false);
 			commit('setCalendarDataLoaded', null);
@@ -186,6 +192,7 @@ const calendarStore = {
 					console.warn(`ERROR IN REVOKING ACCESS: `, err);
 				});
 		},
+
 		removeCachedAuthToken({ getters, commit }, token = getters.calendarToken) {
 			commit('setCalendarPermission', false);
 			return removeCachedAuthToken(token)

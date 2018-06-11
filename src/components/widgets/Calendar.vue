@@ -47,9 +47,7 @@ export default {
 			this.$store.dispatch('getGoogleAuthTokenInteractive');
 		},
 		retryLoading() {
-			this.$store.dispatch('removeCachedAuthToken')
-				.then(() => this.$store.dispatch('getGoogleAuthTokenSilent'))
-				.then(() => this.$store.dispatch('getCalendarList'));	
+			this.$store.dispatch('retryLoading');
 		}
 	}
 

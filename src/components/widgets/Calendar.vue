@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-calendar">
+	<div class="widget-calendar f-shadow-medium">
 
 		<div v-if="dataLoaded === false">
 			<button @click="retryLoading">Probeer opnieuw</button>
@@ -13,14 +13,30 @@
 			<button @click="getPermission">Geef toestemming</button>
 		</div>
 
-		<div v-else-if="permission && dataLoaded">
-			<div v-for="(day, key, index) in eventsByDay" :key="index">
-				<p class="day" :class="{today: day[0].daysFromToday === 0}">{{key | formatCalendar(calendarFormat)}}</p>
-				<div class="event-content" :class="{currently: new Date(event.start).getTime() < new Date().getTime()}" v-for="(event, index) in day" :key="index">
-					<div class="event-name">{{event.summary}}</div>
-					<div class="event-time event-all-day" v-if="event.allDay">Hele dag</div>
-					<div class="event-time" v-else>{{event.start | formatTime(timeFormat)}} - {{event.end | formatTime(timeFormat)}}</div>
-				</div>
+		<div 
+			v-else-if="permission && dataLoaded"
+			class="calendar-content"
+		>
+
+			<div
+				v-for="(day, key, index) in eventsByDay"
+				:key="index"
+				class="calendar-day-wrapper"
+			>
+				<div class="calendar-day">{{key | formatCalendar(calendarFormat)}}</div>
+				<ul	class="calendar-event-list">
+					<li
+						class="calendar-event-item"
+						v-for="(event, index) in day"
+						:key="index"
+						:class="{'current-event': eventIsNow(event)}"
+					>
+						<div class="calendar-event-summary">{{event.summary}}</div>
+						<div class="calendar-event-time">
+							{{formatTime(event)}}
+						</div>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -30,6 +46,7 @@
 import format from "date-fns/format";
 import nlLocale from 'date-fns/locale/nl';
 import addDays from 'date-fns/add_days';
+import isWithinRange from 'date-fns/is_within_range'
 
 export default {
 	computed: {
@@ -46,10 +63,10 @@ export default {
 			return this.$store.getters.calendarDataLoaded;
 		},
 		timeFormat() {
-			return this.$store.getters.timeFormat;
+			return this.$store.getters.calendarTimeFormat;
 		},
 		calendarFormat() {
-			return this.$store.getters.calendarFormat;
+			return this.$store.getters.calendarDateFormat;
 		}
 	},
 	methods: {
@@ -58,12 +75,19 @@ export default {
 		},
 		retryLoading() {
 			this.$store.dispatch('retryLoading');
+		},
+		formatTime({start, end, allDay}) {
+			if (allDay) {
+				return 'Hele dag';
+			} else {
+				return `${format(start, this.timeFormat)} - ${format(end, this.timeFormat)}`;
+			}
+		},
+		eventIsNow({start, end, allDay}) {
+			return isWithinRange(new Date(), start, end);
 		}
 	},
 	filters: {
-		formatTime: (date, timeFormat) => {
-			return format(date, timeFormat);
-		},
 		formatCalendar: (daysFromNow, calendarFormat) => {
 			const date = addDays(new Date(), daysFromNow);
 			return format(date, calendarFormat, {locale: nlLocale});
@@ -75,46 +99,72 @@ export default {
 <style scoped>
 .widget-calendar {
 	align-self: flex-start;
-	width: 100%;
 	margin: unset;
+	margin-right: auto;
 	text-align: left;
-	font-size: 12px;
+	font-size: calc(1em - 2px);
+	max-width: 20em;
 }
 
-.day.today {
-	background: rgba(255, 255, 255, 0.1);
-	font-weight: bold;
-	padding: 0.25em 0;
-	font-size: 14px;
-	border-bottom: 2px solid white;
+.calendar-day-wrapper {
+	margin-bottom: 0.25em;
+	font-size: 87.5%;
 }
 
-.event-content {
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 1em;
+.calendar-day {
+	text-transform: capitalize;
+	font-weight: 700;
 }
 
-.currently.event-content {
-	background: rgba(255, 255, 255, 0.1);
-	font-weight: bold;
-	padding: 0.25em 0;
+.calendar-event-list {
+	list-style: none;
+
+	margin-left: 1em;
+	line-height: 1.4;
+	padding: 0.15em 0;
 }
 
-.event-name {
-	flex: 1 1 50%;
+.calendar-event-item {
+	/* border-bottom: 1px solid rgba(255,255,255,0.75); */
+	/* border-bottom: 1px solid linear-gradient(to right, white calc(10em), transparent 5em); */
+	border-width: 0 0 1px 0;
+	border-style: solid;
+	border-image: linear-gradient(to right, rgba(255,255,255,0.7) calc(100% - 1.5em), transparent calc(100% - 1.5em)) 100% 0/0 0 1px;
+	padding-bottom: 0.1em;
+}
+
+.calendar-event-item.current-event {
+	position: relative;
+}
+
+.calendar-event-item.current-event::before {
+	position: absolute;
+	content: '';
+	width: 3px;
+	height: calc(100% - 0.1em - 4px);
+	background: rgba(255,255,255,0.7);
+	left: calc(-1em + 5px);
+	top: 2px;
+}
+
+.calendar-event-item:not(:last-of-type) {
+	margin-bottom: 0.25em;
+}
+
+.calendar-event-summary {
+	/* white-space: nowrap;
 	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	text-overflow: ellipsis; */
+	letter-spacing: 0.02em;
+	font-weight: 700;
 }
 
-.event-time {
-	flex: 0 0 auto;
-	margin-left: 0.5em;
-	text-align: right;
+.calendar-event-time {
+	opacity: 0.8;
+	font-size: calc(1em - 1px);
 }
 
-.event-all-day {
-	text-transform: uppercase;
+.current-event .calendar-event-time {
+	opacity: 1;
 }
 </style>

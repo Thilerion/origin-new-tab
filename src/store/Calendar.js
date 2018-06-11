@@ -63,11 +63,11 @@ const calendarStore = {
 			return !!(getters.widgets.find(w => w.name === 'calendar').active);
 		},
 
-		calendarFormat(state) {
+		calendarDateFormat(state) {
 			return state.calendarFormat;
 		},
 
-		timeFormat(state) {
+		calendarTimeFormat(state) {
 			return state.timeFormat;
 		}
 

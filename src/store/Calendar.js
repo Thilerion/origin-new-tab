@@ -65,6 +65,10 @@ const calendarStore = {
 
 		calendarFormat(state) {
 			return state.calendarFormat;
+		},
+
+		timeFormat(state) {
+			return state.timeFormat;
 		}
 
 	},

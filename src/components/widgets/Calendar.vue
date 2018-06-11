@@ -15,11 +15,11 @@
 
 		<div v-else-if="permission && dataLoaded">
 			<div v-for="(day, key, index) in eventsByDay" :key="index">
-				<p class="day" :class="{today: day[0].daysFromToday === 0}">{{key}}</p>
+				<p class="day" :class="{today: day[0].daysFromToday === 0}">{{key | formatCalendar(calendarFormat)}}</p>
 				<div class="event-content" :class="{currently: new Date(event.start).getTime() < new Date().getTime()}" v-for="(event, index) in day" :key="index">
 					<div class="event-name">{{event.summary}}</div>
 					<div class="event-time event-all-day" v-if="event.allDay">Hele dag</div>
-					<div class="event-time" v-else>{{event.formattedTimeStart}} - {{event.formattedTimeEnd}}</div>
+					<div class="event-time" v-else>{{event.start | formatTime(timeFormat)}} - {{event.end | formatTime(timeFormat)}}</div>
 				</div>
 			</div>
 		</div>
@@ -27,6 +27,10 @@
 </template>
 
 <script>
+import format from "date-fns/format";
+import nlLocale from 'date-fns/locale/nl';
+import addDays from 'date-fns/add_days';
+
 export default {
 	computed: {
 		eventsByDay() {
@@ -40,6 +44,12 @@ export default {
 		},
 		dataLoaded() {
 			return this.$store.getters.calendarDataLoaded;
+		},
+		timeFormat() {
+			return this.$store.getters.timeFormat;
+		},
+		calendarFormat() {
+			return this.$store.getters.calendarFormat;
 		}
 	},
 	methods: {
@@ -48,6 +58,15 @@ export default {
 		},
 		retryLoading() {
 			this.$store.dispatch('retryLoading');
+		}
+	},
+	filters: {
+		formatTime: (date, timeFormat) => {
+			return format(date, timeFormat);
+		},
+		formatCalendar: (daysFromNow, calendarFormat) => {
+			const date = addDays(new Date(), daysFromNow);
+			return format(date, calendarFormat, {locale: nlLocale});
 		}
 	}
 }

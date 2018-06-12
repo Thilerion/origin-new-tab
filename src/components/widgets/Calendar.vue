@@ -56,9 +56,6 @@ export default {
 		permission() {
 			return this.$store.getters.calendarPermission;
 		},
-		token() {
-			return !!this.$store.getters.calendarToken;
-		},
 		dataLoaded() {
 			return this.$store.getters.calendarDataLoaded;
 		},

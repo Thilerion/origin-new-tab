@@ -128,9 +128,6 @@ const store = new Vuex.Store({
 				deepClone(defaultSettings.user.widgets),
 				deepClone(widgets));
 			commit('setWidgets', mergedWidgets);
-		},
-		changeWidgetActive({ commit }, { name, active }) {
-			commit('setSingleWidgetActive', { name, active });			
 		}
 	}
 

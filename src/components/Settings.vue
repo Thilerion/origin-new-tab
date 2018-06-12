@@ -102,9 +102,6 @@ export default {
 		}
 	},
 	computed: {
-		showSettings() {
-			return this.$store.getters.showSettings;
-		},
 		disableFontSizeSlider() {
 			const isDefault = this.currentSettings.fontSize === null;
 			return isDefault;

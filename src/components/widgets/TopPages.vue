@@ -59,11 +59,6 @@ export default {
 			failed: false
 		}
 	},
-	computed: {
-		topSitesLength() {
-			return this.topSites.length;
-		}
-	},
 	methods: {
 		getTopSites() {
 			try {

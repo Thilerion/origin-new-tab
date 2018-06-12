@@ -22,7 +22,6 @@
 			<p
 				v-if="wallpaperToShow.user"
 				class="attribution f-shadow-heavy"
-				:class="{'default-wallpaper': usingDefaultWallpaper}"
 			>Photo by <a :href="userUrl" target="_blank">{{wallpaperToShow.user}}</a> on <a :href="unsplashUrl" target="_blank">Unsplash</a></p>
 			<p
 				v-else
@@ -82,9 +81,6 @@ export default {
 			catch(e) {
 				return;
 			}
-		},
-		hasLocation() {
-			return !!this.currentWallpaper.location;
 		}
 	},
 	methods: {

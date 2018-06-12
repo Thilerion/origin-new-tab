@@ -28,9 +28,6 @@ export default {
 		forecast() {
 			return this.$store.getters.forecast;
 		},
-		location() {
-			return this.$store.getters.location;
-		},
 		currently() {
 			return this.forecast.currently;
 		},

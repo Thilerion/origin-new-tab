@@ -28,9 +28,6 @@ export default {
 			const wp = this.wallpaperToShow;
 			return (wp && wp.url) ? wp.url : null;
 		},
-		nextWallpaperUrl() {
-			return this.$store.getters.nextWallpaperUrl;
-		},
 		animateName() {
 			if (this.wallpaperToShow && this.animate) {
 				return 'fade';

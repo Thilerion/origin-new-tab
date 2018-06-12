@@ -9,20 +9,12 @@ body {
 	font-weight: 300;
 }
 
-.f-weight-normal {
-	font-weight: 400;
-}
-
 .f-weight-heavy {
 	font-weight: 700;
 }
 
 .f-style-italic {
 	font-style: italic;
-}
-
-.f-style-normal {
-	font-style: normal;
 }
 
 .f-shadow-light {
@@ -67,8 +59,4 @@ body {
 
 .cursor-default {
 	cursor: default;
-}
-
-.no-select {
-	user-select: none;
 }

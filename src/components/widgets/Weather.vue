@@ -2,7 +2,6 @@
 	<div class="widget-weather f-shadow-medium widget-no-select" @click="extend" v-if="weatherDataLoaded">
 		<StartClimacon v-if="icon" :icon="icon" class="icon f-shadow-light"></StartClimacon>
 		<p class="temperature">{{currently.temperature | roundNumber}}&deg;</p>
-		<!-- <p class="summary">{{currently.summary}}</p> -->
 		<p class="location">{{addressCity}}</p>
 		<div class="row-extended">
 			<StartWeatherExtended class="extended" v-show="showExtended && weatherDataLoaded" :forecast="forecast.daily" />
@@ -82,13 +81,6 @@ export default {
 	text-align: right;
 	align-self: center;
 	font-size: 2em;
-}
-
-.summary {
-	grid-column: 1 / 4;
-	grid-row: 2;
-	text-align: center;	
-	font-size: 0.875em;
 }
 
 .location {

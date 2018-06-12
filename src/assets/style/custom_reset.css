@@ -35,26 +35,6 @@ button {
 	font-family: inherit;
 }
 
-button.button {
-	background: hsl(0, 0%, 97%);
-	border: 1px solid hsl(0, 0%, 30%);
-	color: hsl(0, 0%, 25%);
-	border-radius: 2px;
-	padding: 0.25em 0.5em;
-	min-width: 3em;
-	transition: all 100ms;
-}
-
-button.button:hover {
-	background: hsl(0, 0%, 25%);
-	color: hsl(0, 0%, 90%);
-}
-
-button.button:active {
-	background: hsl(0, 0%, 35%);
-	color: hsl(0, 0%, 90%);
-}
-
 button.icon-btn {
 	margin: 0;
 	padding: 0;

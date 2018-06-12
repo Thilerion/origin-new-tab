@@ -117,16 +117,6 @@ export default {
 	margin-bottom: auto;
 }
 
-.input-wrapper {
-	position: absolute;
-	right: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	font-size: inherit;
-	overflow: hidden;
-}
-
 .username-input {
 	padding: 1rem;
 	font-size: 0.75em;

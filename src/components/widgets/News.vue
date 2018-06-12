@@ -99,14 +99,6 @@ export default {
 	min-width: 40em;
 }
 
-.widget-news * {
-	font-size: inherit;
-}
-
-.widget-news.mouseover {
-	color: green;
-}
-
 .news-item-wrapper {
 	width: 100%;
 	height: 2.5em;

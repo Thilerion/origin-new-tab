@@ -95,6 +95,6 @@ function getPosition() {
 		}, (err) => {
 			console.warn("Error in retrieving location. ", err);
 			reject(err);
-		}, { timeout: 20000 });
+		}, { timeout: 20000, enableHighAccuracy: true });
 	})
 }

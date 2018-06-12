@@ -237,7 +237,7 @@ export default {
 
 .forecast-ds-text {
 	display: inline-block;
-	font-size: 11px;
+	font-size: 0.75em;
 	line-height: 1.4;
 	opacity: 0.9;
 	padding: 0.25em 0.5em;

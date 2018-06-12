@@ -1,5 +1,6 @@
 import widgetsApi from './api/index';
 const weatherApi = widgetsApi.weather;
+const locationApi = widgetsApi.location;
 
 const weatherStore = {
 
@@ -11,22 +12,38 @@ const weatherStore = {
 
 		apiData: {
 			expires: null,
-			location: {},
-			forecast: {}
+			address: {},
+			forecast: {},
+			locationCustom: {
+				active: false,
+				coordinates: {
+					latitude: null,
+					longitude: null
+				},
+				address: {
+					city: null,
+					street: null
+				}
+			}
 		},
+
 		dataLoaded: false
 	},
 
 	getters: {
 		weatherWatch: state => state.apiData,
 		forecast: state => state.apiData.forecast,
-		location: state => state.apiData.location,
-		address: state => state.apiData.location.bestAddress,
+		address: state => state.apiData.address,
 		addressCity(state) {
-			let address = state.apiData.location.bestAddress;
-			if (typeof address === 'string') return address.split(',')[0];
+			if (state.apiData && state.apiData.locationCustom && state.apiData.locationCustom.active) {
+				return state.apiData.locationCustom.address.city;
+			} else {
+				let address = state.apiData.address.bestAddress;
+				if (typeof address === 'string') return address.split(',')[0];
+			}
 		},
-		weatherDataLoaded: state => state.dataLoaded
+		weatherDataLoaded: state => state.dataLoaded,
+		customLocationActive: state => state.apiData.locationCustom.active
 	},
 
 	mutations: {
@@ -34,11 +51,22 @@ const weatherStore = {
 			state.locationLocal.latitude = latitude;
 			state.locationLocal.longitude = longitude;
 		},
-		setWeatherData(state, { expires, location, forecast }) {
+		setWeatherData(state, { expires, address, forecast }) {
 			state.apiData.expires = expires;
-			state.apiData.location = { ...location };
+			state.apiData.address = { ...address };
 			state.apiData.forecast = { ...forecast };
 			state.dataLoaded = true;
+		},
+		setCustomLocation(state, { coordinates, address }) {
+			const locCustom = {
+				active: true,
+				coordinates,
+				address
+			};
+			state.apiData.locationCustom = { ...state.apiData.locationCustom, ...locCustom };
+		},
+		unsetCustomLocation(state) {
+			state.apiData.locationCustom.active = false;
 		}
 	},
 
@@ -47,10 +75,15 @@ const weatherStore = {
 			console.warn('Getting location now');
 			commit('setLocalLocation', await getPosition());			
 		},
-		async getWeatherFromServer({state, dispatch}, commitOnFail) {
+		async getWeatherFromServer({getters, state, dispatch}, commitOnFail) {
 			try {
-				await dispatch('getLocalLocation');
-				const { latitude, longitude } = state.locationLocal;
+				if (getters.customLocationActive) {
+					var { latitude, longitude } = state.apiData.locationCustom.coordinates;
+				} else {
+					await dispatch('getLocalLocation');
+					var { latitude, longitude } = state.locationLocal;
+				}
+				
 				let url = weatherApi.url.get(latitude, longitude);				
 				let data = await weatherApi.request(url);				
 				dispatch('weatherSetFromApi', data);
@@ -65,6 +98,19 @@ const weatherStore = {
 				}
 			}
 		},
+		async getLocationFromServer({commit, dispatch}, address) {
+			try {
+				let url = locationApi.url.get();
+				let query = { address };
+				let data = await locationApi.request(url, query);
+				dispatch('locationCustomSetFromApi', data);
+				dispatch('getWeatherFromServer');
+			}
+			catch (e) {
+				console.warn("Failed getting custom location from server...");
+				commit('unsetCustomLocation');
+			}
+		},
 		weatherStorageLoadFailed({ dispatch }) {
 			dispatch('getWeatherFromServer');
 		},
@@ -72,14 +118,24 @@ const weatherStore = {
 			dispatch('getWeatherFromServer', data);
 		},
 		weatherSetFromStorage({ commit }, localData) {
-			const { location, forecast, expires } = localData;
-			commit('setWeatherData', { expires, location, forecast });
+			let { address, forecast, expires, locationCustom = null } = localData;
+			if (localData.location && !localData.address) {
+				//for clients with older localStorage code
+				address = localData.location;
+			}
+			commit('setWeatherData', { expires, address, forecast });
+			if (locationCustom && locationCustom.active) {
+				commit('setCustomLocation', locationCustom);
+			}
 		},
 		weatherSetFromApi({ commit }, apiData) {
 			const { expires } = apiData;
-			const location = apiData.data.location;
+			const address = apiData.data.address ? apiData.data.address : apiData.data.location;
 			const forecast = apiData.data.forecast;
-			commit('setWeatherData', { expires, location, forecast });
+			commit('setWeatherData', { expires, address, forecast });
+		},
+		locationCustomSetFromApi({ commit }, apiData) {
+			commit('setCustomLocation', apiData.data);
 		}
 	}
 

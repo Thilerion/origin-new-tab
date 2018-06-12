@@ -113,6 +113,22 @@ const widgets = {
 				}
 			}			
 		}
+	},
+	'location': {
+		api: true,
+		url: {
+			required: [],
+			get() {
+				return `${BASE_URL}/location`;
+			}
+		},
+		async request(url, query) {
+			let params = { ...query };
+			let options = { ...axiosOptions, params };
+			let data = await axios.get(url, options);
+			console.log(`%cRequest complete from "LOCATION", with the following data:\n`, "color: white; background-color: #089108; line-height: 1.5; font-weight: bold;", deepClone(data.data));
+			return data.data;
+		}
 	}
 };
 export default widgets;

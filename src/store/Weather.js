@@ -136,6 +136,14 @@ const weatherStore = {
 		},
 		locationCustomSetFromApi({ commit }, apiData) {
 			commit('setCustomLocation', apiData.data);
+		},
+		useCustomLocationFromSettings({ dispatch, commit }, customLocation) {
+			if (customLocation) {
+				dispatch('getLocationFromServer', customLocation);
+			} else {
+				commit('unsetCustomLocation');
+				dispatch('getWeatherFromServer');
+			}
 		}
 	}
 

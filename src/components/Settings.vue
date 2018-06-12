@@ -33,6 +33,10 @@
 					
 				</div>
 				<div class="setting-wrap">
+					<label class="f-weight-heavy">Andere locatie gebruiken?</label>
+					<input v-model="currentSettings.customLocation" type="text" class="input">
+				</div>
+				<div class="setting-wrap">
 					<label class="f-weight-heavy">Achtergrond collectie</label>
 					<div class="select">
 					<select v-model="currentSettings.wallpaperCollection">
@@ -87,7 +91,8 @@ export default {
 				wallpaperCollection: "",
 				quoteCategory: "",
 				widgets: "",
-				wallpaperCycleTimeout: ""
+				wallpaperCycleTimeout: "",
+				customLocation: ""
 			},
 			initialSettings: {
 				name: "",
@@ -96,7 +101,8 @@ export default {
 				wallpaperCollection: "",
 				quoteCategory: "",
 				widgets: "",
-				wallpaperCycleTimeout: ""
+				wallpaperCycleTimeout: "",
+				customLocation: ""
 			},
 			settingsOptions: {...settingsOptions}
 		}

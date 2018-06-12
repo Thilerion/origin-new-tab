@@ -114,7 +114,10 @@ const weatherStore = {
 		weatherStorageLoadFailed({ dispatch }) {
 			dispatch('getWeatherFromServer');
 		},
-		weatherStorageLoadExpired({ dispatch }, data) {
+		weatherStorageLoadExpired({ commit, dispatch }, data) {
+			if (data.locationCustom && data.locationCustom.active) {
+				commit('setCustomLocation', data.locationCustom);
+			}
 			dispatch('getWeatherFromServer', data);
 		},
 		weatherSetFromStorage({ commit }, localData) {

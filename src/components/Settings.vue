@@ -34,7 +34,11 @@
 				</div>
 				<div class="setting-wrap">
 					<label class="f-weight-heavy">Andere locatie gebruiken?</label>
-					<input v-model="currentSettings.customLocation" type="text" class="input">
+					<div class="check-wrap">
+						<input type="checkbox" id="useCustom" v-model="useCustomLocation">
+						<label for="useCustom" class="setting-check-label">{{useCustomLocation ? "Ja" : "Nee"}}</label>
+					</div>					
+					<input :disabled="!useCustomLocation" v-model="currentSettings.customLocation" type="text" class="input">
 				</div>
 				<div class="setting-wrap">
 					<label class="f-weight-heavy">Achtergrond collectie</label>
@@ -104,7 +108,9 @@ export default {
 				wallpaperCycleTimeout: "",
 				customLocation: ""
 			},
-			settingsOptions: {...settingsOptions}
+			settingsOptions: {...settingsOptions},
+
+			useCustomLocation: false
 		}
 	},
 	computed: {
@@ -128,12 +134,17 @@ export default {
 			let settingsToSave = {};
 			for (let setting in this.currentSettings) {
 
+				if (!this.useCustomLocation) {
+					this.currentSettings.customLocation = this.initialSettings.customLocation;
+				}
+
 				const hasChanged = !this.deepEquals(
 					this.currentSettings[setting],
 					this.initialSettings[setting]
 				);
 
 				if (hasChanged) {
+					console.log(setting);
 					settingsToSave[setting] = this.currentSettings[setting];
 				};
 			}
@@ -161,6 +172,10 @@ export default {
 		let currentSettings = this.$store.getters.currentSettings;
 		this.currentSettings = this.deepClone(currentSettings);
 		this.initialSettings = this.deepClone(currentSettings);
+
+		if (this.currentSettings.customLocation) {
+			this.useCustomLocation = true;
+		}
 	},
 	beforeDestroy() {
 		this.initialSettings = {};
@@ -256,6 +271,17 @@ export default {
 .setting-radio-label, .setting-check-label {
 	margin-left: 0.25rem;
 	text-transform: capitalize;
+}
+
+.check-wrap {
+	display: flex;
+	align-items: center;
+	margin-bottom: 0.5em;
+}
+
+input[type="text"]:disabled {
+	background-color: hsl(60, 5%, 85%);
+	opacity: 0.9;
 }
 
 input[type="range"].slider {

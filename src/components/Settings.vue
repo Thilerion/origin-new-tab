@@ -39,6 +39,7 @@
 						<label for="useCustom" class="setting-check-label">{{useCustomLocation ? "Ja" : "Nee"}}</label>
 					</div>					
 					<input :disabled="!useCustomLocation" v-model="currentSettings.customLocation" type="text" class="input">
+					<button :disabled="!useCustomLocation || !currentSettings.customLocation || currentSettings.customLocation === initialSettings.customLocation" @click="setCustomLocation">Check</button>
 				</div>
 				<div class="setting-wrap">
 					<label class="f-weight-heavy">Achtergrond collectie</label>
@@ -132,11 +133,12 @@ export default {
 		},
 		saveSettings() {
 			let settingsToSave = {};
-			for (let setting in this.currentSettings) {
 
-				if (!this.useCustomLocation) {
-					this.currentSettings.customLocation = this.initialSettings.customLocation;
-				}
+			if (this.useCustomLocation === false) {
+				this.$store.commit('unsetCustomLocation');
+			}
+
+			for (let setting in this.currentSettings) {
 
 				const hasChanged = !this.deepEquals(
 					this.currentSettings[setting],
@@ -166,6 +168,9 @@ export default {
 		toggleDnd() {
 			this.$store.commit('toggleDnd');
 			this.saveSettings();
+		},
+		setCustomLocation() {
+			this.$store.dispatch('useCustomLocationFromSettings', this.currentSettings.customLocation);
 		}
 	},
 	created() {
@@ -179,6 +184,14 @@ export default {
 	},
 	beforeDestroy() {
 		this.initialSettings = {};
+	},
+	watch: {
+		'$store.getters.addressCity'(newVal, oldVal) {
+			if (this.useCustomLocation) {
+				this.currentSettings.customLocation = newVal;
+				this.initialSettings.customLocation = newVal;
+			}
+		}
 	}
 }
 </script>

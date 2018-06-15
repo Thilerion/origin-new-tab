@@ -182,38 +182,42 @@ const weatherStore = {
 			}
 		},
 
-		async setCustomLocationFromSettings({state, getters, commit, dispatch}, {useCustomLocation, addressCity}) {
+		async setCustomLocationFromSettings({ state, getters, commit, dispatch }, { useCustomLocation, addressCity }) {
+			console.warn(useCustomLocation, addressCity);
 			const currentUseCustom = state.weatherData.useCustomLocation;
 			const currentAddressCity = state.weatherData.address.city;
+			const currentWeatherData = state.weatherData.weatherDataLoaded ? getters.weatherWatch : null;
+
 			try {
 				if (useCustomLocation === false && currentUseCustom === true) {
-					commit('setUseCustomLocation', false);					
-				} else if (useCustomLocation === true && currentUseCustom === false) {
-					commit('setUseCustomLocation', true);
+					commit('setUseCustomLocation', false);
+					dispatch('initiateGetWeather', currentWeatherData);
+				} else if (useCustomLocation === true) {
+					if (currentUseCustom === false) {
+						commit('setUseCustomLocation', true);
+					}
 					if (currentAddressCity !== addressCity) {
 						await dispatch('getCustomLocationFromServer', addressCity);
+						dispatch('initiateGetWeather', currentWeatherData);
 					}
 				}
-
-				//gets new weather, with current weather as fallback if it is loaded
-				const currentWeatherData = state.weatherData.weatherDataLoaded ? getters.weatherWatch : null;
-				dispatch('initiateGetWeather', currentWeatherData);
 			} catch (e) {
 				console.warn("Error in setting custom location from settings!");
-				console.error(e);
+				return Promise.reject(e);
 			}
 		},
 		async getCustomLocationFromServer({commit}, inputLocation) {
 			try {
+				debugger;
 				let url = locationApi.url.get();
-				let data = await locationApi.request(url, inputLocation);
+				let data = await locationApi.request(url, { address: inputLocation });
 				const { coordinates, address } = data.data;
 				commit('setCoordinates', coordinates);
 				commit('setAddress', address);
 				return address.city;
 			} catch (e) {
 				console.warn("Getting custom location failed");
-				console.error(e);
+				return Promise.reject(e);
 			}
 		}
 	}

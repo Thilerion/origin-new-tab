@@ -33,7 +33,7 @@ const settingsStore = {
 	},
 
 	actions: {
-		saveSettings({ commit, dispatch }, { name, language, fontSize, wallpaperCollection, quoteCategory, widgets, wallpaperCycleTimeout }) {
+		saveSettings({ commit, dispatch }, { name, language, fontSize, wallpaperCollection, quoteCategory, widgets, wallpaperCycleTimeout, weatherSettings }) {
 			if (name) commit('setUsername', name);			
 			if (language) commit('setLanguage', language);
 			if (fontSize !== undefined) commit('setFontSize', fontSize);

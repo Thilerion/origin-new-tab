@@ -56,6 +56,12 @@
 					</select>
 					</div>				
 				</div>
+				<div class="setting-wrap">
+					<label>Use custom location?</label>
+					<input type="checkbox" v-model="currentSettings.weatherSettings.useCustomLocation">
+					<label>{{currentSettings.weatherSettings.useCustomLocation ? "Ja" : "Nee"}}</label>
+					<input type="text" v-model="currentSettings.weatherSettings.addressCity" :disabled="!currentSettings.weatherSettings.useCustomLocation">
+				</div>
 			</div>
 			<div class="grid-col-2">
 				<div class="setting-wrap">
@@ -130,7 +136,6 @@ export default {
 			let settingsToSave = {};
 
 			for (let setting in this.currentSettings) {
-
 				const hasChanged = !this.deepEquals(
 					this.currentSettings[setting],
 					this.initialSettings[setting]

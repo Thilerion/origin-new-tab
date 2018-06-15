@@ -61,25 +61,6 @@ const weatherStore = {
 		useCustomLocation(state) {
 			return state.weatherData.useCustomLocation;
 		}
-		/* weatherWatch: state => {
-			return { weatherData, expires, locationData } = state;
-		},
-		forecast: state => state.weatherData.forecast,
-		addressCity(state) {
-			if (getters.useCustomLocation === true) {
-				return state.locationData.address.city;
-			} else {
-				return state.weatherData.address.city;
-			}
-			// if (state.apiData && state.apiData.locationCustom && state.apiData.locationCustom.active) {
-			// 	return state.apiData.locationCustom.address.city;
-			// } else {
-			// 	let address = state.apiData.address.bestAddress;
-			// 	if (typeof address === 'string') return address.split(',')[0];
-			// }
-		},
-		weatherDataLoaded: state => state.weatherDataLoaded,
-		useCustomLocation: state => state.locationData.useCustomLocation */
 	},
 
 	mutations: {
@@ -198,6 +179,41 @@ const weatherStore = {
 			} catch (e) {
 				console.error(e);
 				return Promise.reject("Could not get weather from server");
+			}
+		},
+
+		async setCustomLocationFromSettings({state, getters, commit, dispatch}, {useCustomLocation, addressCity}) {
+			const currentUseCustom = state.weatherData.useCustomLocation;
+			const currentAddressCity = state.weatherData.address.city;
+			try {
+				if (useCustomLocation === false && currentUseCustom === true) {
+					commit('setUseCustomLocation', false);					
+				} else if (useCustomLocation === true && currentUseCustom === false) {
+					commit('setUseCustomLocation', true);
+					if (currentAddressCity !== addressCity) {
+						await dispatch('getCustomLocationFromServer', addressCity);
+					}
+				}
+
+				//gets new weather, with current weather as fallback if it is loaded
+				const currentWeatherData = state.weatherData.weatherDataLoaded ? getters.weatherWatch : null;
+				dispatch('initiateGetWeather', currentWeatherData);
+			} catch (e) {
+				console.warn("Error in setting custom location from settings!");
+				console.error(e);
+			}
+		},
+		async getCustomLocationFromServer({commit}, inputLocation) {
+			try {
+				let url = locationApi.url.get();
+				let data = await locationApi.request(url, inputLocation);
+				const { coordinates, address } = data.data;
+				commit('setCoordinates', coordinates);
+				commit('setAddress', address);
+				return address.city;
+			} catch (e) {
+				console.warn("Getting custom location failed");
+				console.error(e);
 			}
 		}
 	}

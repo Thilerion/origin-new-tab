@@ -33,15 +33,6 @@
 					
 				</div>
 				<div class="setting-wrap">
-					<label class="f-weight-heavy">Andere locatie gebruiken?</label>
-					<div class="check-wrap">
-						<input type="checkbox" id="useCustom" v-model="useCustomLocation">
-						<label for="useCustom" class="setting-check-label">{{useCustomLocation ? "Ja" : "Nee"}}</label>
-					</div>					
-					<input :disabled="!useCustomLocation" v-model="currentSettings.customLocation" type="text" class="input">
-					<button :disabled="!useCustomLocation || !currentSettings.customLocation || currentSettings.customLocation === initialSettings.customLocation" @click="setCustomLocation">Check</button>
-				</div>
-				<div class="setting-wrap">
 					<label class="f-weight-heavy">Achtergrond collectie</label>
 					<div class="select">
 					<select v-model="currentSettings.wallpaperCollection">
@@ -97,7 +88,10 @@ export default {
 				quoteCategory: "",
 				widgets: "",
 				wallpaperCycleTimeout: "",
-				customLocation: ""
+				weatherSettings: {
+					useCustomLocation: "",
+					addressCity: ""
+				}
 			},
 			initialSettings: {
 				name: "",
@@ -107,11 +101,12 @@ export default {
 				quoteCategory: "",
 				widgets: "",
 				wallpaperCycleTimeout: "",
-				customLocation: ""
+				weatherSettings: {
+					useCustomLocation: "",
+					addressCity: ""
+				}
 			},
-			settingsOptions: {...settingsOptions},
-
-			useCustomLocation: false
+			settingsOptions: {...settingsOptions}
 		}
 	},
 	computed: {
@@ -133,10 +128,6 @@ export default {
 		},
 		saveSettings() {
 			let settingsToSave = {};
-
-			if (this.useCustomLocation === false) {
-				this.$store.commit('unsetCustomLocation');
-			}
 
 			for (let setting in this.currentSettings) {
 
@@ -168,30 +159,15 @@ export default {
 		toggleDnd() {
 			this.$store.commit('toggleDnd');
 			this.saveSettings();
-		},
-		setCustomLocation() {
-			this.$store.dispatch('useCustomLocationFromSettings', this.currentSettings.customLocation);
 		}
 	},
 	created() {
 		let currentSettings = this.$store.getters.currentSettings;
 		this.currentSettings = this.deepClone(currentSettings);
 		this.initialSettings = this.deepClone(currentSettings);
-
-		if (this.currentSettings.customLocation) {
-			this.useCustomLocation = true;
-		}
 	},
 	beforeDestroy() {
 		this.initialSettings = {};
-	},
-	watch: {
-		'$store.getters.addressCity'(newVal, oldVal) {
-			if (this.useCustomLocation) {
-				this.currentSettings.customLocation = newVal;
-				this.initialSettings.customLocation = newVal;
-			}
-		}
 	}
 }
 </script>

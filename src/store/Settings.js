@@ -18,7 +18,7 @@ const settingsStore = {
 				quoteCategory: getters.quoteCategory,
 				widgets: copiedWidgets,
 				wallpaperCycleTimeout: getters.wallpaperCycleTimeout,
-				customLocation: getters.customLocationActive ? getters.addressCity : ""
+				weatherSettings: {useCustomLocation: getters.useCustomLocation, addressCity: getters.addressCity}
 			}
 		},
 		dndEnabled(state) {
@@ -33,7 +33,7 @@ const settingsStore = {
 	},
 
 	actions: {
-		saveSettings({ commit, dispatch }, { name, language, fontSize, wallpaperCollection, quoteCategory, widgets, wallpaperCycleTimeout, customLocation }) {
+		saveSettings({ commit, dispatch }, { name, language, fontSize, wallpaperCollection, quoteCategory, widgets, wallpaperCycleTimeout }) {
 			if (name) commit('setUsername', name);			
 			if (language) commit('setLanguage', language);
 			if (fontSize !== undefined) commit('setFontSize', fontSize);
@@ -41,7 +41,7 @@ const settingsStore = {
 			if (quoteCategory) commit('setQuoteCategory', quoteCategory);
 			if (widgets) commit('setWidgets', widgets);
 			if (wallpaperCycleTimeout) commit('setWallpaperCycleTimeout', wallpaperCycleTimeout);
-			if (customLocation != null) dispatch('useCustomLocationFromSettings', customLocation);
+			if (weatherSettings) dispatch('setCustomLocationFromSettings', weatherSettings);
 		}
 	}
 

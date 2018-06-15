@@ -5,84 +5,76 @@ const locationApi = widgetsApi.location;
 const weatherStore = {
 
 	state: {
-		locationLocal: {
-			latitude: null,
-			longitude: null
+		weatherData: {
+			expires: null,
+			address: {
+				city: null,
+				bestAddress: null
+			},
+			forecast: {}
 		},
 
-		apiData: {
-			expires: null,
-			address: {},
-			forecast: {},
-			locationCustom: {
-				active: false,
-				coordinates: {
-					latitude: null,
-					longitude: null
-				},
-				address: {
-					city: null,
-					street: null
-				}
+		locationData: {
+			useCustomLocation: null,
+			coordinates: {
+				latitude: null,
+				longitude: null
+			},
+			address: {
+				city: null,
+				street: null
 			}
 		},
 
-		dataLoaded: false
+		weatherDataLoaded: false
 	},
 
 	getters: {
-		weatherWatch: state => state.apiData,
-		forecast: state => state.apiData.forecast,
-		address: state => state.apiData.address,
-		addressCity(state) {
-			if (state.apiData && state.apiData.locationCustom && state.apiData.locationCustom.active) {
-				return state.apiData.locationCustom.address.city;
-			} else {
-				let address = state.apiData.address.bestAddress;
-				if (typeof address === 'string') return address.split(',')[0];
-			}
+		weatherWatch: state => {
+			return { weatherData, locationData } = state;
 		},
-		weatherDataLoaded: state => state.dataLoaded,
-		customLocationActive: state => state.apiData.locationCustom.active
+		forecast: state => state.weatherData.forecast,
+		addressCity(state) {
+			if (getters.useCustomLocation === true) {
+				return state.locationData.address.city;
+			} else {
+				return state.weatherData.address.city;
+			}
+			// if (state.apiData && state.apiData.locationCustom && state.apiData.locationCustom.active) {
+			// 	return state.apiData.locationCustom.address.city;
+			// } else {
+			// 	let address = state.apiData.address.bestAddress;
+			// 	if (typeof address === 'string') return address.split(',')[0];
+			// }
+		},
+		weatherDataLoaded: state => state.weatherDataLoaded,
+		useCustomLocation: state => state.locationData.useCustomLocation
 	},
 
 	mutations: {
-		setLocalLocation: (state, { latitude, longitude }) => {
-			state.locationLocal.latitude = latitude;
-			state.locationLocal.longitude = longitude;
+		setLocation: (state, { latitude, longitude }) => {
+			state.locationData.coordinates = { latitude, longitude };
 		},
 		setWeatherData(state, { expires, address, forecast }) {
-			state.apiData.expires = expires;
-			state.apiData.address = { ...address };
-			state.apiData.forecast = { ...forecast };
-			state.dataLoaded = true;
-		},
-		setCustomLocation(state, { coordinates, address }) {
-			const locCustom = {
-				active: true,
-				coordinates,
-				address
-			};
-			state.apiData.locationCustom = { ...state.apiData.locationCustom, ...locCustom };
-		},
-		unsetCustomLocation(state) {
-			state.apiData.locationCustom.active = false;
+			state.weatherData.expires = expires;
+			state.weatherData.address = { ...address };
+			state.weatherData.forecast = { ...forecast };
+			state.weatherDataLoaded = true;
 		}
 	},
 
 	actions: {
-		async getLocalLocation({ commit, state }) {
+		async getLocationFromGeolocation({ commit, state }) {
 			console.warn('Getting location now');
 			commit('setLocalLocation', await getPosition());			
 		},
 		async getWeatherFromServer({getters, state, dispatch}, commitOnFail) {
 			try {
-				if (getters.customLocationActive) {
-					var { latitude, longitude } = state.apiData.locationCustom.coordinates;
-				} else {
-					await dispatch('getLocalLocation');
-					var { latitude, longitude } = state.locationLocal;
+				if (getters.useCustomLocation === false) {
+					await dispatch('getLocationFromGeolocation');
 				}
+
+				var { latitude, longitude } = state.locationData.coordinates;
 				
 				let url = weatherApi.url.get(latitude, longitude);				
 				let data = await weatherApi.request(url);				

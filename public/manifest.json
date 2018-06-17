@@ -20,5 +20,9 @@
 		"https://*.google.com/*",
 		"identity"
 	],
-	"options_page": "options.html"
+	"options_page": "options.html",
+	"background": {
+		"page": "js/background.html",
+		"persistent": false
+	}
   }

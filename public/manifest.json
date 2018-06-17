@@ -15,14 +15,13 @@
 	"permissions": [
 		"geolocation",
 		"topSites",
-		"storage",
 		"chrome://favicon/",
 		"https://*.google.com/*",
 		"identity"
 	],
 	"options_page": "options.html",
 	"background": {
-		"page": "js/background.html",
+		"scripts": ["js/background.js"],
 		"persistent": false
 	},
 	"browser_action": {

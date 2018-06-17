@@ -24,5 +24,8 @@
 	"background": {
 		"page": "js/background.html",
 		"persistent": false
+	},
+	"browser_action": {
+		"default_title": "Origin New Tab"
 	}
   }

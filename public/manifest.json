@@ -20,5 +20,5 @@
 		"https://*.google.com/*",
 		"identity"
 	],
-	"options_page": "index.html#settings"
+	"options_page": "options.html"
   }

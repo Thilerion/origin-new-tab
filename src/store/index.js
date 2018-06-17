@@ -18,6 +18,10 @@ const userApi = widgetsApi.user;
 import { defaultSettings, settingsOptions } from './defaultUserSettings';
 import { deepClone, deepMergeArray } from '../utils/deepObject';
 
+const windowHash = window.location.hash.substr(1);
+const settingsPage = windowHash === "settings";
+console.log(windowHash, settingsPage);
+
 const store = new Vuex.Store({
 	strict: process.env.NODE_ENV !== 'development',
 
@@ -41,7 +45,7 @@ const store = new Vuex.Store({
 			widgets: defaultSettings.user.widgets
 		},
 		editingUsername: false,
-		showSettings: false
+		showSettings: settingsPage
 	},
 
 	getters: {
@@ -72,6 +76,19 @@ const store = new Vuex.Store({
 		toggleSettings(state, bool) {
 			if (bool) state.showSettings = bool;
 			else state.showSettings = !state.showSettings;
+
+			if (bool === false) {
+				console.log(window.location.hash);
+				if (window.location.hash) {
+					history.pushState("", document.title, window.location.pathname);
+				}
+			} else if (bool === true) {
+				if (!window.location.hash) {
+					history.pushState("", `${document.title} - Settings`, "#settings");
+				}
+			}
+			console.log("Doc title: ", document.title);
+			console.log(window.location.pathname);
 		},
 		setGridPosition(state, { name, row, col }) {
 			const index = state.user.widgets.findIndex(w => w.name === name);

@@ -24,7 +24,7 @@ const settingsPage = windowHash === "settings";
 const store = new Vuex.Store({
 	strict: process.env.NODE_ENV !== 'development',
 
-	plugins: [createPersistedState('sp_', settingsOptions.user.widgets.haveStorageModule)],
+	plugins: [createPersistedState('sp_', settingsOptions.user.storageModules)],
 
 	modules: {
 		Wallpaper,

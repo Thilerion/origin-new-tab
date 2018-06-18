@@ -9,66 +9,48 @@
 			v-for="(widget, index) of activeWidgets"
 			:key="widget.name"
 		>
-			<div
+			<StartWidget
 				v-if="draggableWidgets.findIndex(w => w.name === widget.name) > -1"
 				class="widget draggable"
-				:style="[widgetGridPlacement[index], {'font-size': widget.fontSize ? `calc(${widget.fontSize}px + 1rem` : '1rem'}]"
+				:style="[widgetGridPlacement[index]]"
 				:class="{'is-dragged': currentlyDragging.index === index}"
 				@click="widgetClicked"
 				:draggable="dndEnabled"
 				@drag="dragging(widget.name, index, $event)"
 				@dragend="dragEnd(widget.name, index, $event)"
 				@dragstart="dragStart(widget.name, index, $event)"
+				:widget="widget"
+				adjustable-widget
+				:dndEnabled="dndEnabled"
 			>
-				<component			
-					:is="componentFromName(widget.name)"				
-					class="widget-inner"				
-				/>
 				<div class="widget-font-size" v-if="dndEnabled">
 					<button class="widget-size-btn icon-btn" @click="decreaseWidgetWidth(widget.name)">&#11208;&ndash;&#11207;</button>
 					<button class="widget-size-btn icon-btn" @click="increaseWidgetWidth(widget.name)">&#11207;&ndash;&#11208;</button>
 					<button class="font-size-btn icon-btn" @click="decreaseFont(widget.name)">T-</button>
 					<button class="font-size-btn icon-btn" @click="increaseFont(widget.name)">T+</button>
 				</div>
-			</div>
-			<div
+			</StartWidget>
+			<StartWidget
 				v-else
 				class="widget"
 				:style="widgetGridPlacement[index]"
+				:widget="widget"
 			>
-				<component
-					:is="componentFromName(widget.name)"
-					class="widget-inner"
-				/>
-			</div>
+			</StartWidget>
 		</WidgetFadeIn>
 		<button v-if="dndEnabled" class="stop-dnd" @click="$store.commit('toggleDnd')">✓</button>
 	</div>
 </template>
 
 <script>
-import StartGreeting from "./widgets/Greeting.vue";
-import StartWallpaperDetails from './widgets/WallpaperDetails.vue';
-import StartQuote from './widgets/Quote.vue';
-import StartWeather from './widgets/Weather.vue';
-import StartNews from './widgets/News.vue';
-import StartSettingsButton from './SettingsButton.vue';
-import StartTopPages from './widgets/TopPages.vue';
-import StartCalendar from './widgets/Calendar.vue';
+import StartWidget from './Widget.vue';
 
 import {deepClone} from '@/utils/deepObject';
 import {settingsOptions} from '@/store/defaultUserSettings';
 
 export default {
 	components: {
-		StartGreeting,
-		StartWallpaperDetails,
-		StartQuote,
-		StartWeather,
-		StartNews,
-		StartSettingsButton,
-		StartTopPages,
-		StartCalendar
+		StartWidget
 	},
 	data() {
 		return {
@@ -96,18 +78,18 @@ export default {
 			return this.$store.getters.widgets;
 		},
 		widgetsInGrid() {
-			return this.widgets.filter(w => settingsOptions.user.widgets.displayInGrid.includes(w.name));
+			return this.widgets.filter(w => settingsOptions.user.widgetOptions[w.name].grid);
 		},
 		activeWidgets() {
 			return this.widgetsInGrid.filter(w => {
 				const active = w.active;
-				const canBeInactive = settingsOptions.user.widgets.canBeDisabled.includes(w.name);
+				const canBeInactive = settingsOptions.user.widgetOptions[w.name].disable;
 				return w.active || !canBeInactive;
 			});
 		},
 		draggableWidgets() {
 			return this.activeWidgets.filter(w => {
-				return settingsOptions.user.widgets.canBeMoved.includes(w.name);
+				return settingsOptions.user.widgetOptions[w.name].move;
 			})
 		},
 		widgetGridPlacement() {
@@ -154,9 +136,6 @@ export default {
 		}
 	},
 	methods: {
-		componentFromName(name) {
-			return `Start${name.charAt(0).toUpperCase()}${name.slice(1)}`;
-		},
 		widgetClicked(e) {
 			if (this.dndEnabled) {
 				e.preventDefault();

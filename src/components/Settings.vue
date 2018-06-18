@@ -121,10 +121,11 @@ export default {
 			return isDefault;
 		},
 		widgetsCanBeDisabled() {
+			const widgetOptions = settingsOptions.user.widgetOptions;
 			let cur = [...this.currentSettings.widgets];
-			console.log(cur);
+
 			return cur.filter(w => {
-				return this.settingsOptions.user.widgets.canBeDisabled.includes(w.name);
+				return widgetOptions[w.name].disable;
 			});
 		}
 	},

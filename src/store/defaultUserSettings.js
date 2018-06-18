@@ -85,11 +85,56 @@ const settingsOptions = {
 			min: 10,
 			max: 22
 		},
-		widgets: {
-			canBeDisabled: ['greeting', 'news', 'quote', 'weather', 'topPages', 'calendar'],
-			canBeMoved: ['greeting', 'news', 'quote', 'weather', 'topPages', 'wallpaperDetails', 'calendar'],
-			displayInGrid: ['greeting', 'news', 'quote', 'weather', 'topPages', 'settingsButton', 'wallpaperDetails', 'calendar'],
-			haveStorageModule: ['user', 'news', 'quote', 'weather', 'wallpaper', 'calendar']
+		storageModules: ['user', 'news', 'quote', 'weather', 'wallpaper', 'calendar'],
+		widgetOptions: {
+			greeting: {
+				disable: true,
+				move: true,
+				grid: true,
+				fontSize: true
+			},
+			news: {
+				disable: true,
+				move: true,
+				grid: true,
+				fontSize: true
+			},
+			quote: {
+				disable: true,
+				move: true,
+				grid: true,
+				fontSize: true
+			},
+			weather: {
+				disable: true,
+				move: true,
+				grid: true,
+				fontSize: true
+			},
+			topPages: {
+				disable: true,
+				move: true,
+				grid: true,
+				fontSize: true
+			},
+			calendar: {
+				disable: true,
+				move: true,
+				grid: true,
+				fontSize: true
+			},
+			wallpaperDetails: {
+				disable: false,
+				move: true,
+				grid: true,
+				fontSize: true
+			},
+			settingsButton: {
+				disable: false,
+				move: false,
+				grid: true,
+				fontSize: false
+			}
 		}
 	},
 	wallpaper: {

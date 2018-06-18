@@ -22,21 +22,13 @@
 				:widget="widget"
 				adjustable-widget
 				:dndEnabled="dndEnabled"
-			>
-				<div class="widget-font-size" v-if="dndEnabled">
-					<button class="widget-size-btn icon-btn" @click="decreaseWidgetWidth(widget.name)">&#11208;&ndash;&#11207;</button>
-					<button class="widget-size-btn icon-btn" @click="increaseWidgetWidth(widget.name)">&#11207;&ndash;&#11208;</button>
-					<button class="font-size-btn icon-btn" @click="decreaseFont(widget.name)">T-</button>
-					<button class="font-size-btn icon-btn" @click="increaseFont(widget.name)">T+</button>
-				</div>
-			</StartWidget>
+			/>
 			<StartWidget
 				v-else
 				class="widget"
 				:style="widgetGridPlacement[index]"
 				:widget="widget"
-			>
-			</StartWidget>
+			/>
 		</WidgetFadeIn>
 		<button v-if="dndEnabled" class="stop-dnd" @click="$store.commit('toggleDnd')">✓</button>
 	</div>
@@ -256,20 +248,6 @@ export default {
 			if (this.currentlyDragging.index != null && newValue != null && newValue !== oldValue) {
 				this.setNewWidgetPosition(this.currentlyDragging.colChange, this.currentlyDragging.rowChange, this.currentlyDraggingName);
 			}
-		},
-		increaseFont(name) {
-			console.log("Increase", name);
-			this.$store.commit('increaseFontSize', name);
-		},
-		decreaseFont(name) {
-			console.log("Decrease", name);
-			this.$store.commit('decreaseFontSize', name);
-		},
-		increaseWidgetWidth(name) {
-			this.$store.commit('increaseWidgetWidth', {name, gridCols: this.gridCols});
-		},
-		decreaseWidgetWidth(name) {
-			this.$store.commit('decreaseWidgetWidth', {name, gridCols: this.gridCols});
 		}
 	},
 	watch: {
@@ -362,10 +340,6 @@ export default {
 .dnd .is-dragged.draggable.widget {
 	background-color: rgba(50, 100, 200, 0.6);
 	opacity: 1;
-}
-
-.dnd .widget.draggable * {
-	cursor: move!important;
 }
 
 .grid-align {

@@ -126,6 +126,12 @@ const store = new Vuex.Store({
 			cols[1] -= 1;
 
 			state.user.widgets[index].column = [...cols];
+		},
+		increaseWidgetHeight() {
+
+		},
+		decreaseWidgetHeight() {
+			
 		}
 	},
 

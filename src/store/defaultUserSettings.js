@@ -85,54 +85,74 @@ const settingsOptions = {
 			min: 10,
 			max: 22
 		},
+		widgetFontSize: {
+			min: -4,
+			max: 4
+		},
 		storageModules: ['user', 'news', 'quote', 'weather', 'wallpaper', 'calendar'],
 		widgetOptions: {
 			greeting: {
 				disable: true,
 				move: true,
 				grid: true,
+				height: true,
+				width: true,
 				fontSize: true
 			},
 			news: {
 				disable: true,
 				move: true,
 				grid: true,
+				height: true,
+				width: true,
 				fontSize: true
 			},
 			quote: {
 				disable: true,
 				move: true,
 				grid: true,
+				height: true,
+				width: true,
 				fontSize: true
 			},
 			weather: {
 				disable: true,
 				move: true,
 				grid: true,
+				height: true,
+				width: true,
 				fontSize: true
 			},
 			topPages: {
 				disable: true,
 				move: true,
 				grid: true,
+				height: true,
+				width: true,
 				fontSize: true
 			},
 			calendar: {
 				disable: true,
 				move: true,
 				grid: true,
+				height: true,
+				width: true,
 				fontSize: true
 			},
 			wallpaperDetails: {
 				disable: false,
 				move: true,
 				grid: true,
+				height: true,
+				width: true,
 				fontSize: true
 			},
 			settingsButton: {
 				disable: false,
 				move: false,
 				grid: true,
+				height: false,
+				width: false,
 				fontSize: false
 			}
 		}

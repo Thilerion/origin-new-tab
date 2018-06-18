@@ -1,12 +1,29 @@
 <template>
 	<div
 		class="widget"
-		:style="{'font-size': widgetFontSize}"
 	>
 		<component
 			:is="widgetComponent"
 			class="widget-inner"
+			:style="{'font-size': widgetFontSize}"
 		/>
+		<div class="widget-settings" v-if="dndEnabled">
+			<div class="widget-setting-group widget-settings-font" v-if="canChangeFontSize">
+				<button class="widget-setting-btn decrease icon-btn" :disabled="minFontSizeReached" @click="decreaseFontSize">-</button>
+				<span class="setting-name">Text</span>
+				<button class="widget-setting-btn increase icon-btn" :disabled="maxFontSizeReached" @click="increaseFontSize">+</button>
+			</div>
+			<div class="widget-setting-group widget-settings-width" v-if="canChangeWidth">
+				<button class="widget-setting-btn decrease icon-btn" @click="decreaseWidth">-</button>
+				<span class="setting-name">Width</span>
+				<button class="widget-setting-btn increase icon-btn" @click="increaseWidth">+</button>
+			</div>
+			<div class="widget-setting-group widget-settings-height" v-if="canChangeHeight">
+				<button class="widget-setting-btn decrease icon-btn" @click="decreaseHeight">-</button>
+				<span class="setting-name">Height</span>
+				<button class="widget-setting-btn increase icon-btn" @click="increaseHeight">+</button>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -33,41 +50,163 @@ export default {
 		StartTopPages,
 		StartCalendar
 	},
+
 	props: {
+
 		widget: {
 			type: Object,
 			required: true
 		},
+
 		adjustableWidget: {
 			type: Boolean,
 			default: false
 		},
+
 		dndEnabled: {
 			type: Boolean,
 			default: false
 		}
 	},
+
 	data() {
 		return {
-			baseFontSize: '1rem'
+			baseFontSize: '1rem',
+			widgetOptions: settingsOptions.user.widgetOptions[this.widget.name]
 		}
 	},
+
 	computed: {
+
 		widgetComponent() {
 			let name = this.widget.name;
 			return `Start${name.charAt(0).toUpperCase()}${name.slice(1)}`;
 		},
+
 		widgetFontSize() {
 			let fontSizeMod = this.widget.fontSize || 0;
 			return `calc(${fontSizeMod}px + ${this.baseFontSize})`;
 		},
+
 		canChangeFontSize() {
-			return settingsOptions.user.widgetOptions[this.widget.name].fontSize;
+			return !!this.widgetOptions.fontSize;
+		},
+
+		maxFontSizeReached() {
+			return this.widget.fontSize >= settingsOptions.user.widgetFontSize.max;
+		},
+
+		minFontSizeReached() {
+			return this.widget.fontSize <= settingsOptions.user.widgetFontSize.min;
+		},
+
+		canChangeHeight() {
+			return !!this.widgetOptions.height;
+		},
+
+		canChangeWidth() {
+			return !!this.widgetOptions.width;
 		}
+
+	},
+
+	methods: {
+
+		increaseFontSize() {
+			this.$store.commit('increaseFontSize', this.widget.name);
+		},
+
+		decreaseFontSize() {
+			this.$store.commit('decreaseFontSize', this.widget.name);
+		},
+
+		//TODO: mutation needs "gridCols" variable
+		increaseHeight() {
+			this.$store.commit('increaseWidgetHeight', this.widget.name);
+		},
+
+		decreaseHeight() {
+			this.$store.commit('decreaseWidgetHeight', this.widget.name);
+		},
+
+		increaseWidth() {
+			this.$store.commit('increaseWidgetWidth', this.widget.name);
+		},
+
+		decreaseWidth() {
+			this.$store.commit('decreaseWidgetWidth', this.widget.name);
+		}
+
 	}
 }
 </script>
 
-<style scoped>
+<style>
+.dnd .draggable .widget-inner {
+	/* cursor: move; */
+}
 
+.dnd .widget.draggable .widget-inner * {
+	cursor: move;
+}
+</style>
+
+<style scoped>
+.widget-settings {
+	/* background: white; */
+	color: black;
+	font-size: 12px;
+	display: flex;
+	position: absolute;
+	top: 0;
+	right: 0;
+	opacity: 0.2;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content:stretch;
+	max-height: 100%;
+	flex-wrap: wrap-reverse;
+}
+
+.widget:hover .widget-settings {
+	opacity: 1;
+}
+
+.widget-setting-group {
+	flex: 1 1 auto;
+	white-space: nowrap;
+	padding: 0.2em 0.3em;
+	display: flex;
+	align-items: center;
+	background: white;
+}
+
+.widget-setting-group:last-of-type {
+	border-bottom-left-radius: 4px;
+	padding-bottom: 0.3em;
+}
+
+.setting-name {
+	flex: 1 1 auto;
+	text-align: center;
+}
+
+.widget-setting-btn {
+	background-color: black;
+	color: white;
+	border-radius: 4px;
+	width: 1em;
+	height: 1em;
+	font-size: 14px;
+	line-height: 1em;
+	cursor: pointer;
+}
+
+.widget-setting-btn.decrease {
+	margin-right: 0.2em;
+}
+
+.widget-setting-btn.increase {
+	margin-left: 0.2em;
+}
 </style>

@@ -192,14 +192,22 @@ export default {
 }
 
 .widget-setting-btn {
+	border: 2px solid transparent;
 	background-color: black;
 	color: white;
 	border-radius: 4px;
 	width: 1em;
 	height: 1em;
 	font-size: 14px;
-	line-height: 1em;
+	line-height: 10px;
 	cursor: pointer;
+	transition: all .1s ease;
+}
+
+.widget-setting-btn:hover:not(:active) {
+	background: transparent;
+	color: black;
+	border: 2px solid black;
 }
 
 .widget-setting-btn.decrease {

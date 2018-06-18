@@ -20,7 +20,6 @@ import { deepClone, deepMergeArray } from '../utils/deepObject';
 
 const windowHash = window.location.hash.substr(1);
 const settingsPage = windowHash === "settings";
-console.log(windowHash, settingsPage);
 
 const store = new Vuex.Store({
 	strict: process.env.NODE_ENV !== 'development',

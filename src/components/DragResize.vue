@@ -144,10 +144,15 @@ export default {
 			this.dragData.initialCols = [...this.widgetCols];
 			this.dragData.initialRows = [...this.widgetRows];
 
+			const emptyDragImage = document.createElement('div');
+			e.dataTransfer.setDragImage(emptyDragImage, 0, 0);
+			e.dataTransfer.effectAllowed = "move";
+
 			e.target.addEventListener('drag', this.dragging)
 			e.target.addEventListener('dragend', this.dragEnd)
 		},
 		dragging: throttle(function(e) {
+			e.preventDefault();
 			if (e.clientX > 5 && e.clientY > 5) {
 				this.dragData.current = [e.clientX, e.clientY];
 			}			
@@ -252,7 +257,7 @@ export default {
 	grid-template-columns: var(--corner-sizing) var(--center-size) var(--corner-sizing);
 }
 
-.dnd-active.is-draggable .widget-slot-wrapper, .dnd-active.is-resizable .widget-slot-wrapper {
+.dnd-active.is-draggable .widget-slot-wrapper, .dnd-active.is-resizable .widget-slot-wrapper, .dnd-active.is-dragging .widget-slot-wrapper, .dnd-active.is-resizing .widget-slot-wrapper {
 	pointer-events: none;
 }
 
@@ -337,8 +342,8 @@ export default {
 	cursor: nwse-resize;
 }
 
-.handle-center {
-	cursor: move;
+.handle-center, .is-dragging {
+	cursor: move!important;
 }
 
 .handle-n {

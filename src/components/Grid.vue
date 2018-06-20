@@ -1,5 +1,5 @@
 <template>
-	<div class="grid" ref="grid" :class="{'dnd': dndEnabled}">
+	<div class="grid" ref="grid" :class="{'dnd': dndEnabled}" @dragover="dragOver">
 		<div class="grid-lines" v-if="dndEnabled">
 			<div class="grid-lines-cell" v-for="box in (gridRows * gridCols)" :key="box"></div>
 			<div class="grid-align hor" v-show="showHor"></div>
@@ -234,6 +234,13 @@ export default {
 		rowOrColChanged(newValue, oldValue) {
 			if (this.currentlyDragging.index != null && newValue != null && newValue !== oldValue) {
 				this.setNewWidgetPosition(this.currentlyDragging.colChange, this.currentlyDragging.rowChange, this.currentlyDraggingName);
+			}
+		},
+		dragOver(e) {
+			// used to show the "move" icon when dnd is enabled and dragging
+			if (this.dndEnabled)  {
+				e.preventDefault();
+				e.dataTransfer.dropEffect = "move";
 			}
 		}
 	},

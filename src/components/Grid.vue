@@ -5,22 +5,27 @@
 			<div class="grid-align hor" v-show="showHor"></div>
 			<div class="grid-align ver" v-show="showVer"></div>
 		</div>
+
 		<WidgetFadeIn
 			v-for="(widget, index) of activeWidgets"
 			:key="widget.name"
 		>
 			<StartWidget
+				class="widget"
+				:style="widgetGridPlacement[index]"
+				:widget="widget"
+			/>
+
+		<!--	<StartWidget
 				v-if="draggableWidgets.findIndex(w => w.name === widget.name) > -1"
-				class="widget draggable"
+				class="widget"
 				:style="[widgetGridPlacement[index]]"
 				:class="{'is-dragged': currentlyDragging.index === index}"
 				@click.native="widgetClicked"
-				:draggable="dndEnabled"
 				@drag.native="dragging(widget.name, index, $event)"
 				@dragend.native="dragEnd(widget.name, index, $event)"
 				@dragstart.native="dragStart(widget.name, index, $event)"
 				:widget="widget"
-				adjustable-widget
 				:dndEnabled="dndEnabled"
 				:gridSize="[gridRows,gridCols]"
 			/>
@@ -29,7 +34,7 @@
 				class="widget"
 				:style="widgetGridPlacement[index]"
 				:widget="widget"
-			/>
+			/>-->
 		</WidgetFadeIn>
 		<button v-if="dndEnabled" class="stop-dnd" @click="$store.commit('toggleDnd')">✓</button>
 	</div>
@@ -317,32 +322,6 @@ export default {
 	user-select: none;
 }
 
-.widget {
-	position: relative;
-	display: flex;
-	justify-content: center;
-}
-
-.widget-inner {
-	margin: auto;
-}
-
-.dnd .widget.draggable {
-	box-shadow: 0 0 2px 5px rgba(255,255,255,0.3);
-	transition: box-shadow .2s ease, background-color .5s ease;
-	cursor:move!important;
-}
-
-.dnd .widget.draggable:hover {
-	box-shadow: 0 0 5px 5px rgba(60, 154, 255, 0.904);
-	background-color: rgba(50, 100, 200, 0.1);
-}
-
-.dnd .is-dragged.draggable.widget {
-	background-color: rgba(50, 100, 200, 0.6);
-	opacity: 1;
-}
-
 .grid-align {
 	position: absolute;
 	background: rgba(0, 255, 179, 0.774);
@@ -367,42 +346,5 @@ export default {
 	right: 5px;
 	bottom: 5px;
 	border: none!important;
-}
-
-.widget-font-size {
-	position: absolute;
-	right: 0;
-	top: 0;
-	padding: 2px 0.5rem;
-	height: auto;
-	background: white;
-	color: black;
-	border-bottom-left-radius: 4px;
-	font-size: 11px;
-	display: flex;
-	align-items: center;
-	justify-content: space-around;
-	opacity: 0.5;
-}
-
-.widget:hover .widget-font-size {
-	opacity: 1;
-}
-
-.icon-btn.font-size-btn, .icon-btn.widget-size-btn {
-	border-radius: 4px;
-	font-size: 14px;
-	margin: 0 0.2em;
-	padding: 0 0.2em;
-}
-
-.font-size-btn:hover, .widget-size-btn:hover {
-	color: white;
-	background: black;
-}
-
-.icon-btn.widget-size-btn {
-	letter-spacing: -5px;
-	padding-right: calc(0.2em + 4px);
 }
 </style>

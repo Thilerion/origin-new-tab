@@ -2,7 +2,11 @@
 	<div
 		class="widget"
 	>
-		<StartDragResize>
+		<StartDragResize
+			:canDrag="canDrag"
+			:canResize="canResize"
+			class="widget-drag-resize"
+		>
 			<component
 				:is="widgetComponent"
 				class="widget-inner"
@@ -56,11 +60,6 @@ export default {
 			required: true
 		},
 
-		adjustableWidget: {
-			type: Boolean,
-			default: false
-		},
-
 		dndEnabled: {
 			type: Boolean,
 			default: false
@@ -78,6 +77,14 @@ export default {
 	},
 
 	computed: {
+
+		canResize() {
+			return settingsOptions.user.widgetOptions[this.widget.name].resize;
+		},
+
+		canDrag() {
+			return settingsOptions.user.widgetOptions[this.widget.name].move;
+		},
 
 		gridCols() {
 			return this.gridSize[1];
@@ -144,6 +151,18 @@ export default {
 </style>
 
 <style scoped>
+.widget {
+	position: relative;
+}
+
+.widget-drag-resize {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .widget-settings {	
 	position: absolute;
 	top: 0;

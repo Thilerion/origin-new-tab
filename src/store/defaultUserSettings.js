@@ -95,64 +95,56 @@ const settingsOptions = {
 				disable: true,
 				move: true,
 				grid: true,
-				height: true,
-				width: true,
+				resize: true,
 				fontSize: true
 			},
 			news: {
 				disable: true,
 				move: true,
 				grid: true,
-				height: true,
-				width: true,
+				resize: true,
 				fontSize: true
 			},
 			quote: {
 				disable: true,
 				move: true,
 				grid: true,
-				height: true,
-				width: true,
+				resize: true,
 				fontSize: true
 			},
 			weather: {
 				disable: true,
 				move: true,
 				grid: true,
-				height: true,
-				width: true,
+				resize: true,
 				fontSize: true
 			},
 			topPages: {
 				disable: true,
 				move: true,
 				grid: true,
-				height: true,
-				width: true,
+				resize: true,
 				fontSize: true
 			},
 			calendar: {
 				disable: true,
 				move: true,
 				grid: true,
-				height: true,
-				width: true,
+				resize: true,
 				fontSize: true
 			},
 			wallpaperDetails: {
 				disable: false,
 				move: true,
 				grid: true,
-				height: true,
-				width: true,
+				resize: true,
 				fontSize: true
 			},
 			settingsButton: {
 				disable: false,
 				move: false,
 				grid: true,
-				height: false,
-				width: false,
+				resize: false,
 				fontSize: false
 			}
 		}

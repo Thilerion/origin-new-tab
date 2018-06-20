@@ -166,6 +166,7 @@ export default {
 			return rowsResized;
 		},
 		widgetResized() {
+			if (!this.resizeData.resizing || !this.resizeData.resizeDirection) return;
 			const cols = this.columnsResized;
 			const rows = this.rowsResized;
 			const newCols = [...this.resizeData.initialCols];
@@ -209,6 +210,7 @@ export default {
 			if (newCols[1] > gridCols + 1) newCols[1] = gridCols + 1;
 			if (newRows[0] < 1) newRows[0] = 1;
 			if (newRows[1] > gridRows + 1) newRows[1] = gridRows + 1;
+			if (newRows[1] === null) debugger;
 			return {cols: newCols, rows: newRows};
 		}
 	},
@@ -307,6 +309,10 @@ export default {
 		},
 		widgetResized: {
 			handler(newValue, oldValue) {
+				if (!newValue) return;
+				if (JSON.stringify(newValue) === JSON.stringify({cols: this.resizeData.initialCols, rows: this.resizeData.initialRows}) && !oldValue) {
+					return;
+				}
 				const {cols, rows} = newValue;
 				if (cols && rows && this.resizeData.resizing) {
 					if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {

@@ -14,6 +14,7 @@
 				class="widget"
 				:style="widgetGridPlacement[index]"
 				:widget="widget"
+				:dndEnabled="dndEnabled"
 			/>
 		</WidgetFadeIn>
 		<button v-if="dndEnabled" class="stop-dnd" @click="$store.commit('toggleDnd')">✓</button>

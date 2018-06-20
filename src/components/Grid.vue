@@ -229,6 +229,8 @@ export default {
 			const el = this.$refs.grid;
 			const gridCols = parseInt(getComputedStyle(el).getPropertyValue('--cols'));
 			const gridRows = parseInt(getComputedStyle(el).getPropertyValue('--rows'));
+			this.gridCols = gridCols;
+			this.gridRows = gridRows;
 			this.$store.commit('setGridSize', {cols: gridCols, rows: gridRows});
 		},
 		rowOrColChanged(newValue, oldValue) {

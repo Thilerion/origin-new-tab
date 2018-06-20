@@ -61,8 +61,7 @@ export default {
 				initial: [null, null],
 				current: [null, null],
 				initialCols: [null, null],
-				initialRows: [null, null],
-				calculateDraggingTimer: null
+				initialRows: [null, null]
 			},
 			resizeData: {
 
@@ -79,10 +78,17 @@ export default {
 		},
 		dragResizeClasses() {
 			const classes = [];
-			if (this.canDrag) classes.push('is-draggable');
-			if (this.canResize) classes.push('is-resizable');
 			if (this.dndEnabled) classes.push('dnd-active');
-			if (this.isDragged) classes.push('is-dragged');
+
+			if (this.dragData.dragging) {
+				classes.push('is-dragging');
+			} else if (this.resizeData.resizing) {
+				classes.push('is-resizing');
+			} else {
+				if (this.canDrag) classes.push('is-draggable');
+				if (this.canResize) classes.push('is-resizable');
+			}
+
 			return classes;
 		},
 		gridColWidth() {
@@ -157,8 +163,6 @@ export default {
 			this.dragData.dragging = false;
 			this.dragData.initialCols = [null, null];
 			this.dragData.initialRows = [null, null];
-			clearInterval(this.dragData.calculateDraggingTimer);
-			this.dragData.calculateDraggingTimer = null;
 			el.removeEventListener('drag', this.dragging);
 			el.removeEventListener('dragend', this.dragEnd)
 		},
@@ -167,7 +171,9 @@ export default {
 		//RESIZE
 		resizeStart(handle, e) {
 			console.log(handle, e);
-		}
+		},
+
+		//OTHER
 	},
 	mounted() {
 		this.gridCols = parseInt(getComputedStyle(this.$el).getPropertyValue('--cols'));
@@ -206,9 +212,12 @@ export default {
 	align-items: center;
 }
 
+.dnd-active {
+	transition: box-shadow 200ms ease, background-color 400ms ease;
+}
+
 .dnd-active.is-draggable, .dnd-active.is-resizable {
 	box-shadow: 0 0 2px 4px rgba(255,255,255,0.4), inset 0 0 2px 2px rgba(255,255,255,0.2);
-	transition: box-shadow 200ms ease, background-color 400ms ease;
 }
 
 .dnd-active.is-draggable:hover {
@@ -219,6 +228,10 @@ export default {
 	background-color: rgba(255, 255, 255, 0.2);
 }
 
+.dnd-active.is-dragging {
+	box-shadow: 0 0 2px 4px rgba(0, 153, 255, 0.6), inset 0 0 2px 2px rgba(0, 153, 255, 0.3);
+	background-color: rgba(41, 169, 255, 0.4);
+}
 
 </style>
 
@@ -243,12 +256,19 @@ export default {
 	pointer-events: none;
 }
 
+.is-resizable.drag-resize-wrapper {
+	--shadow-size: 1rem;
+}
+
+.drag-resize-wrapper:not(.is-resizable) {
+	--shadow-size: 0rem;
+}
+
 .drag-resize-wrapper .resize-handle {
 	--edge-colour: rgba(2, 132, 84, 0.1);
 	--corner-colour: rgba(108, 45, 147, 0.1);
 	transition: box-shadow 200ms ease;
 
-	--shadow-size: 1rem;
 	--offset: calc(var(--shadow-size) * 0.8);
 	--blur: calc(var(--shadow-size) * 0.8);	
 	

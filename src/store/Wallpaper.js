@@ -218,13 +218,14 @@ const wallpaperStore = {
 			dispatch('getWallpapersFromServer');
 		},
 
-		wallpaperStorageLoadExpired({ dispatch }, data) {
-			commit('setWallpaperCollection', commitOnFail.collection);
+		wallpaperStorageLoadExpired({ commit, dispatch }, data) {
+			commit('setWallpaperCollection', data.collection);
+			commit('setWallpaperCycleTimeout', data.wallpaperCycleTimeout);
 			dispatch('getWallpapersFromServer', data);
 		},
 
 		wallpaperSetFromStorage({ commit, dispatch }, localData) {
-			const {
+			let {
 				wallpapers = [],
 				expires,
 				currentWallpaperId = 0,
@@ -233,6 +234,8 @@ const wallpaperStore = {
 				wallpaperCycleTimeout,
 				arrayUpdateChangeAmount
 			} = localData;
+
+			if (!expires) expires = 1;
 
 			//TODO: refresh to next wallpaper if lastSet is too long ago
 			commit('setWallpapers', wallpapers);

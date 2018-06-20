@@ -2,20 +2,22 @@
 	<div
 		class="widget"
 	>
-		<component
-			:is="widgetComponent"
-			class="widget-inner"
-			:style="{'font-size': widgetFontSize}"
-		/>
+		<StartDragResize>
+			<component
+				:is="widgetComponent"
+				class="widget-inner"
+				:style="{'font-size': widgetFontSize}"
+			/>
 
-		<StartWidgetSettings
-			class="widget-settings"
-			v-if="dndEnabled"
-			@changeFontSize="changeFontSize"
-			@changeWidth="changeWidth"
-			@changeHeight="changeHeight"
-			:widget="widget"
-		/>
+			<StartWidgetSettings
+				class="widget-settings"
+				v-if="dndEnabled"
+				@changeFontSize="changeFontSize"
+				@changeWidth="changeWidth"
+				@changeHeight="changeHeight"
+				:widget="widget"
+			/>
+		</StartDragResize>
 	</div>
 </template>
 
@@ -29,6 +31,7 @@ import StartSettingsButton from './SettingsButton.vue';
 import StartTopPages from './widgets/TopPages.vue';
 import StartCalendar from './widgets/Calendar.vue';
 import StartWidgetSettings from './WidgetSettings.vue';
+import StartDragResize from './DragResize.vue';
 
 import {settingsOptions} from '@/store/defaultUserSettings';
 
@@ -42,7 +45,8 @@ export default {
 		StartSettingsButton,
 		StartTopPages,
 		StartCalendar,
-		StartWidgetSettings
+		StartWidgetSettings,
+		StartDragResize
 	},
 
 	props: {

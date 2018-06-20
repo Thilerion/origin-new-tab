@@ -5,7 +5,10 @@
 		<StartDragResize
 			:canDrag="canDrag"
 			:canResize="canResize"
+			:widgetCols="widget.column"
+			:widgetRows="widget.row"
 			class="widget-drag-resize"
+			@moveWidget="moveWidget"
 		>
 			<component
 				:is="widgetComponent"
@@ -63,10 +66,6 @@ export default {
 		dndEnabled: {
 			type: Boolean,
 			default: false
-		},
-
-		gridSize: {
-			type: Array
 		}
 	},
 
@@ -87,11 +86,11 @@ export default {
 		},
 
 		gridCols() {
-			return this.gridSize[1];
+			return this.$store.getters.gridCols;
 		},
 
 		gridRows() {
-			return this.gridSize[0];
+			return this.$store.getters.gridRows;
 		},
 
 		columns() {
@@ -139,6 +138,9 @@ export default {
 				change: amount
 			};
 			this.$store.commit('changeWidgetWidth', data);
+		},
+		moveWidget(moveCols, moveRows) {
+			this.$store.dispatch('moveWidget', {name: this.widget.name, moveCols, moveRows});
 		}
 	}
 }

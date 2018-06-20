@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import throttle from 'lodash.throttle';
+
 export default {
 	props: {
 		canDrag: {
@@ -41,18 +43,34 @@ export default {
 		canResize: {
 			type: Boolean,
 			default: true
+		},
+		widgetRows: {
+			type: Array,
+			required: true
+		},
+		widgetCols: {
+			type: Array,
+			required: true
 		}
 	},
 	data() {
 		return {
 			handles: ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'],
 			dragData: {
+				dragging: false,
 				initial: [null, null],
-				current: [null, null]
+				current: [null, null],
+				initialCols: [null, null],
+				initialRows: [null, null],
+				calculateDraggingTimer: null
 			},
 			resizeData: {
 
-			}
+			},
+			gridCols: null,
+			gridRows: null,
+			windowWidth: window.innerWidth,
+			windowHeight: window.innerHeight
 		}
 	},
 	computed: {
@@ -66,6 +84,49 @@ export default {
 			if (this.dndEnabled) classes.push('dnd-active');
 			if (this.isDragged) classes.push('is-dragged');
 			return classes;
+		},
+		gridColWidth() {
+			return this.windowWidth / this.gridCols;
+		},
+		gridRowHeight() {
+			return this.windowHeight / this.gridRows;
+		},
+		columnsMoved() {
+			if (!this.dragData.dragging) return 0;
+
+			let initialCols = [...this.dragData.initialCols];
+
+			const maxLimit = (this.gridCols + 1) - initialCols[1];
+			const minLimit = initialCols[0] - 1;
+
+			const pxMoved = this.dragData.current[0] - this.dragData.initial[0];
+			const colsMoved = Math.round(pxMoved / this.gridColWidth);
+
+			const colsMovedLimited = Math.min(maxLimit, Math.max(-minLimit, colsMoved));
+			
+			const colsMovedSinceStart = (initialCols[0] - this.widgetCols[0]);
+			const absoluteMoved = colsMovedSinceStart + colsMovedLimited;
+			return absoluteMoved;
+		},
+		rowsMoved() {
+			if (!this.dragData.dragging) return 0;
+
+			let initialRows = [...this.dragData.initialRows];
+
+			const maxLimit = (this.gridRows + 1) - initialRows[1];
+			const minLimit = initialRows[0] - 1;
+
+			const pxMoved = this.dragData.current[1] - this.dragData.initial[1];
+			const rowsMoved = Math.round(pxMoved / this.gridRowHeight);
+
+			const rowsMovedLimited = Math.min(maxLimit, Math.max(-minLimit, rowsMoved));
+			
+			const rowsMovedSinceStart = (initialRows[0] - this.widgetRows[0]);
+			const absoluteMoved = rowsMovedSinceStart + rowsMovedLimited;
+			return absoluteMoved;
+		},
+		widgetMoved() {
+			return [this.columnsMoved, this.rowsMoved];
 		}
 	},
 	methods: {
@@ -73,26 +134,58 @@ export default {
 		dragStart(e) {
 			this.dragData.initial = [e.clientX, e.clientY];
 			this.dragData.current = [e.clientX, e.clientY];
-			
-			let el = e.target;
+			this.dragData.dragging = true;
+			this.dragData.initialCols = [...this.widgetCols];
+			this.dragData.initialRows = [...this.widgetRows];
 
-			console.warn("Drag start");
+			e.target.addEventListener('drag', this.dragging)
+			e.target.addEventListener('dragend', this.dragEnd)
+		},
+		dragging: throttle(function(e) {
+			if (e.clientX > 5 && e.clientY > 5) {
+				this.dragData.current = [e.clientX, e.clientY];
+			}			
+		}, 1000/30),
 
-			el.addEventListener('drag', this.dragging)
-			el.addEventListener('dragend', this.dragEnd)
-		},
-		dragging: (e) => {
-			console.log("Dragging");
-		},
 		dragEnd(e) {
-			console.warn("Drag end", e);
-			const el = e.target;
+			this.resetDrag(e.target);			
+		},
+
+		resetDrag(el) {
+			this.dragData.initial = [null, null];
+			this.dragData.current = [null, null];
+			this.dragData.dragging = false;
+			this.dragData.initialCols = [null, null];
+			this.dragData.initialRows = [null, null];
+			clearInterval(this.dragData.calculateDraggingTimer);
+			this.dragData.calculateDraggingTimer = null;
 			el.removeEventListener('drag', this.dragging);
 			el.removeEventListener('dragend', this.dragEnd)
 		},
+
+
 		//RESIZE
 		resizeStart(handle, e) {
 			console.log(handle, e);
+		}
+	},
+	mounted() {
+		this.gridCols = parseInt(getComputedStyle(this.$el).getPropertyValue('--cols'));
+		this.gridRows = parseInt(getComputedStyle(this.$el).getPropertyValue('--rows'));
+	},
+	watch: {
+		widgetMoved: {
+			handler(newValue, oldValue) {
+				const cols = newValue[0];
+				const rows = newValue[1];
+
+				if (cols === 0 && rows === 0) return;
+				if (cols === oldValue[0] && rows === oldValue[1]) return;
+				if (!this.dragging) return;
+				
+				this.$emit('moveWidget', cols, rows);					
+			},
+			deep: true
 		}
 	}
 }

@@ -42,7 +42,9 @@ const store = new Vuex.Store({
 			widgets: defaultSettings.user.widgets
 		},
 		editingUsername: false,
-		showSettings: settingsPage
+		showSettings: settingsPage,
+		gridCols: null,
+		gridRows: null
 	},
 
 	getters: {
@@ -54,7 +56,9 @@ const store = new Vuex.Store({
 			return state.editingUsername || !state.user.username;
 		},
 		widgets: state => state.user.widgets,
-		showSettings: state => state.showSettings
+		showSettings: state => state.showSettings,
+		gridCols: state => state.gridCols,
+		gridRows: state => state.gridRows
 	},
 
 	mutations: {
@@ -87,10 +91,11 @@ const store = new Vuex.Store({
 			console.log("Doc title: ", document.title);
 			console.log(window.location.pathname);
 		},
-		setGridPosition(state, { name, row, col }) {
-			const index = state.user.widgets.findIndex(w => w.name === name);
-			state.user.widgets[index].row = [...row];
+		setGridPosition(state, { index, moveCols, moveRows }) {
+			let row = [...state.user.widgets[index].row].map(n => n += moveRows);
+			let col = [...state.user.widgets[index].column].map(n => n += moveCols);
 			state.user.widgets[index].column = [...col];
+			state.user.widgets[index].row = [...row];
 		},
 		increaseFontSize(state, name) {
 			const index = state.user.widgets.findIndex(w => w.name === name);
@@ -177,6 +182,10 @@ const store = new Vuex.Store({
 				}
 			}
 			state.user.widgets.find(w => w.name === name).row = [...newWidgetRows];
+		},
+		setGridSize(state, { cols, rows }) {
+			state.gridCols = cols;
+			state.gridRows = rows;
 		}
 	},
 
@@ -195,6 +204,11 @@ const store = new Vuex.Store({
 				deepClone(defaultSettings.user.widgets),
 				deepClone(widgets));
 			commit('setWidgets', mergedWidgets);
+		},
+		moveWidget({ state, commit }, { name, moveCols, moveRows }) {
+			const index = state.user.widgets.findIndex(w => w.name === name);
+
+			commit('setGridPosition', { index, moveCols, moveRows });
 		}
 	}
 

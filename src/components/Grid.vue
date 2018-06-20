@@ -15,26 +15,6 @@
 				:style="widgetGridPlacement[index]"
 				:widget="widget"
 			/>
-
-		<!--	<StartWidget
-				v-if="draggableWidgets.findIndex(w => w.name === widget.name) > -1"
-				class="widget"
-				:style="[widgetGridPlacement[index]]"
-				:class="{'is-dragged': currentlyDragging.index === index}"
-				@click.native="widgetClicked"
-				@drag.native="dragging(widget.name, index, $event)"
-				@dragend.native="dragEnd(widget.name, index, $event)"
-				@dragstart.native="dragStart(widget.name, index, $event)"
-				:widget="widget"
-				:dndEnabled="dndEnabled"
-				:gridSize="[gridRows,gridCols]"
-			/>
-			<StartWidget
-				v-else
-				class="widget"
-				:style="widgetGridPlacement[index]"
-				:widget="widget"
-			/>-->
 		</WidgetFadeIn>
 		<button v-if="dndEnabled" class="stop-dnd" @click="$store.commit('toggleDnd')">✓</button>
 	</div>
@@ -247,8 +227,9 @@ export default {
 		},
 		getCSSGridVariables() {
 			const el = this.$refs.grid;
-			this.gridCols = parseInt(getComputedStyle(el).getPropertyValue('--cols'));
-			this.gridRows = parseInt(getComputedStyle(el).getPropertyValue('--rows'));
+			const gridCols = parseInt(getComputedStyle(el).getPropertyValue('--cols'));
+			const gridRows = parseInt(getComputedStyle(el).getPropertyValue('--rows'));
+			this.$store.commit('setGridSize', {cols: gridCols, rows: gridRows});
 		},
 		rowOrColChanged(newValue, oldValue) {
 			if (this.currentlyDragging.index != null && newValue != null && newValue !== oldValue) {

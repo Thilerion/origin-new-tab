@@ -143,6 +143,73 @@ export default {
 		},
 		widgetMoved() {
 			return [this.columnsMoved, this.rowsMoved];
+		},
+		columnsResized() {
+			if (!this.resizeData.resizing) return 0;
+			const dir = this.resizeData.resizeDirection;
+			if (!dir.includes('w') && !dir.includes('e')) return 0;
+
+			const pxMoved = this.resizeData.current[0] - this.resizeData.initial[0];
+			const colsResized = Math.round(pxMoved / this.gridColWidth);
+
+			return colsResized;
+						
+		},
+		rowsResized() {
+			if (!this.resizeData.resizing) return 0;
+			const dir = this.resizeData.resizeDirection;
+			if (!dir.includes('n') && !dir.includes('s')) return 0;
+
+			const pxMoved = this.resizeData.current[1] - this.resizeData.initial[1];
+			const rowsResized = Math.round(pxMoved / this.gridRowHeight);
+			
+			return rowsResized;
+		},
+		widgetResized() {
+			const cols = this.columnsResized;
+			const rows = this.rowsResized;
+			const newCols = [...this.resizeData.initialCols];
+			const newRows = [...this.resizeData.initialRows];
+			const dir = this.resizeData.resizeDirection;
+			const n = dir.includes('n');
+			const s = dir.includes('s');
+			const w = dir.includes('w');
+			const e = dir.includes('e');
+
+			const MIN_WIDTH = 6;
+			const MIN_HEIGHT = 2;
+
+			if (n) {
+				newRows[0] += rows;
+				if (newRows[1] - newRows[0] < MIN_HEIGHT) {
+					newRows[0] = newRows[1] - MIN_HEIGHT;
+				}
+			} else if (s) {
+				newRows[1] += rows;
+				if (newRows[1] - newRows[0] < MIN_HEIGHT) {
+					newRows[1] = newRows[0] + MIN_HEIGHT;
+				}
+			}
+
+			if (e) {
+				newCols[1] += cols;
+				if (newCols[1] - newCols[0] < MIN_WIDTH) {
+					newCols[1] = newCols[0] + MIN_WIDTH;
+				}
+			} else if (w) {
+				newCols[0] += cols;
+				if (newCols[1] - newCols[0] < MIN_WIDTH) {
+					newCols[0] = newCols[1] - MIN_WIDTH;
+				}
+			}
+
+			const gridCols = this.gridCols;
+			const gridRows = this.gridRows;
+			if (newCols[0] < 1) newCols[0] = 1;
+			if (newCols[1] > gridCols + 1) newCols[1] = gridCols + 1;
+			if (newRows[0] < 1) newRows[0] = 1;
+			if (newRows[1] > gridRows + 1) newRows[1] = gridRows + 1;
+			return {cols: newCols, rows: newRows};
 		}
 	},
 	methods: {
@@ -198,7 +265,6 @@ export default {
 		},
 
 		resizing: throttle(function(e) {
-			console.log("Resizing");
 			if (e.clientX > 5 && e.clientY > 5) {
 				this.resizeData.current = [e.clientX, e.clientY];
 			}
@@ -233,11 +299,21 @@ export default {
 
 				if (cols === 0 && rows === 0) return;
 				if (cols === oldValue[0] && rows === oldValue[1]) return;
-				if (!this.dragging) return;
+				if (!this.dragData.dragging) return;
 				
 				this.$emit('moveWidget', cols, rows);					
 			},
 			deep: true
+		},
+		widgetResized: {
+			handler(newValue, oldValue) {
+				const {cols, rows} = newValue;
+				if (cols && rows && this.resizeData.resizing) {
+					if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+						this.$emit('resizeWidget', cols, rows);
+					}
+				}
+			}, deep: true
 		}
 	}
 }

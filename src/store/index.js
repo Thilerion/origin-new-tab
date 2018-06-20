@@ -97,6 +97,10 @@ const store = new Vuex.Store({
 			state.user.widgets[index].column = [...col];
 			state.user.widgets[index].row = [...row];
 		},
+		setAbsoluteGridPosition(state, { index, cols, rows }) {
+			state.user.widgets[index].column = [...cols];
+			state.user.widgets[index].row = [...rows];
+		},
 		increaseFontSize(state, name) {
 			const index = state.user.widgets.findIndex(w => w.name === name);
 			if (state.user.widgets[index].fontSize != null) {
@@ -209,6 +213,11 @@ const store = new Vuex.Store({
 			const index = state.user.widgets.findIndex(w => w.name === name);
 
 			commit('setGridPosition', { index, moveCols, moveRows });
+		},
+		resizeWidget({ state, commit }, { name, cols, rows }) {
+			const index = state.user.widgets.findIndex(w => w.name === name);
+
+			commit('setAbsoluteGridPosition', { index, cols, rows });
 		}
 	}
 

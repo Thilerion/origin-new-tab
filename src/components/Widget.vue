@@ -9,6 +9,7 @@
 			:widgetRows="widget.row"
 			class="widget-drag-resize"
 			@moveWidget="moveWidget"
+			@resizeWidget="resizeWidget"
 		>
 			<component
 				:is="widgetComponent"
@@ -141,6 +142,9 @@ export default {
 		},
 		moveWidget(moveCols, moveRows) {
 			this.$store.dispatch('moveWidget', {name: this.widget.name, moveCols, moveRows});
+		},
+		resizeWidget(cols, rows) {
+			this.$store.dispatch('resizeWidget', {name: this.widget.name, cols, rows});
 		}
 	}
 }

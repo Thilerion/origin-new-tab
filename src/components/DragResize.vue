@@ -70,38 +70,74 @@ export default {
 }
 
 .dnd-active.is-draggable, .dnd-active.is-resizable {
-	box-shadow: 0 0 2px 5px rgba(255,255,255,0.2);
-	transition: box-shadow .2s ease, background-color .1s ease;
+	box-shadow: 0 0 2px 4px rgba(255,255,255,0.4), inset 0 0 2px 2px rgba(255,255,255,0.2);
+	transition: box-shadow 200ms ease, background-color 400ms ease;
 }
 
 .dnd-active.is-draggable:hover {
-	box-shadow: 0 0 5px 5px rgba(255, 255, 255, 0.8);
+	box-shadow: 0 0 2px 4px rgba(255,255,255,0.8), inset 0 0 2px 2px rgba(255,255,255,0.8);
 }
 
 .dnd-active.is-draggable:hover, .dnd-active.is-resizable:hover {	
-	background-color: rgba(50, 100, 200, 0.2);
+	background-color: rgba(255, 255, 255, 0.2);
 }
 
 
 </style>
 
 <style>
+.drag-resize-wrapper {
+	--corner-sizing: auto;
+	--corner-size: 1.5rem;
+	--center-size: 5fr;
+}
+
 .event-areas {
 	position: absolute;
 	top: -5px; left: -5px;
 	width: calc(100% + 10px);
 	height: calc(100% + 10px);
 	display: grid;
-	grid-template-rows: 1rem auto 1rem;
-	grid-template-columns: 1rem auto 1rem;
+	grid-template-rows: var(--corner-sizing) var(--center-size) var(--corner-sizing);
+	grid-template-columns: var(--corner-sizing) var(--center-size) var(--corner-sizing);
 }
 
 .dnd-active.is-draggable .widget-slot-wrapper, .dnd-active.is-resizable .widget-slot-wrapper {
 	pointer-events: none;
 }
 
-.resize-handle {
-	border: 1px solid green;
+.drag-resize-wrapper .resize-handle {
+	--edge-colour: rgba(2, 132, 84, 0.1);
+	--corner-colour: rgba(108, 45, 147, 0.1);
+	transition: box-shadow 200ms ease;
+
+	--shadow-size: 1rem;
+	--offset: calc(var(--shadow-size) * 0.8);
+	--blur: calc(var(--shadow-size) * 0.8);	
+	
+	--n-offset: calc(var(--offset) * -1);
+}
+
+.drag-resize-wrapper:hover .resize-handle {
+	--edge-colour: rgba(2, 132, 84, 0.3);
+	--corner-colour: rgba(108, 45, 147, 0.3);
+
+	--offset: calc(var(--shadow-size) * 1.1);
+	--blur: calc(var(--shadow-size) * 1.2);
+}
+
+.drag-resize-wrapper .resize-handle:hover {
+	transition: box-shadow 150ms ease 50ms;
+	--edge-colour: rgba(2, 132, 84, 1);
+	--corner-colour: rgba(108, 45, 147, 1);
+
+	--offset: calc(var(--shadow-size) * 1.2);
+	--blur: calc(var(--shadow-size) * 1.5);
+}
+
+.handle-nw, .handle-ne, .handle-sw, .handle-se {
+	width: var(--corner-size);
+	height: var(--corner-size);
 }
 
 .handle-nw, .handle-n, .handle-ne {
@@ -146,5 +182,77 @@ export default {
 
 .handle-center {
 	cursor: move;
+}
+
+.handle-n {
+	box-shadow: inset
+				0
+				var(--offset)
+				var(--blur)
+				-10px
+				var(--edge-colour);
+}
+
+.handle-s {
+	box-shadow: inset
+				0
+				var(--n-offset)
+				var(--blur)
+				-10px
+				var(--edge-colour);
+}
+
+.handle-w {
+	box-shadow: inset
+				var(--offset)
+				0
+				var(--blur)
+				-10px
+				var(--edge-colour);
+}
+
+.handle-e {
+	box-shadow: inset
+				var(--n-offset)
+				0
+				var(--blur)
+				-10px
+				var(--edge-colour);
+}
+
+.handle-nw {
+	box-shadow: inset
+				var(--offset)
+				var(--offset)
+				var(--blur)
+				-10px
+				var(--corner-colour);
+}
+
+.handle-ne {
+	box-shadow: inset
+				var(--n-offset)
+				var(--offset)
+				var(--blur)
+				-10px
+				var(--corner-colour);
+}
+
+.handle-se {
+	box-shadow: inset
+				var(--n-offset)
+				var(--n-offset)
+				var(--blur)
+				-10px
+				var(--corner-colour);
+}
+
+.handle-sw {
+	box-shadow: inset
+				var(--offset)
+				var(--n-offset)
+				var(--blur)
+				-10px
+				var(--corner-colour);
 }
 </style>

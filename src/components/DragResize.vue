@@ -5,14 +5,24 @@
 		:draggable="canDrag && dndEnabled"
 	>
 		<div class="event-areas" v-if="dndEnabled">
+
 			<div
 				v-if="canResize"
 				v-for="handle in handles"
 				:key="handle"
 				class="resize-handle"
 				:class="'handle-' + handle"
+				@dragstart.stop="resizeStart(handle, $event)"
+				draggable
 			></div>
-			<div v-if="canDrag" class="handle-center"></div>
+
+			<div
+				v-if="canDrag"
+				class="handle-center"
+				@dragstart.stop="dragStart"
+				draggable
+			></div>
+
 		</div>		
 
 		<div class="widget-slot-wrapper">
@@ -35,7 +45,14 @@ export default {
 	},
 	data() {
 		return {
-			handles: ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
+			handles: ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'],
+			dragData: {
+				initial: [null, null],
+				current: [null, null]
+			},
+			resizeData: {
+
+			}
 		}
 	},
 	computed: {
@@ -49,6 +66,33 @@ export default {
 			if (this.dndEnabled) classes.push('dnd-active');
 			if (this.isDragged) classes.push('is-dragged');
 			return classes;
+		}
+	},
+	methods: {
+		//DRAG
+		dragStart(e) {
+			this.dragData.initial = [e.clientX, e.clientY];
+			this.dragData.current = [e.clientX, e.clientY];
+			
+			let el = e.target;
+
+			console.warn("Drag start");
+
+			el.addEventListener('drag', this.dragging)
+			el.addEventListener('dragend', this.dragEnd)
+		},
+		dragging: (e) => {
+			console.log("Dragging");
+		},
+		dragEnd(e) {
+			console.warn("Drag end", e);
+			const el = e.target;
+			el.removeEventListener('drag', this.dragging);
+			el.removeEventListener('dragend', this.dragEnd)
+		},
+		//RESIZE
+		resizeStart(handle, e) {
+			console.log(handle, e);
 		}
 	}
 }

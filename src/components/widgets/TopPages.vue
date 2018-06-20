@@ -83,10 +83,11 @@ export default {
 			/* SOURCE
 			https://github.com/atomiks/30-seconds-of-css/blob/master/snippets/mouse-cursor-gradient-tracking.md
 			*/
+			// debugger;
 			const item = this.$refs.linkItem[index];
 
-			const x = e.pageX - e.currentTarget.offsetLeft - e.currentTarget.offsetParent.offsetLeft;
-			const y = e.pageY - e.currentTarget.offsetTop - e.currentTarget.offsetParent.offsetTop;
+			const x = e.pageX - e.currentTarget.offsetLeft - e.currentTarget.offsetParent.offsetParent.offsetLeft;
+			const y = e.pageY - e.currentTarget.offsetTop - e.currentTarget.offsetParent.offsetParent.offsetTop;
 
 			item.style.setProperty('--x', `${x}px`);
 			item.style.setProperty('--y', `${y}px`);

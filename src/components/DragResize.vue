@@ -65,6 +65,7 @@ export default {
 			},
 			resizeData: {
 				resizing: false,
+				resizeDirection: "",
 				initial: [null, null],
 				current: [null, null],
 				initialCols: [null, null],
@@ -88,6 +89,11 @@ export default {
 				classes.push('is-dragging');
 			} else if (this.resizeData.resizing) {
 				classes.push('is-resizing');
+				const dir = this.resizeData.resizeDirection;
+				if (dir.includes('s')) classes.push('south');
+				if (dir.includes('n')) classes.push('north');
+				if (dir.includes('w')) classes.push('west');
+				if (dir.includes('e')) classes.push('east');
 			} else {
 				if (this.canDrag) classes.push('is-draggable');
 				if (this.canResize) classes.push('is-resizable');
@@ -179,34 +185,38 @@ export default {
 
 		//RESIZE
 		resizeStart(handle, e) {
+			console.log("Start");
 			this.resizeData.initial = [e.clientX, e.clientY];
 			this.resizeData.current = [e.clientX, e.clientY];
 			this.resizeData.resizing = true;
 			this.resizeData.initialCols = [...this.widgetCols];
 			this.resizeData.initialRows = [...this.widgetRows];
+			this.resizeData.resizeDirection = handle;
 
-			e.target.addEventListener('mousemove', this.resizing);
-			e.target.addEventListener('mouseup', this.resizeEnd);
+			document.addEventListener('mousemove', this.resizing, true);
+			document.addEventListener('mouseup', this.resizeEnd, true);
 		},
 
 		resizing: throttle(function(e) {
-			e.preventDefault();
+			console.log("Resizing");
 			if (e.clientX > 5 && e.clientY > 5) {
 				this.resizeData.current = [e.clientX, e.clientY];
 			}
 		}, 1000/30),
 		resizeEnd(e) {
-			this.resetResize(e.target);
+			console.log("End");
+			this.resetResize();
 		},
-		resetResize(el) {
+		resetResize() {
 			this.resizeData.initial = [null, null];
 			this.resizeData.current = [null, null];
 			this.resizeData.resizing = false;
 			this.resizeData.initialCols = [null, null];
 			this.resizeData.initialRows = [null, null];
+			this.resizeData.resizeDirection = "";
 
-			el.removeEventListener('mousemove', this.resizing);
-			el.removeEventListener('mouseup', this.resizeEnd);
+			document.removeEventListener('mousemove', this.resizing, true);
+			document.removeEventListener('mouseup', this.resizeEnd, true);
 		}
 
 		//OTHER
@@ -269,6 +279,11 @@ export default {
 	background-color: rgba(41, 169, 255, 0.4);
 }
 
+.dnd-active.is-resizing {
+	box-shadow: 0 0 2px 4px rgba(255,255,255,0.8), inset 0 0 2px 2px rgba(255,255,255,0.8);
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
 </style>
 
 <style>
@@ -292,12 +307,13 @@ export default {
 	pointer-events: none;
 }
 
-.is-resizable.drag-resize-wrapper {
-	--shadow-size: 1rem;
+.drag-resize-wrapper {
+	--shadow-size: 0rem;
+	--base-shadow-size: 1rem;
 }
 
-.drag-resize-wrapper:not(.is-resizable) {
-	--shadow-size: 0rem;
+.is-resizable.drag-resize-wrapper, .is-resizing.drag-resize-wrapper {
+	--shadow-size: var(--base-shadow-size);
 }
 
 .drag-resize-wrapper .resize-handle {
@@ -311,7 +327,7 @@ export default {
 	--n-offset: calc(var(--offset) * -1);
 }
 
-.drag-resize-wrapper:hover .resize-handle {
+.drag-resize-wrapper:not(.is-resizing):hover .resize-handle {
 	--edge-colour: rgba(2, 132, 84, 0.3);
 	--corner-colour: rgba(108, 45, 147, 0.3);
 
@@ -319,13 +335,45 @@ export default {
 	--blur: calc(var(--shadow-size) * 1.2);
 }
 
-.drag-resize-wrapper .resize-handle:hover {
+.drag-resize-wrapper:hover .resize-handle:hover {
 	transition: box-shadow 150ms ease 50ms;
 	--edge-colour: rgba(2, 132, 84, 1);
 	--corner-colour: rgba(108, 45, 147, 1);
 
 	--offset: calc(var(--shadow-size) * 1.2);
 	--blur: calc(var(--shadow-size) * 1.5);
+}
+
+.drag-resize-wrapper .resize-handle:hover {
+	--edge-colour: rgba(2, 132, 84, 1);
+	--corner-colour: rgba(108, 45, 147, 1);
+}
+
+.north .handle-n,
+.south .handle-s,
+.west .handle-w,
+.east .handle-e {
+	--offset: calc(var(--shadow-size) * 1.2)!important;
+	--edge-colour: rgba(2, 132, 84, 1);
+	--corner-colour: rgba(2, 132, 84, 1);
+	
+}
+
+.north.west .handle-nw,
+.north.west .handle-n,
+.north.west .handle-w,
+.south.west .handle-sw,
+.south.west .handle-s,
+.south.west .handle-w,
+.north.east .handle-ne,
+.north.east .handle-n,
+.north.east .handle-e,
+.south.east .handle-se,
+.south.east .handle-s,
+.south.east .handle-e {
+	--offset: calc(var(--shadow-size) * 1.2)!important;
+	--edge-colour: rgba(108, 45, 147, 1);
+	--corner-colour: rgba(108, 45, 147, 1);
 }
 
 .handle-nw, .handle-ne, .handle-sw, .handle-se {
@@ -377,6 +425,10 @@ export default {
 	cursor: move!important;
 }
 
+.north .handle-n {
+	--offset: var(--base-shadow-size)!important;
+}
+
 .handle-n {
 	box-shadow: inset
 				0
@@ -393,6 +445,10 @@ export default {
 				var(--blur)
 				-10px
 				var(--edge-colour);
+}
+
+.south .handle-s {
+
 }
 
 .handle-w {

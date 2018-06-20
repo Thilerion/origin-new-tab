@@ -12,7 +12,7 @@
 				:key="handle"
 				class="resize-handle"
 				:class="'handle-' + handle"
-				@dragstart.stop="resizeStart(handle, $event)"
+				@mousedown.stop.prevent="resizeStart(handle, $event)"
 				draggable
 			></div>
 
@@ -64,7 +64,11 @@ export default {
 				initialRows: [null, null]
 			},
 			resizeData: {
-
+				resizing: false,
+				initial: [null, null],
+				current: [null, null],
+				initialCols: [null, null],
+				initialRows: [null, null]
 			},
 			gridCols: null,
 			gridRows: null,
@@ -175,8 +179,35 @@ export default {
 
 		//RESIZE
 		resizeStart(handle, e) {
-			console.log(handle, e);
+			this.resizeData.initial = [e.clientX, e.clientY];
+			this.resizeData.current = [e.clientX, e.clientY];
+			this.resizeData.resizing = true;
+			this.resizeData.initialCols = [...this.widgetCols];
+			this.resizeData.initialRows = [...this.widgetRows];
+
+			e.target.addEventListener('mousemove', this.resizing);
+			e.target.addEventListener('mouseup', this.resizeEnd);
 		},
+
+		resizing: throttle(function(e) {
+			e.preventDefault();
+			if (e.clientX > 5 && e.clientY > 5) {
+				this.resizeData.current = [e.clientX, e.clientY];
+			}
+		}, 1000/30),
+		resizeEnd(e) {
+			this.resetResize(e.target);
+		},
+		resetResize(el) {
+			this.resizeData.initial = [null, null];
+			this.resizeData.current = [null, null];
+			this.resizeData.resizing = false;
+			this.resizeData.initialCols = [null, null];
+			this.resizeData.initialRows = [null, null];
+
+			el.removeEventListener('mousemove', this.resizing);
+			el.removeEventListener('mouseup', this.resizeEnd);
+		}
 
 		//OTHER
 	},

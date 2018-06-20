@@ -7,22 +7,46 @@
 			class="widget-inner"
 			:style="{'font-size': widgetFontSize}"
 		/>
+
 		<div class="widget-settings" v-if="dndEnabled">
 			<div class="widget-setting-group widget-settings-font" v-if="canChangeFontSize">
-				<button class="widget-setting-btn decrease icon-btn" :disabled="minFontSizeReached" @click="decreaseFontSize">-</button>
+				<button 
+					class="widget-setting-btn decrease icon-btn"
+					:disabled="minFontSizeReached"
+					@click="decreaseFontSize"
+				>-</button>
 				<span class="setting-name">Text</span>
-				<button class="widget-setting-btn increase icon-btn" :disabled="maxFontSizeReached" @click="increaseFontSize">+</button>
+				<button
+					class="widget-setting-btn increase icon-btn"
+					:disabled="maxFontSizeReached"
+					@click="increaseFontSize"
+				>+</button>
 			</div>
+
 			<div class="widget-setting-group widget-settings-width" v-if="canChangeWidth">
-				<button class="widget-setting-btn decrease icon-btn" @click="decreaseWidth">-</button>
+				<button
+					class="widget-setting-btn decrease icon-btn"
+					@click="decreaseWidth"
+				>-</button>
 				<span class="setting-name">Width</span>
-				<button class="widget-setting-btn increase icon-btn" @click="increaseWidth">+</button>
+				<button
+					class="widget-setting-btn increase icon-btn"
+					@click="increaseWidth"
+				>+</button>
 			</div>
+
 			<div class="widget-setting-group widget-settings-height" v-if="canChangeHeight">
-				<button class="widget-setting-btn decrease icon-btn" @click="decreaseHeight">-</button>
+				<button
+					class="widget-setting-btn decrease icon-btn"
+					@click="decreaseHeight"
+				>-</button>
 				<span class="setting-name">Height</span>
-				<button class="widget-setting-btn increase icon-btn" @click="increaseHeight">+</button>
+				<button
+					class="widget-setting-btn increase icon-btn"
+					@click="increaseHeight"
+				>+</button>
 			</div>
+
 		</div>
 	</div>
 </template>
@@ -66,6 +90,10 @@ export default {
 		dndEnabled: {
 			type: Boolean,
 			default: false
+		},
+
+		gridSize: {
+			type: Array
 		}
 	},
 
@@ -77,6 +105,22 @@ export default {
 	},
 
 	computed: {
+
+		gridCols() {
+			return this.gridSize[1];
+		},
+
+		gridRows() {
+			return this.gridSize[0];
+		},
+
+		columns() {
+			return this.widget.column;
+		},
+
+		rows() {
+			return this.widget.row;
+		},
 
 		widgetComponent() {
 			let name = this.widget.name;
@@ -122,19 +166,43 @@ export default {
 
 		//TODO: mutation needs "gridCols" variable
 		increaseHeight() {
-			this.$store.commit('increaseWidgetHeight', this.widget.name);
+			const data = {
+				name: this.widget.name,
+				gridRows: this.gridRows,
+				widgetRows: this.rows,
+				change: 1
+			};
+			this.$store.commit('changeWidgetHeight', data);
 		},
 
 		decreaseHeight() {
-			this.$store.commit('decreaseWidgetHeight', this.widget.name);
+			const data = {
+				name: this.widget.name,
+				gridRows: this.gridRows,
+				widgetRows: this.rows,
+				change: -1
+			};
+			this.$store.commit('changeWidgetHeight', data);
 		},
 
 		increaseWidth() {
-			this.$store.commit('increaseWidgetWidth', this.widget.name);
+			const data = {
+				name: this.widget.name,
+				gridCols: this.gridCols,
+				widgetCols: this.columns,
+				change: 1
+			};
+			this.$store.commit('changeWidgetWidth', data);
 		},
 
 		decreaseWidth() {
-			this.$store.commit('decreaseWidgetWidth', this.widget.name);
+			const data = {
+				name: this.widget.name,
+				gridCols: this.gridCols,
+				widgetCols: this.columns,
+				change: -1
+			};
+			this.$store.commit('changeWidgetWidth', data);
 		}
 
 	}

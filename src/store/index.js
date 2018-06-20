@@ -12,8 +12,6 @@ import Calendar from './Calendar'
 Vue.use(Vuex)
 
 import createPersistedState from './utils/persist';
-import widgetsApi from './api/index';
-const userApi = widgetsApi.user;
 
 import { defaultSettings, settingsOptions } from './defaultUserSettings';
 import { deepClone, deepMergeArray } from '../utils/deepObject';
@@ -127,11 +125,58 @@ const store = new Vuex.Store({
 
 			state.user.widgets[index].column = [...cols];
 		},
-		increaseWidgetHeight() {
+		changeWidgetWidth(state, { name, gridCols, widgetCols, change }) {
+			const minCol = 1;
+			const maxCol = gridCols + 1;
+			const curWidth = widgetCols[1] - widgetCols[0];
+			const newWidgetCols = [...widgetCols];
 
+			if (change > 0) {
+				if (widgetCols[1] + change <= maxCol) {
+					newWidgetCols[1] += change;
+				} else if (widgetCols[0] - change >= minCol) {
+					newWidgetCols[0] -= change;
+				} else {
+					console.warn("Can't change width. Max width reached?");
+				}
+			} else if (change < 0) {
+				if (curWidth > 4) {
+					newWidgetCols[1] += change;
+				} else {
+					console.warn("Can't change width. Min width reached?");
+				}
+			}
+			state.user.widgets.find(w => w.name === name).column = [...newWidgetCols];
 		},
-		decreaseWidgetHeight() {
-			
+		changeWidgetHeight(state, {name, gridRows, widgetRows, change}) {
+			const minRow = 1;
+			const maxRow = gridRows + 1;
+			const curHeight = widgetRows[1] - widgetRows[0];
+			const newWidgetRows = [...widgetRows];
+
+			if (change > 0) {
+				//increase height
+				if (widgetRows[1] + change <= maxRow) {
+					//increase widgetRows[1]
+					newWidgetRows[1] += change;
+				} else if (widgetRows[0] - change >= minRow) {
+					//decrease widgetRows[0]
+					newWidgetRows[0] -= change;
+				} else {
+					//can't change height
+					console.warn("Can't change height. Max height reached?");
+				}
+			} else if (change < 0) {
+				//decrease height
+				if (curHeight > 2) {
+					//decrease widgetRows[1]
+					newWidgetRows[1] += change;
+				} else {
+					//can't change height: min height reached
+					console.warn("Can't change height. Min height reached?");
+				}
+			}
+			state.user.widgets.find(w => w.name === name).row = [...newWidgetRows];
 		}
 	},
 

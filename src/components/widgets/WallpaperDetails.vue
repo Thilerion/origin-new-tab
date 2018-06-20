@@ -103,7 +103,6 @@ export default {
 	margin: auto auto 0 0;
 	
 	opacity: 0.5;
-	font-size: 0.75em;
 	display: inline-flex;
 	flex-direction: column-reverse;
 	transition: all .3s ease-out;
@@ -117,6 +116,7 @@ export default {
 	opacity: 0;
 	transition: all .3s ease-out;
 	user-select: text;
+		font-size: 0.75em;
 }
 
 .widget-wallpaper-details:hover .location {
@@ -128,6 +128,7 @@ export default {
 	align-items: flex-end;
 	position: relative;
 	height: 24px;
+		font-size: 0.75em;
 }
 
 .buttons {

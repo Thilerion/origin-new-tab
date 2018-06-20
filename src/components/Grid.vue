@@ -14,14 +14,15 @@
 				class="widget draggable"
 				:style="[widgetGridPlacement[index]]"
 				:class="{'is-dragged': currentlyDragging.index === index}"
-				@click="widgetClicked"
+				@click.native="widgetClicked"
 				:draggable="dndEnabled"
-				@drag="dragging(widget.name, index, $event)"
-				@dragend="dragEnd(widget.name, index, $event)"
-				@dragstart="dragStart(widget.name, index, $event)"
+				@drag.native="dragging(widget.name, index, $event)"
+				@dragend.native="dragEnd(widget.name, index, $event)"
+				@dragstart.native="dragStart(widget.name, index, $event)"
 				:widget="widget"
 				adjustable-widget
 				:dndEnabled="dndEnabled"
+				:gridSize="[gridRows,gridCols]"
 			/>
 			<StartWidget
 				v-else

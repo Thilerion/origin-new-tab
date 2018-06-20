@@ -1,3 +1,5 @@
+import debounce from 'lodash.debounce';
+
 function createPersistedState(storagePrefix = "sp_", widgets = []) {
 	// save to store: [widgetName]Set
 	// no data in store: [widgetName]StorageLoadFailed
@@ -5,10 +7,10 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 
 	const toWatch = (val) => (state, getters) => getters[`${val}Watch`];
 
-	const watchCallback = (val) => (newValue, oldValue) => {
+	const watchCallback = (val) => debounce((newValue, oldValue) => {
 		console.log(`Watcher is triggered for module '${val}'.`);
 		saveToStorage(val, newValue);
-	}
+	}, 500, {maxWait: 10000});
 
 	function createWatcher(store, val) {
 		console.log(`Creating watcher for '${val}'.`);
@@ -25,7 +27,6 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 		}		
 	}
 	
-
 	function saveToStorage(widget, data) {
 		const key = `${storagePrefix}${widget}`;
 		window.localStorage.setItem(key, JSON.stringify(data));

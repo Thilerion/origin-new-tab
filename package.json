@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "date-fns": "^1.29.0",
+    "lodash.debounce": "^4.0.8",
     "lodash.merge": "^4.6.1",
     "lodash.throttle": "^4.1.1",
     "vue": "^2.5.16",

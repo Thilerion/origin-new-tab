@@ -11,7 +11,7 @@
 				v-for="handle in handles"
 				:key="handle"
 				class="resize-handle"
-				:class="'handle-' + handle"
+				:class="handleClasses(handle)"
 				@mousedown.stop.prevent="resizeStart(handle, $event)"
 				draggable
 			></div>
@@ -82,23 +82,26 @@ export default {
 			return this.$store.getters.dndEnabled;
 		},
 		dragResizeClasses() {
-			const classes = [];
-			if (this.dndEnabled) classes.push('dnd-active');
+			if (!this.dndEnabled) return [];
+
+			const classes = ['dnd-active'];
 
 			if (this.dragData.dragging) {
 				classes.push('is-dragging');
+				classes.push('is-active');
 			} else if (this.resizeData.resizing) {
 				classes.push('is-resizing');
+				classes.push('is-active');
 				const dir = this.resizeData.resizeDirection;
 				if (dir.includes('s')) classes.push('south');
 				if (dir.includes('n')) classes.push('north');
 				if (dir.includes('w')) classes.push('west');
 				if (dir.includes('e')) classes.push('east');
 			} else {
+				if (this.canDrag || this.canResize) classes.push('is-editable');
 				if (this.canDrag) classes.push('is-draggable');
 				if (this.canResize) classes.push('is-resizable');
 			}
-
 			return classes;
 		},
 		gridColWidth() {
@@ -285,9 +288,24 @@ export default {
 
 			document.removeEventListener('mousemove', this.resizing, true);
 			document.removeEventListener('mouseup', this.resizeEnd, true);
-		}
+		},
 
 		//OTHER
+		handleClasses(handle) {
+			let classes = [`handle-${handle}`];
+			
+			handle.length > 1 ? classes.push('corner') : classes.push('side');
+			if (this.resizeData.resizeDirection.includes(handle)) {
+				classes.push('active-handle');
+				if (this.resizeData.resizeDirection.length > 1) {
+					classes.push('active-handle-corner');
+				} else {
+					classes.push('active-handle-side');
+				}
+			}
+			console.log(classes);
+			return classes;
+		}
 	},
 	mounted() {
 		this.gridCols = parseInt(getComputedStyle(this.$el).getPropertyValue('--cols'));
@@ -340,35 +358,6 @@ export default {
 	align-items: center;
 }
 
-.dnd-active {
-	transition: box-shadow 200ms ease, background-color 400ms ease;
-}
-
-.dnd-active.is-draggable, .dnd-active.is-resizable {
-	box-shadow: 0 0 2px 4px rgba(255,255,255,0.4), inset 0 0 2px 2px rgba(255,255,255,0.2);
-}
-
-.dnd-active.is-draggable:hover {
-	box-shadow: 0 0 2px 4px rgba(255,255,255,0.8), inset 0 0 2px 2px rgba(255,255,255,0.8);
-}
-
-.dnd-active.is-draggable:hover, .dnd-active.is-resizable:hover {	
-	background-color: rgba(255, 255, 255, 0.2);
-}
-
-.dnd-active.is-dragging {
-	box-shadow: 0 0 2px 4px rgba(0, 153, 255, 0.6), inset 0 0 2px 2px rgba(0, 153, 255, 0.3);
-	background-color: rgba(41, 169, 255, 0.4);
-}
-
-.dnd-active.is-resizing {
-	box-shadow: 0 0 2px 4px rgba(255,255,255,0.8), inset 0 0 2px 2px rgba(255,255,255,0.8);
-	background-color: rgba(255, 255, 255, 0.2);
-}
-
-</style>
-
-<style>
 .drag-resize-wrapper {
 	--corner-sizing: auto;
 	--corner-size: 1.5rem;
@@ -385,80 +374,11 @@ export default {
 	grid-template-columns: var(--corner-sizing) var(--center-size) var(--corner-sizing);
 }
 
-.dnd-active.is-draggable .widget-slot-wrapper, .dnd-active.is-resizable .widget-slot-wrapper, .dnd-active.is-dragging .widget-slot-wrapper, .dnd-active.is-resizing .widget-slot-wrapper {
+.is-editable .widget-slot-wrapper, .is-active .widget-slot-wrapper {
 	pointer-events: none;
 }
 
-.drag-resize-wrapper {
-	--shadow-size: 0rem;
-	--base-shadow-size: 1rem;
-}
-
-.is-resizable.drag-resize-wrapper, .is-resizing.drag-resize-wrapper {
-	--shadow-size: var(--base-shadow-size);
-}
-
-.drag-resize-wrapper .resize-handle {
-	--edge-colour: rgba(2, 132, 84, 0.1);
-	--corner-colour: rgba(108, 45, 147, 0.1);
-	transition: box-shadow 200ms ease;
-
-	--offset: calc(var(--shadow-size) * 0.8);
-	--blur: calc(var(--shadow-size) * 0.8);	
-	
-	--n-offset: calc(var(--offset) * -1);
-}
-
-.drag-resize-wrapper:not(.is-resizing):hover .resize-handle {
-	--edge-colour: rgba(2, 132, 84, 0.3);
-	--corner-colour: rgba(108, 45, 147, 0.3);
-
-	--offset: calc(var(--shadow-size) * 1.1);
-	--blur: calc(var(--shadow-size) * 1.2);
-}
-
-.drag-resize-wrapper:hover .resize-handle:hover {
-	transition: box-shadow 150ms ease 50ms;
-	--edge-colour: rgba(2, 132, 84, 1);
-	--corner-colour: rgba(108, 45, 147, 1);
-
-	--offset: calc(var(--shadow-size) * 1.2);
-	--blur: calc(var(--shadow-size) * 1.5);
-}
-
-.drag-resize-wrapper .resize-handle:hover {
-	--edge-colour: rgba(2, 132, 84, 1);
-	--corner-colour: rgba(108, 45, 147, 1);
-}
-
-.north .handle-n,
-.south .handle-s,
-.west .handle-w,
-.east .handle-e {
-	--offset: calc(var(--shadow-size) * 1.2)!important;
-	--edge-colour: rgba(2, 132, 84, 1);
-	--corner-colour: rgba(2, 132, 84, 1);
-	
-}
-
-.north.west .handle-nw,
-.north.west .handle-n,
-.north.west .handle-w,
-.south.west .handle-sw,
-.south.west .handle-s,
-.south.west .handle-w,
-.north.east .handle-ne,
-.north.east .handle-n,
-.north.east .handle-e,
-.south.east .handle-se,
-.south.east .handle-s,
-.south.east .handle-e {
-	--offset: calc(var(--shadow-size) * 1.2)!important;
-	--edge-colour: rgba(108, 45, 147, 1);
-	--corner-colour: rgba(108, 45, 147, 1);
-}
-
-.handle-nw, .handle-ne, .handle-sw, .handle-se {
+.resize-handle.corner {
 	width: var(--corner-size);
 	height: var(--corner-size);
 }
@@ -507,8 +427,97 @@ export default {
 	cursor: move!important;
 }
 
-.north .handle-n {
-	--offset: var(--base-shadow-size)!important;
+</style>
+
+<style>
+.dnd-active {
+	transition: box-shadow 200ms ease, background-color 400ms ease;
+}
+
+.is-editable {
+	box-shadow: 0 0 2px 4px rgba(255,255,255,0.4), inset 0 0 2px 2px rgba(255,255,255,0.2);
+	background-color: rgba(255, 255, 255, 0.05);
+}
+
+.is-editable:hover {
+	box-shadow: 0 0 2px 4px rgba(255,255,255,0.8), inset 0 0 2px 2px rgba(255,255,255,0.8);
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+.is-dragging {
+	box-shadow: 0 0 2px 4px rgba(0, 153, 255, 1), inset 0 0 2px 2px rgba(0, 153, 255, 0.7);
+	background-color: rgba(41, 169, 255, 0.4);
+}
+
+.is-resizing {
+	box-shadow: 0 0 2px 4px rgba(255,255,255,1), inset 0 0 2px 2px rgba(255,255,255,1);
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+.drag-resize-wrapper {
+	--shadow: 1rem;
+	--side: 2, 132, 84;
+	--corner: 108, 45, 147;
+	--offset: var(--shadow);
+	--n-offset: calc(-1 * var(--offset));
+	--blur: var(--shadow);
+}
+
+.is-resizable.drag-resize-wrapper {
+	--edge-opacity: 0.1;
+}
+
+.is-resizable.drag-resize-wrapper:hover {
+	--edge-opacity: 0.8;
+}
+
+.resize-handle {
+	transition: box-shadow 200ms ease; 
+}
+
+.is-resizable.drag-resize-wrapper:hover .resize-handle:hover {
+	transition: box-shadow 150ms ease 50ms; 
+	--edge-opacity: 1;
+	--offset: calc(var(--shadow) * 1.3);
+	--n-offset: calc(var(--offset) * -1);
+	--blur: calc(var(--shadow) * 0.8);
+}
+
+.is-resizing.drag-resize-wrapper {
+	--edge-opacity: 0.3;
+}
+
+.is-dragging.drag-resize-wrapper {
+	--edge-opacity: 0;
+}
+
+.active-handle {
+	--edge-opacity: 1;
+	--offset: calc(var(--shadow) * 1.3);
+	--n-offset: calc(var(--offset) * -1);
+	--blur: calc(var(--shadow) * 0.8);
+}
+
+.side, .active-handle.active-handle-side {
+	--edge-colour: rgba(var(--side), var(--edge-opacity));
+}
+
+.corner, .active-handle.active-handle-corner {
+	--edge-colour: rgba(var(--corner), var(--edge-opacity));
+}
+
+.is-resizing .current-resize-corner {
+	--edge-opacity: 1;
+	--edge-colour: rgba(var(--corner), var(--edge-opacity));
+	--offset: calc(1.5 * var(--shadow));
+	--blur: calc(1.5 * var(--shadow));
+}
+
+.is-resizing .current-resize.current-resize-side {
+	--edge-opacity: 1;
+	--edge-colour: rgba(var(--side), var(--edge-opacity));
+	--offset: calc(1.5 * var(--shadow));
+	--blur: calc(0.8 * var(--shadow));
 }
 
 .handle-n {
@@ -527,10 +536,6 @@ export default {
 				var(--blur)
 				-10px
 				var(--edge-colour);
-}
-
-.south .handle-s {
-
 }
 
 .handle-w {
@@ -557,7 +562,7 @@ export default {
 				var(--offset)
 				var(--blur)
 				-10px
-				var(--corner-colour);
+				var(--edge-colour);
 }
 
 .handle-ne {
@@ -566,7 +571,7 @@ export default {
 				var(--offset)
 				var(--blur)
 				-10px
-				var(--corner-colour);
+				var(--edge-colour);
 }
 
 .handle-se {
@@ -575,7 +580,7 @@ export default {
 				var(--n-offset)
 				var(--blur)
 				-10px
-				var(--corner-colour);
+				var(--edge-colour);
 }
 
 .handle-sw {
@@ -584,6 +589,6 @@ export default {
 				var(--n-offset)
 				var(--blur)
 				-10px
-				var(--corner-colour);
+				var(--edge-colour);
 }
 </style>

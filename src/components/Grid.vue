@@ -336,5 +336,7 @@ export default {
 	right: 5px;
 	bottom: 5px;
 	border: none!important;
+	width: 2.5rem;
+	height: 1.5rem;
 }
 </style>

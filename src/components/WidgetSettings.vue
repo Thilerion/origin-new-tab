@@ -13,30 +13,6 @@
 				@click="$emit('changeFontSize', 1)"
 			>+</button>
 		</div>
-
-		<div class="widget-setting-group widget-settings-width" v-if="canChangeWidth">
-			<button
-				class="widget-setting-btn decrease icon-btn"
-				@click="$emit('changeWidth', -1)"
-			>-</button>
-			<span class="setting-name">Width</span>
-			<button
-				class="widget-setting-btn increase icon-btn"
-				@click="$emit('changeWidth', 1)"
-			>+</button>
-		</div>
-
-		<div class="widget-setting-group widget-settings-height" v-if="canChangeHeight">
-			<button
-				class="widget-setting-btn decrease icon-btn"
-				@click="$emit('changeHeight', -1)"
-			>-</button>
-			<span class="setting-name">Height</span>
-			<button
-				class="widget-setting-btn increase icon-btn"
-				@click="$emit('changeHeight', 1)"
-			>+</button>
-		</div>
 	</div>
 </template>
 
@@ -58,12 +34,6 @@ export default {
 	computed: {
 		canChangeFontSize() {
 			return !!this.widgetOptions.fontSize;
-		},
-		canChangeWidth() {
-			return !!this.widgetOptions.width;
-		},
-		canChangeHeight() {
-			return !!this.widgetOptions.height;
 		},
 		minFontSizeReached() {
 			return this.widget.fontSize <= settingsOptions.user.widgetFontSize.min;

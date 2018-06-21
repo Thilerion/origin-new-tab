@@ -131,7 +131,7 @@ export default {
 	},
 	methods: {
 		closeSettings() {
-			this.$store.commit('toggleSettings', false);
+			this.$store.commit('setShowSettings', false);
 		},
 		saveSettings() {
 			let settingsToSave = {};

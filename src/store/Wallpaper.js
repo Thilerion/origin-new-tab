@@ -20,10 +20,8 @@ const wallpaperStore = {
 		wallpaperData: {
 			wallpapers: [],
 			currentWallpaperId: 0,
-			collection: defaultSettings.wallpaper.wallpaperCollection,
 			expires: null,
 			idLastSet: null,
-			wallpaperCycleTimeout: defaultSettings.wallpaper.wallpaperCycleTimeout,
 			//TODO: two props below
 			arrayUpdated: new Date().getTime(),
 			arrayUpdateChangeAmount: null
@@ -61,7 +59,6 @@ const wallpaperStore = {
 
 		currentWallpaperId: state => state.wallpaperData.currentWallpaperId,
 		currentExternalWallpaper: (state, getters) => state.wallpaperData.wallpapers[getters.currentWallpaperId] || null,
-		wallpaperCollection: state => state.wallpaperData.collection,
 
 		wallpapersLength: state => state.wallpaperData.wallpapers.length || 0,
 
@@ -74,9 +71,6 @@ const wallpaperStore = {
 			if (getters.showDefaultWallpaper) return state.defaultWallpaper.url;
 			else if (!state.dataLoaded) return;
 			return state.wallpaperData.wallpapers[getters.nextWallpaperId].url;
-		},
-		wallpaperCycleTimeout(state) {
-			return state.wallpaperData.wallpaperCycleTimeout;
 		},
 
 		arrayUpdated(state) {
@@ -109,17 +103,11 @@ const wallpaperStore = {
 		setWallpaperId(state, id = 0) {
 			state.wallpaperData.currentWallpaperId = id;
 		},
-		setWallpaperCollection(state, collection) {
-			state.wallpaperData.collection = collection;
-		},
 		setWallpaperDataExpires(state, expiresOn) {
 			state.wallpaperData.expires = expiresOn;
 		},
 		setWallpaperLastSet(state, lastSet) {
 			state.wallpaperData.idLastSet = lastSet;
-		},
-		setWallpaperCycleTimeout(state, length) {
-			state.wallpaperData.wallpaperCycleTimeout = length;
 		},
 		removeWallpaperFromArray(state, index) {
 			state.wallpaperData.wallpapers.splice(index, 1);

@@ -21,8 +21,6 @@
 				class="widget-settings"
 				v-if="dndEnabled"
 				@changeFontSize="changeFontSize"
-				@changeWidth="changeWidth"
-				@changeHeight="changeHeight"
 				:widget="widget"
 			/>
 		</StartDragResize>
@@ -121,24 +119,6 @@ export default {
 			} else if (amount > 0) {
 				this.$store.commit('increaseFontSize', this.widget.name);
 			}				
-		},
-		changeHeight(amount) {
-			const data = {
-				name: this.widget.name,
-				gridRows: this.gridRows,
-				widgetRows: this.rows,
-				change: amount
-			};
-			this.$store.commit('changeWidgetHeight', data);
-		},
-		changeWidth(amount) {
-			const data = {
-				name: this.widget.name,
-				gridCols: this.gridCols,
-				widgetCols: this.columns,
-				change: amount
-			};
-			this.$store.commit('changeWidgetWidth', data);
 		},
 		moveWidget(moveCols, moveRows) {
 			this.$store.dispatch('moveWidget', {name: this.widget.name, moveCols, moveRows});

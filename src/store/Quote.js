@@ -9,14 +9,12 @@ const quoteStore = {
 		quoteData: {
 			randomQuote: {},
 			expires: null,
-			quoteCategory: defaultSettings.quote.category
 		},
 		dataLoaded: false
 	},
 
 	getters: {
 		quoteWatch: state => state.quoteData,
-		quoteCategory: state => state.quoteData.quoteCategory,
 		quoteDataLoaded: state => state.dataLoaded
 	},
 
@@ -26,9 +24,6 @@ const quoteStore = {
 			state.quoteData.expires = expires;
 			state.dataLoaded = true;
 		},
-		setQuoteCategory(state, cat) {
-			state.quoteData.quoteCategory = cat;
-		}
 	},
 
 	actions: {

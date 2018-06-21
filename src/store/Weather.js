@@ -40,7 +40,6 @@ const weatherStore = {
 				latitude: null,
 				longitude: null
 			},
-			useCustomLocation: null,
 			weatherDataLoaded: false
 		}
 	},
@@ -57,9 +56,6 @@ const weatherStore = {
 		},
 		weatherDataLoaded(state) {
 			return state.weatherData.weatherDataLoaded;
-		},
-		useCustomLocation(state) {
-			return state.weatherData.useCustomLocation;
 		}
 	},
 

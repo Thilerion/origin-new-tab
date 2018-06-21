@@ -1,71 +1,71 @@
 const defaultSettings = {
-	user: {
+	general: {
 		name: "",
 		// [nl, en]
 		language: "nl",
 		// range: 10-20, or null (which resets to 100% in base css file)
-		fontSize: null,
-		widgets: [
-			{ 
-				name: 'greeting',
-				active: true,
-				row: [7, 13],
-				column: [9, 33],
-				fontSize: -1
-			},
-			{ 
-				name: 'news',
-				active: true,
-				row: [1, 3],
-				column: [9, 33],
-				fontSize: -1
-			},
-			{ 
-				name: 'quote',
-				active: true,
-				row: [2, 4],
-				column: [9, 33],
-				fontSize: -2
-			},
-			{ 
-				name: 'weather',
-				active: true,
-				row: [1, 4],
-				column: [35, 41],
-				fontSize: -1
-			},
-			{ 
-				name: 'topPages',
-				active: true,
-				row: [16, 21],
-				column: [11, 31],
-				fontSize: -3
-			},
-			{
-				name: 'settingsButton',
-				active: true,
-				row: [20, 21],
-				column: [40, 41],
-				fontSize: 0
-			},
-			{
-				name: 'wallpaperDetails',
-				active: true,
-				row: [19, 21],
-				column: [1, 13],
-				fontSize: -1
-			},
-			{
-				name: 'calendar',
-				active: false,
-				row: [1, 7],
-				column: [1, 11],
-				fontSize: -1
-			}
-		]
+		fontSize: null
 	},
+	widgets: [
+		{ 
+			name: 'greeting',
+			active: true,
+			row: [7, 13],
+			column: [9, 33],
+			fontSize: -1
+		},
+		{ 
+			name: 'news',
+			active: true,
+			row: [1, 3],
+			column: [9, 33],
+			fontSize: -1
+		},
+		{ 
+			name: 'quote',
+			active: true,
+			row: [2, 4],
+			column: [9, 33],
+			fontSize: -2
+		},
+		{ 
+			name: 'weather',
+			active: true,
+			row: [1, 4],
+			column: [35, 41],
+			fontSize: -1
+		},
+		{ 
+			name: 'topPages',
+			active: true,
+			row: [16, 21],
+			column: [11, 31],
+			fontSize: -3
+		},
+		{
+			name: 'settingsButton',
+			active: true,
+			row: [20, 21],
+			column: [40, 41],
+			fontSize: 0
+		},
+		{
+			name: 'wallpaperDetails',
+			active: true,
+			row: [19, 21],
+			column: [1, 13],
+			fontSize: -1
+		},
+		{
+			name: 'calendar',
+			active: false,
+			row: [1, 7],
+			column: [1, 11],
+			fontSize: -1
+		}
+	],
 	weather: {
-		customLocation: null
+		useCustomLocation: false
 	},
 	wallpaper: {
 		// any valid unsplash collection id. maybe provide a list as well?
@@ -75,7 +75,9 @@ const defaultSettings = {
 	quote: {
 		// [motivinspirational, movies, famous]
 		category: "motivinspirational"
-	}
+	},
+	news: {},
+	calendar: {}
 }
 
 const settingsOptions = {
@@ -89,7 +91,7 @@ const settingsOptions = {
 			min: -4,
 			max: 4
 		},
-		storageModules: ['user', 'news', 'quote', 'weather', 'wallpaper', 'calendar'],
+		storageModules: ['settings', 'news', 'quote', 'weather', 'wallpaper', 'calendar'],
 		widgetOptions: {
 			greeting: {
 				disable: true,

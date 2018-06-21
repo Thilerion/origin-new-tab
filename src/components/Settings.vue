@@ -14,7 +14,7 @@
 				</div>
 				<div class="setting-wrap">
 					<label class="f-weight-heavy">Taal</label>
-					<div class="setting-radio" v-for="lang in settingsOptions.user.language" :key="lang.id">
+					<div class="setting-radio" v-for="lang in settingsOptions.general.language" :key="lang.id">
 						<input type="radio" :value="lang.id" v-model="currentSettings.general.language">
 						<span class="setting-radio-label">{{lang.name}}</span>
 					</div>				
@@ -27,7 +27,7 @@
 						<span class="setting-input-label">Standaard</span>
 					</div>
 					<div class="setting-input font-size-range">
-						<input type="range" class="slider is-circle" :class="{'range-disabled': disableFontSizeSlider}" :min="settingsOptions.user.fontSize.min" :max="settingsOptions.user.fontSize.max" v-model="currentSettings.general.fontSize">
+						<input type="range" class="slider is-circle" :class="{'range-disabled': disableFontSizeSlider}" :min="settingsOptions.general.fontSize.min" :max="settingsOptions.general.fontSize.max" v-model="currentSettings.general.fontSize">
 						<div :class="{'hide-label': !!disableFontSizeSlider}" class="setting-input-label">{{currentSettings.general.fontSize}}px</div>
 					</div>					
 				</div>
@@ -152,7 +152,7 @@ export default {
 			return isDefault;
 		},
 		widgetsCanBeDisabled() {
-			const widgetOptions = settingsOptions.user.widgetOptions;
+			const widgetOptions = settingsOptions.widgets.widgetOptions;
 			let cur = [...this.currentSettings.widgets];
 
 			return cur.filter(w => {

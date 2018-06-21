@@ -85,13 +85,15 @@ const defaultSettings = {
 }
 
 const settingsOptions = {
-	user: {
+	general: {
 		language: [{ name: 'Nederlands', id: 'nl'}, { name: 'English', id: 'en'}],
 		fontSize: {
 			min: 10,
 			max: 22
-		},
-		widgetFontSize: {
+		}
+	},
+	widgets: {
+		fontSize: {
 			min: -4,
 			max: 4
 		},

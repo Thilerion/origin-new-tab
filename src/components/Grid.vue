@@ -57,18 +57,18 @@ export default {
 			return this.$store.getters.widgets;
 		},
 		widgetsInGrid() {
-			return this.widgets.filter(w => settingsOptions.user.widgetOptions[w.name].grid);
+			return this.widgets.filter(w => settingsOptions.widgets.widgetOptions[w.name].grid);
 		},
 		activeWidgets() {
 			return this.widgetsInGrid.filter(w => {
 				const active = w.active;
-				const canBeInactive = settingsOptions.user.widgetOptions[w.name].disable;
+				const canBeInactive = settingsOptions.widgets.widgetOptions[w.name].disable;
 				return w.active || !canBeInactive;
 			});
 		},
 		draggableWidgets() {
 			return this.activeWidgets.filter(w => {
-				return settingsOptions.user.widgetOptions[w.name].move;
+				return settingsOptions.widgets.widgetOptions[w.name].move;
 			})
 		},
 		widgetGridPlacement() {

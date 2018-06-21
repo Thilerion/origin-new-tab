@@ -19,7 +19,7 @@ import { deepClone, deepMergeArray } from '../utils/deepObject';
 const store = new Vuex.Store({
 	strict: process.env.NODE_ENV !== 'development',
 
-	plugins: [createPersistedState('sp_', settingsOptions.user.storageModules)],
+	plugins: [createPersistedState('sp_', settingsOptions.widgets.storageModules)],
 
 	modules: {
 		Wallpaper,

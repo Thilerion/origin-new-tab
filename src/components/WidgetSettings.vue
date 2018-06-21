@@ -28,7 +28,7 @@ export default {
 	},
 	data() {
 		return {
-			widgetOptions: settingsOptions.user.widgetOptions[this.widget.name]
+			widgetOptions: settingsOptions.widgets.widgetOptions[this.widget.name]
 		}
 	},
 	computed: {
@@ -36,10 +36,10 @@ export default {
 			return !!this.widgetOptions.fontSize;
 		},
 		minFontSizeReached() {
-			return this.widget.fontSize <= settingsOptions.user.widgetFontSize.min;
+			return this.widget.fontSize <= settingsOptions.widgets.fontSize.min;
 		},
 		maxFontSizeReached() {
-			return this.widget.fontSize >= settingsOptions.user.widgetFontSize.max;
+			return this.widget.fontSize >= settingsOptions.widgets.fontSize.max;
 		}
 	}
 }

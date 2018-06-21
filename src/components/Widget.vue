@@ -77,11 +77,11 @@ export default {
 	computed: {
 
 		canResize() {
-			return settingsOptions.user.widgetOptions[this.widget.name].resize;
+			return settingsOptions.widgets.widgetOptions[this.widget.name].resize;
 		},
 
 		canDrag() {
-			return settingsOptions.user.widgetOptions[this.widget.name].move;
+			return settingsOptions.widgets.widgetOptions[this.widget.name].move;
 		},
 
 		gridCols() {

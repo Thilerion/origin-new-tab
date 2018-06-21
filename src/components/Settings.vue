@@ -165,7 +165,12 @@ export default {
 			this.$store.commit('setShowSettings', false);
 		},
 		saveSettings() {
-			this.$store.dispatch('saveUpdatedSettings', this.currentSettings);
+			if (this.deepEquals(this.currentSettings, this.initialSettings)) {
+				console.log("No changes in settings.");
+			} else {
+				console.log("Settings have changed");
+				this.$store.dispatch('saveUpdatedSettings', this.currentSettings);
+			}			
 			this.closeSettings();
 		},
 		deepClone(obj) {

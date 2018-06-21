@@ -152,14 +152,13 @@ const settingsStore = {
 		saveUpdatedSettings({ getters, commit, dispatch }, settings) {
 			const currentSettings = getters.settingsWatch;
 			
-
-			dispatch('checkImmediateModuleUpdates', { settings, currentSettings });
+			dispatch('checkImmediateModuleUpdates', { settings, currentSettings });		
 
 			const merged = lodashMerge(currentSettings, settings);
 			commit('setSettingsData', merged);
 		},
 
-		checkImmediateModuleUpdates({ dispatch }, { settings, currentSettings }) {
+		checkImmediateModuleUpdates({ commit, dispatch }, { settings, currentSettings }) {
 			/*
 			need updates in components:
 				quote category
@@ -176,13 +175,17 @@ const settingsStore = {
 			if (useCustomLocChanged) {
 				if (!settings.weather.useCustomLocation) {
 					//disable using custom location
+					commit('setUseCustomLocation', false);
+					console.warn("disable custom location");
 					dispatch('weatherSettingsChanged', { disable: true });
 				} else {
 					//enable use custom location
+					console.warn("enable custom location");
 					dispatch('weatherSettingsChanged', { enable: true, newLocation: settings.weather.customLocationToUse });
 				}
 			} else if (settings.weather.useCustomLocation && customLocChanged) {
 				//only update new custom location
+				console.warn('use new custom location');
 				dispatch('weatherSettingsChanged', { newLocation: settings.weather.customLocationToUse });
 			}
 

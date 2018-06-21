@@ -140,7 +140,7 @@ const weatherStore = {
 			commit('setWeatherDataLoaded', true);
 		},
 
-		async getCoordinates({ state,getters, commit }) {
+		async getCoordinates({ state, getters, commit }) {
 			if (getters.useCustomLocation === true) {
 				return state.weatherData.coordinates;
 			} else {

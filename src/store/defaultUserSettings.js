@@ -1,6 +1,6 @@
 const defaultSettings = {
 	general: {
-		name: "",
+		username: "",
 		// [nl, en]
 		language: "nl",
 		// range: 10-20, or null (which resets to 100% in base css file)
@@ -65,7 +65,8 @@ const defaultSettings = {
 		}
 	],
 	weather: {
-		useCustomLocation: false
+		useCustomLocation: false,
+		customLocationToUse: ""
 	},
 	wallpaper: {
 		// any valid unsplash collection id. maybe provide a list as well?

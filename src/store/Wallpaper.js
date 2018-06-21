@@ -207,7 +207,6 @@ const wallpaperStore = {
 		},
 
 		wallpaperStorageLoadExpired({ commit, dispatch }, data) {
-			commit('setWallpaperCollection', data.collection);
 			commit('setWallpaperCycleTimeout', data.wallpaperCycleTimeout);
 			dispatch('getWallpapersFromServer', data);
 		},
@@ -227,9 +226,7 @@ const wallpaperStore = {
 
 			//TODO: refresh to next wallpaper if lastSet is too long ago
 			commit('setWallpapers', wallpapers);
-			commit('setWallpaperCycleTimeout', wallpaperCycleTimeout);
 			dispatch('setCurrentWallpaperId', { id: currentWallpaperId, lastSet: idLastSet });
-			commit('setWallpaperCollection', collection);
 			commit('setWallpaperDataExpires', expires);
 			commit('setArrayUpdateChangeAmount', arrayUpdateChangeAmount);
 			dispatch('loadingDataSucces');
@@ -382,10 +379,9 @@ const wallpaperStore = {
 			commit('setWallpaperLastSet', newLastSet);
 		},
 
-		setWallpaperCollection({ commit, dispatch }, col) {
+		wallpaperSettingsChanged({commit, dispatch}) {
 			commit('setDataLoaded', null);
 			commit('setWallpaperImageLoaded', null);
-			commit('setWallpaperCollection', col);
 			dispatch('getWallpapersFromServer');
 		}
 	}

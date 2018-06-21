@@ -33,13 +33,6 @@ export default {
 				return str.slice(0, -1);
 			} else return str;
 		}
-	},
-	watch: {
-		quoteCategory(newValue, oldValue) {
-			if (newValue !== oldValue) {
-				this.reloadQuote();
-			}
-		}
 	}
 }
 </script>

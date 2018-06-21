@@ -72,13 +72,6 @@ const weatherStore = {
 		setCoordinates(state, coords) {
 			state.weatherData.coordinates = { ...coords };
 		},
-		setUseCustomLocation(state, bool) {
-			if (bool == null) {
-				state.weatherData.useCustomLocation = !state.weatherData.useCustomLocation;
-			} else {
-				state.weatherData.useCustomLocation = bool;
-			}
-		},
 		setWeatherDataLoaded(state, bool) {
 			if (bool == null) {
 				state.weatherData.weatherDataLoaded = !state.weatherData.weatherDataLoaded;
@@ -89,13 +82,10 @@ const weatherStore = {
 	},
 
 	actions: {
-		weatherStorageLoadFailed({ commit, dispatch }) {
-			commit('setUseCustomLocation', false);
+		weatherStorageLoadFailed({ dispatch }) {
 			dispatch('initiateGetWeather');
 		},
 		weatherStorageLoadExpired({ commit, dispatch }, localData) {
-			const { useCustomLocation = false } = localData;
-			commit('setUseCustomLocation', useCustomLocation);
 			dispatch('initiateGetWeather', localData);
 		},
 		weatherSetFromStorage({ commit, dispatch }, localData) {
@@ -107,15 +97,13 @@ const weatherStore = {
 				expires,
 				forecast,
 				address,
-				coordinates,
-				useCustomLocation = false
+				coordinates
 			} = localData;
 
 			commit('setWeatherDataExpires', expires);
 			commit('setForecast', forecast);
 			commit('setAddress', address);
 			commit('setCoordinates', coordinates);
-			commit('setUseCustomLocation', useCustomLocation);
 			commit('setWeatherDataLoaded', true);
 		},
 
@@ -138,22 +126,22 @@ const weatherStore = {
 			}
 		},
 
-		weatherSetFromServer({state, commit}, weatherData) {
+		weatherSetFromServer({getters, commit}, weatherData) {
 			const { expires } = weatherData;
 			const { forecast, address } = weatherData.data;
 
 			commit('setWeatherDataExpires', expires);
 			commit('setForecast', forecast);
 
-			if (state.weatherData.useCustomLocation === false) {
+			if (getters.useCustomLocation === false) {
 				const city = address.bestAddress.split(',')[0];
 				commit('setAddress', { city, street: null });
 			}
 			commit('setWeatherDataLoaded', true);
 		},
 
-		async getCoordinates({ state, commit }) {
-			if (state.weatherData.useCustomLocation === true) {
+		async getCoordinates({ state,getters, commit }) {
+			if (getters.useCustomLocation === true) {
 				return state.weatherData.coordinates;
 			} else {
 				try {
@@ -178,33 +166,8 @@ const weatherStore = {
 			}
 		},
 
-		async setCustomLocationFromSettings({ state, getters, commit, dispatch }, { useCustomLocation, addressCity }) {
-			console.warn(useCustomLocation, addressCity);
-			const currentUseCustom = state.weatherData.useCustomLocation;
-			const currentAddressCity = state.weatherData.address.city;
-			const currentWeatherData = state.weatherData.weatherDataLoaded ? getters.weatherWatch : null;
-
-			try {
-				if (useCustomLocation === false && currentUseCustom === true) {
-					commit('setUseCustomLocation', false);
-					dispatch('initiateGetWeather', currentWeatherData);
-				} else if (useCustomLocation === true) {
-					if (currentUseCustom === false) {
-						commit('setUseCustomLocation', true);
-					}
-					if (currentAddressCity !== addressCity) {
-						await dispatch('getCustomLocationFromServer', addressCity);
-						dispatch('initiateGetWeather', currentWeatherData);
-					}
-				}
-			} catch (e) {
-				console.warn("Error in setting custom location from settings!");
-				return Promise.reject(e);
-			}
-		},
 		async getCustomLocationFromServer({commit}, inputLocation) {
 			try {
-				debugger;
 				let url = locationApi.url.get();
 				let data = await locationApi.request(url, { address: inputLocation });
 				const { coordinates, address } = data.data;
@@ -214,6 +177,21 @@ const weatherStore = {
 			} catch (e) {
 				console.warn("Getting custom location failed");
 				return Promise.reject(e);
+			}
+		},
+
+		async weatherSettingsChanged({ state, getters, dispatch }, { enable, disable, newLocation }) {
+			const currentWeatherData = state.weatherData.weatherDataLoaded ? getters.weatherWatch : null;
+			if (disable) {
+				dispatch('initiateGetWeather', currentWeatherData);
+			} else if (newLocation) {
+				try {
+					await dispatch('getCustomLocationFromServer', newLocation);
+					dispatch('initiateGetWeather', currentWeatherData);
+				} catch (e) {
+					console.warn("Error in setting custom location from settings!");
+					return Promise.reject(e);
+				}
 			}
 		}
 	}

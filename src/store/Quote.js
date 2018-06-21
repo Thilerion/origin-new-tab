@@ -57,6 +57,10 @@ const quoteStore = {
 		quoteSetFromApi({ commit }, apiData) {
 			const { data: randomQuote, expires } = apiData;
 			commit('setQuote', { randomQuote, expires });
+		},
+		quoteSettingsChanged({getters, dispatch}) {
+			const currentQuoteData = getters.quoteWatch;
+			dispatch('getQuoteFromServer', currentQuoteData);
 		}
 	}
 

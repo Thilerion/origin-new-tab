@@ -1,5 +1,5 @@
 import { defaultSettings, settingsOptions } from './defaultUserSettings';
-import { deepMergeArray } from '../utils/deepObject';
+import { deepClone, deepMergeArray } from '../utils/deepObject';
 
 import lodashMerge from 'lodash.merge';
 
@@ -20,7 +20,8 @@ const settingsStore = {
 			},
 			widgets: [],
 			weather: {
-				useCustomLocation: false
+				useCustomLocation: false,
+				customLocationToUse: ""
 			},
 			wallpaper: {
 				wallpaperCollection: null,
@@ -45,6 +46,10 @@ const settingsStore = {
 		widgetByName: state => name => state.settingsData.widgets.find(w => w.name === name),
 		widgetIndexByName: state => name => state.settingsData.widgets.findIndex(w => w.name === name),
 		useCustomLocation: state => state.settingsData.weather.useCustomLocation,
+		customLocationToUse: state => state.settingsData.weather.customLocationToUse,
+		locationToUse: (state, getters) => {
+			return state.settingsData.weather.customLocationToUse || getters.addressCity;
+		},
 		wallpaperCollection: state => state.settingsData.wallpaper.wallpaperCollection,
 		wallpaperCycleTimeout: state => state.settingsData.wallpaper.wallpaperCycleTimeout,
 		quoteCategory: state => state.settingsData.quote.category,
@@ -57,7 +62,7 @@ const settingsStore = {
 			return !!state.showSettings;
 		},
 		isEditingUsername(state) {
-			return state.editingUsername || !state.settingsData.username;
+			return state.editingUsername || !state.settingsData.general.username;
 		},
 		gridCols: state => state.gridCols,
 		gridRows: state => state.gridRows
@@ -65,13 +70,15 @@ const settingsStore = {
 
 	mutations: {
 		setSettingsData(state, settingsData) {
-			state.settingsData = { ...settingsData };
+			console.log(settingsData);
+			state.settingsData = { ...deepClone(settingsData) };
 		},
 		setLanguage(state, language) {
 			state.settingsData.general.language = language;
 		},
 		setUsername(state, username) {
 			state.settingsData.general.username = username;
+			if (state.editingUsername) state.editingUsername = false;
 		},
 		setFontSize(state, fontSize = null) {
 			state.settingsData.general.fontSize = fontSize;
@@ -86,6 +93,9 @@ const settingsStore = {
 			//TODO: dispatch to weather component (from action)
 			state.settingsData.weather.useCustomLocation = !!bool;
 		},
+		setCustomLocationToUse(state, loc) {
+			state.settingsData.weather.customLocationToUse = loc;
+		},
 		setWallpaperCollection(state, collection) {
 			state.settingsData.wallpaper.wallpaperCollection = collection;
 		},
@@ -93,7 +103,7 @@ const settingsStore = {
 			state.settingsData.wallpaper.wallpaperCycleTimeout = timeout;
 		},
 		setQuoteCategory(state, category) {
-			state.settingsData.quote.quoteCategory = category;
+			state.settingsData.quote.category = category;
 		},
 		
 		toggleDnd(state) {
@@ -131,18 +141,50 @@ const settingsStore = {
 	},
 
 	actions: {
-		saveSettings({ commit, dispatch }, { name, language, fontSize, wallpaperCollection, quoteCategory, widgets, wallpaperCycleTimeout, weatherSettings }) {
-			if (name) commit('setUsername', name);			
-			if (language) commit('setLanguage', language);
-			if (fontSize !== undefined) commit('setFontSize', fontSize);
-			if (wallpaperCollection) dispatch('setWallpaperCollection', wallpaperCollection);
-			if (quoteCategory) commit('setQuoteCategory', quoteCategory);
-			if (widgets) commit('setWidgets', widgets);
-			if (wallpaperCycleTimeout) commit('setWallpaperCycleTimeout', wallpaperCycleTimeout);
-			if (weatherSettings) dispatch('setCustomLocationFromSettings', weatherSettings);
+		saveUpdatedSettings({ getters, commit, dispatch }, settings) {
+			const currentSettings = getters.settingsWatch;
+			
+
+			dispatch('checkImmediateModuleUpdates', { settings, currentSettings });
+
+			const merged = lodashMerge(currentSettings, settings);
+			commit('setSettingsData', merged);
 		},
 
-		settingsSetFromStorage({commit}, storageData) {
+		checkImmediateModuleUpdates({ dispatch }, { settings, currentSettings }) {
+			/*
+			need updates in components:
+				quote category
+				if: useCustomLocation => customLocationToUse
+				wallpaper collection
+			*/
+			if (settings.quote.category !== currentSettings.quote.category) {
+				console.log('quote cat changed');
+				dispatch('quoteSettingsChanged');
+			}
+
+			const useCustomLocChanged = settings.weather.useCustomLocation !== currentSettings.weather.useCustomLocation;
+			const customLocChanged = settings.weather.customLocationToUse !== currentSettings.weather.customLocationToUse;
+			if (useCustomLocChanged) {
+				if (!settings.weather.useCustomLocation) {
+					//disable using custom location
+					dispatch('weatherSettingsChanged', { disable: true });
+				} else {
+					//enable use custom location
+					dispatch('weatherSettingsChanged', { enable: true, newLocation: settings.weather.customLocationToUse });
+				}
+			} else if (settings.weather.useCustomLocation && customLocChanged) {
+				//only update new custom location
+				dispatch('weatherSettingsChanged', { newLocation: settings.weather.customLocationToUse });
+			}
+
+			if (settings.wallpaper.wallpaperCollection !== currentSettings.wallpaper.wallpaperCollection) {
+				console.log('wallpaper collection changed');
+				dispatch('wallpaperSettingsChanged');
+			}
+		},
+
+		settingsSetFromStorage({ commit }, storageData) {
 			const def = defaultSettings;
 			const merged = lodashMerge(def, storageData);
 			commit('setSettingsData', merged);

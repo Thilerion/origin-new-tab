@@ -53,7 +53,7 @@ const store = new Vuex.Store({
 	},
 
 	actions: {
-		userStorageLoadFailed({ commit }) {
+		/*userStorageLoadFailed({ commit }) {
 			commit('setLanguage', 'nl');
 			commit('setFontSize', null);
 			commit('setEditingUsername', true);
@@ -67,7 +67,7 @@ const store = new Vuex.Store({
 				deepClone(defaultSettings.user.widgets),
 				deepClone(widgets));
 			commit('setWidgets', mergedWidgets);
-		}
+		}*/
 	}
 
 })

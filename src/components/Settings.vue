@@ -10,12 +10,12 @@
 			<div class="grid-col-1">
 				<div class="setting-wrap">
 					<label class="f-weight-heavy">Naam</label>
-					<input v-model="currentSettings.name" type="text" class="input">
+					<input v-model="currentSettings.general.username" type="text" class="input">
 				</div>
 				<div class="setting-wrap">
 					<label class="f-weight-heavy">Taal</label>
 					<div class="setting-radio" v-for="lang in settingsOptions.user.language" :key="lang.id">
-						<input type="radio" :value="lang.id" v-model="currentSettings.language">
+						<input type="radio" :value="lang.id" v-model="currentSettings.general.language">
 						<span class="setting-radio-label">{{lang.name}}</span>
 					</div>				
 				</div>
@@ -23,19 +23,19 @@
 					<label class="f-weight-heavy">Text grootte</label>
 					<div class="setting-input">
 						<!-- no value on this input to bind it to 'null' -->
-						<input type="radio" v-model="currentSettings.fontSize">
+						<input type="radio" v-model="currentSettings.general.fontSize">
 						<span class="setting-input-label">Standaard</span>
 					</div>
 					<div class="setting-input font-size-range">
-						<input type="range" class="slider is-circle" :class="{'range-disabled': disableFontSizeSlider}" :min="settingsOptions.user.fontSize.min" :max="settingsOptions.user.fontSize.max" v-model="currentSettings.fontSize">
-						<div :class="{'hide-label': !!disableFontSizeSlider}" class="setting-input-label">{{currentSettings.fontSize}}px</div>
+						<input type="range" class="slider is-circle" :class="{'range-disabled': disableFontSizeSlider}" :min="settingsOptions.user.fontSize.min" :max="settingsOptions.user.fontSize.max" v-model="currentSettings.general.fontSize">
+						<div :class="{'hide-label': !!disableFontSizeSlider}" class="setting-input-label">{{currentSettings.general.fontSize}}px</div>
 					</div>
 					
 				</div>
 				<div class="setting-wrap">
 					<label class="f-weight-heavy">Achtergrond collectie</label>
 					<div class="select">
-					<select v-model="currentSettings.wallpaperCollection">
+					<select v-model="currentSettings.wallpaper.wallpaperCollection">
 						<option v-for="col in settingsOptions.wallpaper.wallpaperCollection" :key="col.id" :value="col.id">{{col.name}}</option>
 					</select>
 					</div>
@@ -43,7 +43,7 @@
 				<div class="setting-wrap">
 					<label class="f-weight-heavy">Hoe vaak een nieuwe achtergrond</label>
 					<div class="select">
-					<select v-model="currentSettings.wallpaperCycleTimeout">
+					<select v-model="currentSettings.wallpaper.wallpaperCycleTimeout">
 						<option v-for="opt in settingsOptions.wallpaper.wallpaperCycleTimeout" :key="opt.value" :value="opt.value">{{opt.name}}</option>
 					</select>
 					</div>
@@ -51,16 +51,16 @@
 				<div class="setting-wrap">
 					<label class="f-weight-heavy">Quote categorie</label>
 					<div class="select">
-					<select v-model="currentSettings.quoteCategory" class="quote-option">
+					<select v-model="currentSettings.quote.category" class="quote-option">
 						<option v-for="cat in settingsOptions.quote.quoteCategory" :key="cat" :value="cat" class="quote-option">{{cat}}</option>
 					</select>
 					</div>				
 				</div>
 				<div class="setting-wrap">
 					<label>Use custom location?</label>
-					<input type="checkbox" v-model="currentSettings.weatherSettings.useCustomLocation">
-					<label>{{currentSettings.weatherSettings.useCustomLocation ? "Ja" : "Nee"}}</label>
-					<input type="text" v-model="currentSettings.weatherSettings.addressCity" :disabled="!currentSettings.weatherSettings.useCustomLocation">
+					<input type="checkbox" v-model="currentSettings.weather.useCustomLocation">
+					<label>{{useCustomLocation ? "Ja" : "Nee"}}</label>
+					<input type="text" v-model="currentSettings.weather.customLocationToUse" :disabled="!currentSettings.weather.useCustomLocation">
 				</div>
 			</div>
 			<div class="grid-col-2">
@@ -87,35 +87,52 @@ export default {
 	data() {
 		return {
 			currentSettings: {
-				name: "",
-				language: "",
-				fontSize: "",
-				wallpaperCollection: "",
-				quoteCategory: "",
-				widgets: "",
-				wallpaperCycleTimeout: "",
-				weatherSettings: {
-					useCustomLocation: "",
-					addressCity: ""
-				}
+				general: {},
+				widgets: [],
+				weather: {},
+				wallpaper: {},
+				quote: {},
+				news: {},
+				calendar: {}
 			},
 			initialSettings: {
-				name: "",
-				language: "",
-				fontSize: "",
-				wallpaperCollection: "",
-				quoteCategory: "",
-				widgets: "",
-				wallpaperCycleTimeout: "",
-				weatherSettings: {
-					useCustomLocation: "",
-					addressCity: ""
-				}
+				general: {},
+				widgets: [],
+				weather: {},
+				wallpaper: {},
+				quote: {},
+				news: {},
+				calendar: {}
 			},
 			settingsOptions: {...settingsOptions}
 		}
 	},
 	computed: {
+		username() {
+			return this.currentSettings.general.username;
+		},
+		language() {
+			return this.currentSettings.general.language;
+		},
+		fontSize() {
+			return this.currentSettings.general.fontSize;
+		},
+		useCustomLocation() {
+			return this.currentSettings.weather.useCustomLocation;
+		},
+		currentLocation() {
+			//TODO: field for new custom location
+			return this.$store.getters.locationToUse;
+		},
+		wallpaperCollection() {
+			return this.currentSettings.wallpaper.wallpaperCollection;
+		},
+		wallpaperCycleTimeout() {
+			return this.currentSettings.wallpaper.wallpaperCycleTimeout;
+		},
+		quoteCategory() {
+			return this.currentSettings.quote.category;
+		},
 		disableFontSizeSlider() {
 			const isDefault = this.currentSettings.fontSize === null;
 			return isDefault;
@@ -134,20 +151,7 @@ export default {
 			this.$store.commit('setShowSettings', false);
 		},
 		saveSettings() {
-			let settingsToSave = {};
-
-			for (let setting in this.currentSettings) {
-				const hasChanged = !this.deepEquals(
-					this.currentSettings[setting],
-					this.initialSettings[setting]
-				);
-
-				if (hasChanged) {
-					console.log(setting);
-					settingsToSave[setting] = this.currentSettings[setting];
-				};
-			}
-			this.$store.dispatch('saveSettings', settingsToSave);
+			this.$store.dispatch('saveUpdatedSettings', this.currentSettings);
 			this.closeSettings();
 		},
 		deepClone(obj) {
@@ -168,9 +172,9 @@ export default {
 		}
 	},
 	created() {
-		let currentSettings = this.$store.getters.currentSettings;
-		this.currentSettings = this.deepClone(currentSettings);
-		this.initialSettings = this.deepClone(currentSettings);
+		let currentSettings = this.$store.getters.settingsWatch;
+		this.currentSettings = {...this.deepClone(currentSettings)};
+		this.initialSettings = {...this.deepClone(currentSettings)};
 	},
 	beforeDestroy() {
 		this.initialSettings = {};

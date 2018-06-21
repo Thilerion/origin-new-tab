@@ -1,4 +1,4 @@
-input[type="text"].input {
+input[type="text"].input-text {
 	border: 1px solid #dbdbdb;
 	border-radius: 4px;
     color: #363636;
@@ -12,7 +12,12 @@ input[type="text"].input {
 	outline: 0;
 }
 
-input[type="text"].input:active, input[type="text"].input:focus {
+.input-text-height {
+	height: 2.25rem;
+	line-height: 1.5;
+}
+
+input[type="text"].input-text:active, input[type="text"].input-text:focus {
 	border: 1px solid rgba(50, 115, 220, 0.5);
     box-shadow: 0 0 0 0.125em rgba(50,115,220,.8);
 }

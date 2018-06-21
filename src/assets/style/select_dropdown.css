@@ -1,4 +1,4 @@
-.select select {
+.input-select select {
 	background-color: #fff;
 	border: 1px solid #dbdbdb;
 	border-radius: 4px;
@@ -20,16 +20,18 @@
 	width: 100%;
 }
 
-.select select:active, .select select:focus {
+.input-select select:active, .input-select select:focus {
 	border: 1px solid rgba(50, 115, 220, 0.5);
     box-shadow: 0 0 0 0.125em rgba(50,115,220,.8);		
 }
 
-.select {
+.input-select {
 	position: relative;
+	display: inline-block;
+	max-width: 100%;
 }
 
-.select::after {
+.input-select::after {
 	pointer-events: none;
 	position: absolute;
 	height: .5625rem;

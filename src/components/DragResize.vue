@@ -303,7 +303,6 @@ export default {
 					classes.push('active-handle-side');
 				}
 			}
-			console.log(classes);
 			return classes;
 		}
 	},

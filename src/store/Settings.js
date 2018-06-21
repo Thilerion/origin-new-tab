@@ -26,12 +26,14 @@ const settingsStore = {
 			},
 			wallpaper: {
 				wallpaperCollection: null,
-				wallpaperCycleTimeout: null
+				wallpaperRefresh: null
 			},
 			quote: {
 				category: ""
 			},
-			news: {},
+			news: {
+				slideInterval: null
+			},
 			calendar: {}
 		}
 	},
@@ -53,8 +55,9 @@ const settingsStore = {
 			return state.settingsData.weather.customLocationToUse || getters.addressCity;
 		},
 		wallpaperCollection: state => state.settingsData.wallpaper.wallpaperCollection,
-		wallpaperCycleTimeout: state => state.settingsData.wallpaper.wallpaperCycleTimeout,
+		wallpaperRefresh: state => state.settingsData.wallpaper.wallpaperRefresh,
 		quoteCategory: state => state.settingsData.quote.category,
+		newsSlideInterval: state => state.settingsData.news.slideInterval,
 
 
 		dndEnabled(state) {
@@ -101,11 +104,14 @@ const settingsStore = {
 		setWallpaperCollection(state, collection) {
 			state.settingsData.wallpaper.wallpaperCollection = collection;
 		},
-		setWallpaperCycleTimeout(state, timeout = 10) {
-			state.settingsData.wallpaper.wallpaperCycleTimeout = timeout;
+		setWallpaperRefresh(state, timeout = 10) {
+			state.settingsData.wallpaper.wallpaperRefresh = timeout;
 		},
 		setQuoteCategory(state, category) {
 			state.settingsData.quote.category = category;
+		},
+		setNewsSlideInterval(state, interval) {
+			state.settingsData.news.slideInterval = interval;
 		},
 		
 		toggleDnd(state) {

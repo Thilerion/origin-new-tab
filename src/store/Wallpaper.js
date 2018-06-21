@@ -207,7 +207,7 @@ const wallpaperStore = {
 		},
 
 		wallpaperStorageLoadExpired({ commit, dispatch }, data) {
-			commit('setWallpaperCycleTimeout', data.wallpaperCycleTimeout);
+			commit('setWallpaperRefresh', data.wallpaperRefresh);
 			dispatch('getWallpapersFromServer', data);
 		},
 
@@ -218,7 +218,7 @@ const wallpaperStore = {
 				currentWallpaperId = 0,
 				collection,
 				idLastSet,
-				wallpaperCycleTimeout,
+				wallpaperRefresh,
 				arrayUpdateChangeAmount
 			} = localData;
 
@@ -369,7 +369,7 @@ const wallpaperStore = {
 			let newId = (id != null) ? id : 0;
 			let newLastSet = lastSet ? lastSet : now;
 
-			if (lastSet && (newLastSet + getters.wallpaperCycleTimeout < now)) {	
+			if (lastSet && (newLastSet + getters.wallpaperRefresh < now)) {	
 				console.warn("Timer has passed, current wallpaper id is cycled.");
 				newId = (newId + 1) % getters.wallpapersLength;
 				newLastSet = now;

@@ -72,13 +72,15 @@ const defaultSettings = {
 	wallpaper: {
 		// any valid unsplash collection id. maybe provide a list as well?
 		wallpaperCollection: 477172,
-		wallpaperCycleTimeout: 1 * 60 * 60 * 1000
+		wallpaperRefresh: 1 * 60 * 60 * 1000
 	},
 	quote: {
 		// [motivinspirational, movies, famous]
 		category: "motivinspirational"
 	},
-	news: {},
+	news: {
+		slideInterval: 6000
+	},
 	calendar: {}
 }
 
@@ -176,7 +178,7 @@ const settingsOptions = {
 			{ name: 'The Deep Sea', id: 461104 },
 			{ name: 'Au Naturel', id: 881815 }
 		],
-		wallpaperCycleTimeout: [
+		wallpaperRefresh: [
 			{ name: 'Altijd', value: 10 },
 			{ name: 'Elk uur', value: 1 * 60 * 60 * 1000 },
 			{ name: 'Elke 4 uur', value: 4 * 60 * 60 * 1000 },
@@ -186,6 +188,12 @@ const settingsOptions = {
 	},
 	quote: {
 		quoteCategory: ['motivinspirational', 'movies', 'famous']
+	},
+	news: {
+		slideInterval: {
+			min: 4000,
+			max: 60000
+		}
 	}
 };
 

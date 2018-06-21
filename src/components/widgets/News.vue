@@ -30,6 +30,9 @@ export default {
 		},
 		newsDataLoaded() {
 			return this.$store.getters.newsDataLoaded;
+		},
+		slideInterval() {
+			return this.$store.getters.newsSlideInterval;
 		}
 	},
 	methods: {
@@ -61,7 +64,7 @@ export default {
 				} else {
 					this.next(false);
 				}
-			}, 6000);
+			}, this.slideInterval);
 			this.timeout = timeout;
 		},
 		restartTimeout() {

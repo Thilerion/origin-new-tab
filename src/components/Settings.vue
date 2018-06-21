@@ -48,8 +48,8 @@
 				<div class="setting-wrap">
 					<label class="f-weight-heavy">Hoe vaak een nieuwe achtergrond</label>
 					<div class="select">
-					<select v-model="currentSettings.wallpaper.wallpaperCycleTimeout">
-						<option v-for="opt in settingsOptions.wallpaper.wallpaperCycleTimeout" :key="opt.value" :value="opt.value">{{opt.name}}</option>
+					<select v-model="currentSettings.wallpaper.wallpaperRefresh">
+						<option v-for="opt in settingsOptions.wallpaper.wallpaperRefresh" :key="opt.value" :value="opt.value">{{opt.name}}</option>
 					</select>
 					</div>
 				</div>
@@ -66,6 +66,15 @@
 					<input type="checkbox" v-model="currentSettings.weather.useCustomLocation">
 					<label>{{useCustomLocation ? "Ja" : "Nee"}}</label>
 					<input type="text" v-model="currentSettings.weather.customLocationToUse" :disabled="!currentSettings.weather.useCustomLocation">
+				</div>
+				<div class="setting-wrap">
+					<label class="f-weight-heavy">Nieuws slide interval</label>
+					<div class="setting-input setting-range">
+						<input type="range" class="slider is-circle" :min="settingsOptions.news.slideInterval.min" :max="settingsOptions.news.slideInterval.max"
+						step="1000"
+						v-model="currentSettings.news.slideInterval">
+						<div class="setting-input-label">{{currentSettings.news.slideInterval / 1000}}s</div>
+					</div>					
 				</div>
 			</div>
 			<div class="grid-col-2">
@@ -132,8 +141,8 @@ export default {
 		wallpaperCollection() {
 			return this.currentSettings.wallpaper.wallpaperCollection;
 		},
-		wallpaperCycleTimeout() {
-			return this.currentSettings.wallpaper.wallpaperCycleTimeout;
+		wallpaperRefresh() {
+			return this.currentSettings.wallpaper.wallpaperRefresh;
 		},
 		quoteCategory() {
 			return this.currentSettings.quote.category;

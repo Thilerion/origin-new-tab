@@ -1,96 +1,147 @@
 <template>
 	<div class="settings-page">
-		<button class="close-btn icon-btn" @click="closeSettings">
-			<StartSvgIcon icon="close" size="36px" />
-		</button>
-		<header class="settings-header f-align-c">
-			<h2 class="f-weight-light">Instellingen</h2>
-		</header>
-		<main class="settings-content">
-			<div class="grid-col-1">
-				<div class="setting-wrap">
-					<label class="f-weight-heavy">Naam</label>
-					<input v-model="currentSettings.general.username" type="text" class="input">
-				</div>
-				<div class="setting-wrap">
-					<label class="f-weight-heavy">Taal</label>
-					<div class="setting-radio" v-for="lang in settingsOptions.general.language" :key="lang.id">
-						<input type="radio" :value="lang.id" v-model="currentSettings.general.language">
-						<span class="setting-radio-label">{{lang.name}}</span>
-					</div>				
-				</div>
-				<div class="setting-wrap">
-					<label class="f-weight-heavy">Text grootte</label>
-					<div class="setting-input">
-						<!-- no value on this input to bind it to 'null' -->
-						<input type="radio" v-model="currentSettings.general.fontSize">
-						<span class="setting-input-label">Standaard</span>
-					</div>
-					<div class="setting-input font-size-range">
-						<input type="range" class="slider is-circle" :class="{'range-disabled': disableFontSizeSlider}" :min="settingsOptions.general.fontSize.min" :max="settingsOptions.general.fontSize.max" v-model="currentSettings.general.fontSize">
-						<div :class="{'hide-label': !!disableFontSizeSlider}" class="setting-input-label">{{currentSettings.general.fontSize}}px</div>
-					</div>					
-				</div>
-				<div class="setting-wrap">
-					<div class="setting-input">
-						<input type="checkbox" v-model="currentSettings.general.showTextGreeting">
-						<span class="setting-input-label">Show greeting</span>
-					</div>
-				</div>
-				<div class="setting-wrap">
-					<label class="f-weight-heavy">Achtergrond collectie</label>
-					<div class="select">
-					<select v-model="currentSettings.wallpaper.wallpaperCollection">
-						<option v-for="col in settingsOptions.wallpaper.wallpaperCollection" :key="col.id" :value="col.id">{{col.name}}</option>
-					</select>
+		<div class="settings-content">
+			<button class="close-btn icon-btn" @click="closeSettings">
+				<StartSvgIcon icon="close" size="36px" />
+			</button>
+			<div class="settings-content-inner">
+				<h1>Instellingen</h1>
+
+				<div class="setting-group">
+					<h2>Algemeen</h2>
+					<div class="setting-group-content">
+
+						<div class="setting-item">
+							<h3 class="setting-item-name">Naam</h3>				
+							<input type="text" v-model="currentSettings.general.username">
+						</div>
+
+						<div class="setting-item">
+							<h3 class="setting-item-name">Taal</h3>
+							<label v-for="lang in settingsOptions.general.language" :key="lang.id"><input type="radio" :value="lang.id" v-model="currentSettings.general.language">{{lang.name}}</label>
+						</div>
+
+						<div class="setting-item">
+							<h3 class="setting-item-name">Textgrootte</h3>
+							<div class="checkbox-group">
+								<input type="radio" v-model="currentSettings.general.fontSize"><label>Standaard</label>
+							</div>				
+							<input type="range" class="slider is-circle" :class="{'range-disabled': disableFontSizeSlider}" :min="settingsOptions.general.fontSize.min" :max="settingsOptions.general.fontSize.max" v-model="currentSettings.general.fontSize"><label :class="{'hide-label': !!disableFontSizeSlider}">{{currentSettings.general.fontSize}}px</label>
+						</div>
+
+						<div class="setting-item">
+							<h3 class="setting-item-name">Laat welkomsttekst zien</h3>
+							<input type="checkbox" v-model="currentSettings.general.showTextGreeting">
+						</div>
+
 					</div>
 				</div>
-				<div class="setting-wrap">
-					<label class="f-weight-heavy">Hoe vaak een nieuwe achtergrond</label>
-					<div class="select">
-					<select v-model="currentSettings.wallpaper.wallpaperRefresh">
-						<option v-for="opt in settingsOptions.wallpaper.wallpaperRefresh" :key="opt.value" :value="opt.value">{{opt.name}}</option>
-					</select>
+
+				<div class="setting-group">
+					<h2>Widgets</h2>
+					<div class="setting-group-content">
+						<div class="setting-item">
+							<h3 class="setting-item-name">Actieve widgets</h3>
+							<div class="checkbox-group" v-for="widget in widgetsCanBeDisabled" :key="widget.name">
+								<input type="checkbox" v-model="widget.active"><label class="text-capitalize">{{widget.name}}</label>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="setting-wrap">
-					<label class="f-weight-heavy">Quote categorie</label>
-					<div class="select">
-					<select v-model="currentSettings.quote.category" class="quote-option">
-						<option v-for="cat in settingsOptions.quote.quoteCategory" :key="cat" :value="cat" class="quote-option">{{cat}}</option>
-					</select>
-					</div>				
-				</div>
-				<div class="setting-wrap">
-					<label>Use custom location?</label>
-					<input type="checkbox" v-model="currentSettings.weather.useCustomLocation">
-					<label>{{useCustomLocation ? "Ja" : "Nee"}}</label>
-					<input type="text" v-model="currentSettings.weather.customLocationToUse" :disabled="!currentSettings.weather.useCustomLocation">
-				</div>
-				<div class="setting-wrap">
-					<label class="f-weight-heavy">Nieuws slide interval</label>
-					<div class="setting-input setting-range">
-						<input type="range" class="slider is-circle" :min="settingsOptions.news.slideInterval.min" :max="settingsOptions.news.slideInterval.max"
-						step="1000"
-						v-model="currentSettings.news.slideInterval">
-						<div class="setting-input-label">{{currentSettings.news.slideInterval / 1000}}s</div>
-					</div>					
-				</div>
-			</div>
-			<div class="grid-col-2">
-				<div class="setting-wrap">
-					<label class="f-weight-heavy">Widgets</label>
-					<div class="setting-check" v-for="widget in widgetsCanBeDisabled" :key="widget.name">
-						<input type="checkbox" :value="widget.name" v-model="widget.active">
-						<span class="setting-check-label">{{widget.name}}</span>
+
+				<div class="setting-group">
+					<h2>Weer</h2>
+					<div class="setting-group-content">
+						<div class="setting-item">
+							<h3 class="setting-item-name">Gebruik aangepaste locatie</h3>
+							<div class="checkbox-group">
+								<input type="checkbox" v-model="currentSettings.weather.useCustomLocation">
+								<label v-if="currentSettings.weather.useCustomLocation">Ja: <input
+									type="text"
+									v-model="currentSettings.weather.customLocationToUse"
+								></label>
+								<label v-else>Nee, gebruik browser locatie.</label>
+							</div>
+						</div>
 					</div>
-					<button class="toggle-dnd" @click="toggleDnd">Verplaats widgets</button>
-					<button class="toggle-dnd" @click="$store.dispatch('removeAndRevokeAuthToken')">Revoke calendar access</button>
 				</div>
+
+				<div class="setting-group">
+					<h2>Achtergrond</h2>
+					<div class="setting-group-content">
+						<div class="setting-item">
+							<h3 class="setting-item-name">Achtergrond collectie</h3>
+							<div class="select">
+								<select
+									v-model="currentSettings.wallpaper.wallpaperCollection"
+								>
+									<option
+										v-for="col in settingsOptions.wallpaper.wallpaperCollection"
+										:key="col.id"
+										:value="col.id"
+									>{{col.name}}</option>
+								</select>	
+							</div>			
+						</div>
+
+						<div class="setting-item">
+							<h3 class="setting-item-name">Nieuwe achtergrond</h3>
+							<div class="select">
+								<select
+									v-model="currentSettings.wallpaper.wallpaperRefresh"
+								>
+									<option
+										v-for="opt in settingsOptions.wallpaper.wallpaperRefresh"
+										:key="opt.value"
+										:value="opt.value"
+									>{{opt.name}}</option>
+								</select>	
+							</div>			
+						</div>
+					</div>
+				</div>
+
+				<div class="setting-group">
+					<h2>Quote</h2>
+					<div class="setting-group-content">
+						<div class="setting-item">
+							<h3 class="setting-item-name">Quote categorie</h3>
+							<div class="select">
+								<select
+									v-model="currentSettings.quote.category"
+									class="text-capitalize"
+								>
+									<option
+										v-for="cat in settingsOptions.quote.quoteCategory"
+										:key="cat"
+										:value="cat"
+									>{{cat}}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="setting-group">
+					<h2>Nieuws</h2>
+					<div class="setting-group-content">
+						<div class="setting-item">
+							<h3 class="setting-item-name">Nieuws slide snelheid</h3>
+							<input
+								type="range"
+								class="slider is-circle"
+								:min="settingsOptions.news.slideInterval.min"
+								:max="settingsOptions.news.slideInterval.max"
+								step="1000"
+								v-model="currentSettings.news.slideInterval"
+							><label>{{currentSettings.news.slideInterval / 1000}}s</label>
+						</div>
+					</div>
+				</div>
+
 			</div>
 			<button @click="saveSettings" class="save-btn">Opslaan</button>
-			<button @click="resetAllStorage" class="reset-btn">Reset alles</button>
-		</main>
+		</div>
 	</div>
 </template>
 
@@ -122,33 +173,12 @@ export default {
 		}
 	},
 	computed: {
-		username() {
-			return this.currentSettings.general.username;
-		},
-		language() {
-			return this.currentSettings.general.language;
-		},
-		fontSize() {
-			return this.currentSettings.general.fontSize;
-		},
-		useCustomLocation() {
-			return this.currentSettings.weather.useCustomLocation;
-		},
 		currentLocation() {
 			//TODO: field for new custom location
 			return this.$store.getters.locationToUse;
 		},
-		wallpaperCollection() {
-			return this.currentSettings.wallpaper.wallpaperCollection;
-		},
-		wallpaperRefresh() {
-			return this.currentSettings.wallpaper.wallpaperRefresh;
-		},
-		quoteCategory() {
-			return this.currentSettings.quote.category;
-		},
 		disableFontSizeSlider() {
-			const isDefault = this.currentSettings.fontSize === null;
+			const isDefault = this.currentSettings.general.fontSize === null;
 			return isDefault;
 		},
 		widgetsCanBeDisabled() {
@@ -202,16 +232,54 @@ export default {
 </script>
 
 <style scoped>
+.text-capitalize {
+	text-transform: capitalize;
+}
+
+label:not(:last-of-type) {
+	margin-right: 1rem;
+}
+
+input + label {
+	margin-left: 0.25rem;
+}
+
+label > input {
+	margin-right: 0.25rem;
+}
+
+.checkbox-group {
+	margin-bottom: 0.25rem;
+}
+
+.setting-item {
+	margin-bottom: 1rem;
+}
+
+.setting-item-name {
+	margin-bottom: 0.25rem;
+}
+
 .settings-page {
 	font-size: 1rem;
 	position: fixed;
-	width: 100vw;
-	height: 100vh;
-	top: 0; left: 0;
-	background-color: rgba(0, 0, 0, 0.9);
-	padding: 1rem;
-	display: flex;
-	flex-direction: column;
+	top: 0; bottom: 0;
+	left: 0; right: 0;
+	background-color: rgba(10, 10, 10, 0.9);
+}
+
+.settings-content {
+	height: 100%;
+	overflow-y: scroll;
+	position: relative;
+	padding: 2rem 0 0 1rem;
+}
+
+.settings-content-inner {
+	width: 80%;
+	max-width: 1000px;
+	min-width: 700px;
+	margin: auto;
 }
 
 .close-btn {
@@ -220,127 +288,31 @@ export default {
 	right: 0.5rem;
 }
 
-.reset-btn {
-	position: absolute;
-	left: 1em;
-	bottom: 1em;
-	opacity: 0.2;
-}
-
-.reset-btn:hover {
-	opacity: 1;
-}
-
-.settings-header {
-	font-size: 2rem;
+h1 {
+	font-size: 2.5rem;
 	margin-bottom: 2rem;
-	flex: 0 0 auto;
 }
 
-.settings-content {
-	/* border: 1px solid red; */
-	width: 90%;
-	max-width: 700px;
-	margin: 0 auto;
+h2 {
+	font-size: 1.25rem;
+	font-weight: normal;
+	text-transform: capitalize;
+}
+
+.setting-group {
+	display: flex;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.setting-group:not(:last-of-type) {
+	margin-bottom: 0.7rem;
+}
+
+.setting-group > h2 {
+	flex: 0 0 15rem;
+}
+
+.setting-group-content {
 	flex: 1 1 auto;
-	height: 100%;
-	display: grid;
-	align-items: start;
-	justify-content: start;
-	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 1fr 1fr;
-	grid-column-gap: 100px;
-}
-
-.grid-col-1 {
-	grid-column: 1;
-	grid-row: 1;
-}
-
-.grid-col-2 {
-	grid-column: 2;
-	grid-row: 1;
-}
-
-.setting-wrap {
-	display: flex;
-	flex-direction: column;
-	max-width: 300px;
-}
-
-.setting-wrap:not(:last-of-type) {
-	margin-bottom: 1rem;
-}
-
-.setting-wrap > label {
-	margin-bottom: 0.25rem;
-}
-
-.setting-input:not(:last-of-type) {
-	margin-bottom: 0.25rem;
-}
-
-.setting-radio, .setting-check {
-	display: flex;
-	align-items: center;
-	margin-bottom: 0.25rem;
-}
-
-.setting-radio-label, .setting-check-label {
-	margin-left: 0.25rem;
-	text-transform: capitalize;
-}
-
-.check-wrap {
-	display: flex;
-	align-items: center;
-	margin-bottom: 0.5em;
-}
-
-input[type="text"]:disabled {
-	background-color: hsl(60, 5%, 85%);
-	opacity: 0.9;
-}
-
-input[type="range"].slider {
-	flex: 1 1 100%;
-}
-
-input[type="range"].slider.range-disabled {
-	opacity: 0.5;
-}
-
-.setting-input.font-size-range {
-	display: flex;
-	align-items: center;
-	width: 100%;
-}
-
-.font-size-range .setting-input-label {
-	flex: 0 0 3rem;
-	text-align: right;
-}
-
-.font-size-range .setting-input-label.hide-label {
-	opacity: 0;
-}
-
-.quote-option {
-	text-transform: capitalize;
-}
-
-.toggle-dnd {
-	display: block;
-	margin: 1em auto;
-	padding: 0.5em 1em;
-	border-radius: 4px;
-}
-
-.save-btn {
-	grid-column: 1 / 3;
-	display: block;
-	padding: 0.5rem 0.75rem;
-	border-radius: 4px;
-	margin: 2rem auto 0;
 }
 </style>

@@ -4,7 +4,8 @@ const defaultSettings = {
 		// [nl, en]
 		language: "nl",
 		// range: 10-20, or null (which resets to 100% in base css file)
-		fontSize: null
+		fontSize: null,
+		showTextGreeting: true
 	},
 	widgets: [
 		{ 

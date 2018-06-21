@@ -29,8 +29,13 @@
 					<div class="setting-input font-size-range">
 						<input type="range" class="slider is-circle" :class="{'range-disabled': disableFontSizeSlider}" :min="settingsOptions.user.fontSize.min" :max="settingsOptions.user.fontSize.max" v-model="currentSettings.general.fontSize">
 						<div :class="{'hide-label': !!disableFontSizeSlider}" class="setting-input-label">{{currentSettings.general.fontSize}}px</div>
+					</div>					
+				</div>
+				<div class="setting-wrap">
+					<div class="setting-input">
+						<input type="checkbox" v-model="currentSettings.general.showTextGreeting">
+						<span class="setting-input-label">Show greeting</span>
 					</div>
-					
 				</div>
 				<div class="setting-wrap">
 					<label class="f-weight-heavy">Achtergrond collectie</label>

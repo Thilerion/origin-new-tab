@@ -16,7 +16,8 @@ const settingsStore = {
 			general: {
 				language: null,
 				username: '',
-				fontSize: null
+				fontSize: null,
+				showTextGreeting: null
 			},
 			widgets: [],
 			weather: {
@@ -41,6 +42,7 @@ const settingsStore = {
 		language: state => state.settingsData.general.language,
 		username: state => state.settingsData.general.username,
 		fontSize: state => state.settingsData.general.fontSize,
+		showTextGreeting: state => state.settingsData.general.showTextGreeting,
 		widgets: state => state.settingsData.widgets,
 		widgetByIndex: state => index => state.settingsData.widgets[index],
 		widgetByName: state => name => state.settingsData.widgets.find(w => w.name === name),

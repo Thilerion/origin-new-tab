@@ -32,9 +32,9 @@ const quoteStore = {
 	},
 
 	actions: {
-		async getQuoteFromServer({getters, dispatch}, commitOnFail) {
+		async getQuoteFromServer({rootGetters, dispatch}, commitOnFail) {
 			try {
-				let url = quoteApi.url.get(getters.quoteCategory);				
+				let url = quoteApi.url.get(rootGetters.quoteCategory);				
 				let data = await quoteApi.request(url);				
 				dispatch('quoteSetFromApi', data);
 			}

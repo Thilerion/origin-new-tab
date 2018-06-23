@@ -108,8 +108,8 @@ const wallpaperStore = {
 	},
 
 	actions: {
-		getWallpapersFromServer({ getters, commit, dispatch }, commitOnFail) {
-			let url = wallpaperApi.url.get(getters.wallpaperCollection);
+		getWallpapersFromServer({ rootGetters, commit, dispatch }, commitOnFail) {
+			let url = wallpaperApi.url.get(rootGetters.wallpaperCollection);
 			wallpaperApi.request(url)
 				.then(data => {
 					console.log("Got data from wallpaper API!");
@@ -127,7 +127,7 @@ const wallpaperStore = {
 				});
 		},
 
-		getAdditionalWallpapersFromServer({ state, getters, commit, dispatch }) {
+		getAdditionalWallpapersFromServer({ state, getters, commit, dispatch, rootGetters }) {
 			if (getters.wallpapersLength > 70) {
 				console.warn("Wont load additional wallpapers because: too many wallpapers already loaded.", `${curLength} / 70`);
 				return;
@@ -155,7 +155,7 @@ const wallpaperStore = {
 			//setting array updated in advance, to prevent numerous retries when it fails
 			commit('setArrayUpdated');
 
-			let url = wallpaperApi.url.get(getters.wallpaperCollection);
+			let url = wallpaperApi.url.get(rootGetters.wallpaperCollection);
 			wallpaperApi.request(url)
 				.then(data => {
 					console.log("Additional wallpapers have been loaded from API! Amount:", data.data.length);
@@ -194,7 +194,6 @@ const wallpaperStore = {
 		},
 
 		wallpaperStorageLoadExpired({ commit, dispatch }, data) {
-			commit('setWallpaperRefresh', data.wallpaperRefresh);
 			dispatch('getWallpapersFromServer', data);
 		},
 
@@ -203,9 +202,7 @@ const wallpaperStore = {
 				wallpapers = [],
 				expires,
 				currentWallpaperId = 0,
-				collection,
 				idLastSet,
-				wallpaperRefresh,
 				arrayUpdateChangeAmount
 			} = localData;
 
@@ -351,12 +348,14 @@ const wallpaperStore = {
 			}			
 		},
 
-		setCurrentWallpaperId({ state, getters, commit }, {id, lastSet}) {
+		setCurrentWallpaperId({ rootGetters, getters, commit }, {id, lastSet}) {
 			let now = new Date().getTime();
 			let newId = (id != null) ? id : 0;
 			let newLastSet = lastSet ? lastSet : now;
 
-			if (lastSet && (newLastSet + getters.wallpaperRefresh < now)) {	
+			console.log(newLastSet, rootGetters.wallpaperRefresh, now);
+
+			if (lastSet && (newLastSet + rootGetters.wallpaperRefresh < now)) {	
 				console.warn("Timer has passed, current wallpaper id is cycled.");
 				newId = (newId + 1) % getters.wallpapersLength;
 				newLastSet = now;

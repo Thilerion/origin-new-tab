@@ -5,23 +5,22 @@ const newsStore = {
 	namespaced: true,
 
 	state: {
-		newsData: {
-			expires: null,
-			articles: []
-		},
+		expires: null,
+		articles: [],
 		dataLoaded: false
 	},
 
 	getters: {
-		newsWatch: state => state.newsData,
-		newsArticles: state => state.newsData.articles,
-		newsDataLoaded: state => state.dataLoaded
+		newsWatch(state) {
+			const { expires, articles } = state;
+			return { expires, articles };
+		}
 	},
 
 	mutations: {
 		setNewsArticles(state, {articles, expires}) {
-			state.newsData.articles = [...articles];
-			state.newsData.expires = expires;
+			state.articles = [...articles];
+			state.expires = expires;
 			state.dataLoaded = true;
 		}
 	},

@@ -301,7 +301,7 @@ export default {
 		}
 	},
 	methods: {
-		...mapMutations('settings', ['setShowSettings', 'toggleDnd']),
+		...mapMutations('settings', ['setShowSettings']),
 		...mapActions('settings', ['saveUpdatedSettings']),
 		saveSettings() {
 			if (this.deepEquals(this.currentSettings, this.initialSettings)) {
@@ -325,7 +325,7 @@ export default {
 			location.reload();
 		},
 		toggleDnd() {
-			this.toggleDnd();
+			this.$store.commit('settings/toggleDnd');
 			this.saveSettings();
 		}
 	},

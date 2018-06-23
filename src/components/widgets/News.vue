@@ -2,7 +2,7 @@
 	<div class="widget-news f-shadow-heavy" @mouseover="mouseOver = true" @mouseout="mouseOver = false" v-if="dataLoaded">
 		<div class="news-item-wrapper clip-edges f-shadow-heavy">
 			<transition :name="transitionName">
-				<a v-if="showItem != null" :href="news[showItem].url" class="news-item" :key="showItem" target="_blank" rel="noopener" :class="{faster: fasterTransition}">{{news[showItem].title}}</a>
+				<a v-if="showItem != null" :href="articles[showItem].url" class="news-item" :key="showItem" target="_blank" rel="noopener" :class="{faster: fasterTransition}">{{articles[showItem].title}}</a>
 			</transition>
 		</div>	
 		<button class="icon-btn news-scroll-btn scroll-prev" @click="prev(true)">&lt;</button>	
@@ -24,10 +24,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('news', ['dataLoaded']),
-		...mapState('news', {
-			'news': state => state.newsData.articles
-		}),
+		...mapState('news', ['dataLoaded', 'articles']),
 		...mapGetters('settings', ['newsSlideInterval']),
 		transitionName() {
 			return `slide-news-${this.dir}`;
@@ -38,7 +35,7 @@ export default {
 			this.fasterTransition = !!faster;
 			this.$nextTick(() => {
 				this.dir = 'next';
-				this.showItem = (this.showItem + 1) % this.news.length
+				this.showItem = (this.showItem + 1) % this.articles.length
 				this.restartTimeout();
 			});			
 		},
@@ -46,7 +43,7 @@ export default {
 			this.fasterTransition = !!faster;
 			this.$nextTick(() => {
 				this.dir = 'prev';
-				if (this.showItem === 0) this.showItem = this.news.length - 1;
+				if (this.showItem === 0) this.showItem = this.articles.length - 1;
 				else this.showItem -= 1;
 				this.restartTimeout();
 			});						
@@ -75,7 +72,7 @@ export default {
 			this.timeout = null;
 		},
 		loadRandomArticle() {
-			const amount = this.news.length;
+			const amount = this.articles.length;
 			this.showItem = Math.floor(Math.random() * amount);
 		}
 	},

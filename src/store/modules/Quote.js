@@ -5,30 +5,36 @@ const quoteStore = {
 	namespaced: true,
 
 	state: {
-		quoteData: {
-			randomQuote: {},
-			expires: null,
-		},
+		randomQuote: {},
+		expires: null,
 		dataLoaded: false
 	},
 
 	getters: {
-		quoteWatch: state => state.quoteData,
-		quoteDataLoaded: state => state.dataLoaded
+		quoteWatch(state) {
+			const { randomQuote, expires } = state;
+			return { randomQuote, expires };
+		},
+		quote(state) {
+			return state.randomQuote.quote;
+		},
+		author(state) {
+			return state.randomQuote.author;
+		}
 	},
 
 	mutations: {
 		setQuote: (state, { randomQuote, expires }) => {
-			state.quoteData.randomQuote = { ...randomQuote };
-			state.quoteData.expires = expires;
+			state.randomQuote = { ...randomQuote };
+			state.expires = expires;
 			state.dataLoaded = true;
 		},
 	},
 
 	actions: {
-		async getQuoteFromServer({getters, dispatch}, commitOnFail) {
+		async getQuoteFromServer({rootGetters, dispatch}, commitOnFail) {
 			try {
-				let url = quoteApi.url.get(getters.quoteCategory);				
+				let url = quoteApi.url.get(rootGetters['settings/quoteCategory']);				
 				let data = await quoteApi.request(url);				
 				dispatch('quoteSetFromApi', data);
 			}

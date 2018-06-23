@@ -17,25 +17,21 @@ const wallpaperStore = {
 		},
 		dataLoaded: null,
 		wallpaperLoaded: null,
-		wallpaperData: {
-			wallpapers: [],
-			currentWallpaperId: 0,
-			expires: null,
-			idLastSet: null,
-			//TODO: two props below
-			arrayUpdated: new Date().getTime(),
-			arrayUpdateChangeAmount: null
-		}
+
+		wallpapers: [],
+		currentWallpaperId: 0,
+		expires: null,
+		idLastSet: null,
+		//TODO: two props below
+		arrayUpdated: new Date().getTime(),
+		arrayUpdateChangeAmount: null
 	},
 
 	getters: {
 		wallpaperWatch(state) {
-			//Used for the watchers, for syncing with localStorage
-			return state.wallpaperData;
+			const { wallpapers, currentWallpaperId, expires, idLastSet, arrayUpdated, arrayUpdateChangeAmount } = state;
+			return { wallpapers, currentWallpaperId, expires, idLastSet, arrayUpdated, arrayUpdateChangeAmount };
 		},
-
-		apiDataLoaded: state => state.dataLoaded,
-		wallpaperImageLoaded: state => state.wallpaperLoaded,
 
 		//TODO: what if a new wallpaper is being loaded?
 		showExternalWallpaper(state) {
@@ -49,38 +45,29 @@ const wallpaperStore = {
 		},
 
 		wallpaperToShow(state, getters) {
-			const wpExternal = state.wallpaperData.wallpapers[state.wallpaperData.currentWallpaperId];
+			const wpExternal = state.wallpapers[state.currentWallpaperId];
 			const wpDefault = state.defaultWallpaper;
-
 			if (getters.showExternalWallpaper) return wpExternal;
 			else if (getters.showDefaultWallpaper) return wpDefault;
 			return null;
 		},
 
-		currentWallpaperId: state => state.wallpaperData.currentWallpaperId,
-		currentExternalWallpaper: (state, getters) => state.wallpaperData.wallpapers[getters.currentWallpaperId] || null,
+		currentExternalWallpaper: state => state.wallpapers[state.currentWallpaperId] || null,
 
-		wallpapersLength: state => state.wallpaperData.wallpapers.length || 0,
+		wallpapersLength: state => state.wallpapers.length || 0,
 
-		nextWallpaperId(state, getters) {
-			const l = state.wallpaperData.wallpapers.length;
+		nextWallpaperId(state) {
+			const l = state.wallpapers.length;
 			if (l === 0) return 0;
-			return (getters.currentWallpaperId + 1) % l;
+			return (state.currentWallpaperId + 1) % l;
 		},
 		nextWallpaperUrl: (state, getters) => {
 			if (getters.showDefaultWallpaper) return state.defaultWallpaper.url;
 			else if (!state.dataLoaded) return;
-			return state.wallpaperData.wallpapers[getters.nextWallpaperId].url;
-		},
-
-		arrayUpdated(state) {
-			return state.wallpaperData.arrayUpdated;
-		},
-		arrayUpdateChangeAmount(state) {
-			return state.wallpaperData.arrayUpdateChangeAmount;
+			return state.wallpapers[getters.nextWallpaperId].url;
 		},
 		arrayUpdateChangePercentage(state, getters) {
-			return getters.arrayUpdateChangeAmount / getters.wallpapersLength;
+			return state.arrayUpdateChangeAmount / getters.wallpapersLength;
 		}
 	},
 
@@ -92,37 +79,37 @@ const wallpaperStore = {
 			state.wallpaperLoaded = loaded;
 		},
 		setWallpapers(state, wps) {
-			state.wallpaperData.wallpapers = deepClone(wps);
-			state.wallpaperData.arrayUpdated = new Date().getTime();
-			state.wallpaperData.arrayUpdateChangeAmount = wps.length;
+			state.wallpapers = deepClone(wps);
+			state.arrayUpdated = new Date().getTime();
+			state.arrayUpdateChangeAmount = wps.length;
 		},
 		addCombinedWallpapers(state, wps) {
-			state.wallpaperData.wallpapers = deepClone(wps);
-			state.wallpaperData.arrayUpdated = new Date().getTime();
+			state.wallpapers = deepClone(wps);
+			state.arrayUpdated = new Date().getTime();
 		},
 		setWallpaperId(state, id = 0) {
-			state.wallpaperData.currentWallpaperId = id;
+			state.currentWallpaperId = id;
 		},
 		setWallpaperDataExpires(state, expiresOn) {
-			state.wallpaperData.expires = expiresOn;
+			state.expires = expiresOn;
 		},
 		setWallpaperLastSet(state, lastSet) {
-			state.wallpaperData.idLastSet = lastSet;
+			state.idLastSet = lastSet;
 		},
 		removeWallpaperFromArray(state, index) {
-			state.wallpaperData.wallpapers.splice(index, 1);
+			state.wallpapers.splice(index, 1);
 		},
 		setArrayUpdated(state, t = new Date().getTime()) {
-			state.wallpaperData.arrayUpdated = t;
+			state.arrayUpdated = t;
 		},
 		setArrayUpdateChangeAmount(state, amount) {
-			state.wallpaperData.arrayUpdateChangeAmount = amount;
+			state.arrayUpdateChangeAmount = amount;
 		}
 	},
 
 	actions: {
-		getWallpapersFromServer({ getters, commit, dispatch }, commitOnFail) {
-			let url = wallpaperApi.url.get(getters.wallpaperCollection);
+		getWallpapersFromServer({ rootGetters, commit, dispatch }, commitOnFail) {
+			let url = wallpaperApi.url.get(rootGetters['settings/wallpaperCollection']);
 			wallpaperApi.request(url)
 				.then(data => {
 					console.log("Got data from wallpaper API!");
@@ -140,14 +127,14 @@ const wallpaperStore = {
 				});
 		},
 
-		getAdditionalWallpapersFromServer({ getters, commit, dispatch }) {
+		getAdditionalWallpapersFromServer({ state, getters, commit, dispatch }) {
 			if (getters.wallpapersLength > 70) {
 				console.warn("Wont load additional wallpapers because: too many wallpapers already loaded.", `${curLength} / 70`);
 				return;
 			};
 
-			const lastUpdated = getters.arrayUpdated;
-			const lastChange = getters.arrayUpdateChangeAmount;
+			const lastUpdated = state.arrayUpdated;
+			const lastChange = state.arrayUpdateChangeAmount;
 			const lastPercentageChange = getters.arrayUpdateChangePercentage;
 			const minTimeSince = 10 * 60 * 1000; //10 minutes
 			const now = new Date().getTime();
@@ -187,7 +174,7 @@ const wallpaperStore = {
 			} = apiData;
 
 			//first check for duplicates
-			const wpBefore = deepClone(state.wallpaperData.wallpapers);
+			const wpBefore = deepClone(state.wallpapers);
 			const combined = wpBefore.concat(wallpapers);
 			const dupesRemoved = uniqueBy(combined, 'url');
 
@@ -251,7 +238,7 @@ const wallpaperStore = {
 				return;
 			}
 
-			const distanceFromEnd = (getters.wallpapersLength - 1) - getters.currentWallpaperId;
+			const distanceFromEnd = (getters.wallpapersLength - 1) - state.currentWallpaperId;
 			console.log("Distance from end: ", distanceFromEnd);
 			
 			if (distanceFromEnd < 3 && distanceFromEnd > 1) {
@@ -272,8 +259,8 @@ const wallpaperStore = {
 		},
 
 		hideCurrentWallpaper({ state, getters, commit, dispatch }) {
-			const arrayLength = state.wallpaperData.wallpapers.length;
-			const currentId = state.wallpaperData.currentWallpaperId;
+			const arrayLength = state.wallpapers.length;
+			const currentId = state.currentWallpaperId;
 			const nextId = getters.nextWallpaperId;
 
 			if (!state.dataLoaded) {
@@ -344,20 +331,20 @@ const wallpaperStore = {
 			})
 		},
 
-		preloadNextImage({getters}) {
+		preloadNextImage({state, getters}) {
 			const nextUrl = getters.nextWallpaperUrl;
-			if (getters.apiDataLoaded && nextUrl) {
+			if (state.dataLoaded && nextUrl) {
 				const image = new Image();
 				image.src = nextUrl;
 			}
 		},
 
-		retryLoadingWallpapers({getters, dispatch}) {
-			if (!getters.apiDataLoaded) {
+		retryLoadingWallpapers({state, dispatch}) {
+			if (!state.dataLoaded) {
 				// if data loading failed
 				console.log("Loading wallpaper data was unsuccesful, so retrying that now.");
 				dispatch('getWallpapersFromServer');
-			} else if (!getters.wallpaperImageLoaded) {
+			} else if (!state.wallpaperLoaded) {
 				// if loading the wallpaper itself failed
 				console.log("Loading wallpaper data was succesful, so retrying the wallpaper source now.");
 				dispatch('loadingDataSucces');

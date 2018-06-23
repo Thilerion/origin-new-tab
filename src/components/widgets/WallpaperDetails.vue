@@ -1,7 +1,7 @@
 <template>
 	<div class="widget-wallpaper-details widget-no-select f-shadow-medium" v-if="wallpaperSource">
 		<div class="row-bottom">
-			<div class="buttons" v-if="!usingDefaultWallpaper">
+			<div class="buttons" v-if="!showDefaultWallpaper">
 				<button class="icon-btn load-btn" @click="nextWallpaper" alt="Next wallpaper">
 					<StartSvgIcon icon="refresh"/>
 				</button>
@@ -26,7 +26,7 @@
 			<p
 				v-else
 				class="attribution"
-				:class="{'default-wallpaper': usingDefaultWallpaper}"
+				:class="{'default-wallpaper': showDefaultWallpaper}"
 			>Photo from <a :href="unsplashUrl" target="_blank">Unsplash</a></p>
 		</div>		
 
@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import {mapState, mapGetters} from 'vuex';
+
 export default {
 	data() {
 		return {
@@ -49,15 +51,11 @@ export default {
 		}
 	},
 	computed: {
-		usingDefaultWallpaper() {
-			return this.$store.getters['wallpaper/showDefaultWallpaper'];
-		},
-		currentWallpaper() {
-			return this.$store.getters['wallpaper/wallpaperToShow'];
-		},
+		...mapState('wallpaper', []),
+		...mapGetters('wallpaper', ['showDefaultWallpaper', 'wallpaperToShow']),
 		userUrl() {
 			try {
-				return `${this.currentWallpaper.urlUser}${this.unsplashReferralSuffix}`;
+				return `${this.wallpaperToShow.urlUser}${this.unsplashReferralSuffix}`;
 			}
 			catch(e) {
 				return "";
@@ -66,17 +64,14 @@ export default {
 		unsplashUrl() {
 			return `${this.unsplashBaseUrl}${this.unsplashReferralSuffix}`;
 		},
-		wallpaperToShow() {
-			return this.currentWallpaper;
-		},
 		wallpaperSource() {
 			const wp = this.wallpaperToShow;
 			return (wp && wp.url) ? wp.url : null;
 		},
 		downloadUrl() {
 			try {
-				if (this.currentWallpaper.urlDownload) return `${this.currentWallpaper.urlDownload}${this.unsplashReferralSuffix}`;
-				else return `${this.currentWallpaper.url}${this.unsplashReferralSuffix}`;
+				if (this.wallpaperToShow.urlDownload) return `${this.wallpaperToShow.urlDownload}${this.unsplashReferralSuffix}`;
+				else return `${this.wallpaperToShow.url}${this.unsplashReferralSuffix}`;
 			}
 			catch(e) {
 				return;
@@ -85,7 +80,7 @@ export default {
 	},
 	methods: {
 		nextWallpaper() {
-			if (!this.usingDefaultWallpaper) this.$store.dispatch('wallpaper/goToNextWallpaper');
+			if (!this.showDefaultWallpaper) this.$store.dispatch('wallpaper/goToNextWallpaper');
 			else this.retryLoadWallpapers();
 		},
 		retryLoadWallpapers() {

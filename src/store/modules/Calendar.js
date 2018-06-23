@@ -23,9 +23,7 @@ const calendarStore = {
 		token: null,
 		dataLoaded: null,
 
-		calendarData: {
-			permission: false
-		},
+		permission: false,
 
 		events: {}
 		
@@ -60,7 +58,10 @@ const calendarStore = {
 		},
 
 		calendarWatch(state) {
-			return state.calendarData;
+			const { permission } = state;
+			return {
+				permission
+			};
 		},
 
 		calendarDateFormat(state) {
@@ -84,7 +85,7 @@ const calendarStore = {
 		},
 
 		setCalendarPermission(state, bool) {
-			state.calendarData.permission = bool;
+			state.permission = bool;
 		},
 
 		setCalendarDataLoaded(state, bool) {

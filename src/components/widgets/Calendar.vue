@@ -52,10 +52,7 @@ import {mapState, mapGetters, mapActions} from 'vuex';
 
 export default {
 	computed: {
-		...mapState('calendar', {
-			permission: state => state.calendarData.permission,
-		}),
-		...mapState('calendar', ['dataLoaded', 'timeFormat', 'calendarFormat']),
+		...mapState('calendar', ['dataLoaded', 'timeFormat', 'calendarFormat', 'permission']),
 		...mapGetters('calendar', ['calenderEventsMaxAmount'])
 	},
 	methods: {

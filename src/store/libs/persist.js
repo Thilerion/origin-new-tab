@@ -5,7 +5,7 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 	// no data in store: [widgetName]StorageLoadFailed
 	// expired: [widgetName]StorageLoadExpired
 
-	const toWatch = (val) => (state, getters) => getters[`${val}Watch`];
+	const toWatch = (val) => (state, getters) => getters[`${val}/${val}Watch`];
 
 	const watchCallback = (val) => debounce((newValue, oldValue) => {
 		console.log(`Watcher is triggered for module '${val}'.`);

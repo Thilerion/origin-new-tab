@@ -1,7 +1,7 @@
 <template>
-	<div v-if="quoteLoaded" class="widget-quote widget-no-select f-shadow-heavy" :key="quote.randomQuote.quote">
-		<p class="quote"><span class="q-mark q-mark-top f-shadow-medium">‟ </span>{{quote.randomQuote.quote | removeDot}}<span class="q-mark q-mark-bot f-shadow-medium">&nbsp;„</span></p>
-		<p class="author f-style-italic">~ {{quote.randomQuote.author}}</p>	
+	<div v-if="dataLoaded" class="widget-quote widget-no-select f-shadow-heavy" :key="quote">
+		<p class="quote"><span class="q-mark q-mark-top f-shadow-medium">‟ </span>{{quote | removeDot}}<span class="q-mark q-mark-bot f-shadow-medium">&nbsp;„</span></p>
+		<p class="author f-style-italic">~ {{author}}</p>	
 		<button class="icon-btn reload-btn" @click="reloadQuote">
 			<StartSvgIcon icon="refresh"/>
 		</button>
@@ -10,17 +10,12 @@
 </template>
 
 <script>
+import {mapState, mapGetters} from 'vuex';
+
 export default {
 	computed: {
-		quoteLoaded() {
-			return this.$store.getters['quote/quoteDataLoaded'];
-		},
-		quote() {
-			return this.$store.getters['quote/quoteWatch'];
-		},
-		quoteCategory() {
-			return this.$store.getters['quote/quoteCategory'];
-		}
+		...mapState('quote', ['dataLoaded']),
+		...mapGetters('quote', ['quote', 'author'])
 	},
 	methods: {
 		reloadQuote() {

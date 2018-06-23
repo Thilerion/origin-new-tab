@@ -39,7 +39,7 @@ export default {
 }
 
 .w-align-center {
-	min-width: 40em;
+	min-width: 20em;
 	margin: auto;
 }
 
@@ -62,8 +62,7 @@ export default {
 	cursor: default;
 	position: relative;
 	display: flex;
-	flex-direction: column;
-	
+	flex-direction: column;	
 }
 
 .quote {
@@ -71,6 +70,7 @@ export default {
 	margin-bottom: 0.25em;
 	letter-spacing: 0.1px;
 	word-spacing: 0.7px;
+	display: inline-block;
 }
 
 .author {

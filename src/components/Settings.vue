@@ -1,6 +1,6 @@
 <template>
 	<div class="settings-page">
-		<div class="settings-content">
+		<div class="settings-content custom-scrollbar">
 			<button class="close-btn icon-btn" @click="closeSettings">
 				<StartSvgIcon icon="close" size="36px" />
 			</button>
@@ -314,7 +314,6 @@ label > input {
 
 .settings-content {
 	height: 100%;
-	overflow-y: scroll;
 	position: relative;
 	padding: 2rem 0 0 1rem;
 }

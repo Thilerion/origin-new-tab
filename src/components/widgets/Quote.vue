@@ -38,23 +38,42 @@ export default {
 </script>
 
 <style scoped>
-.widget-quote {
-	margin: auto;
-	font-size: inherit;
+.w-align-left {
+	text-align: left;
+	margin: auto auto auto 1em;
+}
 
+.w-align-center {
+	min-width: 40em;
+	margin: auto;
+}
+
+.w-align-center .quote {
+	text-align: left;
+	padding-right: 2em;
+}
+
+.w-align-center .author {
+	text-align: right;
+}
+
+.w-align-right {
+	text-align: right;
+	margin: auto 1em auto auto;
+}
+
+.widget-quote {
+	font-size: inherit;
 	cursor: default;
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	min-width: 40em;
+	
 }
 
 .quote {
 	font-size: 1.25em;
 	margin-bottom: 0.25em;
-	padding-right: 2em;
-	text-align: center;
 	letter-spacing: 0.1px;
 	word-spacing: 0.7px;
 }

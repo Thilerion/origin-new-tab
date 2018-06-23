@@ -69,7 +69,7 @@ export default {
 			return {'background-image': `url(${this.wallpaperUrl})`};
 		},
 		wallaperToShow() {
-			return this.$store.getters.wallpaperToShow;
+			return this.$store.getters['wallpaper/wallpaperToShow'];
 		},
 		wallpaperUrl() {
 			const wp = this.wallaperToShow;

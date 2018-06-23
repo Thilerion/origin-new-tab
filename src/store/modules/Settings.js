@@ -4,6 +4,7 @@ import { deepClone, deepMergeArray } from '../../utils/deepObject';
 import lodashMerge from 'lodash.merge';
 
 const settingsStore = {
+	namespaced: true,
 
 	state: {
 		dndEnabled: false,
@@ -174,7 +175,7 @@ const settingsStore = {
 			*/
 			if (settings.quote.category !== currentSettings.quote.category) {
 				console.log('quote cat changed');
-				dispatch('quoteSettingsChanged');
+				dispatch('quote/quoteSettingsChanged', null, {root: true});
 			}
 
 			const useCustomLocChanged = settings.weather.useCustomLocation !== currentSettings.weather.useCustomLocation;
@@ -184,21 +185,21 @@ const settingsStore = {
 					//disable using custom location
 					commit('setUseCustomLocation', false);
 					console.warn("disable custom location");
-					dispatch('weatherSettingsChanged', { disable: true });
+					dispatch('weather/weatherSettingsChanged', { disable: true }, {root: true});
 				} else {
 					//enable use custom location
 					console.warn("enable custom location");
-					dispatch('weatherSettingsChanged', { enable: true, newLocation: settings.weather.customLocationToUse });
+					dispatch('weather/weatherSettingsChanged', { enable: true, newLocation: settings.weather.customLocationToUse }, {root: true});
 				}
 			} else if (settings.weather.useCustomLocation && customLocChanged) {
 				//only update new custom location
 				console.warn('use new custom location');
-				dispatch('weatherSettingsChanged', { newLocation: settings.weather.customLocationToUse });
+				dispatch('weather/weatherSettingsChanged', { newLocation: settings.weather.customLocationToUse }, {root: true});
 			}
 
 			if (settings.wallpaper.wallpaperCollection !== currentSettings.wallpaper.wallpaperCollection) {
 				console.log('wallpaper collection changed');
-				dispatch('wallpaperSettingsChanged');
+				dispatch('wallpaper/wallpaperSettingsChanged', null, {root: true});
 			}
 		},
 

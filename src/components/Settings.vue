@@ -265,7 +265,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters({
+		...mapGetters('settings', {
 			customLocation: 'locationToUse'
 		}),
 		disableFontSizeSlider() {
@@ -301,8 +301,8 @@ export default {
 		}
 	},
 	methods: {
-		...mapMutations(['setShowSettings', 'toggleDnd']),
-		...mapActions(['saveUpdatedSettings']),
+		...mapMutations('settings', ['setShowSettings', 'toggleDnd']),
+		...mapActions('settings', ['saveUpdatedSettings']),
 		saveSettings() {
 			if (this.deepEquals(this.currentSettings, this.initialSettings)) {
 				console.log("No changes in settings.");
@@ -330,7 +330,7 @@ export default {
 		}
 	},
 	created() {
-		let currentSettings = this.$store.getters.settingsWatch;
+		let currentSettings = this.$store.getters['settings/settingsWatch'];
 		this.currentSettings = {...this.deepClone(currentSettings)};
 		this.initialSettings = {...this.deepClone(currentSettings)};
 	},

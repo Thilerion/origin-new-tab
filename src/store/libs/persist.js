@@ -56,13 +56,13 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 			let data = store[`${widget}FromStorage`]();
 			if (!data) {
 				//no data: [widgetName]StorageLoadFailed
-				store.dispatch(`${widget}StorageLoadFailed`);
+				store.dispatch(`${widget}/${widget}StorageLoadFailed`);
 			} else if (data.expires && isExpired(data.expires)) {
 				//expired: [widgetName]StorageLoadExpired
-				store.dispatch(`${widget}StorageLoadExpired`, data);
+				store.dispatch(`${widget}/${widget}StorageLoadExpired`, data);
 			} else {
 				//everything ok: [widgetName]SetFromStorage
-				store.dispatch(`${widget}SetFromStorage`, data);
+				store.dispatch(`${widget}/${widget}SetFromStorage`, data);
 			}
 		});
 	}

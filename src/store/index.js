@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import Wallpaper from './modules/Wallpaper'
-import Greeting from './modules/Greeting'
-import Quote from './modules/Quote'
-import Weather from './modules/Weather'
-import News from './modules/News'
-import Settings from './modules/Settings'
-import Calendar from './modules/Calendar'
+import wallpaper from './modules/Wallpaper'
+import greeting from './modules/Greeting'
+import quote from './modules/Quote'
+import weather from './modules/Weather'
+import news from './modules/News'
+import settings from './modules/Settings'
+import calendar from './modules/Calendar'
 
 Vue.use(Vuex)
 
@@ -20,13 +20,13 @@ const store = new Vuex.Store({
 	plugins: [createPersistedState('sp_', settingsOptions.widgets.storageModules)],
 
 	modules: {
-		Wallpaper,
-		Greeting,
-		Quote,
-		Weather,
-		News,
-		Settings,
-		Calendar
+		wallpaper,
+		greeting,
+		quote,
+		weather,
+		news,
+		settings,
+		calendar
 	},
 
 	state: {

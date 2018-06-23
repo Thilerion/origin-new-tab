@@ -1,6 +1,6 @@
 <template>
 	<div class="widget-greeting widget-no-select f-shadow-heavy f-shadow-wide cursor-default">
-		<div class="time">{{time | toTimeString(currentTimeFormat)}}</div>
+		<div class="time">{{time | toTimeString(timeFormat)}}</div>
 		
 		<div
 			class="message"
@@ -18,6 +18,8 @@ import getHours from 'date-fns/get_hours';
 
 const TIMEOUT_MARGIN = 20; //ms
 
+import {mapGetters} from 'vuex';
+
 export default {
 	data() {
 		return {
@@ -27,29 +29,19 @@ export default {
 		}		
 	},
 	computed: {
+		...mapGetters('settings', ['username', 'isEditingUsername', 'showTextGreeting']),
+		...mapGetters('greeting', ['timeFormat']),
 		msUntilMinute() {
 			return diffInMs(this.minuteEndsAt, this.time);
 		},
 		minuteEndsAt() {
 			return endOfMinute(this.time);
 		},
-		currentTimeFormat() {
-			return this.$store.getters.timeFormat;
-		},
 		timeOfDay() {
 			return this.getTimeOfDay(this.time);
 		},
 		timeOfDayMessage() {
-			return this.$store.getters.greetingMessages.timeOfDay[this.timeOfDay];
-		},
-		username() {
-			return this.$store.getters.username;
-		},
-		isEditingUsername() {
-			return this.$store.getters.isEditingUsername;
-		},
-		showTextGreeting() {
-			return this.$store.getters.showTextGreeting;
+			return this.$store.getters['greeting/greetingMessages'].timeOfDay[this.timeOfDay];
 		}
 	},
 	methods: {
@@ -66,10 +58,10 @@ export default {
 		},
 		editUsername() {
 			this.usernameInput = this.username;
-			this.$store.commit('setEditingUsername', true);
+			this.$store.commit('settings/setEditingUsername', true);
 		},
 		saveUsername() {
-			this.$store.commit('setUsername', this.usernameInput);
+			this.$store.commit('settings/setUsername', this.usernameInput);
 		},
 		getTimeOfDay(date = new Date()) {
 			// morning: 5 - 12, day: 12 - 18, evening: 18 - 00, night: 00 - 5

@@ -23,9 +23,9 @@ export default {
 		StartSettings
 	},
 	computed: {
-		...mapState({
-			'showSettings': state => state.Settings.showSettings,
-			'fontSize': state => state.Settings.settingsData.general.fontSize
+		...mapState('settings', {
+			'showSettings': state => state.showSettings,
+			'fontSize': state => state.settingsData.general.fontSize
 		})
 	},
 	methods: {

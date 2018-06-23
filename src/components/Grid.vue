@@ -39,10 +39,10 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			widgets: state => state.Settings.settingsData.widgets,
-			dndEnabled: state => state.Settings.dndEnabled
+		...mapState('settings', {
+			widgets: state => state.settingsData.widgets
 		}),
+		...mapState('settings', ['dndEnabled']),
 		widgetsInGrid() {
 			return this.widgets.filter(w => settingsOptions.widgets.widgetOptions[w.name].grid);
 		},
@@ -76,7 +76,7 @@ export default {
 		}
 	},
 	methods: {
-		...mapMutations(['toggleDnd', 'setGridSize']),
+		...mapMutations('settings', ['toggleDnd', 'setGridSize']),
 		checkCenter(widgetCols, widgetRows) {
 			/*let cols = this.gridCols;
 			let rows = this.gridRows;

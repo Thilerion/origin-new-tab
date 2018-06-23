@@ -13,6 +13,8 @@ const CALENDAR_FORMAT = "dddd D MMMM";
 const TIME_FORMAT = "HH:mm";
 
 const calendarStore = {
+	namespaced: true,
+	
 	state: {
 
 		calendarFormat: CALENDAR_FORMAT,

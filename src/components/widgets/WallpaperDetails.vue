@@ -50,10 +50,10 @@ export default {
 	},
 	computed: {
 		usingDefaultWallpaper() {
-			return this.$store.getters.showDefaultWallpaper;
+			return this.$store.getters['wallpaper/showDefaultWallpaper'];
 		},
 		currentWallpaper() {
-			return this.$store.getters.wallpaperToShow;
+			return this.$store.getters['wallpaper/wallpaperToShow'];
 		},
 		userUrl() {
 			try {
@@ -67,7 +67,7 @@ export default {
 			return `${this.unsplashBaseUrl}${this.unsplashReferralSuffix}`;
 		},
 		wallpaperToShow() {
-			return this.$store.getters.wallpaperToShow;
+			return this.currentWallpaper;
 		},
 		wallpaperSource() {
 			const wp = this.wallpaperToShow;
@@ -85,14 +85,14 @@ export default {
 	},
 	methods: {
 		nextWallpaper() {
-			if (!this.usingDefaultWallpaper) this.$store.dispatch('goToNextWallpaper');
+			if (!this.usingDefaultWallpaper) this.$store.dispatch('wallpaper/goToNextWallpaper');
 			else this.retryLoadWallpapers();
 		},
 		retryLoadWallpapers() {
-			this.$store.dispatch('retryLoadingWallpapers');
+			this.$store.dispatch('wallpaper/retryLoadingWallpapers');
 		},
 		hideWallpaper() {
-			this.$store.dispatch('hideCurrentWallpaper');
+			this.$store.dispatch('wallpaper/hideCurrentWallpaper');
 		}
 	}
 }

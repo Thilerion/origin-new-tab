@@ -4,6 +4,7 @@ const wallpaperApi = widgetsApi.wallpaper;
 import { deepClone, uniqueBy } from '@/utils/deepObject';
 
 const wallpaperStore = {
+	namespaced: true,
 
 	state: {
 		defaultWallpaper: {

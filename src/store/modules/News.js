@@ -2,6 +2,7 @@ import widgetsApi from '../api';
 const newsApi = widgetsApi.news;
 
 const newsStore = {
+	namespaced: true,
 
 	state: {
 		newsData: {

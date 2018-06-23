@@ -19,7 +19,7 @@
 		>
 
 			<div
-				v-for="(day, key, index) in eventsByDay"
+				v-for="(day, key, index) in calenderEventsMaxAmount"
 				:key="index"
 				class="calendar-day-wrapper"
 			>
@@ -52,16 +52,14 @@ import {mapState, mapGetters, mapActions} from 'vuex';
 
 export default {
 	computed: {
-		...mapState({
-			permission: state => state.Calendar.calendarData.permission,
-			dataLoaded: state => state.Calendar.dataLoaded,
-			timeFormat: state => state.Calendar.timeFormat,
-			calendarFormat: state => state.Calendar.calendarFormat
+		...mapState('calendar', {
+			permission: state => state.calendarData.permission,
 		}),
-		...mapGetters({eventsByDay: 'calenderEventsMaxAmount'})
+		...mapState('calendar', ['dataLoaded', 'timeFormat', 'calendarFormat']),
+		...mapGetters('calendar', ['calenderEventsMaxAmount'])
 	},
 	methods: {
-		...mapActions({
+		...mapActions('calendar', {
 			getPermission: 'getGoogleAuthTokenInteractive',
 			retryLoading: 'retryLoading'
 		}),

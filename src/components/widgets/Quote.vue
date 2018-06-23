@@ -13,18 +13,18 @@
 export default {
 	computed: {
 		quoteLoaded() {
-			return this.$store.getters.quoteDataLoaded;
+			return this.$store.getters['quote/quoteDataLoaded'];
 		},
 		quote() {
-			return this.$store.getters.quoteWatch;
+			return this.$store.getters['quote/quoteWatch'];
 		},
 		quoteCategory() {
-			return this.$store.getters.quoteCategory;
+			return this.$store.getters['quote/quoteCategory'];
 		}
 	},
 	methods: {
 		reloadQuote() {
-			this.$store.dispatch('getQuoteFromServer');
+			this.$store.dispatch('quote/getQuoteFromServer');
 		}
 	},
 	filters: {

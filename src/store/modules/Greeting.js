@@ -1,6 +1,7 @@
 import localeMessages from '../../locale/greeting.locale.js';
 
 const greetingStore = {
+	namespaced: true,
 
 	state: {		
 		localeMessages,
@@ -8,7 +9,7 @@ const greetingStore = {
 	},
 
 	getters: {
-		greetingMessages: (state, getters) => state.localeMessages[getters.language],
+		greetingMessages: (state, getters, rootState, rootGetters) => state.localeMessages[rootGetters['settings/language']],
 		timeFormat: state => state.timeFormat
 	},
 

@@ -79,9 +79,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			dndEnabled: state => state.Settings.dndEnabled
-		}),
+		...mapState('settings', ['dndEnabled']),
 		dragResizeClasses() {
 			if (!this.dndEnabled) return [];
 

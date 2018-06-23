@@ -72,6 +72,8 @@ const DEFAULT_TOPSITES = [
 	}
 ];
 
+import {mapGetters} from 'vuex';
+
 export default {
 	data() {
 		return {
@@ -81,18 +83,13 @@ export default {
 		}
 	},
 	computed: {
-		maxTopSites() {
-			return this.$store.getters.maxTopSites;
-		},
+		...mapGetters('settings', ['maxTopSites', 'topSiteColumns']),
 		topSitesSliced() {
 			return this.topSites.slice(0, this.maxTopSites);
 		},
-		columns() {
-			return this.$store.getters.topSiteColumns;
-		},
 		dynamicRows() {
 			const items = this.topSitesSliced.length;
-			const columns = this.columns;
+			const columns = this.topSiteColumns;
 
 			const widgetWidth = this.itemWidth * columns;
 

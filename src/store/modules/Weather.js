@@ -3,6 +3,7 @@ const weatherApi = widgetsApi.weather;
 const locationApi = widgetsApi.location;
 
 const weatherStore = {
+	namespaced: true,
 
 	state: {
 		// weatherData: {

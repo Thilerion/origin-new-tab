@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-news f-shadow-heavy" @mouseover="mouseOver = true" @mouseout="mouseOver = false" v-if="newsDataLoaded">
+	<div class="widget-news f-shadow-heavy" @mouseover="mouseOver = true" @mouseout="mouseOver = false" v-if="dataLoaded">
 		<div class="news-item-wrapper clip-edges f-shadow-heavy">
 			<transition :name="transitionName">
 				<a v-if="showItem != null" :href="news[showItem].url" class="news-item" :key="showItem" target="_blank" rel="noopener" :class="{faster: fasterTransition}">{{news[showItem].title}}</a>
@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import {mapState, mapGetters} from 'vuex';
+
 export default {
 	data() {
 		return {
@@ -22,17 +24,13 @@ export default {
 		}
 	},
 	computed: {
-		news() {
-			return this.$store.getters.newsArticles;
-		},
+		...mapState('news', ['dataLoaded']),
+		...mapState('news', {
+			'news': state => state.newsData.articles
+		}),
+		...mapGetters('settings', ['newsSlideInterval']),
 		transitionName() {
 			return `slide-news-${this.dir}`;
-		},
-		newsDataLoaded() {
-			return this.$store.getters.newsDataLoaded;
-		},
-		slideInterval() {
-			return this.$store.getters.newsSlideInterval;
 		}
 	},
 	methods: {
@@ -64,7 +62,7 @@ export default {
 				} else {
 					this.next(false);
 				}
-			}, this.slideInterval);
+			}, this.newsSlideInterval);
 			this.timeout = timeout;
 		},
 		restartTimeout() {

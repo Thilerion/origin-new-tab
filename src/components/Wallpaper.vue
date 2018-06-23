@@ -19,7 +19,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['wallpaperToShow']),
+		...mapGetters('wallpaper', ['wallpaperToShow']),
 		backgroundStyle() {
 			if (!this.wallpaperSource) return;
 			return {'background-image': `url(${this.wallpaperSource})`};

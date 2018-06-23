@@ -2,6 +2,7 @@ import widgetsApi from '../api';
 const quoteApi = widgetsApi.quote;
 
 const quoteStore = {
+	namespaced: true,
 
 	state: {
 		quoteData: {
@@ -50,7 +51,7 @@ const quoteStore = {
 		quoteSetFromStorage({ commit }, localData) {
 			const { randomQuote, expires, quoteCategory = 'motivinspirational' } = localData;
 			commit('setQuote', { randomQuote, expires });
-			commit('setQuoteCategory', quoteCategory);
+			commit('settings/setQuoteCategory', quoteCategory, {root: true});
 		},
 		quoteSetFromApi({ commit }, apiData) {
 			const { data: randomQuote, expires } = apiData;

@@ -25,19 +25,19 @@ export default {
 	},
 	computed: {
 		forecast() {
-			return this.$store.getters.forecast;
+			return this.$store.getters['weather/forecast'];
 		},
 		currently() {
 			return this.forecast.currently;
 		},
 		addressCity() {
-			return this.$store.getters.addressCity;
+			return this.$store.getters['weather/addressCity'];
 		},
 		icon() {
 			if (this.currently) return this.currently.icon;
 		},
 		weatherDataLoaded() {
-			return this.$store.getters.weatherDataLoaded;
+			return this.$store.getters['weather/weatherDataLoaded'];
 		}
 	},
 	methods: {

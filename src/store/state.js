@@ -46,13 +46,10 @@ const getters = {
 	widgetByIndex: state => index => state.settingsData.widgets[index],
 	widgetByName: state => name => state.settingsData.widgets.find(w => w.name === name),
 	widgetIndexByName: state => name => state.settingsData.widgets.findIndex(w => w.name === name),
-	useCustomLocation: state => state.settingsData.weather.useCustomLocation,
-	customLocationToUse: state => state.settingsData.weather.customLocationToUse,
-	locationToUse: (state, getters) => {
-		if (getters.useCustomLocation && state.settingsData.weather.customLocationToUse) {
-			return state.settingsData.weather.customLocationToUse;
-		} else return getters['weather/addressCity'];
+	customLocationToUse: (state, getters) => {
+		return state.settingsData.weather.customLocationToUse || getters['weather/addressCity'];
 	},
+	useCustomLocation: state => state.settingsData.weather.useCustomLocation,
 	wallpaperCollection: state => state.settingsData.wallpaper.wallpaperCollection,
 	wallpaperRefresh: state => state.settingsData.wallpaper.wallpaperRefresh,
 	quoteCategory: state => state.settingsData.quote.category,

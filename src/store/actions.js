@@ -4,6 +4,10 @@ import { defaultSettings } from './defaultUserSettings';
 export default {
 	saveUpdatedSettings({ getters, commit, dispatch }, settings) {
 		const currentSettings = getters.settingsWatch;
+
+		if (settings.weather.useCustomLocation && !settings.weather.customLocationToUse) {
+			settings.weather.useCustomLocation = false;
+		}
 		
 		dispatch('checkImmediateModuleUpdates', { settings, currentSettings });		
 

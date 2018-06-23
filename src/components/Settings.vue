@@ -234,7 +234,7 @@
 
 <script>
 import {settingsOptions} from '../store/defaultUserSettings';
-import {mapGetters, mapMutations, mapActions} from 'vuex';
+import {mapMutations, mapActions} from 'vuex';
 
 export default {
 	data() {
@@ -265,9 +265,6 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters({
-			customLocation: 'locationToUse'
-		}),
 		disableFontSizeSlider() {
 			const isDefault = this.currentSettings.general.fontSize === null;
 			return isDefault;

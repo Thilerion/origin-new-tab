@@ -59,7 +59,10 @@ const weatherStore = {
 			return state.weatherData.weatherDataLoaded;
 		},
 		useCustomLocation(state, getters, rootState, rootGetters) {
-			return rootGetters.useCustomLocation;
+			return rootGetters.useCustomLocation && !!rootGetters.customLocationToUse;
+		},
+		customLocationToUse(state, getters, rootState, rootGetters) {
+			return rootGetters.customLocationToUse;
 		}
 	},
 
@@ -136,7 +139,6 @@ const weatherStore = {
 
 			commit('setWeatherDataExpires', expires);
 			commit('setForecast', forecast);
-
 			if (getters.useCustomLocation === false) {
 				const city = address.bestAddress.split(',')[0];
 				commit('setAddress', { city, street: null });
@@ -145,7 +147,7 @@ const weatherStore = {
 		},
 
 		async getCoordinates({ state, getters, commit }) {
-			if (getters.useCustomLocation === true) {
+			if (getters.useCustomLocation === true && state.weatherData.coordinates.latitude && state.weatherData.coordinates.longitude) {
 				return state.weatherData.coordinates;
 			} else {
 				try {

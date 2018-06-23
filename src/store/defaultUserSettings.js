@@ -114,9 +114,6 @@ const settingsOptions = {
 			1: 'center',
 			2: 'right'
 		},
-		alignStrings: {
-			text: ['left', 'center', 'right']
-		},
 		storageModules: ['settings', 'news', 'quote', 'weather', 'wallpaper', 'calendar'],
 		widgetOptions: {
 			greeting: {

@@ -96,15 +96,28 @@ export default {
 </script>
 
 <style scoped>
+.w-align-left {
+	padding-left: 1em;
+	text-align: left;
+	white-space: nowrap;
+}
+
+.w-align-center {
+	text-align: center;
+	min-width: 50em;
+}
+
+.w-align-right {
+	padding-right: 1em;
+	text-align: right;
+	white-space: nowrap;
+}
+
 .widget-greeting {
 	font-size: inherit;
 	width: 100%;
-	padding-left: 1em;
-	padding-right: 1em;
-	min-width: 50em;
 	display: flex;
 	flex-direction: column;
-	text-align: var(--text-align);
 }
 
 .time {

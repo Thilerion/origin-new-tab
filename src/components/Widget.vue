@@ -14,10 +14,8 @@
 			<component
 				:is="widgetComponent"
 				class="widget-inner"
-				:style="{
-					'font-size': widgetFontSize,
-					'--text-align': textAlignString
-				}"
+				:style="{'font-size': widgetFontSize}"
+				:class="alignmentClass"
 			/>			
 		</StartDragResize>
 		<StartWidgetSettings
@@ -111,8 +109,8 @@ export default {
 			return `calc(${fontSizeMod}px + ${this.baseFontSize})`;
 		},
 		
-		textAlignString() {
-			return settingsOptions.widgets.alignStrings.text[this.widget.align];
+		alignmentClass() {
+			return `w-align-${settingsOptions.widgets.align[this.widget.align]}`;
 		}
 
 	},

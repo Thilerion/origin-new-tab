@@ -47,7 +47,7 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 	}
 
 	return function persistState(store) {
-		store.resetAllStorage = createResetStorage(widgets);
+		store.resetAllStorage = createResetStorage(['settings', ...widgets]);
 
 		console.log(`Creating watcher for 'settings'.`);
 		store.watch((state, getters) => getters.settingsWatch, watchCallback('settings'), { deep: true });

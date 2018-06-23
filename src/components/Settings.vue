@@ -224,8 +224,9 @@
 						</transition>
 					</div>
 				</div>
-
+				
 			</div>
+			<button @click="resetAllStorage" class="reset-btn setting-btn">Reset alle instellingen</button>
 			<button @click="saveSettings" class="save-btn setting-btn">Opslaan</button>
 		</div>
 	</div>
@@ -380,7 +381,7 @@ label > input {
 
 .settings-content {
 	height: 100%;
-	position: relative;
+	/* position: relative; */
 	padding: 2rem 0 0 1rem;
 }
 
@@ -532,6 +533,19 @@ label {
 
 .fade-preview-enter, .fade-preview-leave-to {
 	opacity: 0;
+}
+
+.reset-btn {
+	background: none;
+	color: white;
+	border-color: transparent;
+	margin: 0;
+	font-size: 10px;
+	padding: 5px;
+	position: absolute;
+	bottom: 5px;
+	left: 5px;
+	opacity: 0.2;
 }
 
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<div class="widget-top-pages widget-no-select f-shadow-heavy">
-			<a :href="site.url" rel="noreferrer" class="top-page-item" v-for="(site, index) in topSites" :key="site.title" @mousemove="setHoverGradient(index, $event)" ref="linkItem">
+			<a :href="site.url" rel="noreferrer" class="top-page-item" v-for="(site, index) in topSitesSliced" :key="site.title" @mousemove="setHoverGradient(index, $event)" ref="linkItem">
 				<img class="top-page-icon" :src="getFavicon(site.url)" height="32" width="32">
 				<span class="top-page-title" ref="siteTitle"><span class="underline">{{site.title}}</span></span>	
 			</a>
@@ -59,6 +59,14 @@ export default {
 			failed: false
 		}
 	},
+	computed: {
+		maxTopSites() {
+			return this.$store.getters.maxTopSites;
+		},
+		topSitesSliced() {
+			return this.topSites.slice(0, this.maxTopSites);
+		}
+	},
 	methods: {
 		getTopSites() {
 			try {
@@ -101,12 +109,15 @@ export default {
 
 <style scoped>
 .widget-top-pages {
+	--columns: 5;
+}
+
+.widget-top-pages {
 	margin: auto auto 0 auto;
 
 	display: inline-grid;
 	max-width: calc(35em + (1em * 4));
-	min-width: 40em;
-	grid-template-columns: repeat(5, minmax(7em, 1fr));
+	grid-template-columns: repeat(var(--columns), minmax(7em, 1fr));
 	grid-auto-rows: calc(32px + 1.25em + (2 * 1.25em));
 	grid-gap: 0.5em 0.25em;
 }

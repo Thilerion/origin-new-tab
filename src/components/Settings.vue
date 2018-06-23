@@ -183,6 +183,24 @@
 					</div>
 				</div>
 
+				<div class="setting-group">
+					<h2>TopSites</h2>
+					<div class="setting-group-content">
+						<div class="setting-item">
+							<h3 class="setting-item-name">Hoeveel websites</h3>
+							<div class="input-range-wrap">
+								<input
+									type="range"
+									class="slider is-circle input-range"
+									:min="settingsOptions.topSites.maxTopSites.min"
+									:max="settingsOptions.topSites.maxTopSites.max"
+									v-model="currentSettings.topSites.maxTopSites"
+								><label>{{currentSettings.topSites.maxTopSites}}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
 			</div>
 			<button @click="saveSettings" class="setting-btn">Opslaan</button>
 		</div>
@@ -202,6 +220,7 @@ export default {
 				wallpaper: {},
 				quote: {},
 				news: {},
+				topSites: {},
 				calendar: {}
 			},
 			initialSettings: {
@@ -211,6 +230,7 @@ export default {
 				wallpaper: {},
 				quote: {},
 				news: {},
+				topSites: {},
 				calendar: {}
 			},
 			settingsOptions: {...settingsOptions}

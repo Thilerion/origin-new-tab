@@ -81,6 +81,9 @@ const defaultSettings = {
 	news: {
 		slideInterval: 6000
 	},
+	topSites: {
+		maxTopSites: 10
+	},
 	calendar: {}
 }
 
@@ -195,6 +198,12 @@ const settingsOptions = {
 		slideInterval: {
 			min: 4000,
 			max: 60000
+		}
+	},
+	topSites: {
+		maxTopSites: {
+			min: 2,
+			max: 10
 		}
 	}
 };

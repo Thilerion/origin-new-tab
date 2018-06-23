@@ -34,6 +34,9 @@ const settingsStore = {
 			news: {
 				slideInterval: null
 			},
+			topSites: {
+				maxTopSites: null
+			},
 			calendar: {}
 		}
 	},
@@ -58,6 +61,7 @@ const settingsStore = {
 		wallpaperRefresh: state => state.settingsData.wallpaper.wallpaperRefresh,
 		quoteCategory: state => state.settingsData.quote.category,
 		newsSlideInterval: state => state.settingsData.news.slideInterval,
+		maxTopSites: state => state.settingsData.topSites.maxTopSites,
 
 
 		dndEnabled(state) {

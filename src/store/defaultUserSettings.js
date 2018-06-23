@@ -82,7 +82,8 @@ const defaultSettings = {
 		slideInterval: 6000
 	},
 	topSites: {
-		maxTopSites: 10
+		maxTopSites: 10,
+		columns: 5
 	},
 	calendar: {}
 }
@@ -203,6 +204,10 @@ const settingsOptions = {
 	topSites: {
 		maxTopSites: {
 			min: 2,
+			max: 10
+		},
+		columns: {
+			min: 1,
 			max: 10
 		}
 	}

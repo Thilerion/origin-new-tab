@@ -35,7 +35,8 @@ const settingsStore = {
 				slideInterval: null
 			},
 			topSites: {
-				maxTopSites: null
+				maxTopSites: null,
+				columns: null
 			},
 			calendar: {}
 		}
@@ -62,6 +63,7 @@ const settingsStore = {
 		quoteCategory: state => state.settingsData.quote.category,
 		newsSlideInterval: state => state.settingsData.news.slideInterval,
 		maxTopSites: state => state.settingsData.topSites.maxTopSites,
+		topSiteColumns: state => state.settingsData.topSites.columns,
 
 
 		dndEnabled(state) {

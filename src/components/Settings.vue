@@ -198,6 +198,19 @@
 								><label>{{currentSettings.topSites.maxTopSites}}</label>
 							</div>
 						</div>
+
+						<div class="setting-item">
+							<h3 class="setting-item-name">Kolommen</h3>
+							<div class="input-range-wrap">
+								<input
+									type="range"
+									class="slider is-circle input-range"
+									:min="settingsOptions.topSites.columns.min"
+									:max="settingsOptions.topSites.columns.max"
+									v-model="currentSettings.topSites.columns"
+								><label>{{currentSettings.topSites.columns}}</label>
+							</div>
+						</div>
 					</div>
 				</div>
 

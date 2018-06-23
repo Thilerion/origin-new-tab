@@ -31,42 +31,19 @@ const store = new Vuex.Store({
 	},
 
 	state: {
+		
 	},
 
 	getters: {
+
 	},
 
 	mutations: {
-		increaseFontSize(state, name) {
-			const index = state.user.widgets.findIndex(w => w.name === name);
-			if (state.user.widgets[index].fontSize != null) {
-				state.user.widgets[index].fontSize += 1;
-			}
-		},
-		decreaseFontSize(state, name) {
-			const index = state.user.widgets.findIndex(w => w.name === name);
-			if (state.user.widgets[index].fontSize != null) {
-				state.user.widgets[index].fontSize -= 1;
-			}
-		}
+		
 	},
 
 	actions: {
-		/*userStorageLoadFailed({ commit }) {
-			commit('setLanguage', 'nl');
-			commit('setFontSize', null);
-			commit('setEditingUsername', true);
-			commit('setWidgets', defaultSettings.user.widgets);
-		},
-		userSetFromStorage({ commit }, { username = "", language = "", fontSize = null, widgets = defaultSettings.user.widgets }) {
-			commit('setUsername', username);
-			commit('setLanguage', language);
-			commit('setFontSize', fontSize);
-			const mergedWidgets = deepMergeArray(
-				deepClone(defaultSettings.user.widgets),
-				deepClone(widgets));
-			commit('setWidgets', mergedWidgets);
-		}*/
+	
 	}
 
 })

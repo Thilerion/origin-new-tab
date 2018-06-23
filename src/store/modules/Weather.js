@@ -1,4 +1,4 @@
-import widgetsApi from './api/index';
+import widgetsApi from '../api';
 const weatherApi = widgetsApi.weather;
 const locationApi = widgetsApi.location;
 

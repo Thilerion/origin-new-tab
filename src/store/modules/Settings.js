@@ -1,5 +1,5 @@
-import { defaultSettings, settingsOptions } from './defaultUserSettings';
-import { deepClone, deepMergeArray } from '../utils/deepObject';
+import { defaultSettings, settingsOptions } from '../defaultUserSettings';
+import { deepClone, deepMergeArray } from '../../utils/deepObject';
 
 import lodashMerge from 'lodash.merge';
 

@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import Wallpaper from './Wallpaper'
-import Greeting from './Greeting'
-import Quote from './Quote'
-import Weather from './Weather'
-import News from './News'
-import Settings from './Settings'
-import Calendar from './Calendar'
+import Wallpaper from './modules/Wallpaper'
+import Greeting from './modules/Greeting'
+import Quote from './modules/Quote'
+import Weather from './modules/Weather'
+import News from './modules/News'
+import Settings from './modules/Settings'
+import Calendar from './modules/Calendar'
 
 Vue.use(Vuex)
 

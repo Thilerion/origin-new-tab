@@ -1,4 +1,4 @@
-import widgetsApi from './api/index';
+import widgetsApi from '../api';
 const wallpaperApi = widgetsApi.wallpaper;
 
 import { deepClone, uniqueBy } from '@/utils/deepObject';

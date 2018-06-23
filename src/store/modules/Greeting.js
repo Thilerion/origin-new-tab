@@ -1,4 +1,4 @@
-import localeMessages from '../locale/greeting.locale.js';
+import localeMessages from '../../locale/greeting.locale.js';
 
 const greetingStore = {
 

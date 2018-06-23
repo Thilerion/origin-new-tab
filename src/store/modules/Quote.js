@@ -1,7 +1,5 @@
-import widgetsApi from './api/index';
+import widgetsApi from '../api';
 const quoteApi = widgetsApi.quote;
-
-import { defaultSettings } from './defaultUserSettings';
 
 const quoteStore = {
 

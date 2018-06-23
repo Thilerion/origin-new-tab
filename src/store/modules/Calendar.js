@@ -1,22 +1,13 @@
-import widgetsApi from './api/index';
+import widgetsApi from '../api';
 const calendarApi = widgetsApi.calendar;
-
-import isToday from "date-fns/is_today";
-import differenceInDays from "date-fns/difference_in_calendar_days";
-import format from "date-fns/format";
-import isBefore from "date-fns/is_before";
-import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
-import compareAsc from "date-fns/compare_asc";
-import parse from 'date-fns/parse';
-
-import { createCalendarList, reduceCalendarList } from './libs/calendarModel';
+import { createCalendarList, reduceCalendarList } from '../libs/calendarModel';
 
 import {
 	getAuthTokenInteractive,
 	getAuthTokenSilent,
 	removeCachedAuthToken,
 	revokeOauthAccess
-} from './libs/identity';
+} from '../libs/identity';
 
 const CALENDAR_FORMAT = "dddd D MMMM";
 const TIME_FORMAT = "HH:mm";

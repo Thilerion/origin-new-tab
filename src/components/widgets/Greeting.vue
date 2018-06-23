@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-greeting widget-no-select f-shadow-heavy f-shadow-wide cursor-default">
+	<div class="widget-greeting widget-no-select f-shadow-heavy f-shadow-wide cursor-default" v-show="!!timeOfDay">
 		<div class="time">{{time | toTimeString(timeFormat)}}</div>
 		
 		<div
@@ -72,7 +72,7 @@ export default {
 			return 2;
 		}
 	},
-	beforeMount() {
+	created() {
 		this.setNewTimeout();
 	},
 	beforeDestroy() {

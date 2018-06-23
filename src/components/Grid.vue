@@ -6,17 +6,14 @@
 			<div class="grid-align ver" v-show="showVer"></div>
 		</div>
 
-		<WidgetFadeIn
+		<StartWidget
+			class="widget"
+			:style="widgetGridPlacement[index]"
+			:widget="widget"
+			:dndEnabled="dndEnabled"
 			v-for="(widget, index) of activeWidgets"
 			:key="widget.name"
-		>
-			<StartWidget
-				class="widget"
-				:style="widgetGridPlacement[index]"
-				:widget="widget"
-				:dndEnabled="dndEnabled"
-			/>
-		</WidgetFadeIn>
+		/>
 		<button v-if="dndEnabled" class="stop-dnd" @click="toggleDnd">✓</button>
 	</div>
 </template>

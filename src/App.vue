@@ -2,9 +2,9 @@
 	<div id="app">
 		<StartWallpaper/>
 		<StartGrid/>
-		<WidgetFadeIn fadein fadeout>		
+		<transition name="settings-transition">	
 			<StartSettings v-if="showSettings" />
-		</WidgetFadeIn>
+		</transition>
 	</div>
 </template>
 

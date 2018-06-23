@@ -11,12 +11,14 @@
 			@moveWidget="moveWidget"
 			@resizeWidget="resizeWidget"
 		>
+		<transition name="widget-fade">
 			<component
 				:is="widgetComponent"
 				class="widget-inner"
 				:style="{'font-size': widgetFontSize}"
 				:class="alignmentClass"
-			/>			
+			/>	
+		</transition>		
 		</StartDragResize>
 		<StartWidgetSettings
 			class="widget-settings"

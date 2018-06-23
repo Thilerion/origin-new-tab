@@ -225,6 +225,8 @@ export default {
 			this.dragData.initialCols = [...this.widgetCols];
 			this.dragData.initialRows = [...this.widgetRows];
 
+			this.removeSelection();
+
 			const emptyDragImage = document.createElement('div');
 			e.dataTransfer.setDragImage(emptyDragImage, 0, 0);
 			e.dataTransfer.effectAllowed = "move";
@@ -303,6 +305,12 @@ export default {
 				}
 			}
 			return classes;
+		},
+		removeSelection() {
+			const getSelection = document.getSelection();
+			if (getSelection.type) {
+				getSelection.removeAllRanges();
+			}
 		}
 	},
 	mounted() {

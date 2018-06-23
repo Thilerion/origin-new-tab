@@ -154,6 +154,9 @@ const settingsStore = {
 		},
 		changeWidgetFontSize(state, { index, amount }) {
 			state.settingsData.widgets[index].fontSize += amount;
+		},
+		setWidgetAlignment(state, { index, alignment }) {
+			state.settingsData.widgets[index].align = alignment;
 		}
 	},
 
@@ -217,6 +220,11 @@ const settingsStore = {
 		changeWidgetFontSize({ getters, commit }, { name, value }) {
 			const index = getters.widgetIndexByName(name);
 			commit('changeWidgetFontSize', { index, amount: value });
+		},
+
+		changeWidgetAlignment({ getters, commit }, { name, alignment }) {
+			const index = getters.widgetIndexByName(name);
+			commit('setWidgetAlignment', {index, alignment})
 		},
 
 		moveWidget({ getters, commit }, { name, moveCols, moveRows }) {

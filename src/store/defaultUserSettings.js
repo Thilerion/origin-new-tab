@@ -13,13 +13,15 @@ const defaultSettings = {
 			active: true,
 			row: [7, 13],
 			column: [9, 33],
-			fontSize: -1
+			align: 1,
+			fontSize: -1,
 		},
 		{ 
 			name: 'news',
 			active: true,
 			row: [1, 3],
 			column: [9, 33],
+			align: 1,
 			fontSize: -1
 		},
 		{ 
@@ -27,6 +29,7 @@ const defaultSettings = {
 			active: true,
 			row: [2, 4],
 			column: [9, 33],
+			align: 1,
 			fontSize: -2
 		},
 		{ 
@@ -34,6 +37,7 @@ const defaultSettings = {
 			active: true,
 			row: [1, 4],
 			column: [35, 41],
+			align: 2,
 			fontSize: -1
 		},
 		{ 
@@ -41,6 +45,7 @@ const defaultSettings = {
 			active: true,
 			row: [16, 21],
 			column: [11, 31],
+			align: 1,
 			fontSize: -3
 		},
 		{
@@ -48,6 +53,7 @@ const defaultSettings = {
 			active: true,
 			row: [20, 21],
 			column: [40, 41],
+			align: 2,
 			fontSize: 0
 		},
 		{
@@ -55,6 +61,7 @@ const defaultSettings = {
 			active: true,
 			row: [19, 21],
 			column: [1, 13],
+			align: 0,
 			fontSize: -1
 		},
 		{
@@ -62,6 +69,7 @@ const defaultSettings = {
 			active: false,
 			row: [1, 7],
 			column: [1, 11],
+			align: 0,
 			fontSize: -1
 		}
 	],
@@ -101,6 +109,11 @@ const settingsOptions = {
 			min: -4,
 			max: 4
 		},
+		align: {
+			0: 'left',
+			1: 'center',
+			2: 'right'
+		},
 		storageModules: ['settings', 'news', 'quote', 'weather', 'wallpaper', 'calendar'],
 		widgetOptions: {
 			greeting: {
@@ -108,6 +121,7 @@ const settingsOptions = {
 				move: true,
 				grid: true,
 				resize: true,
+				align: true,
 				fontSize: true
 			},
 			news: {
@@ -115,6 +129,7 @@ const settingsOptions = {
 				move: true,
 				grid: true,
 				resize: true,
+				align: false,
 				fontSize: true
 			},
 			quote: {
@@ -122,6 +137,7 @@ const settingsOptions = {
 				move: true,
 				grid: true,
 				resize: true,
+				align: true,
 				fontSize: true
 			},
 			weather: {
@@ -129,6 +145,7 @@ const settingsOptions = {
 				move: true,
 				grid: true,
 				resize: true,
+				align: true,
 				fontSize: true
 			},
 			topPages: {
@@ -136,6 +153,7 @@ const settingsOptions = {
 				move: true,
 				grid: true,
 				resize: true,
+				align: true,
 				fontSize: true
 			},
 			calendar: {
@@ -143,6 +161,7 @@ const settingsOptions = {
 				move: true,
 				grid: true,
 				resize: true,
+				align: true,
 				fontSize: true
 			},
 			wallpaperDetails: {
@@ -150,6 +169,7 @@ const settingsOptions = {
 				move: true,
 				grid: true,
 				resize: true,
+				align: true,
 				fontSize: true
 			},
 			settingsButton: {
@@ -157,6 +177,7 @@ const settingsOptions = {
 				move: false,
 				grid: true,
 				resize: false,
+				align: false,
 				fontSize: false
 			}
 		}

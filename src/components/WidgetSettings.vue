@@ -2,24 +2,50 @@
 	<div class="widget-settings">
 		<div class="widget-setting-group widget-settings-font" v-if="canChangeFontSize">
 			<button 
-				class="widget-setting-btn decrease icon-btn"
+				class="widget-setting-btn font-btn decrease icon-btn"
 				:disabled="minFontSizeReached"
 				@click="decreaseFontSize"
 			>-</button>
 			<span class="setting-name">Text</span>
 			<button
-				class="widget-setting-btn increase icon-btn"
+				class="widget-setting-btn font-btn increase icon-btn"
 				:disabled="maxFontSizeReached"
 				@click="increaseFontSize"
 			>+</button>
+		</div>
+		<div class="widget-setting-group widget-settings-align" v-if="canChangeAlignment">
+			<button
+				class="widget-setting-btn icon-btn align-btn"
+				@click="changeAlignment(0)"
+				:class="{'active-alignment': currentAlignment === 0}"
+			>
+				<StartSvgIcon icon="align-left" />
+			</button>
+			<button
+				class="widget-setting-btn icon-btn align-btn"
+				@click="changeAlignment(1)"
+				:class="{'active-alignment': currentAlignment === 1}"
+			>
+				<StartSvgIcon icon="align-center" />
+			</button>
+			<button
+				class="widget-setting-btn icon-btn align-btn"
+				@click="changeAlignment(2)"
+				:class="{'active-alignment': currentAlignment === 2}"
+			>
+				<StartSvgIcon icon="align-right" />
+			</button>
 		</div>
 	</div>
 </template>
 
 <script>
-import {settingsOptions} from '@/store/defaultUserSettings';
-const widgetOptions = settingsOptions.widgets.widgetOptions;
-const fontSizeOptions = settingsOptions.widgets.fontSize;
+import {settingsOptions, defaultSettings} from '@/store/defaultUserSettings';
+const WIDGET_OPTIONS = settingsOptions.widgets.widgetOptions;
+const WIDGET_DEFAULTS = defaultSettings.widgets;
+
+const FONT_SIZE_OPTIONS = settingsOptions.widgets.fontSize;
+const ALIGN_OPTIONS = settingsOptions.widgets.align;
 
 export default {
 	props: {
@@ -30,7 +56,11 @@ export default {
 	},
 	data() {
 		return {
-			widgetOptions: widgetOptions[this.widget.name]
+			widgetOptions: WIDGET_OPTIONS[this.widget.name],
+			widgetDefaults: WIDGET_DEFAULTS.find(w => w.name === this.widget.name),
+
+			fontSizeOptions: FONT_SIZE_OPTIONS,
+			alignOptions: ALIGN_OPTIONS
 		}
 	},
 	computed: {
@@ -38,10 +68,23 @@ export default {
 			return !!this.widgetOptions.fontSize;
 		},
 		minFontSizeReached() {
-			return this.widget.fontSize <= settingsOptions.widgets.fontSize.min;
+			return this.widget.fontSize <= this.fontSizeOptions.min;
 		},
 		maxFontSizeReached() {
-			return this.widget.fontSize >= settingsOptions.widgets.fontSize.max;
+			return this.widget.fontSize >= this.fontSizeOptions.max;
+		},
+		defaultFontSize() {
+			return this.widgetDefaults.fontSize;
+		},
+
+		canChangeAlignment() {
+			return !!this.widgetOptions.align;
+		},
+		defaultAlignment() {
+			return this.widgetDefaults.align;
+		},
+		currentAlignment() {
+			return this.widget.align;
 		}
 	},
 	methods: {
@@ -50,6 +93,9 @@ export default {
 		},
 		decreaseFontSize() {
 			this.$store.dispatch('changeWidgetFontSize', {name: this.widget.name, value: -1});
+		},
+		changeAlignment(alignment) {
+			this.$store.dispatch('changeWidgetAlignment', {name: this.widget.name, alignment});
 		}
 	}
 }
@@ -93,18 +139,32 @@ export default {
 
 .widget-setting-btn {
 	border: 2px solid transparent;
-	background-color: black;
-	color: white;
 	border-radius: 4px;
-	width: 1em;
-	height: 1em;
-	font-size: 14px;
-	line-height: 10px;
 	cursor: pointer;
 	transition: all .1s ease;
 }
 
-.widget-setting-btn:hover:not(:active) {
+.font-btn {
+	width: 1em;
+	height: 1em;
+	font-size: 14px;
+	line-height: 10px;
+	background-color: black;
+	color: white;
+}
+
+.align-btn.active-alignment {
+	background-color: black;
+	color: white;
+	cursor: default;
+}
+
+.align-btn:not(.active-alignment):hover {
+	background-color: black;
+	color: white;
+}
+
+.font-btn:hover:not(:active) {
 	background: transparent;
 	color: black;
 	border: 2px solid black;

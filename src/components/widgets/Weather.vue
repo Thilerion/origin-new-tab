@@ -57,18 +57,21 @@ export default {
 .w-align-left {
 	margin: 0 auto auto 0;
 	padding-left: 1em;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: auto auto auto;
+	justify-items: start;
 }
 
 .w-align-center {
 	margin: 0 auto auto auto;
 	grid-template-columns: repeat(4, 1fr);
+	justify-items: start;
 }
 
 .w-align-right {
 	margin: 0 0 auto auto;
 	padding-right: 1em;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: auto auto auto;
+	justify-items: start;
 }
 
 .w-align-left .temperature {
@@ -129,14 +132,19 @@ export default {
 
 .w-align-left .row-extended {
 	grid-column: 1 / 4;
+	margin-left: -5px;
+	justify-self: start;
 }
 
 .w-align-center .row-extended {
 	grid-column: 1 / 5;
+	justify-self: center;
 }
 
 .w-align-right .row-extended {
 	grid-column: 1 / 4;
+	margin-right: -5px;	
+	justify-self: end;
 }
 
 .widget-weather {
@@ -176,9 +184,7 @@ export default {
 }
 
 .extended {
-	position: absolute;
 	top: 0;
-	left: -5px;
-	right: -5px;
+	/* position: absolute; */
 }
 </style>

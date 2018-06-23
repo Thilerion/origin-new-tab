@@ -107,7 +107,9 @@ export default {
 	--transition-dur1: 0.3s;
 	--transition-dur2: 0.3s;
 	--transition-dur3: 0.45s;
-	min-width: 8rem;
+	min-width: 7rem;
+	width: 9em;
+	max-width: 12em;
 }
 
 .background-image {
@@ -200,7 +202,7 @@ export default {
 	margin-top: 1px;
 	height: 4em;
 	display: grid;
-	grid-template-columns: 3.25em auto;
+	grid-template-columns: 2fr 3fr;
 	grid-template-rows: repeat(2, 1fr);
 	white-space: nowrap;
 }
@@ -237,7 +239,7 @@ export default {
 
 .forecast-ds-text {
 	display: inline-block;
-	font-size: 0.75em;
+	font-size: calc(1em - 5px);
 	line-height: 1.4;
 	opacity: 0.9;
 	padding: 0.25em 0.5em;

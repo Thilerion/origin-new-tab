@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-greeting widget-no-select f-shadow-heavy f-shadow-wide f-align-c cursor-default">
+	<div class="widget-greeting widget-no-select f-shadow-heavy f-shadow-wide cursor-default">
 		<div class="time">{{time | toTimeString(currentTimeFormat)}}</div>
 		
 		<div
@@ -97,11 +97,14 @@ export default {
 
 <style scoped>
 .widget-greeting {
-	margin: 0 auto;
 	font-size: inherit;
+	width: 100%;
+	padding-left: 1em;
+	padding-right: 1em;
 	min-width: 50em;
 	display: flex;
 	flex-direction: column;
+	text-align: var(--text-align);
 }
 
 .time {

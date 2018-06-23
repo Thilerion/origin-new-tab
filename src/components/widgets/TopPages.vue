@@ -145,18 +145,29 @@ export default {
 </script>
 
 <style scoped>
+.w-align-left {
+	margin-right: auto;
+	margin-left: -1em;
+}
+
+.w-align-center {
+	margin-left: -1em;
+}
+
+.w-align-right {
+	text-align: right;
+	margin-left: auto;
+}
+
 .widget-top-pages {
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: center;
 	margin-bottom: -0.75em;
-	margin-left: -1em;
 }
 
 .top-page-item {
 	margin-left: 1em;
 	position: relative;
-	text-align: center;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -202,6 +213,7 @@ export default {
 	letter-spacing: 0.02em;
 	line-height: 1.25em;
 	position: relative;
+	text-align: center;
 	padding-bottom: 1px;
 }
 

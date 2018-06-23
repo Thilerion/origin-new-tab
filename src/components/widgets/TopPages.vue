@@ -83,7 +83,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters('settings', ['maxTopSites', 'topSiteColumns']),
+		...mapGetters(['maxTopSites', 'topSiteColumns']),
 		topSitesSliced() {
 			return this.topSites.slice(0, this.maxTopSites);
 		},

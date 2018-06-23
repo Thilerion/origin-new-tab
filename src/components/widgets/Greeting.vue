@@ -29,7 +29,7 @@ export default {
 		}		
 	},
 	computed: {
-		...mapGetters('settings', ['username', 'isEditingUsername', 'showTextGreeting']),
+		...mapGetters(['username', 'isEditingUsername', 'showTextGreeting']),
 		...mapGetters('greeting', ['timeFormat']),
 		msUntilMinute() {
 			return diffInMs(this.minuteEndsAt, this.time);
@@ -58,10 +58,10 @@ export default {
 		},
 		editUsername() {
 			this.usernameInput = this.username;
-			this.$store.commit('settings/setEditingUsername', true);
+			this.$store.commit('setEditingUsername', true);
 		},
 		saveUsername() {
-			this.$store.commit('settings/setUsername', this.usernameInput);
+			this.$store.commit('setUsername', this.usernameInput);
 		},
 		getTimeOfDay(date = new Date()) {
 			// morning: 5 - 12, day: 12 - 18, evening: 18 - 00, night: 00 - 5

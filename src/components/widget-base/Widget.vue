@@ -76,7 +76,7 @@ export default {
 
 	computed: {
 
-		...mapState('settings', ['gridCols', 'gridRows']),
+		...mapState(['gridCols', 'gridRows']),
 
 		canResize() {
 			return settingsOptions.widgets.widgetOptions[this.widget.name].resize;
@@ -112,10 +112,10 @@ export default {
 
 	methods: {
 		moveWidget(moveCols, moveRows) {
-			this.$store.dispatch('settings/moveWidget', {name: this.widget.name, moveCols, moveRows});
+			this.$store.dispatch('moveWidget', {name: this.widget.name, moveCols, moveRows});
 		},
 		resizeWidget(cols, rows) {
-			this.$store.dispatch('settings/resizeWidget', {name: this.widget.name, cols, rows});
+			this.$store.dispatch('resizeWidget', {name: this.widget.name, cols, rows});
 		}
 	}
 }

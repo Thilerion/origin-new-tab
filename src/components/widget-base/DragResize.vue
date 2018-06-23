@@ -79,7 +79,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('settings', ['dndEnabled']),
+		...mapState(['dndEnabled']),
 		dragResizeClasses() {
 			if (!this.dndEnabled) return [];
 

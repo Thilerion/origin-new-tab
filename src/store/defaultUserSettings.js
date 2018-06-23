@@ -114,7 +114,13 @@ const settingsOptions = {
 			1: 'center',
 			2: 'right'
 		},
-		storageModules: ['settings', 'news', 'quote', 'weather', 'wallpaper', 'calendar'],
+		storageModules: [
+			'news',
+			'quote',
+			'weather',
+			'wallpaper',
+			'calendar'
+		],
 		widgetOptions: {
 			greeting: {
 				disable: true,

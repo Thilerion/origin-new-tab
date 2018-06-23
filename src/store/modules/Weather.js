@@ -57,6 +57,9 @@ const weatherStore = {
 		},
 		weatherDataLoaded(state) {
 			return state.weatherData.weatherDataLoaded;
+		},
+		useCustomLocation(state, getters, rootState, rootGetters) {
+			return rootGetters.useCustomLocation;
 		}
 	},
 

@@ -108,8 +108,8 @@ const wallpaperStore = {
 	},
 
 	actions: {
-		getWallpapersFromServer({ rootGetters, commit, dispatch }, commitOnFail) {
-			let url = wallpaperApi.url.get(rootGetters['settings/wallpaperCollection']);
+		getWallpapersFromServer({ getters, commit, dispatch }, commitOnFail) {
+			let url = wallpaperApi.url.get(getters.wallpaperCollection);
 			wallpaperApi.request(url)
 				.then(data => {
 					console.log("Got data from wallpaper API!");

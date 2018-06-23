@@ -8,7 +8,7 @@
 export default {
 	methods: {
 		toggleSettings() {
-			this.$store.commit('settings/setShowSettings', true);
+			this.$store.commit('setShowSettings', true);
 		}
 	}
 }

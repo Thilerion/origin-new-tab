@@ -25,7 +25,7 @@ export default {
 	},
 	computed: {
 		...mapState('news', ['dataLoaded', 'articles']),
-		...mapGetters('settings', ['newsSlideInterval']),
+		...mapGetters(['newsSlideInterval']),
 		transitionName() {
 			return `slide-news-${this.dir}`;
 		}

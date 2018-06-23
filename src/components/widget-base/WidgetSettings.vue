@@ -89,13 +89,13 @@ export default {
 	},
 	methods: {
 		increaseFontSize() {
-			this.$store.dispatch('settings/changeWidgetFontSize', {name: this.widget.name, value: 1});
+			this.$store.dispatch('changeWidgetFontSize', {name: this.widget.name, value: 1});
 		},
 		decreaseFontSize() {
-			this.$store.dispatch('settings/changeWidgetFontSize', {name: this.widget.name, value: -1});
+			this.$store.dispatch('changeWidgetFontSize', {name: this.widget.name, value: -1});
 		},
 		changeAlignment(alignment) {
-			this.$store.dispatch('settings/changeWidgetAlignment', {name: this.widget.name, alignment});
+			this.$store.dispatch('changeWidgetAlignment', {name: this.widget.name, alignment});
 		}
 	}
 }

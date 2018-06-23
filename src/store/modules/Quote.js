@@ -32,9 +32,9 @@ const quoteStore = {
 	},
 
 	actions: {
-		async getQuoteFromServer({rootGetters, dispatch}, commitOnFail) {
+		async getQuoteFromServer({getters, dispatch}, commitOnFail) {
 			try {
-				let url = quoteApi.url.get(rootGetters['settings/quoteCategory']);				
+				let url = quoteApi.url.get(getters.quoteCategory);				
 				let data = await quoteApi.request(url);				
 				dispatch('quoteSetFromApi', data);
 			}
@@ -55,9 +55,8 @@ const quoteStore = {
 			dispatch('getQuoteFromServer', data);
 		},
 		quoteSetFromStorage({ commit }, localData) {
-			const { randomQuote, expires, quoteCategory = 'motivinspirational' } = localData;
+			const { randomQuote, expires } = localData;
 			commit('setQuote', { randomQuote, expires });
-			commit('settings/setQuoteCategory', quoteCategory, {root: true});
 		},
 		quoteSetFromApi({ commit }, apiData) {
 			const { data: randomQuote, expires } = apiData;

@@ -49,6 +49,20 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 	return function persistState(store) {
 		store.resetAllStorage = createResetStorage(widgets);
 
+		console.log(`Creating watcher for 'settings'.`);
+		store.watch((state, getters) => getters.settingsWatch, watchCallback('settings'), { deep: true });
+		store.settingsFromStorage = createLoadFromStorage('settings');
+		let data = store.settingsFromStorage();
+		if (!data) {
+			store.dispatch(`settingsStorageLoadFailed`);
+		} else if (data.expires && isExpired(data.expires)) {
+			//expired: [widgetName]StorageLoadExpired
+			store.dispatch(`settingsStorageLoadExpired`, data);
+		} else {
+			//everything ok: [widgetName]SetFromStorage
+			store.dispatch(`settingsSetFromStorage`, data);
+		}
+
 		widgets.forEach(widget => {
 			createWatcher(store, widget)
 			store[`${widget}FromStorage`] = createLoadFromStorage(widget);

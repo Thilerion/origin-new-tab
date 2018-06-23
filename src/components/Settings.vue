@@ -265,7 +265,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters('settings', {
+		...mapGetters({
 			customLocation: 'locationToUse'
 		}),
 		disableFontSizeSlider() {
@@ -301,8 +301,8 @@ export default {
 		}
 	},
 	methods: {
-		...mapMutations('settings', ['setShowSettings']),
-		...mapActions('settings', ['saveUpdatedSettings']),
+		...mapMutations(['setShowSettings']),
+		...mapActions(['saveUpdatedSettings']),
 		saveSettings() {
 			if (this.deepEquals(this.currentSettings, this.initialSettings)) {
 				console.log("No changes in settings.");
@@ -325,12 +325,12 @@ export default {
 			location.reload();
 		},
 		toggleDnd() {
-			this.$store.commit('settings/toggleDnd');
+			this.$store.commit('toggleDnd');
 			this.saveSettings();
 		}
 	},
 	created() {
-		let currentSettings = this.$store.getters['settings/settingsWatch'];
+		let currentSettings = this.$store.getters.settingsWatch;
 		this.currentSettings = {...this.deepClone(currentSettings)};
 		this.initialSettings = {...this.deepClone(currentSettings)};
 	},

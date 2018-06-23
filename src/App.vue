@@ -13,7 +13,7 @@ import StartWallpaper from "./components/Wallpaper.vue";
 import StartGrid from './components/Grid.vue'
 import StartSettings from './components/Settings.vue';
 
-import {mapState} from 'vuex';
+import {mapState, mapGetters} from 'vuex';
 
 export default {
 	name: "app",
@@ -23,10 +23,8 @@ export default {
 		StartSettings
 	},
 	computed: {
-		...mapState('settings', {
-			'showSettings': state => state.showSettings,
-			'fontSize': state => state.settingsData.general.fontSize
-		})
+		...mapState(['showSettings']),
+		...mapGetters(['fontSize'])
 	},
 	methods: {
 		setDocumentFontSize(px) {

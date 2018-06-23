@@ -9,7 +9,7 @@ const greetingStore = {
 	},
 
 	getters: {
-		greetingMessages: (state, getters, rootState, rootGetters) => state.localeMessages[rootGetters['settings/language']],
+		greetingMessages: (state, getters, rootState) => state.localeMessages[rootState.settingsData.general.language],
 		timeFormat: state => state.timeFormat
 	},
 

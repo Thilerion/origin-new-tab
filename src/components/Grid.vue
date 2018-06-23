@@ -26,7 +26,7 @@ import StartWidget from './widget-base/Widget.vue';
 
 import {deepClone} from '@/utils/deepObject';
 import {settingsOptions} from '@/store/defaultUserSettings';
-import {mapState, mapMutations} from 'vuex';
+import {mapState, mapGetters, mapMutations} from 'vuex';
 
 export default {
 	components: {
@@ -39,10 +39,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('settings', {
-			widgets: state => state.settingsData.widgets
-		}),
-		...mapState('settings', ['dndEnabled']),
+		...mapGetters(['widgets']),
+		...mapState(['dndEnabled']),
 		widgetsInGrid() {
 			return this.widgets.filter(w => settingsOptions.widgets.widgetOptions[w.name].grid);
 		},
@@ -76,7 +74,7 @@ export default {
 		}
 	},
 	methods: {
-		...mapMutations('settings', ['toggleDnd', 'setGridSize']),
+		...mapMutations(['toggleDnd', 'setGridSize']),
 		checkCenter(widgetCols, widgetRows) {
 			/*let cols = this.gridCols;
 			let rows = this.gridRows;
@@ -99,7 +97,7 @@ export default {
 			const gridRows = parseInt(getComputedStyle(el).getPropertyValue('--rows'));
 			this.gridCols = gridCols;
 			this.gridRows = gridRows;
-			this.setGridSize('setGridSize', {cols: gridCols, rows: gridRows});
+			this.setGridSize({cols: gridCols, rows: gridRows});
 		},
 		dragOver(e) {
 			// used to show the "move" icon when dnd is enabled and dragging

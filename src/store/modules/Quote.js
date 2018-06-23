@@ -29,11 +29,16 @@ const quoteStore = {
 			state.expires = expires;
 			state.dataLoaded = true;
 		},
+		setQuoteLoaded(state, bool) {
+			if (bool == null) state.dataLoaded = !state.dataLoaded;
+			else state.dataLoaded = bool;
+		}
 	},
 
 	actions: {
-		async getQuoteFromServer({rootGetters, dispatch}, commitOnFail) {
+		async getQuoteFromServer({rootGetters, commit, dispatch}, commitOnFail) {
 			try {
+				commit('setQuoteLoaded', false);
 				let url = quoteApi.url.get(rootGetters.quoteCategory);				
 				let data = await quoteApi.request(url);				
 				dispatch('quoteSetFromApi', data);

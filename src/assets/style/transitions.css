@@ -1,5 +1,13 @@
 .widget-fade-enter-active {
-	transition: opacity 0.5s ease;
+	transition: opacity 1s ease;
+}
+
+.widget-fade-leave-active {
+	transition: opacity 5s ease;
+}
+
+.widget-fade-leave-to {
+	opacity: 0;
 }
 
 .widget-fade-enter {

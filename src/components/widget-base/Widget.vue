@@ -27,14 +27,14 @@
 </template>
 
 <script>
-import StartGreeting from "./widgets/Greeting.vue";
-import StartWallpaperDetails from './widgets/WallpaperDetails.vue';
-import StartQuote from './widgets/Quote.vue';
-import StartWeather from './widgets/Weather.vue';
-import StartNews from './widgets/News.vue';
-import StartSettingsButton from './SettingsButton.vue';
-import StartTopPages from './widgets/TopPages.vue';
-import StartCalendar from './widgets/Calendar.vue';
+import StartGreeting from "../widgets/Greeting.vue";
+import StartWallpaperDetails from '../widgets/WallpaperDetails.vue';
+import StartQuote from '../widgets/Quote.vue';
+import StartWeather from '../widgets/Weather.vue';
+import StartNews from '../widgets/News.vue';
+import StartSettingsButton from '../SettingsButton.vue';
+import StartTopPages from '../widgets/TopPages.vue';
+import StartCalendar from '../widgets/Calendar.vue';
 import StartWidgetSettings from './WidgetSettings.vue';
 import StartDragResize from './DragResize.vue';
 

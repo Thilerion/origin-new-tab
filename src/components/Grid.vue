@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import StartWidget from './Widget.vue';
+import StartWidget from './widget-base/Widget.vue';
 
 import {deepClone} from '@/utils/deepObject';
 import {settingsOptions} from '@/store/defaultUserSettings';

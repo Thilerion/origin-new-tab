@@ -12,7 +12,6 @@ import Calendar from './modules/Calendar'
 Vue.use(Vuex)
 
 import createPersistedState from './libs/persist';
-
 import { settingsOptions } from './defaultUserSettings';
 
 const store = new Vuex.Store({

@@ -423,4 +423,9 @@ label.range-disabled {
 	opacity: 0;
 }
 
+label {
+	display: inline-flex;
+	align-items: center;
+}
+
 </style>

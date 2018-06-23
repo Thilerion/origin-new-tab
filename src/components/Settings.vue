@@ -35,11 +35,18 @@
 						<div class="setting-item">
 							<h3 class="setting-item-name">Textgrootte</h3>
 							<div class="checkbox-group">
-								<input
+								<label><input
 									type="radio"
 									v-model="currentSettings.general.fontSize"
+									:value="null"
 									class="input-radio"
-								><label>Standaard</label>
+								>Standaard</label>
+								<label><input
+									type="radio"
+									:checked="currentSettings.general.fontSize !== null"
+									@input="$event.target.value ? currentSettings.general.fontSize = '16' : currentSettings.general.fontSize = null"
+									class="input-radio"
+								>Aangepast</label>
 							</div>
 							<div
 								class="input-range-wrap"
@@ -52,7 +59,7 @@
 									:max="settingsOptions.general.fontSize.max"
 									v-model="currentSettings.general.fontSize"
 								><label
-									:class="{'hide-label': !!disableFontSizeSlider}"
+									:class="{'range-disabled': disableFontSizeSlider}"
 								>{{currentSettings.general.fontSize}}px</label>
 							</div>			
 						</div>
@@ -364,6 +371,7 @@ h2 {
 
 .input-range-wrap > label {
 	flex: 0 0 2rem;
+	text-align: right;
 }
 
 .input-range-wrap > .input-range {
@@ -405,6 +413,14 @@ h2 {
 .save-btn:hover {
 	background: black;
 	color: white;
+}
+
+.slider.range-disabled {
+	opacity: 0.4;
+}
+
+label.range-disabled {
+	opacity: 0;
 }
 
 </style>

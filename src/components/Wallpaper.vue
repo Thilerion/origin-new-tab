@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
+
 export default {
 	data() {
 		return {
@@ -17,12 +19,10 @@ export default {
 		}
 	},
 	computed: {
+		...mapGetters(['wallpaperToShow']),
 		backgroundStyle() {
 			if (!this.wallpaperSource) return;
 			return {'background-image': `url(${this.wallpaperSource})`};
-		},
-		wallpaperToShow() {
-			return this.$store.getters.wallpaperToShow;
 		},
 		wallpaperSource() {
 			const wp = this.wallpaperToShow;

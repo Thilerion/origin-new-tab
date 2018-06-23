@@ -49,7 +49,6 @@ const settingsStore = {
 		username: state => state.settingsData.general.username,
 		fontSize: state => state.settingsData.general.fontSize,
 		showTextGreeting: state => state.settingsData.general.showTextGreeting,
-		widgets: state => state.settingsData.widgets,
 		widgetByIndex: state => index => state.settingsData.widgets[index],
 		widgetByName: state => name => state.settingsData.widgets.find(w => w.name === name),
 		widgetIndexByName: state => name => state.settingsData.widgets.findIndex(w => w.name === name),
@@ -65,10 +64,6 @@ const settingsStore = {
 		maxTopSites: state => state.settingsData.topSites.maxTopSites,
 		topSiteColumns: state => state.settingsData.topSites.columns,
 
-
-		dndEnabled(state) {
-			return state.dndEnabled;
-		},
 		showSettings(state) {
 			return !!state.showSettings;
 		},

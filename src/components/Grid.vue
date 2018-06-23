@@ -17,7 +17,7 @@
 				:dndEnabled="dndEnabled"
 			/>
 		</WidgetFadeIn>
-		<button v-if="dndEnabled" class="stop-dnd" @click="$store.commit('toggleDnd')">✓</button>
+		<button v-if="dndEnabled" class="stop-dnd" @click="toggleDnd">✓</button>
 	</div>
 </template>
 
@@ -26,6 +26,7 @@ import StartWidget from './widget-base/Widget.vue';
 
 import {deepClone} from '@/utils/deepObject';
 import {settingsOptions} from '@/store/defaultUserSettings';
+import {mapState, mapMutations} from 'vuex';
 
 export default {
 	components: {
@@ -33,29 +34,15 @@ export default {
 	},
 	data() {
 		return {
-			currentlyDragging: {
-				index: null,
-				startX: null,
-				startY: null,
-				currentX: null,
-				currentY: null,
-				initialRows: [0, 0],
-				initialCols: [0, 0],
-				rowChange: 0,
-				colChange: 0,
-				isCenterVertical: false,
-				isCenterHorizontal: false
-			},
-			windowWidth: window.innerWidth,
-			windowHeight: window.innerHeight,
 			gridCols: 0,
 			gridRows: 0
 		}
 	},
 	computed: {
-		widgets() {
-			return this.$store.getters.widgets;
-		},
+		...mapState({
+			widgets: state => state.Settings.settingsData.widgets,
+			dndEnabled: state => state.Settings.dndEnabled
+		}),
 		widgetsInGrid() {
 			return this.widgets.filter(w => settingsOptions.widgets.widgetOptions[w.name].grid);
 		},
@@ -81,137 +68,17 @@ export default {
 				}
 			})
 		},
-		rectXMoveDifference() {
-			if (this.currentlyDragging.index == null) return 0;
-			return this.currentlyDragging.currentX - this.currentlyDragging.startX;
-		},
-		rectYMoveDifference() {
-			if (this.currentlyDragging.index == null) return 0;
-			return this.currentlyDragging.currentY - this.currentlyDragging.startY;
-		},
-		gridColumnWidth() {
-			return this.windowWidth / this.gridCols;
-		},
-		gridRowHeight() {
-			return this.windowHeight / this.gridRows;
-		},
-		rowChange() {
-			return this.currentlyDragging.rowChange;
-		},
-		colChange() {
-			return this.currentlyDragging.colChange;
-		},
 		showHor() {
-			return this.currentlyDragging.isCenterHorizontal;
+			//return this.currentlyDragging.isCenterHorizontal;
 		},
 		showVer() {
-			return this.currentlyDragging.isCenterVertical;
-		},
-		dndEnabled() {
-			return this.$store.getters.dndEnabled;
-		},
-		currentlyDraggingName() {
-			return this.activeWidgets[this.currentlyDragging.index].name;
+			//return this.currentlyDragging.isCenterVertical;
 		}
 	},
 	methods: {
-		widgetClicked(e) {
-			if (this.dndEnabled) {
-				e.preventDefault();
-				e.stopPropagation();
-			}
-		},
-		setCurrentlyDragging(index = null, startX = null, startY = null) {
-			const newCurrentlyDragging = {
-				index,
-				startX,
-				startY,
-				currentX: startX,
-				currentY: startY,
-				initialRows: [0, 0],
-				initialCols: [0, 0],
-				rowChange: 0,
-				colChange: 0,
-				isCenterVertical: false,
-				isCenterHorizontal: false
-			}
-			if (index !== null) {
-				newCurrentlyDragging.initialRows = [...this.activeWidgets[index].row];
-				newCurrentlyDragging.initialCols = [...this.activeWidgets[index].column];
-			}
-			
-			this.currentlyDragging = {...newCurrentlyDragging};
-			this.checkCenter(newCurrentlyDragging.initialCols, newCurrentlyDragging.initialRows);
-		},
-		dragStart(widgetName, index, e) {
-			console.log(widgetName, index, e);
-			if (!this.dndEnabled) return;
-
-			const startX = e.clientX;
-			const startY = e.clientY;
-
-			let el = document.createElement('div');
-			e.dataTransfer.setDragImage(el, 0, 0);			
-
-			this.setCurrentlyDragging(index, startX, startY);
-		},
-		dragging(widgetName, index, e) {
-			if (!this.dndEnabled) return;
-			
-			if (e.x === 0 && e.y === 0) return;
-			this.currentlyDragging = {...this.currentlyDragging, currentX: e.clientX, currentY: e.clientY};
-			this.calcNewWidgetPosition();		
-		},
-		dragEnd(widgetName, index, e) {
-			if (!this.dndEnabled) return;
-
-			this.calcNewWidgetPosition();
-			this.setCurrentlyDragging();
-		},
-		setNewWidgetPosition(colChange, rowChange, name) {
-			const colWidth = this.currentlyDragging.initialCols[1] - this.currentlyDragging.initialCols[0];
-			const rowHeight = this.currentlyDragging.initialRows[1] - this.currentlyDragging.initialRows[0];
-
-			let newColStart, newColEnd, newRowStart, newRowEnd;
-
-			if (colChange === 0) {
-				newColStart = this.currentlyDragging.initialCols[0];
-				newColEnd = this.currentlyDragging.initialCols[1];
-			} else if (colChange < 0) {
-				newColStart = Math.max(this.currentlyDragging.initialCols[0] + colChange, 1);
-				newColEnd = newColStart + colWidth;
-			} else if (colChange > 0) {
-				newColEnd = Math.min(this.currentlyDragging.initialCols[1] + colChange, (this.gridCols + 1));
-				newColStart = newColEnd - colWidth;
-			}
-
-			if (rowChange === 0) {
-				newRowStart = this.currentlyDragging.initialRows[0];
-				newRowEnd = this.currentlyDragging.initialRows[1];
-			} else if (rowChange < 0) {
-				newRowStart = Math.max(this.currentlyDragging.initialRows[0] + rowChange, 1);
-				newRowEnd = newRowStart + rowHeight;
-			} else if (rowChange > 0) {
-				newRowEnd = Math.min(this.currentlyDragging.initialRows[1] + rowChange, this.gridRows + 1);
-				newRowStart = newRowEnd - rowHeight;
-			}			
-
-			const col = [newColStart, newColEnd];
-			const row = [newRowStart, newRowEnd];
-
-			this.checkCenter(col, row);
-
-			this.$store.commit('setGridPosition', {name, row, col});
-		},
-		calcNewWidgetPosition() {
-			const colChange = Math.round(this.rectXMoveDifference / this.gridColumnWidth);
-			const rowChange = Math.round(this.rectYMoveDifference / this.gridRowHeight);
-
-			this.currentlyDragging.rowChange = rowChange;
-			this.currentlyDragging.colChange = colChange;
-		},
+		...mapMutations(['toggleDnd', 'setGridSize']),
 		checkCenter(widgetCols, widgetRows) {
-			let cols = this.gridCols;
+			/*let cols = this.gridCols;
 			let rows = this.gridRows;
 
 			let fromLeft = widgetCols[0] - 1;
@@ -224,7 +91,7 @@ export default {
 
 			console.log(horizontal, vertical);
 			this.currentlyDragging.isCenterVertical = vertical;
-			this.currentlyDragging.isCenterHorizontal = horizontal;
+			this.currentlyDragging.isCenterHorizontal = horizontal;*/
 		},
 		getCSSGridVariables() {
 			const el = this.$refs.grid;
@@ -232,12 +99,7 @@ export default {
 			const gridRows = parseInt(getComputedStyle(el).getPropertyValue('--rows'));
 			this.gridCols = gridCols;
 			this.gridRows = gridRows;
-			this.$store.commit('setGridSize', {cols: gridCols, rows: gridRows});
-		},
-		rowOrColChanged(newValue, oldValue) {
-			if (this.currentlyDragging.index != null && newValue != null && newValue !== oldValue) {
-				this.setNewWidgetPosition(this.currentlyDragging.colChange, this.currentlyDragging.rowChange, this.currentlyDraggingName);
-			}
+			this.setGridSize('setGridSize', {cols: gridCols, rows: gridRows});
 		},
 		dragOver(e) {
 			// used to show the "move" icon when dnd is enabled and dragging
@@ -245,14 +107,6 @@ export default {
 				e.preventDefault();
 				e.dataTransfer.dropEffect = "move";
 			}
-		}
-	},
-	watch: {
-		rowChange(newValue, oldValue) {
-			this.rowOrColChanged(newValue, oldValue);
-		},
-		colChange(newValue, oldValue) {
-			this.rowOrColChanged(newValue, oldValue);
 		}
 	},
 	beforeMount() {

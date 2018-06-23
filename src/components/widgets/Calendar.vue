@@ -48,31 +48,23 @@ import nlLocale from 'date-fns/locale/nl';
 import addDays from 'date-fns/add_days';
 import isWithinRange from 'date-fns/is_within_range'
 
+import {mapState, mapGetters, mapActions} from 'vuex';
+
 export default {
 	computed: {
-		eventsByDay() {
-			return this.$store.getters.calenderEventsMaxAmount;
-		},
-		permission() {
-			return this.$store.getters.calendarPermission;
-		},
-		dataLoaded() {
-			return this.$store.getters.calendarDataLoaded;
-		},
-		timeFormat() {
-			return this.$store.getters.calendarTimeFormat;
-		},
-		calendarFormat() {
-			return this.$store.getters.calendarDateFormat;
-		}
+		...mapState({
+			permission: state => state.Calendar.calendarData.permission,
+			dataLoaded: state => state.Calendar.dataLoaded,
+			timeFormat: state => state.Calendar.timeFormat,
+			calendarFormat: state => state.Calendar.calendarFormat
+		}),
+		...mapGetters({eventsByDay: 'calenderEventsMaxAmount'})
 	},
 	methods: {
-		getPermission() {
-			this.$store.dispatch('getGoogleAuthTokenInteractive');
-		},
-		retryLoading() {
-			this.$store.dispatch('retryLoading');
-		},
+		...mapActions({
+			getPermission: 'getGoogleAuthTokenInteractive',
+			retryLoading: 'retryLoading'
+		}),
 		formatTime({start, end, allDay}) {
 			if (allDay) {
 				return 'Hele dag';

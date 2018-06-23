@@ -39,6 +39,7 @@ import StartWidgetSettings from './WidgetSettings.vue';
 import StartDragResize from './DragResize.vue';
 
 import {settingsOptions} from '@/store/defaultUserSettings';
+import {mapState} from 'vuex';
 
 export default {
 	components: {
@@ -75,20 +76,17 @@ export default {
 
 	computed: {
 
+		...mapState({
+			gridCols: state => state.Settings.gridCols,
+			gridRows: state => state.Settings.gridRows
+		}),
+
 		canResize() {
 			return settingsOptions.widgets.widgetOptions[this.widget.name].resize;
 		},
 
 		canDrag() {
 			return settingsOptions.widgets.widgetOptions[this.widget.name].move;
-		},
-
-		gridCols() {
-			return this.$store.getters.gridCols;
-		},
-
-		gridRows() {
-			return this.$store.getters.gridRows;
 		},
 
 		columns() {

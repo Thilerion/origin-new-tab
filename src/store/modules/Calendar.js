@@ -30,13 +30,6 @@ const calendarStore = {
 	},
 
 	getters: {
-		calendarToken(state) {
-			return state.token;
-		},
-
-		calendarEvents(state) {
-			return state.events;
-		},
 
 		calenderEventsMaxAmount(state) {
 			const MAX_AMOUNT = 3;
@@ -66,18 +59,6 @@ const calendarStore = {
 
 		calendarWatch(state) {
 			return state.calendarData;
-		},
-
-		calendarPermission(state) {
-			return state.calendarData.permission;
-		},
-
-		calendarDataLoaded(state) {
-			return state.dataLoaded;
-		},
-
-		calendarWidgetActive(state, getters) {
-			return !!(getters.widgets.find(w => w.name === 'calendar').active);
 		},
 
 		calendarDateFormat(state) {
@@ -118,10 +99,10 @@ const calendarStore = {
 			commit('setCalendarDataLoaded', true);
 		},
 
-		async getCalendarFromServer({ getters, commit, dispatch }) {
+		async getCalendarFromServer({ state, commit, dispatch }) {
 			try {
 				const url = calendarApi.url.get();
-				const token = getters.calendarToken;
+				const token = state.calendarToken;
 				let data = await calendarApi.request(url, token);
 				//TODO: do something with data
 				dispatch('parseAndSetCalendarData', data);				
@@ -141,14 +122,14 @@ const calendarStore = {
 			dispatch('initiateCalendarModule');		
 		},
 
-		async initiateCalendarModule({getters, dispatch}) {
-			if (!getters.calendarWidgetActive) return;
+		async initiateCalendarModule({state, dispatch}) {
+			if (!state.calendarWidgetActive) return;
 
 			//GET TOKEN SILENT
 			//if succes, SET TOKEN, and FETCH DATA
 			//if error, SET PERMISSION FALSE
 			await dispatch('getGoogleAuthTokenSilent');
-			if (getters.calendarToken) {
+			if (state.calendarToken) {
 				dispatch('getCalendarFromServer');
 			} else {
 				console.warn("Could not get token");
@@ -180,8 +161,8 @@ const calendarStore = {
 					console.warn(err.message);
 				});
 		},
-		async removeAndRevokeAuthToken({ getters, dispatch }) {
-			const token = getters.calendarToken;
+		async removeAndRevokeAuthToken({ state, dispatch }) {
+			const token = state.calendarToken;
 			await dispatch('removeCachedAuthToken', token);
 			await dispatch('revokeAccessToken', token);
 		},
@@ -191,7 +172,7 @@ const calendarStore = {
 				.then(() => dispatch('initiateCalendarModule'));
 		},
 
-		revokeAccessToken({ getters, commit }, token = getters.calendarToken) {
+		revokeAccessToken({ state, commit }, token = state.calendarToken) {
 			commit('setCalendarPermission', false);
 			commit('setCalendarDataLoaded', null);
 			return revokeOauthAccess(token)
@@ -205,7 +186,7 @@ const calendarStore = {
 				});
 		},
 
-		removeCachedAuthToken({ getters, commit }, token = getters.calendarToken) {
+		removeCachedAuthToken({ state, commit }, token = state.calendarToken) {
 			commit('setCalendarPermission', false);
 			return removeCachedAuthToken(token)
 				.then(() => {

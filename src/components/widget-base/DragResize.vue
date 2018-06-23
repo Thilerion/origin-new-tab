@@ -33,6 +33,7 @@
 
 <script>
 import throttle from 'lodash.throttle';
+import {mapState} from 'vuex';
 
 export default {
 	props: {
@@ -78,9 +79,9 @@ export default {
 		}
 	},
 	computed: {
-		dndEnabled() {
-			return this.$store.getters.dndEnabled;
-		},
+		...mapState({
+			dndEnabled: state => state.Settings.dndEnabled
+		}),
 		dragResizeClasses() {
 			if (!this.dndEnabled) return [];
 

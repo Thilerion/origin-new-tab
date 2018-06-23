@@ -1,7 +1,7 @@
 <template>
 	<div class="settings-page">
 		<div class="settings-content custom-scrollbar">
-			<button class="close-btn icon-btn" @click="closeSettings">
+			<button class="close-btn icon-btn" @click="setShowSettings(false)">
 				<StartSvgIcon icon="close" size="36px" />
 			</button>
 			<div class="settings-content-inner">
@@ -234,6 +234,7 @@
 
 <script>
 import {settingsOptions} from '../store/defaultUserSettings';
+import {mapGetters, mapMutations, mapActions} from 'vuex';
 
 export default {
 	data() {
@@ -264,10 +265,9 @@ export default {
 		}
 	},
 	computed: {
-		currentLocation() {
-			//TODO: field for new custom location
-			return this.$store.getters.locationToUse;
-		},
+		...mapGetters({
+			customLocation: 'locationToUse'
+		}),
 		disableFontSizeSlider() {
 			const isDefault = this.currentSettings.general.fontSize === null;
 			return isDefault;
@@ -301,17 +301,16 @@ export default {
 		}
 	},
 	methods: {
-		closeSettings() {
-			this.$store.commit('setShowSettings', false);
-		},
+		...mapMutations(['setShowSettings', 'toggleDnd']),
+		...mapActions(['saveUpdatedSettings']),
 		saveSettings() {
 			if (this.deepEquals(this.currentSettings, this.initialSettings)) {
 				console.log("No changes in settings.");
 			} else {
 				console.log("Settings have changed");
-				this.$store.dispatch('saveUpdatedSettings', this.currentSettings);
+				this.saveUpdatedSettings(this.currentSettings);
 			}			
-			this.closeSettings();
+			this.setShowSettings(false);
 		},
 		deepClone(obj) {
 			return JSON.parse(JSON.stringify(obj));
@@ -326,7 +325,7 @@ export default {
 			location.reload();
 		},
 		toggleDnd() {
-			this.$store.commit('toggleDnd');
+			this.toggleDnd();
 			this.saveSettings();
 		}
 	},

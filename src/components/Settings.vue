@@ -224,9 +224,9 @@
 						</transition>
 					</div>
 				</div>
-				
+				<button @click="resetAllStorage" class="reset-btn setting-btn">Reset alle instellingen</button>
 			</div>
-			<button @click="resetAllStorage" class="reset-btn setting-btn">Reset alle instellingen</button>
+			
 			<button @click="saveSettings" class="save-btn setting-btn">Opslaan</button>
 		</div>
 	</div>
@@ -377,7 +377,7 @@ label > input {
 
 .settings-content {
 	height: 100%;
-	/* position: relative; */
+	position: relative;
 	padding: 2rem 0 0 1rem;
 }
 
@@ -386,6 +386,7 @@ label > input {
 	max-width: 900px;
 	min-width: 700px;
 	margin: auto;
+	position: relative;
 }
 
 .close-btn {
@@ -537,10 +538,10 @@ label {
 	border-color: transparent;
 	margin: 0;
 	font-size: 10px;
-	padding: 5px;
+	padding: 0;
 	position: absolute;
-	bottom: 5px;
-	left: 5px;
+	bottom: -8em;
+	left: 0;
 	opacity: 0.2;
 }
 

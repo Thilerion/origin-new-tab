@@ -151,6 +151,9 @@ const settingsStore = {
 		setWidgetSizeOnGrid(state, { index, cols, rows }) {
 			state.settingsData.widgets[index].column = [...cols];
 			state.settingsData.widgets[index].row = [...rows];
+		},
+		changeWidgetFontSize(state, { index, amount }) {
+			state.settingsData.widgets[index].fontSize += amount;
 		}
 	},
 
@@ -209,6 +212,11 @@ const settingsStore = {
 
 		settingsStorageLoadFailed({ commit }) {
 			commit('setSettingsData', defaultSettings);	
+		},
+
+		changeWidgetFontSize({ getters, commit }, { name, value }) {
+			const index = getters.widgetIndexByName(name);
+			commit('changeWidgetFontSize', { index, amount: value });
 		},
 
 		moveWidget({ getters, commit }, { name, moveCols, moveRows }) {

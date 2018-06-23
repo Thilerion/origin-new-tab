@@ -15,15 +15,13 @@
 				:is="widgetComponent"
 				class="widget-inner"
 				:style="{'font-size': widgetFontSize}"
-			/>
-
-			<StartWidgetSettings
-				class="widget-settings"
-				v-if="dndEnabled"
-				@changeFontSize="changeFontSize"
-				:widget="widget"
-			/>
+			/>			
 		</StartDragResize>
+		<StartWidgetSettings
+			class="widget-settings"
+			v-if="dndEnabled"
+			:widget="widget"
+		/>
 	</div>
 </template>
 
@@ -113,13 +111,6 @@ export default {
 	},
 
 	methods: {
-		changeFontSize(amount) {
-			if (amount < 0) {
-				this.$store.commit('decreaseFontSize', this.widget.name);
-			} else if (amount > 0) {
-				this.$store.commit('increaseFontSize', this.widget.name);
-			}				
-		},
 		moveWidget(moveCols, moveRows) {
 			this.$store.dispatch('moveWidget', {name: this.widget.name, moveCols, moveRows});
 		},

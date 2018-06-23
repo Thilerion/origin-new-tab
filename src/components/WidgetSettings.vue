@@ -4,13 +4,13 @@
 			<button 
 				class="widget-setting-btn decrease icon-btn"
 				:disabled="minFontSizeReached"
-				@click="$emit('changeFontSize', -1)"
+				@click="decreaseFontSize"
 			>-</button>
 			<span class="setting-name">Text</span>
 			<button
 				class="widget-setting-btn increase icon-btn"
 				:disabled="maxFontSizeReached"
-				@click="$emit('changeFontSize', 1)"
+				@click="increaseFontSize"
 			>+</button>
 		</div>
 	</div>
@@ -18,6 +18,8 @@
 
 <script>
 import {settingsOptions} from '@/store/defaultUserSettings';
+const widgetOptions = settingsOptions.widgets.widgetOptions;
+const fontSizeOptions = settingsOptions.widgets.fontSize;
 
 export default {
 	props: {
@@ -28,7 +30,7 @@ export default {
 	},
 	data() {
 		return {
-			widgetOptions: settingsOptions.widgets.widgetOptions[this.widget.name]
+			widgetOptions: widgetOptions[this.widget.name]
 		}
 	},
 	computed: {
@@ -40,6 +42,14 @@ export default {
 		},
 		maxFontSizeReached() {
 			return this.widget.fontSize >= settingsOptions.widgets.fontSize.max;
+		}
+	},
+	methods: {
+		increaseFontSize() {
+			this.$store.dispatch('changeWidgetFontSize', {name: this.widget.name, value: 1});
+		},
+		decreaseFontSize() {
+			this.$store.dispatch('changeWidgetFontSize', {name: this.widget.name, value: -1});
 		}
 	}
 }

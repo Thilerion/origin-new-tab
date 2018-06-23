@@ -2,7 +2,6 @@ import widgetsApi from './api/index';
 const wallpaperApi = widgetsApi.wallpaper;
 
 import { deepClone, uniqueBy } from '@/utils/deepObject';
-import { defaultSettings } from './defaultUserSettings';
 
 const wallpaperStore = {
 

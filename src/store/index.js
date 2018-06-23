@@ -11,10 +11,9 @@ import Calendar from './Calendar'
 
 Vue.use(Vuex)
 
-import createPersistedState from './utils/persist';
+import createPersistedState from './libs/persist';
 
-import { defaultSettings, settingsOptions } from './defaultUserSettings';
-import { deepClone, deepMergeArray } from '../utils/deepObject';
+import { settingsOptions } from './defaultUserSettings';
 
 const store = new Vuex.Store({
 	strict: process.env.NODE_ENV !== 'development',

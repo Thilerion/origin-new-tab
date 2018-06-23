@@ -9,14 +9,14 @@ import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 import compareAsc from "date-fns/compare_asc";
 import parse from 'date-fns/parse';
 
-import { createCalendarList, reduceCalendarList } from './utils/calendarModel';
+import { createCalendarList, reduceCalendarList } from './libs/calendarModel';
 
 import {
 	getAuthTokenInteractive,
 	getAuthTokenSilent,
 	removeCachedAuthToken,
 	revokeOauthAccess
-} from './utils/identity';
+} from './libs/identity';
 
 const CALENDAR_FORMAT = "dddd D MMMM";
 const TIME_FORMAT = "HH:mm";

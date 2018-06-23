@@ -2,7 +2,5 @@
 @import './custom_reset.css';
 
 @import './typography.css';
-@import './range_slider.css';
-@import './select_dropdown.css';
-@import './input_text.css';
 @import './custom-scrollbar.css';
+@import './input_styles.css';

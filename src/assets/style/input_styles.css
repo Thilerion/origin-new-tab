@@ -1,3 +1,81 @@
+/* INPUT TEXT */
+
+input[type="text"].input-text {
+	border: 1px solid #dbdbdb;
+	border-radius: 4px;
+    color: #363636;
+	padding: 0.25rem 0.25rem;
+	font-size: 1em;
+	max-width: 100%;
+	display: inline-block;
+	line-height: 1.5;
+	padding: .375rem .625rem;
+	height: 2.25rem;
+	outline: 0;
+}
+
+.input-text-height {
+	height: 2.25rem;
+	line-height: 1.5;
+}
+
+input[type="text"].input-text:active, input[type="text"].input-text:focus {
+	border: 1px solid rgba(50, 115, 220, 0.5);
+    box-shadow: 0 0 0 0.125em rgba(50,115,220,.8);
+}
+
+/* INPUT SELECT DROPDOWN */
+
+.input-select select {
+	background-color: #fff;
+	border: 1px solid #dbdbdb;
+	border-radius: 4px;
+    color: #363636;
+    cursor: pointer;
+    display: block;
+    font-size: 1em;
+    max-width: 100%;
+	outline: 0;
+	-webkit-appearance: none;
+	appearance: none;
+	height: 2.25rem;
+	line-height: 1.5;
+	padding: .375rem .625rem;
+	padding-right: 2.5rem;
+	position: relative;
+	margin: 0;
+	display: inline-block;
+	width: 100%;
+}
+
+.input-select select:active, .input-select select:focus {
+	border: 1px solid rgba(50, 115, 220, 0.5);
+    box-shadow: 0 0 0 0.125em rgba(50,115,220,.8);		
+}
+
+.input-select {
+	position: relative;
+	display: inline-block;
+	max-width: 100%;
+}
+
+.input-select::after {
+	pointer-events: none;
+	position: absolute;
+	height: .5625rem;
+	width: .5625rem;
+	content: "";
+	border: 3px solid #333;
+	border-top: 0;
+	border-left: 0;
+	transform-origin: center;
+	transform: rotate(45deg) translateX(-50%);
+	right: .5rem;
+	top: calc(50% - .15rem);
+}
+
+/* INPUT RANGE SLIDER */
+
 input[type="range"].slider {
 	-webkit-appearance: none;
 	-moz-appearance: none;

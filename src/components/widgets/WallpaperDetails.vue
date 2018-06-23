@@ -99,13 +99,76 @@ export default {
 </script>
 
 <style scoped>
-.widget-wallpaper-details {
+.w-align-left {
+	padding-left: 0.5em;
 	margin: auto auto 0 0;
-	
+	text-align: left;
+}
+
+.w-align-center {
+	margin: auto auto 0 auto;
+	text-align: center;
+}
+
+.w-align-right {
+	padding-right: 0.5em;
+	margin: auto 0 0 auto;
+	text-align: right;
+}
+
+.w-align-left .row-bottom {
+	justify-content: flex-start;	
+}
+
+.w-align-center .row-bottom {
+	justify-content: center;	
+}
+
+.w-align-right .row-bottom {
+	justify-content: flex-end;
+}
+
+.w-align-left .buttons {
+	order: 1;
+	padding-right: 4px;
+	transform: translateX(35%);
+}
+
+.w-align-center .buttons {
+	order: 1;
+	padding-left: 4px;
+	transform: translateX(31px);
+}
+
+.w-align-right .buttons {
+	order: 2;
+	padding-left: 4px;
+	transform: translateX(-35%);
+}
+
+.w-align-left .attribution {
+	order: 2;
+	transform: translateX(-62px);
+}
+
+.w-align-center .attribution {
+	order: 2;
+	transform: translateX(-31px);
+}
+
+.w-align-right .attribution {
+	order: 1;
+	text-align: right;
+	transform: translateX(62px);
+}
+
+.widget-wallpaper-details {	
 	opacity: 0.5;
-	display: inline-flex;
+	display: flex;
+	max-width: 100%;
 	flex-direction: column-reverse;
 	transition: all .3s ease-out;
+	white-space: nowrap;
 }
 
 .widget-wallpaper-details:hover {
@@ -116,7 +179,7 @@ export default {
 	opacity: 0;
 	transition: all .3s ease-out;
 	user-select: text;
-		font-size: 0.75em;
+	font-size: 0.75em;
 }
 
 .widget-wallpaper-details:hover .location {
@@ -128,7 +191,9 @@ export default {
 	align-items: flex-end;
 	position: relative;
 	height: 24px;
-		font-size: 0.75em;
+	font-size: 0.75em;
+	flex-shrink: 0;
+	min-width: 0;
 }
 
 .buttons {
@@ -136,6 +201,8 @@ export default {
 	align-items:center;
 	justify-content: space-between;
 	width: calc(18px * 3 + 4px * 2);
+	flex-shrink: 0;
+	min-width: 0;
 }
 
 .widget-wallpaper-details:hover .buttons {
@@ -149,16 +216,17 @@ export default {
 
 .attribution {
 	font-size: 1em;
-	margin-left: 4px;
 	line-height: 18px;
-	transform: translateX(-62px);
 	transition: all .3s ease-out;
+	min-width: 0;
+	flex-shrink: 0;
 }
 
 .buttons {
 	opacity: 0;
 	transition: all .3s ease-out;
-	transform: translateX(35%);
+	min-width: 0;
+	flex-shrink: 0;
 }
 
 .load-btn, .dl-btn, .hide-btn {

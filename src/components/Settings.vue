@@ -195,6 +195,8 @@
 									:min="settingsOptions.topSites.maxTopSites.min"
 									:max="settingsOptions.topSites.maxTopSites.max"
 									v-model="currentSettings.topSites.maxTopSites"
+									@mousedown="showTopPagePreview = true"
+									@mouseup="showTopPagePreview = false"
 								><label>{{currentSettings.topSites.maxTopSites}}</label>
 							</div>
 						</div>
@@ -208,9 +210,18 @@
 									:min="settingsOptions.topSites.columns.min"
 									:max="settingsOptions.topSites.columns.max"
 									v-model="currentSettings.topSites.columns"
+									@mousedown="showTopPagePreview = true"
+									@mouseup="showTopPagePreview = false"
 								><label>{{currentSettings.topSites.columns}}</label>
 							</div>
 						</div>
+						<transition name="fade-preview">
+						<div class="toppages-preview" v-if="showTopPagePreview">
+							<div class="toppages-preview-row" v-for="(row, index) in previewArray" :key="index">
+								<div class="toppages-preview-item" v-for="(item, index2) in row" :key="index2"></div>
+							</div>
+						</div>
+						</transition>
 					</div>
 				</div>
 
@@ -246,7 +257,9 @@ export default {
 				topSites: {},
 				calendar: {}
 			},
-			settingsOptions: {...settingsOptions}
+			settingsOptions: {...settingsOptions},
+
+			showTopPagePreview: false
 		}
 	},
 	computed: {
@@ -265,6 +278,25 @@ export default {
 			return cur.filter(w => {
 				return widgetOptions[w.name].disable;
 			});
+		},
+		previewRows() {
+			return Math.ceil(this.currentSettings.topSites.maxTopSites / this.currentSettings.topSites.columns);
+		},
+		previewCols() {
+			return this.currentSettings.topSites.columns * 1;
+		},
+		previewArray() {
+			let arr = [];
+			for (let i = 1; i <= this.currentSettings.topSites.maxTopSites; i++) {
+				let curRow = Math.ceil(i / this.previewCols) -1;
+				console.log(i, this.previewCols, curRow);
+				if (arr[curRow]) {
+					arr[curRow].push([]);
+				} else {
+					arr.push([[]]);
+				}
+			}
+			return arr;
 		}
 	},
 	methods: {
@@ -391,6 +423,7 @@ h2 {
 
 .setting-group-content {
 	flex: 1 1 auto;
+	position: relative;
 }
 
 .input-select, .input-text, .input-range-wrap, .checkbox-group-optional-text {
@@ -464,6 +497,41 @@ label.range-disabled {
 label {
 	display: inline-flex;
 	align-items: center;
+}
+
+.toppages-preview {
+	margin-bottom: -2px;
+	display: inline-block;
+	position: absolute;
+	right: -2em;
+	top: 0;
+}
+
+.toppages-preview-row {
+	display: flex;
+	opacity: 0.5;
+	margin-left: -2px;
+	margin-bottom: 2px;
+	justify-content: center;
+}
+
+.toppages-preview-item {
+	background: white;
+	width: 6px;
+	height: 6px;
+	margin-left: 2px;
+}
+
+.fade-preview-leave-active {
+	transition: opacity .5s ease 1s;
+}
+
+.fade-preview-enter-active {
+	transition: opacity .2s ease;
+}
+
+.fade-preview-enter, .fade-preview-leave-to {
+	opacity: 0;
 }
 
 </style>

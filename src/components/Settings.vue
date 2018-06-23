@@ -85,7 +85,7 @@
 								<input type="checkbox" class="input-checkbox" v-model="widget.active"><label class="text-capitalize">{{widget.name}}</label>
 							</div>
 						</div>
-						<button @click="toggleDnd" class="setting-btn">Weergave widgets aanpassen</button>
+						<button @click="toggleDnd" class="dnd-btn setting-btn">Weergave widgets aanpassen</button>
 					</div>
 				</div>
 
@@ -202,7 +202,7 @@
 				</div>
 
 			</div>
-			<button @click="saveSettings" class="setting-btn">Opslaan</button>
+			<button @click="saveSettings" class="save-btn setting-btn">Opslaan</button>
 		</div>
 	</div>
 </template>
@@ -418,21 +418,26 @@ h2 {
 }
 
 .setting-btn {
-	display: block;
-	margin: auto;
-	min-width: 8rem;
-	min-height: 3rem;
-	margin-top: 2rem;
-	margin-bottom: 3rem;
+	display: block;	
 	border-radius: 4px;
 	border: 2px solid white;;
 	background: white;
 	transition: all .2s ease;
+	margin-bottom: 1rem;
+	padding: 0.5rem;
 }
 
 .setting-btn:hover {
 	background: black;
 	color: white;
+}
+
+.save-btn {
+	margin: auto;
+	margin-top: 2rem;
+	margin-bottom: 3rem;
+	min-width: 8rem;
+	min-height: 3rem;
 }
 
 .slider.range-disabled {

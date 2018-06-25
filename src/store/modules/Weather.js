@@ -34,10 +34,10 @@ const weatherStore = {
 		weatherDataLoaded(state) {
 			return state.dataLoaded;
 		},
-		useCustomLocation(state, getters, rootState, rootGetters) {
+		useCustomLocation({}, {}, {}, rootGetters) {
 			return rootGetters.useCustomLocation && !!rootGetters.customLocationToUse;
 		},
-		customLocationToUse(state, getters, rootState, rootGetters) {
+		customLocationToUse({}, {}, {}, rootGetters) {
 			return rootGetters.customLocationToUse;
 		}
 	},
@@ -68,7 +68,7 @@ const weatherStore = {
 		weatherStorageLoadFailed({ dispatch }) {
 			dispatch('initiateGetWeather');
 		},
-		weatherStorageLoadExpired({ commit, dispatch }, localData) {
+		weatherStorageLoadExpired({ dispatch }, localData) {
 			dispatch('initiateGetWeather', localData);
 		},
 		weatherSetFromStorage({ commit, dispatch }, localData) {

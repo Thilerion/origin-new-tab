@@ -127,11 +127,13 @@ export default {
 	position: relative;
 	flex: 0 0 1.2em;
 	margin-bottom: auto;
+	white-space: nowrap;
 }
 
 .username-input {
-	padding: 1rem;
+	padding: 0 1rem;
 	font-size: 0.75em;
+	line-height: 1.5;
 	width: 10em;
 	vertical-align: middle;
 	background: none;

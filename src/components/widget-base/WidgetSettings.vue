@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import {settingsOptions, defaultSettings} from '@/store/defaultUserSettings';
+import {settingsOptions, defaultSettings} from '@/store/libs/defaultUserSettings';
 const WIDGET_OPTIONS = settingsOptions.widgets.widgetOptions;
 const WIDGET_DEFAULTS = defaultSettings.widgets;
 

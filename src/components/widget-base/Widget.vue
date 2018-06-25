@@ -40,7 +40,7 @@ import StartCalendar from '../widgets/Calendar.vue';
 import StartWidgetSettings from './WidgetSettings.vue';
 import StartDragResize from './DragResize.vue';
 
-import {settingsOptions} from '@/store/defaultUserSettings';
+import {settingsOptions} from '@/store/libs/defaultUserSettings';
 import {mapState} from 'vuex';
 
 export default {

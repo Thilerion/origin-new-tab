@@ -10,7 +10,7 @@ import calendar from './modules/Calendar'
 
 Vue.use(Vuex)
 
-import { settingsOptions } from './defaultUserSettings';
+import { settingsOptions } from '@/store/libs/defaultUserSettings';
 import createPersistedState from './libs/persist';
 
 import mutations from './mutations';

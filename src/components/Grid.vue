@@ -22,7 +22,7 @@
 import StartWidget from './widget-base/Widget.vue';
 
 import {deepClone} from '@/utils/deepObject';
-import {settingsOptions} from '@/store/defaultUserSettings';
+import {settingsOptions} from '@/store/libs/defaultUserSettings';
 import {mapState, mapGetters, mapMutations} from 'vuex';
 
 export default {

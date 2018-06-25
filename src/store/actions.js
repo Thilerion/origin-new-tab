@@ -1,5 +1,5 @@
 import lodashMerge from 'lodash.merge';
-import { defaultSettings } from './defaultUserSettings';
+import { defaultSettings } from '@/store/libs/defaultUserSettings';
 
 export default {
 	saveUpdatedSettings({ getters, commit, dispatch }, settings) {

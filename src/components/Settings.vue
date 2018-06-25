@@ -233,7 +233,7 @@
 </template>
 
 <script>
-import {settingsOptions} from '../store/defaultUserSettings';
+import {settingsOptions} from '@/store/libs/defaultUserSettings';
 import {mapMutations, mapActions} from 'vuex';
 
 export default {

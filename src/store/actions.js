@@ -26,7 +26,7 @@ export default {
 			console.log('quote cat changed');
 			dispatch('quote/quoteSettingsChanged', null, {root: true});
 		}
-
+		/*
 		const useCustomLocChanged = settings.weather.useCustomLocation !== currentSettings.weather.useCustomLocation;
 		const customLocChanged = settings.weather.customLocationToUse !== currentSettings.weather.customLocationToUse;
 		if (useCustomLocChanged) {
@@ -44,7 +44,7 @@ export default {
 			//only update new custom location
 			console.warn('use new custom location');
 			dispatch('weather/weatherSettingsChanged', { newLocation: settings.weather.customLocationToUse });
-		}
+		}*/
 
 		if (settings.wallpaper.wallpaperCollection !== currentSettings.wallpaper.wallpaperCollection) {
 			console.log('wallpaper collection changed');

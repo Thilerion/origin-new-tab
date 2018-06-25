@@ -85,7 +85,7 @@ const quoteStore = {
 					author: apiData.data.author
 				});
 			} catch (e) {
-				console.warn("Could not load quote api data...");
+				console.warn("Could not load QUOTE api data...");
 				console.warn(e);
 			}			
 		}

@@ -41,7 +41,6 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 	}
 
 	function initializeModulePersistence(store, moduleName, namespaced = true) {
-		debugger;
 		//Initializing ${moduleName} watcher
 		createWatcher(store, moduleName, namespaced);
 

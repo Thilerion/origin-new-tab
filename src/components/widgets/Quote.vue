@@ -1,5 +1,5 @@
 <template>
-	<div v-show="dataLoaded" class="widget-quote widget-no-select f-shadow-heavy" :key="quote">
+	<div v-show="finishedLoading" class="widget-quote widget-no-select f-shadow-heavy" :key="quote">
 		<p class="quote"><span class="q-mark q-mark-top f-shadow-medium">‟ </span>{{quote | removeDot}}<span class="q-mark q-mark-bot f-shadow-medium">&nbsp;„</span></p>
 		<p class="author f-style-italic">~ {{author}}</p>	
 		<button class="icon-btn reload-btn" @click="reloadQuote">
@@ -14,7 +14,7 @@ import {mapState, mapGetters} from 'vuex';
 
 export default {
 	computed: {
-		...mapState('quote', ['dataLoaded']),
+		...mapState('quote', ['finishedLoading']),
 		...mapGetters('quote', ['quote', 'author'])
 	},
 	methods: {

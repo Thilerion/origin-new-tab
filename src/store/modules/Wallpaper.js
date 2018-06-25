@@ -33,6 +33,10 @@ const wallpaperStore = {
 			return { wallpapers, currentWallpaperId, expires, idLastSet, arrayUpdated, arrayUpdateChangeAmount };
 		},
 
+		hasExpired(state) {
+			return state.expires - new Date().getTime() < 0;
+		},
+
 		//TODO: what if a new wallpaper is being loaded?
 		showExternalWallpaper(state) {
 			//if DataLoaded (storage or server) && image load success

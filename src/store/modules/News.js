@@ -14,7 +14,10 @@ const newsStore = {
 		toWatch(state) {
 			const { expires, articles } = state;
 			return { expires, articles };
-		}
+		},
+		hasExpired(state) {
+			return state.expires - new Date().getTime() < 0;
+		}		
 	},
 
 	mutations: {

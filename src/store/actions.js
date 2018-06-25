@@ -48,6 +48,7 @@ export default {
 
 		if (settings.wallpaper.wallpaperCollection !== currentSettings.wallpaper.wallpaperCollection) {
 			console.log('wallpaper collection changed');
+			commit('setWallpaperCollection', settings.wallpaper.wallpaperCollection);
 			dispatch('wallpaper/wallpaperSettingsChanged');
 		}
 	},

@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-greeting widget-no-select f-shadow-heavy f-shadow-wide cursor-default" v-show="!!timeOfDay">
+	<div class="widget-greeting widget-no-select f-shadow-heavy f-shadow-wide cursor-default" v-show="timeOfDay != null">
 		<div class="time">{{time | toTimeString(timeFormat)}}</div>
 		
 		<div

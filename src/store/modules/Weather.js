@@ -1,6 +1,4 @@
-import widgetsApi from '../api';
-const weatherApi = widgetsApi.weather;
-const locationApi = widgetsApi.location;
+import {weatherRequest, locationRequest} from '../api/';
 
 const weatherStore = {
 	namespaced: true,
@@ -160,19 +158,17 @@ const weatherStore = {
 		},
 		async getWeatherFromServer({}, {latitude, longitude}) {
 			try {
-				let url = weatherApi.url.get(latitude, longitude);
-				let data = await weatherApi.request(url);
+				let data = await weatherRequest({ latitude, longitude });
 				return data;
 			} catch (e) {
-				console.error(e);
+				console.warn(e);
 				return Promise.reject("Could not get weather from server");
 			}
 		},
 
 		async getCustomLocationFromServer({commit}, inputLocation) {
 			try {
-				let url = locationApi.url.get();
-				let data = await locationApi.request(url, { address: inputLocation });
+				let data = await locationRequest({ address: inputLocation });
 				const { coordinates, address } = data.data;
 				commit('setCoordinates', coordinates);
 				commit('setAddress', address);

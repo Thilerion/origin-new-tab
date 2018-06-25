@@ -1,35 +1,43 @@
-import widgetsApi from '../api';
-const quoteApi = widgetsApi.quote;
+import {quoteRequest as apiRequest} from '../api/';
 
 const quoteStore = {
 	namespaced: true,
 
 	state: {
-		randomQuote: {},
+		quote: "",
+		author: "",
 		expires: null,
 		finishedLoading: false,		//true, false
 		dataStatus: null			//fresh, stale, null
 	},
 
 	getters: {
+		// COMMMON GETTERS
 		toWatch(state) {
-			const { randomQuote, expires } = state;
-			return { randomQuote, expires };
+			const { quote, author, expires } = state;
+			return { quote, author, expires };
 		},
 		hasExpired(state) {
 			return state.expires - new Date().getTime() < 0;
 		},
+
+		// UNIQUE GETTERS
 		quote(state) {
-			return state.randomQuote.quote;
+			return state.quote;
 		},
 		author(state) {
-			return state.randomQuote.author;
+			return state.author;
+		},
+		category({ }, { }, { }, rootGetters) {
+			return rootGetters.quoteCategory;
 		}
 	},
 
 	mutations: {
-		setQuote: (state, { quote, author, expires }) => {
-			state.randomQuote = { quote, author };
+		// COMMON MUTATIONS
+		setData(state, { quote, author, expires }) {
+			state.quote = quote;
+			state.author = author;
 			state.expires = expires;
 		},
 		setFinishedLoading(state, bool) {
@@ -41,60 +49,12 @@ const quoteStore = {
 	},
 
 	actions: {
-		/*async getQuoteFromServer({ rootGetters, commit, dispatch }, commitOnFail) {
-			try {
-				commit('setQuoteLoaded', false);
-				let url = quoteApi.url.get(rootGetters.quoteCategory);
-				let data = await quoteApi.request(url);
-				dispatch('quoteSetFromApi', data);
-			}
-			catch (e) {
-				if (commitOnFail) {
-					console.warn("Error in getting quote from server. However, old date will be committed now. ", e);
-					dispatch('quoteSetFromStorage', commitOnFail);
-				} else {
-					console.warn("Error in getting quote from server.", e);
-				}
-			}
-		},
-		storageLoadFail({ dispatch }) {
-			dispatch('getQuoteFromServer');
-		},
-		storageLoadExpired({ dispatch }, data) {
-			//should commit data if getting from server fails
-			dispatch('getQuoteFromServer', data);
-		},
-		storageLoadSuccess({ commit, dispatch }, localData) {
-			const { randomQuote, expires } = localData;
-			if (expires - new Date().getTime() < 0) return dispatch('storageLoadExpired', localData);
-			commit('setQuote', { randomQuote, expires });
-		},
-		quoteSetFromApi({ commit }, apiData) {
-			const { data: randomQuote, expires } = apiData;
-			commit('setQuote', { randomQuote, expires });
-		},*/
-		quoteSettingsChanged({ getters, dispatch }) {
+		// COMMON ACTIONS
+		settingsChanged({ getters, dispatch }) {
 			const currentQuoteData = getters.quoteWatch;
 			dispatch('getQuoteFromServer', currentQuoteData);
 		},
-
-
-		/*
-		Initializing sequence:
-			StorageLoadSuccess => set local data to store
-			StorageLoadFail => fetchApiData
-
-			SetLocalDataToStore, fresh => finishedLoading = true, dataStatus = "fresh"
-			SetLocalDataToStore, stale => dataStatus = "stale" => fetchApiData
-
-			FetchApiData success => set api data to store => finishedLoading = true, dataStatus = "fresh"
-			FetchApiData fail => finishedLoading = true
-
-			SetApiDataToStore => finishedLoading = true, dataStatus = "fresh"
-		*/
-
 		async storageLoadFail({ commit, dispatch }) {
-			debugger;
 			await dispatch('fetchApiData');
 			commit('setFinishedLoading', true);
 		},
@@ -109,15 +69,16 @@ const quoteStore = {
 			commit('setFinishedLoading', true);
 		},
 		setLocalData({commit}, localData) {
-			commit('setQuote', localData);
+			commit('setData', localData);
 		},
 		setApiData({commit}, apiData) {
-			commit('setQuote', apiData);
+			commit('setData', apiData);
 			commit('setDataStatus', "fresh");
 		},
-		async fetchApiData({dispatch}) {
+		async fetchApiData({getters, dispatch}) {
 			try {
-				let apiData = await dispatch('apiRequest');
+				const category = getters.category;
+				let apiData = await apiRequest({category});
 				dispatch('setApiData', {
 					expires: apiData.expires,
 					quote: apiData.data.quote,
@@ -127,10 +88,6 @@ const quoteStore = {
 				console.warn("Could not load quote api data...");
 				console.warn(e);
 			}			
-		},
-		async apiRequest({rootGetters}) {
-			let url = quoteApi.url.get(rootGetters.quoteCategory);
-			return quoteApi.request(url);
 		}
 	}
 

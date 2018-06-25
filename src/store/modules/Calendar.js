@@ -1,5 +1,4 @@
-import widgetsApi from '../api';
-const calendarApi = widgetsApi.calendar;
+import {calendarRequest as apiRequest} from '../api/';
 import { createCalendarList, reduceCalendarList } from '../libs/calendarModel';
 
 import {
@@ -104,9 +103,7 @@ const calendarStore = {
 
 		async getCalendarFromServer({ state, commit, dispatch }) {
 			try {
-				const url = calendarApi.url.get();
-				const token = state.calendarToken;
-				let data = await calendarApi.request(url, token);
+				let data = await apiRequest({ token });
 				//TODO: do something with data
 				dispatch('parseAndSetCalendarData', data);				
 			}

@@ -1,5 +1,4 @@
-import widgetsApi from '../api';
-const wallpaperApi = widgetsApi.wallpaper;
+import {wallpaperRequest as apiRequest} from '../api/';
 
 import { deepClone, uniqueBy } from '@/utils/deepObject';
 
@@ -113,8 +112,7 @@ const wallpaperStore = {
 
 	actions: {
 		getWallpapersFromServer({ rootGetters, commit, dispatch }, commitOnFail) {
-			let url = wallpaperApi.url.get(rootGetters.wallpaperCollection);
-			wallpaperApi.request(url)
+			apiRequest({collection: rootGetters.wallpaperCollection})
 				.then(data => {
 					console.log("Got data from wallpaper API!");
 					dispatch('wallpaperSetFromApi', data);
@@ -159,8 +157,7 @@ const wallpaperStore = {
 			//setting array updated in advance, to prevent numerous retries when it fails
 			commit('setArrayUpdated');
 
-			let url = wallpaperApi.url.get(rootGetters.wallpaperCollection);
-			wallpaperApi.request(url)
+			apiRequest({collection: rootGetters.wallpaperCollection})
 				.then(data => {
 					console.log("Additional wallpapers have been loaded from API! Amount:", data.data.length);
 					dispatch('wallpaperSetAdditionalFromApi', data);

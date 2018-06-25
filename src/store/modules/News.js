@@ -1,5 +1,4 @@
-import widgetsApi from '../api';
-const newsApi = widgetsApi.news;
+import {newsRequest as apiRequest} from '../api/';
 
 const newsStore = {
 	namespaced: true,
@@ -31,8 +30,7 @@ const newsStore = {
 	actions: {
 		async getNewsFromServer({ dispatch }, commitOnFail) {
 			try {
-				let url = newsApi.url.get();				
-				let data = await newsApi.request(url);				
+				let data = await apiRequest({});				
 				dispatch('newsSetFromApi', data);
 			}
 			catch (e) {

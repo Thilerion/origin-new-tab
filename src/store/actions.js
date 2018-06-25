@@ -24,7 +24,7 @@ export default {
 		*/
 		if (settings.quote.category !== currentSettings.quote.category) {
 			console.log('quote cat changed');
-			dispatch('quote/quoteSettingsChanged', null, {root: true});
+			dispatch('quote/settingsChanged', null, {root: true});
 		}
 		/*
 		const useCustomLocChanged = settings.weather.useCustomLocation !== currentSettings.weather.useCustomLocation;

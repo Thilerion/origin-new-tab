@@ -1,10 +1,10 @@
 <template>
-	<div class="widget-weather f-shadow-medium widget-no-select" @click="extend" v-if="weatherDataLoaded">
+	<div class="widget-weather f-shadow-medium widget-no-select" @click="extend" v-if="dataLoaded">
 		<StartClimacon v-if="icon" :icon="icon" class="icon f-shadow-light"></StartClimacon>
 		<p class="temperature">{{currently.temperature | roundNumber}}&deg;</p>
 		<p class="location">{{addressCity}}</p>
 		<div class="row-extended">
-			<StartWeatherExtended class="extended" v-show="showExtended && weatherDataLoaded" :forecast="forecast.daily" />
+			<StartWeatherExtended class="extended" v-show="showExtended && dataLoaded" :forecast="forecast.daily" />
 		</div>		
 	</div>
 </template>
@@ -12,6 +12,8 @@
 <script>
 import StartClimacon from '../shared/Climacon.vue';
 import StartWeatherExtended from './WeatherExtended.vue';
+
+import {mapState, mapGetters} from 'vuex';
 
 export default {
 	components: {
@@ -24,20 +26,13 @@ export default {
 		}
 	},
 	computed: {
-		forecast() {
-			return this.$store.getters['weather/forecast'];
-		},
+		...mapState('weather', ['forecast', 'dataLoaded']),
+		...mapGetters('weather', ['addressCity']),
 		currently() {
 			return this.forecast.currently;
 		},
-		addressCity() {
-			return this.$store.getters['weather/addressCity'];
-		},
 		icon() {
 			if (this.currently) return this.currently.icon;
-		},
-		weatherDataLoaded() {
-			return this.$store.getters['weather/weatherDataLoaded'];
 		}
 	},
 	methods: {

@@ -6,57 +6,33 @@ const weatherStore = {
 	namespaced: true,
 
 	state: {
-		// weatherData: {
-		// 	address: {
-		// 		city: null,
-		// 		bestAddress: null
-		// 	},
-		// 	forecast: {}
-		// },
 
-		// expires: null,
-
-		// locationData: {
-		// 	useCustomLocation: null,
-		// 	coordinates: {
-		// 		latitude: null,
-		// 		longitude: null
-		// 	},
-		// 	address: {
-		// 		city: null,
-		// 		street: null
-		// 	}
-		// },
-
-		// weatherDataLoaded: false
-
-		weatherData: {
-			expires: null,
-			forecast: {},
-			address: {
-				city: null,
-				street: null
-			},
-			coordinates: {
-				latitude: null,
-				longitude: null
-			},
-			weatherDataLoaded: false
-		}
+		expires: null,
+		forecast: {},
+		address: {
+			city: null,
+			street: null
+		},
+		coordinates: {
+			latitude: null,
+			longitude: null
+		},
+		dataLoaded: false
 	},
 
 	getters: {
 		weatherWatch(state) {
-			return state.weatherData;
+			const { expires, forecast, address, coordinates, dataLoaded } = state;
+			return { expires, forecast, address, coordinates, dataLoaded };
 		},
 		forecast(state) {
-			return state.weatherData.forecast;
+			return state.forecast;
 		},
 		addressCity(state) {
-			return state.weatherData.address.city;
+			return state.address.city;
 		},
 		weatherDataLoaded(state) {
-			return state.weatherData.weatherDataLoaded;
+			return state.dataLoaded;
 		},
 		useCustomLocation(state, getters, rootState, rootGetters) {
 			return rootGetters.useCustomLocation && !!rootGetters.customLocationToUse;
@@ -68,22 +44,22 @@ const weatherStore = {
 
 	mutations: {
 		setWeatherDataExpires(state, expires) {
-			state.weatherData.expires = expires;
+			state.expires = expires;
 		},
 		setForecast(state, forecast) {
-			state.weatherData.forecast = { ...forecast };
+			state.forecast = { ...forecast };
 		},
 		setAddress(state, {city, street = null}) {
-			state.weatherData.address = { city, street };
+			state.address = { city, street };
 		},
 		setCoordinates(state, coords) {
-			state.weatherData.coordinates = { ...coords };
+			state.coordinates = { ...coords };
 		},
 		setWeatherDataLoaded(state, bool) {
 			if (bool == null) {
-				state.weatherData.weatherDataLoaded = !state.weatherData.weatherDataLoaded;
+				state.dataLoaded = !state.dataLoaded;
 			} else {
-				state.weatherData.weatherDataLoaded = bool;
+				state.dataLoaded = bool;
 			}
 		}
 	},
@@ -96,7 +72,7 @@ const weatherStore = {
 			dispatch('initiateGetWeather', localData);
 		},
 		weatherSetFromStorage({ commit, dispatch }, localData) {
-			if (localData.expires == null || !localData.weatherDataLoaded) {
+			if (localData.expires == null || !localData.dataLoaded) {
 				dispatch('weatherStorageLoadFailed');
 				return;
 			}
@@ -147,8 +123,8 @@ const weatherStore = {
 		},
 
 		async getCoordinates({ state, getters, commit }) {
-			if (getters.useCustomLocation === true && state.weatherData.coordinates.latitude && state.weatherData.coordinates.longitude) {
-				return state.weatherData.coordinates;
+			if (getters.useCustomLocation === true && state.coordinates.latitude && state.coordinates.longitude) {
+				return state.coordinates;
 			} else {
 				try {
 					let coords = await getPosition();
@@ -187,7 +163,7 @@ const weatherStore = {
 		},
 
 		async weatherSettingsChanged({ state, getters, dispatch }, { enable, disable, newLocation }) {
-			const currentWeatherData = state.weatherData.weatherDataLoaded ? getters.weatherWatch : null;
+			const currentWeatherData = state.dataLoaded ? getters.weatherWatch : null;
 			if (disable) {
 				dispatch('initiateGetWeather', currentWeatherData);
 			} else if (newLocation) {

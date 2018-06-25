@@ -8,8 +8,10 @@ const state = {
 	settingsData: {
 		general: {
 			language: null,
-			username: '',
 			fontSize: null,
+		},
+		greeting: {
+			username: '',
 			showTextGreeting: null
 		},
 		widgets: [],
@@ -39,9 +41,9 @@ const getters = {
 	settingsWatch: state => state.settingsData,
 
 	language: state => state.settingsData.general.language,
-	username: state => state.settingsData.general.username,
 	fontSize: state => state.settingsData.general.fontSize,
-	showTextGreeting: state => state.settingsData.general.showTextGreeting,
+	username: state => state.settingsData.greeting.username,
+	showTextGreeting: state => state.settingsData.greeting.showTextGreeting,
 	widgets: state => state.settingsData.widgets,
 	widgetByIndex: state => index => state.settingsData.widgets[index],
 	widgetByName: state => name => state.settingsData.widgets.find(w => w.name === name),
@@ -61,7 +63,7 @@ const getters = {
 		return !!state.showSettings;
 	},
 	isEditingUsername(state) {
-		return state.editingUsername || !state.settingsData.general.username;
+		return state.editingUsername || !state.settingsData.greeting.username;
 	},
 	gridCols: state => state.gridCols,
 	gridRows: state => state.gridRows

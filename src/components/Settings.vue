@@ -16,7 +16,7 @@
 							<input
 								type="text"
 								class="input-text"
-								v-model="currentSettings.general.username">
+								v-model="currentSettings.greeting.username">
 						</div>
 
 						<div class="setting-item">
@@ -68,7 +68,7 @@
 							<h3 class="setting-item-name">Laat welkomsttekst zien</h3>
 							<input
 								type="checkbox"
-								v-model="currentSettings.general.showTextGreeting"
+								v-model="currentSettings.greeting.showTextGreeting"
 								class="input-checkbox"
 							>
 						</div>

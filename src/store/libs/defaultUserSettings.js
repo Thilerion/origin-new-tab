@@ -1,10 +1,12 @@
 const defaultSettings = {
 	general: {
-		username: "",
 		// [nl, en]
 		language: "nl",
 		// range: 10-20, or null (which resets to 100% in base css file)
 		fontSize: null,
+	},
+	greeting: {
+		username: "",
 		showTextGreeting: true
 	},
 	widgets: [

@@ -21,7 +21,7 @@ const weatherStore = {
 	},
 
 	getters: {
-		weatherWatch(state) {
+		toWatch(state) {
 			const { expires, forecast, address, coordinates, dataLoaded } = state;
 			return { expires, forecast, address, coordinates, dataLoaded };
 		},
@@ -65,27 +65,29 @@ const weatherStore = {
 	},
 
 	actions: {
-		weatherStorageLoadFailed({ dispatch }) {
+		storageLoadFail({ dispatch }) {
 			dispatch('initiateGetWeather');
 		},
-		weatherStorageLoadExpired({ getters, commit, dispatch }, localData) {
+		storageLoadExpired({ getters, commit, dispatch }, localData) {
 			if (getters.useCustomLocation) {
 				commit('setAddress', localData.address);
 				commit('setCoordinates', localData.coordinates);
 			}
 			dispatch('initiateGetWeather', localData);
 		},
-		weatherSetFromStorage({ commit, dispatch }, localData) {
-			if (localData.expires == null || !localData.dataLoaded) {
-				dispatch('weatherStorageLoadFailed');
-				return;
-			}
+		storageLoadSuccess({ commit, dispatch }, localData) {
 			const {
 				expires,
 				forecast,
 				address,
 				coordinates
 			} = localData;
+
+			if (localData.expires == null || !localData.dataLoaded) {
+				dispatch('weatherStorageLoadFailed');
+				return;
+			}
+			if (expires - new Date().getTime() < 0) return dispatch('storageLoadExpired', localData);
 
 			commit('setWeatherDataExpires', expires);
 			commit('setForecast', forecast);

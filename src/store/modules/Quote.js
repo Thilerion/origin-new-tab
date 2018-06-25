@@ -11,7 +11,7 @@ const quoteStore = {
 	},
 
 	getters: {
-		quoteWatch(state) {
+		toWatch(state) {
 			const { randomQuote, expires } = state;
 			return { randomQuote, expires };
 		},
@@ -52,15 +52,16 @@ const quoteStore = {
 				}
 			}
 		},
-		quoteStorageLoadFailed({ dispatch }) {
+		storageLoadFail({ dispatch }) {
 			dispatch('getQuoteFromServer');
 		},
-		quoteStorageLoadExpired({ dispatch }, data) {
+		storageLoadExpired({ dispatch }, data) {
 			//should commit data if getting from server fails
 			dispatch('getQuoteFromServer', data);
 		},
-		quoteSetFromStorage({ commit }, localData) {
+		storageLoadSuccess({ commit, dispatch }, localData) {
 			const { randomQuote, expires } = localData;
+			if (expires - new Date().getTime() < 0) return dispatch('storageLoadExpired', localData);
 			commit('setQuote', { randomQuote, expires });
 		},
 		quoteSetFromApi({ commit }, apiData) {

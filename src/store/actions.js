@@ -53,13 +53,13 @@ export default {
 		}
 	},
 
-	settingsSetFromStorage({ commit }, storageData) {
+	settingsStorageLoadSuccess({ commit }, storageData) {
 		const def = defaultSettings;
 		const merged = lodashMerge(def, storageData);
 		commit('setSettingsData', merged);
 	},
 
-	settingsStorageLoadFailed({ commit }) {
+	settingsStorageLoadFail({ commit }) {
 		commit('setSettingsData', defaultSettings);	
 	},
 

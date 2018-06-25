@@ -1,6 +1,78 @@
 import debounce from 'lodash.debounce';
 
 function createPersistedState(storagePrefix = "sp_", widgets = []) {
+	const toWatch = (moduleName, namespaced) => {
+		let moduleGetter = namespaced ? `${moduleName}/toWatch` : `${moduleName}ToWatch`;
+		console.warn(`Watch getter for ${moduleName} is getters[${moduleGetter}]`);
+		return (state, getters) => getters[moduleGetter];
+	};
+
+	const moduleDataChanged = moduleName => debounce((newValue, _) => {
+		console.log(`Watcher is triggered for module '${moduleName}'.`);
+		saveToStorage(moduleName, newValue);
+	}, 500, { maxWait: 10000 });
+
+	const saveToStorage = (moduleName, data) => {
+		const key = `${storagePrefix}${moduleName}`;
+		window.localStorage.setItem(key, JSON.stringify(data));	
+	}
+
+	const loadFromStorage = moduleName => {
+		const key = `${storagePrefix}${moduleName}`;
+		const data = window.localStorage.getItem(key);
+		if (data) return JSON.parse(data);
+		else return null;
+	}
+
+	const resetStorage = moduleName => {
+		window.localStorage.removeItem(`${storagePrefix}${moduleName}`);
+		console.warn("Removed localStorage item", moduleName);
+	}
+
+	const createResetAllStorage = (widgets = []) => () => {
+		console.warn("Creating a remove all localStorage function.");
+		resetStorage('settings');
+		widgets.forEach(resetStorage);
+	}
+
+	const createWatcher = (store, moduleName, namespaced) => {
+		console.log(`Creating watcher for '${moduleName}'.`);
+		store.watch(toWatch(moduleName, namespaced), moduleDataChanged(moduleName), { deep: true });
+	}
+
+	function initializeModulePersistence(store, moduleName, namespaced = true) {
+		debugger;
+		//Initializing ${moduleName} watcher
+		createWatcher(store, moduleName, namespaced);
+
+		//Loading ${moduleName} storage data
+		const storageData = loadFromStorage(moduleName);
+
+		//Dispatching ${moduleName} storage data to module
+		if (!storageData) {
+			let action = `${moduleName}/storageLoadFail`;
+			if (!namespaced) action = `${moduleName}StorageLoadFail`;
+			store.dispatch(action);
+		}
+		else {
+			let action = `${moduleName}/storageLoadSuccess`;
+			if (!namespaced) action = `${moduleName}StorageLoadSuccess`;
+			store.dispatch(action, storageData);
+		}
+	}
+
+	return function persistStatePlugin(store) {
+		initializeModulePersistence(store, 'settings', false);
+
+		widgets.forEach(w => initializeModulePersistence(store, w));
+
+		store.resetAllStorage = createResetAllStorage(widgets);
+	}
+}
+
+
+/*
+function createPersistedState2(storagePrefix = "sp_", widgets = []) {
 	// save to store: [widgetName]Set
 	// no data in store: [widgetName]StorageLoadFailed
 	// expired: [widgetName]StorageLoadExpired
@@ -80,6 +152,6 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 			}
 		});
 	}
-}
+}*/
 
 export default createPersistedState;

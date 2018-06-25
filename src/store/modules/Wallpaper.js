@@ -28,7 +28,7 @@ const wallpaperStore = {
 	},
 
 	getters: {
-		wallpaperWatch(state) {
+		toWatch(state) {
 			const { wallpapers, currentWallpaperId, expires, idLastSet, arrayUpdated, arrayUpdateChangeAmount } = state;
 			return { wallpapers, currentWallpaperId, expires, idLastSet, arrayUpdated, arrayUpdateChangeAmount };
 		},
@@ -189,15 +189,15 @@ const wallpaperStore = {
 			commit('setWallpaperDataExpires', expires);
 		},
 
-		wallpaperStorageLoadFailed({dispatch}) {
+		storageLoadFail({dispatch}) {
 			dispatch('getWallpapersFromServer');
 		},
 
-		wallpaperStorageLoadExpired({ commit, dispatch }, data) {
+		storageLoadExpired({ commit, dispatch }, data) {
 			dispatch('getWallpapersFromServer', data);
 		},
 
-		wallpaperSetFromStorage({ commit, dispatch }, localData) {
+		storageLoadSuccess({ commit, dispatch }, localData) {
 			let {
 				wallpapers = [],
 				expires,
@@ -206,7 +206,7 @@ const wallpaperStore = {
 				arrayUpdateChangeAmount
 			} = localData;
 
-			if (!expires) expires = 1;
+			if (expires - new Date().getTime() < 0) return dispatch('storageLoadExpired', localData);
 
 			//TODO: refresh to next wallpaper if lastSet is too long ago
 			commit('setWallpapers', wallpapers);

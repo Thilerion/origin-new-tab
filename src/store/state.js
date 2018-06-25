@@ -38,7 +38,7 @@ const state = {
 };
 
 const getters = {
-	settingsWatch: state => state.settingsData,
+	settingsToWatch: state => state.settingsData,
 
 	language: state => state.settingsData.general.language,
 	fontSize: state => state.settingsData.general.fontSize,

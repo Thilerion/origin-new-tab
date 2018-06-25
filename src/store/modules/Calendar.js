@@ -57,7 +57,7 @@ const calendarStore = {
 			return reduced;
 		},
 
-		calendarWatch(state) {
+		toWatch(state) {
 			const { permission } = state;
 			return {
 				permission
@@ -116,11 +116,11 @@ const calendarStore = {
 			}
 		},
 
-		calendarStorageLoadFailed({dispatch}) {
+		storageLoadFail({dispatch}) {
 			dispatch('initiateCalendarModule');
 		},
 
-		calendarSetFromStorage({ commit, dispatch }, calData) {
+		storageLoadSuccess({ commit, dispatch }, calData) {
 			commit('setCalendarPermission', calData.permission);
 			dispatch('initiateCalendarModule');		
 		},

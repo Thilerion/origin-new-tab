@@ -11,7 +11,7 @@ const newsStore = {
 	},
 
 	getters: {
-		newsWatch(state) {
+		toWatch(state) {
 			const { expires, articles } = state;
 			return { expires, articles };
 		}
@@ -41,16 +41,17 @@ const newsStore = {
 				}
 			}
 		},
-		newsStorageLoadFailed({ dispatch }) {
+		storageLoadFail({ dispatch }) {
 			dispatch('getNewsFromServer');
 		},
-		newsStorageLoadExpired({ dispatch }, data) {
+		storageLoadExpired({ dispatch }, data) {
 			//should commit data if getting from server fails
 			dispatch('getNewsFromServer', data);					
 		},
-		newsSetFromStorage({ commit }, localData) {
+		storageLoadSuccess({ commit, dispatch }, localData) {
 			const { articles = [], expires } = localData;
-			commit('setNewsArticles', { articles, expires });
+			if (expires - new Date().getTime() < 0) return dispatch('storageLoadExpired', localData);
+			else commit('setNewsArticles', { articles, expires });
 		},
 		newsSetFromApi({ commit }, apiData) {
 			const { data: articles = [], expires } = apiData;

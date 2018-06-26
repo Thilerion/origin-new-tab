@@ -19,7 +19,7 @@
 			</div>
 
 			<div class="buttons" v-else-if="showDefault">
-				<button class="icon-btn load-btn" @click="nextWallpaper" alt="Retry loading wallpaper">
+				<button class="icon-btn load-btn" @click="retryLoadingWallpapers" alt="Retry loading wallpaper">
 					<StartSvgIcon icon="refresh"/>
 				</button>
 			</div>
@@ -35,12 +35,18 @@
 			>Photo from <a :href="unsplashUrl" target="_blank">Unsplash</a></p>
 		</div>		
 
-		<transition name="fade-location" mode="out-in">
 		<p
-			v-if="currentWallpaper.location"
-			class="location"
-			:key="currentWallpaper.location"
-		>{{currentWallpaper.location}}</p>
+			v-if="showDefault"
+			class="load-error-message"
+		>Problem loading wallpaper. Showing default.
+		</p>
+
+		<transition name="fade-location" mode="out-in">
+			<p
+				v-if="currentWallpaper.location"
+				class="location"
+				:key="currentWallpaper.location"
+			>{{currentWallpaper.location}}</p>
 		</transition>
 	</div>
 </template>
@@ -57,7 +63,8 @@ export default {
 	},
 	computed: {
 		...mapState('wallpaper', [
-			'loadingImage'
+			'loadingImage',
+			'errorLoadingImage'
 		]),
 		...mapGetters('wallpaper', [
 			'dataLoadSuccessful',
@@ -103,11 +110,27 @@ export default {
 			}
 			
 		},
-		retryLoadWallpapers() {
-			this.$store.dispatch('wallpaper/retryLoadingWallpapers');
-		},
 		hideWallpaper() {
-			this.$store.dispatch('wallpaper/hideCurrentWallpaper');
+			if (this.loadingImage) {
+				console.warn("Cannot hide wallpaper, as it is still loading.");
+				return;
+			}
+			if (this.showExternal) {
+				this.$store.dispatch('wallpaper/hideCurrent');
+			} else {
+				console.warn('Cannot hide wallpaper, as it is the default wallpaper.');
+			}
+		},
+		retryLoadingWallpapers() {
+			if (this.loadingImage) {
+				console.warn("Cannot retry loading because an image is still being loaded.");
+			} else if (this.showExternal && !this.errorLoadingImage) {
+				console.warn("Cannot retry loading because an external wallpaper is being displayed, and no error in loading an image is found.");
+			} else {
+				console.log('Dispatching "retryLoadingWallpapers" now.');
+				this.$store.dispatch('wallpaper/retryLoading');
+			}
+			
 		}
 	}
 }
@@ -197,15 +220,25 @@ export default {
 	font-size: 0.75em;
 }
 
-.widget-wallpaper-details:hover .location {
+.load-error-message {
+	opacity: 0.5;
+	transition: all .3s ease-out;
+	font-size: 0.75em;
+}
+
+.widget-wallpaper-details:hover .location, .widget-wallpaper-details:hover .load-error-message {
 	opacity: 1;
+}
+
+.load-error-message + .location {
+	margin-bottom: 0.25em;
 }
 
 .row-bottom {
 	display: flex;
 	align-items: flex-end;
 	position: relative;
-	height: 24px;
+	margin-top: 0.1em;
 	font-size: 0.75em;
 	flex-shrink: 0;
 	min-width: 0;

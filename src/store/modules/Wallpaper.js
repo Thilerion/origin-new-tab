@@ -158,6 +158,12 @@ const wallpaperStore = {
 			// to disable loading a new image when still loading
 			state.loadingImage = bool;
 		},
+		removeWallpaper(state, index) {
+			state.wallpapers.splice(index, 1);
+		},
+		addToHiddenIds(state, id) {
+			state.hiddenIds.push(id);
+		},
 
 		//OLD BELOW
 		setWallpaperImageLoaded(state, loaded) {
@@ -286,6 +292,21 @@ const wallpaperStore = {
 			//commit change amount
 		},
 
+		retryLoading({state, getters, commit, dispatch}) {
+			if (getters.dataLoadFailed) {
+				dispatch('retryLoadingApiData');
+			} else if (getters.dataLoadSuccessful && state.errorLoadingImage) {
+				//retry loading wallpaper image
+				commit('setErrorLoadingImage', false);
+			}
+		},
+
+		async retryLoadingApiData({dispatch, commit}) {
+			// commit('setFinishedLoading', false);
+			await dispatch('fetchApiData');
+			commit('setFinishedLoading', true);
+		},
+
 		goToNext({state, getters, commit}) {
 			//if not finishedLoading return
 			if (!state.finishedLoading) return;
@@ -295,8 +316,27 @@ const wallpaperStore = {
 			//			MAYBE IN COMPONENT?
 		},
 
-		hideCurrent() {
-			//if not finishedLoading return
+		hideCurrent({state, getters, commit, dispatch}) {
+			//if not finishedLoading, or showing default, return
+			if (!state.finishedLoading || state.showingDefault) return;
+			//if only 1 wallpaper left return
+			if (state.wallpapers.length <= 1) return;
+			//get current wallpaper id (not index, its unique id)
+			const idToHide = getters.currentWallpaper.id;
+			const indexToHide = state.currentWallpaperId;
+			//get next wallpaper id, and if it is 0, the currentWallpaper id is the last one.
+			//in that case, go to next wallpaper, else, set idLastSet to now
+			if (getters.nextWallpaperId === 0) {
+				dispatch('goToNext');
+			} else {
+				commit('setWallpaperId', { currentWallpaperId: state.currentWallpaperId, idLastSet: new Date().getTime() });
+			}
+			//remove wallpaper and add to hiddenIds
+			//then, when new wallpapers are loaded, remove any wallpapers with id in hiddenIds
+			commit('removeWallpaper', indexToHide);
+			commit('addToHiddenIds', idToHide);
+
+			console.log(`Hidden wallpaper. Previous 'currentWallpaperId' was ${indexToHide}, and currently is ${state.currentWallpaperId}. The id of the hidden wallpaper is ${idToHide}.`);
 		},
 
 		checkWallpaperId({ state, getters, commit }) {
@@ -482,7 +522,7 @@ const wallpaperStore = {
 			}
 		},
 
-		retryLoadingWallpapers({state, dispatch}) {
+		/*retryLoadingWallpapers({state, dispatch}) {
 			if (!state.dataLoaded) {
 				// if data loading failed
 				console.log("Loading wallpaper data was unsuccesful, so retrying that now.");
@@ -492,7 +532,7 @@ const wallpaperStore = {
 				console.log("Loading wallpaper data was succesful, so retrying the wallpaper source now.");
 				dispatch('loadingDataSucces');
 			}			
-		},
+		},*/
 
 		setCurrentWallpaperId({ rootGetters, getters, commit }, {id, lastSet}) {
 			let now = new Date().getTime();

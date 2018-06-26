@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import {mapState, mapGetters} from 'vuex';
 
 export default {
 	data() {
@@ -30,6 +30,9 @@ export default {
 			'showAny',
 			'currentWallpaper',
 			'nextWallpaper'
+		]),
+		...mapState('wallpaper', [
+			'errorLoadingImage'
 		]),
 		currentWallpaperURL() {
 			return this.currentWallpaper.url;
@@ -166,6 +169,12 @@ export default {
 					console.warn("Max retries reached, dispatch error to store.");
 					this.$store.commit('wallpaper/setErrorLoadingImage', true);
 				}
+			}
+		},
+		errorLoadingImage(newValue, oldValue) {
+			if (!newValue && oldValue) {
+				this.maxLoadFailures = 1;
+				this.currentLoadFailures = 0;
 			}
 		}
 	}

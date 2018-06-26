@@ -1,13 +1,17 @@
-import {weatherRequest, locationRequest} from '../api/';
+import { weatherRequest, locationRequest } from '../api/';
+import getPosition from '../libs/geolocation';
 
 const weatherStore = {
 	namespaced: true,
 
 	state: {
-
 		expires: null,
 		forecast: {},
 		address: {
+			city: null,
+			street: null
+		},
+		customAddress: {
 			city: null,
 			street: null
 		},
@@ -15,33 +19,80 @@ const weatherStore = {
 			latitude: null,
 			longitude: null
 		},
+		customCoordinates: {
+			latitude: null,
+			longitude: null
+		},
+
 		finishedLoading: false,
 		dataStatus: null
 	},
 
 	getters: {
+		// COMMMON GETTERS
 		toWatch(state) {
-			const { expires, forecast, address, coordinates } = state;
-			return { expires, forecast, address, coordinates };
+			const { expires, forecast, address, customAddress, coordinates, customCoordinates } = state;
+			return { expires, forecast, address, customAddress, coordinates, customCoordinates };
 		},
 		hasExpired(state) {
 			return state.expires - new Date().getTime() < 0;
 		},
+
+		// UNIQUE GETTERS
 		forecast(state) {
 			return state.forecast;
-		},
-		addressCity(state) {
-			return state.address.city;
 		},
 		useCustomLocation({}, {}, {}, rootGetters) {
 			return rootGetters.useCustomLocation && !!rootGetters.customLocationToUse;
 		},
-		customLocationToUse({}, {}, {}, rootGetters) {
-			return rootGetters.customLocationToUse;
+
+		coordinates(state, getters) {
+			if (getters.useCustomLocation) {
+				return state.customCoordinates;
+			} else if (!getters.useCustomLocation) {
+				return state.coordinates;
+			}
+		},
+		addressCity(state, getters) {
+			if (getters.useCustomLocation) {
+				return state.customAddress.city;
+			} else if (!getters.useCustomLocation) {
+				return state.address.city;
+			}
 		}
 	},
 
 	mutations: {
+		// COMMON MUTATIONS
+		setData(state, data) {
+
+		},
+		setFinishedLoading(state, bool) {
+
+		},
+		setDataStatus(state, status) {
+
+		},
+
+		// UNIQUE MUTATIONS
+		setCustomAddressQuery() {
+
+		},
+		setAddress() {
+
+		},
+		setCustomAddress() {
+
+		},
+		setCoordinates() {
+
+		},
+		setCustomCoordinates() {
+
+		},
+
+
+		// OLD BELOW
 		setWeatherDataExpires(state, expires) {
 			state.expires = expires;
 		},
@@ -64,7 +115,31 @@ const weatherStore = {
 	},
 
 	actions: {
-		storageLoadFail({ dispatch }) {
+		// COMMON ACTIONS
+		settingsChanged({}, changes = []) {
+
+		},
+		async storageLoadFail() {
+
+		},
+		async storageLoadSuccess() {
+
+		},
+		setLocalData() {
+
+		},
+		setApiData() {
+
+		},
+		fetchApiData() {
+
+		},
+		
+		// UNIQUE ACTIONS
+
+		// OLD BELOW
+
+		storageLoadFailOLD({ dispatch }) {
 			dispatch('initiateGetWeather');
 		},
 		storageLoadExpired({ getters, commit, dispatch }, localData) {
@@ -197,16 +272,3 @@ const weatherStore = {
 }
 
 export default weatherStore;
-
-function getPosition() {
-	return new Promise((resolve, reject) => {
-		navigator.geolocation.getCurrentPosition(({ coords }) => {
-			console.log(coords);
-			const { latitude, longitude } = coords;
-			resolve({ latitude, longitude });
-		}, (err) => {
-			console.warn("Error in retrieving location. ", err);
-			reject(err);
-		}, { timeout: 20000, enableHighAccuracy: true });
-	})
-}

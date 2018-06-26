@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-news f-shadow-heavy" @mouseover="mouseOver = true" @mouseout="mouseOver = false" v-if="dataLoaded">
+	<div class="widget-news f-shadow-heavy" @mouseover="mouseOver = true" @mouseout="mouseOver = false" v-if="dataLoadSuccessful">
 		<div class="news-item-wrapper clip-edges f-shadow-heavy">
 			<transition :name="transitionName">
 				<a v-if="showItem != null" :href="articles[showItem].url" class="news-item" :key="showItem" target="_blank" rel="noopener" :class="{faster: fasterTransition}">{{articles[showItem].title}}</a>
@@ -24,7 +24,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('news', ['dataLoaded', 'articles']),
+		...mapState('news', ['articles']),
+		...mapGetters('news', ['dataLoadSuccessful']),
 		...mapGetters(['newsSlideInterval']),
 		transitionName() {
 			return `slide-news-${this.dir}`;

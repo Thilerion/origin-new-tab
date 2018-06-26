@@ -50,6 +50,16 @@ const wallpaperStore = {
 			return state.expires - new Date().getTime() < 0;
 		},
 
+		dataLoadSuccessful(state) {
+			//dataStatus either "fresh" or "stale" and loading is finished
+			return state.dataStatus != null && state.finishedLoading;
+		},
+		
+		dataLoadFailed(state) {
+			//this means data could not be loaded
+			return state.dataStatus === null && state.finishedLoading;
+		},
+
 		// UNIQUE GETTERS
 		collection({ }, { }, { }, rootGetters) {
 			return rootGetters.wallpaperCollection;	
@@ -61,14 +71,6 @@ const wallpaperStore = {
 			return state.wallpapers.length === 0 ? 0 : (state.currentWallpaperId + 1) % state.wallpapers.length;
 		},
 
-		dataLoadSuccessful(state) {
-			//dataStatus either "fresh" or "stale" and loading is finished
-			return state.dataStatus != null && state.finishedLoading;
-		},
-		dataLoadFailed(state) {
-			//this means data could not be loaded
-			return state.dataStatus === null && state.finishedLoading;
-		},
 		showExternal(state, getters) {
 			return !!getters.dataLoadSuccessful && !state.errorLoadingImage;
 		},

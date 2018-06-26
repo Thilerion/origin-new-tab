@@ -95,7 +95,7 @@ export default {
 	width: 100%;
 	position: relative;
 	display: flex;
-	min-width: 40em;
+	min-width: 30em;
 }
 
 .news-item-wrapper {

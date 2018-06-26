@@ -175,8 +175,11 @@ const wallpaperStore = {
 
 	actions: {
 		// COMMON ACTIONS
-		settingsChanged() {
+		settingsChanged({dispatch}, changes = []) {
 			//Some sort of check for if the collection setting has changed
+			if (changes.includes('collection')) {
+				dispatch('fetchApiData');
+			}
 		},
 		async storageLoadFail({ commit, dispatch }) {
 			await dispatch('fetchApiData');
@@ -260,7 +263,6 @@ const wallpaperStore = {
 		},
 
 		// UNIQUE ACTIONS
-
 		retryLoading({state, getters, commit, dispatch}) {
 			if (getters.dataLoadFailed) {
 				dispatch('retryLoadingApiData');

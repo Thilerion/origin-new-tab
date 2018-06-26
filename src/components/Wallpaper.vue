@@ -31,7 +31,8 @@ export default {
 			'showExternal',
 			'currentWallpaper',
 			'nextWallpaper',
-			'canRetrieveAdditional'
+			'canRetrieveAdditional',
+			'collection'
 		]),
 		...mapState('wallpaper', [			
 			'idLastSet',
@@ -185,6 +186,11 @@ export default {
 			if (this.showExternal && this.canRetrieveAdditional) {
 				console.warn("Watcher in Wallpaper.vue: idLastSet has been changed. Can retrieve additional is possible. Dispatching retrieveExtraWallpapers now.");
 				this.$store.dispatch('wallpaper/retrieveExtraWallpapers');
+			}
+		},
+		collection(newValue, oldValue) {
+			if (newValue !== oldValue) {
+				this.$store.dispatch('wallpaper/settingsChanged', ['collection']);
 			}
 		}
 	}

@@ -81,7 +81,7 @@ const wallpaperStore = {
 
 		currentWallpaper(state, getters) {
 			if (getters.showExternal) return state.wallpapers[state.currentWallpaperId];
-			else return state.defaultWallpaper;
+			else if (getters.showDefault) return state.defaultWallpaper;
 		},
 		nextWallpaper(state, getters) {
 			if (getters.dataLoadSuccessful) return state.wallpapers[getters.nextWallpaperId];
@@ -170,14 +170,20 @@ const wallpaperStore = {
 			state.wallpapers = [...wallpapers];
 			state.expires = expires;
 			state.arrayUpdateChangeAmount = arrayUpdateChangeAmount;
+		},
+
+		setExpiresToNow(state) {
+			state.expires = new Date().getTime();
 		}
 	},
 
 	actions: {
 		// COMMON ACTIONS
-		settingsChanged({dispatch}, changes = []) {
+		settingsChanged({commit, dispatch}, changes = []) {
 			//Some sort of check for if the collection setting has changed
 			if (changes.includes('collection')) {
+				// set expires to now so that, if it fails, next time a tab is opened, it will try again
+				commit('setExpiresToNow');
 				dispatch('fetchApiData');
 			}
 		},
@@ -228,7 +234,7 @@ const wallpaperStore = {
 			} = apiData;
 			
 			const arrayUpdated = new Date().getTime();
-			const arrayUpdateChangeAmount = (wallpapers.length - state.wallpapers.length);
+			const arrayUpdateChangeAmount = wallpapers.length;
 
 			const idLastSet = new Date().getTime();
 			const currentWallpaperId = 0;
@@ -317,7 +323,7 @@ const wallpaperStore = {
 			let currentWallpaperId = state.currentWallpaperId;
 			let idLastSet = state.idLastSet;
 
-			if (idLastSet + refresh > now) {
+			if (idLastSet + refresh < now) {
 				currentWallpaperId = getters.nextWallpaperId;
 				idLastSet = now;
 				commit('setWallpaperId', { currentWallpaperId, idLastSet });

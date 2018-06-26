@@ -9,7 +9,7 @@ export default {
 			settings.weather.useCustomLocation = false;
 		}
 		
-		dispatch('checkImmediateModuleUpdates', { settings, currentSettings });		
+		//dispatch('checkImmediateModuleUpdates', { settings, currentSettings });		
 
 		const merged = lodashMerge(currentSettings, settings);
 		commit('setSettingsData', merged);

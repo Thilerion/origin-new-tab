@@ -39,13 +39,11 @@ export default {
 			'errorLoadingImage'
 		]),
 		currentWallpaperURL() {
-			return this.currentWallpaper.url;
+			if (this.currentWallpaper) return this.currentWallpaper.url;
 		},
 		nextWallpaperURL() {
 			if (this.nextWallpaper) return this.nextWallpaper.url;
 		},
-
-
 
 
 		backgroundStyle() {

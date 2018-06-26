@@ -2,7 +2,12 @@
 	<div class="widget-wallpaper-details widget-no-select f-shadow-medium" v-if="showAny">
 		<div class="row-bottom">
 			<div class="buttons" v-if="showExternal">
-				<button class="icon-btn load-btn" @click="nextWallpaper" alt="Next wallpaper">
+				<button
+					class="icon-btn load-btn"
+					@click="nextWallpaper"
+					alt="Next wallpaper"
+					:class="{spinning: loadingImage}"
+				>
 					<StartSvgIcon icon="refresh"/>
 				</button>
 				<a :href="downloadUrl" class="icon-btn dl-btn" target="_blank" alt="Download wallpaper">
@@ -51,6 +56,9 @@ export default {
 		}
 	},
 	computed: {
+		...mapState('wallpaper', [
+			'loadingImage'
+		]),
 		...mapGetters('wallpaper', [
 			'dataLoadSuccessful',
 			'dataLoadFailed',
@@ -86,6 +94,10 @@ export default {
 	},
 	methods: {
 		nextWallpaper() {
+			if (this.loadingImage) {
+				console.warn("Cannot go to next wallpaper, as previous is still loading.");
+				return;
+			}
 			if (this.showExternal) {
 				this.$store.dispatch('wallpaper/goToNext');
 			}
@@ -241,6 +253,24 @@ export default {
 	min-width: 18px;
 	height: 18px;
 	display: inline-block;
+}
+
+.load-btn {
+	transform: rotate(0deg);
+	transition: transform 0.4s;
+}
+
+.load-btn.spinning {
+	animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+	99% {
+		transform: rotate(360deg);
+	}
+	100% {
+		transform: rotate(0deg);
+	}
 }
 
 .load-btn > svg, .dl-btn > svg, .hide-btn > svg {

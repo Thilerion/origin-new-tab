@@ -85,18 +85,23 @@ export default {
 			})
 		},
 		async loadAndSetCurrent() {
+			this.$store.commit('wallpaper/setCurrentlyLoadingImage', true);
 			try {
 				const url = this.currentWallpaperURL;
 				if (!url) return;
 
 				let loaded = await this.loadImage(url);
-				this.currentLoadedURL = loaded;
+				if (this.currentWallpaperURL === loaded) {
+					//if they are still the same, set it, else the user has already moved past this one
+					this.currentLoadedURL = loaded;
+				}				
 				this.currentLoadFailures = 0;
 			} catch (e) {
 				this.currentLoadFailures += 1;
 				console.warn("Problem loading current image URL!");
 				console.warn(e);
-			}	
+			}
+			this.$store.commit('wallpaper/setCurrentlyLoadingImage', false);
 		},
 		async loadAndSetNext() {
 			try {
@@ -181,7 +186,7 @@ export default {
 }
 
 .fade-enter-active {
-	transition: opacity 0.75s ease-in;
+	transition: opacity 0.75s ease-in, transform 0.75s ease-out;
 }
 
 .fade-leave-active {
@@ -190,5 +195,9 @@ export default {
 
 .fade-enter, .fade-leave-to {
 	opacity: 0;
+}
+
+.fade-enter {
+	transform: scale(1.1);
 }
 </style>

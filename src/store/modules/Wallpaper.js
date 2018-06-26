@@ -27,6 +27,7 @@ const wallpaperStore = {
 		finishedLoading: false,
 		dataStatus: null,
 
+		loadingImage: false,
 		errorLoadingImage: false
 	},
 
@@ -152,6 +153,10 @@ const wallpaperStore = {
 		},
 		setErrorLoadingImage(state, bool) {
 			state.errorLoadingImage = bool;
+		},
+		setCurrentlyLoadingImage(state, bool) {
+			// to disable loading a new image when still loading
+			state.loadingImage = bool;
 		},
 
 		//OLD BELOW

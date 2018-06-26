@@ -132,6 +132,7 @@ export default {
 <style scoped>
 .widget {
 	position: relative;
+	opacity: 1;
 }
 
 .widget-settings {	

@@ -88,6 +88,14 @@ const quoteStore = {
 				console.warn("Could not load QUOTE api data...");
 				console.warn(e);
 			}			
+		},
+
+		// UNIQUE ACTIONS
+		async getNewQuote({commit, dispatch}) {
+			commit('setDataStatus', "stale");
+			commit('setFinishedLoading', false);
+			await dispatch('fetchApiData');
+			commit('setFinishedLoading', true);
 		}
 	}
 

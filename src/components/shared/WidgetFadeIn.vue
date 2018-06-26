@@ -55,12 +55,4 @@ export default {
 </script>
 
 <style>
-.widget-fadein-enter-active, .widget-fade-enter-active, .widget-fade-leave-active, .widget-fadeout-leave-active {
-	transition-property: opacity;
-	transition-timing-function: ease;
-}
-
-.widget-fadein-enter, .widget-fade-enter, .widget-fade-leave-to, .widget-fadeout-leave-to {
-	opacity: 0;
-}
 </style>

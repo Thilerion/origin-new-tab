@@ -19,7 +19,7 @@ export default {
 	},
 	methods: {
 		reloadQuote() {
-			this.$store.dispatch('quote/getQuoteFromServer');
+			this.$store.dispatch('quote/getNewQuote');
 		}
 	},
 	filters: {

@@ -7,9 +7,6 @@ import './assets/style/base.css';
 import StartSvgIcon from './components/shared/SvgIcon';
 Vue.component('StartSvgIcon', StartSvgIcon);
 
-import WidgetFadeInTransition from './components/shared/WidgetFadeIn';
-Vue.component('WidgetFadeIn', WidgetFadeInTransition);
-
 Vue.directive('focus', {
 	inserted(el) {
 		el.focus();

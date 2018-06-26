@@ -28,10 +28,13 @@ export default {
 			'dataLoadSuccessful',
 			'dataLoadFailed',
 			'showAny',
+			'showExternal',
 			'currentWallpaper',
-			'nextWallpaper'
+			'nextWallpaper',
+			'canRetrieveAdditional'
 		]),
-		...mapState('wallpaper', [
+		...mapState('wallpaper', [			
+			'idLastSet',
 			'errorLoadingImage'
 		]),
 		currentWallpaperURL() {
@@ -175,6 +178,13 @@ export default {
 			if (!newValue && oldValue) {
 				this.maxLoadFailures = 1;
 				this.currentLoadFailures = 0;
+			}
+		},
+		idLastSet(newValue, oldValue) {
+			if (newValue <= oldValue) return;
+			if (this.showExternal && this.canRetrieveAdditional) {
+				console.warn("Watcher in Wallpaper.vue: idLastSet has been changed. Can retrieve additional is possible. Dispatching retrieveExtraWallpapers now.");
+				this.$store.dispatch('wallpaper/retrieveExtraWallpapers');
 			}
 		}
 	}

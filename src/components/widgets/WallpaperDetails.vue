@@ -1,6 +1,6 @@
 <template>
 	<div class="widget-wallpaper-details widget-no-select f-shadow-medium" v-if="showAny">
-		<div class="row-bottom">
+		<div class="row-bottom" :class="showDefault ? 'default-bg' : null">
 			<div class="buttons" v-if="showExternal">
 				<button
 					class="icon-btn load-btn"
@@ -18,7 +18,7 @@
 				</button>
 			</div>
 
-			<div class="buttons" v-else-if="showDefault">
+			<div class="buttons default-buttons" v-else-if="showDefault">
 				<button class="icon-btn load-btn" @click="retryLoadingWallpapers" alt="Retry loading wallpaper">
 					<StartSvgIcon icon="refresh"/>
 				</button>
@@ -189,15 +189,27 @@ export default {
 	transform: translateX(-62px);
 }
 
+.w-align-left .default-bg .attribution {
+	transform: translateX(-22px);
+}
+
 .w-align-center .attribution {
 	order: 2;
 	transform: translateX(-31px);
+}
+
+.w-align-center .default-bg .attribution {
+	transform: translateX(-11px);
 }
 
 .w-align-right .attribution {
 	order: 1;
 	text-align: right;
 	transform: translateX(62px);
+}
+
+.w-align-right .default-bg .attribution {
+	transform: translateX(22px);
 }
 
 .widget-wallpaper-details {	
@@ -248,9 +260,15 @@ export default {
 	display: flex;
 	align-items:center;
 	justify-content: space-between;
-	width: calc(18px * 3 + 4px * 2);
+	width: 62px;
 	flex-shrink: 0;
 	min-width: 0;
+	opacity: 0;
+	transition: all .3s ease-out;
+}
+
+.default-bg .buttons {
+	width: 22px;
 }
 
 .widget-wallpaper-details:hover .buttons {
@@ -265,13 +283,6 @@ export default {
 .attribution {
 	font-size: 1em;
 	line-height: 18px;
-	transition: all .3s ease-out;
-	min-width: 0;
-	flex-shrink: 0;
-}
-
-.buttons {
-	opacity: 0;
 	transition: all .3s ease-out;
 	min-width: 0;
 	flex-shrink: 0;

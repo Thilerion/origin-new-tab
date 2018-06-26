@@ -1,7 +1,7 @@
 <template>
-	<div class="widget-wallpaper-details widget-no-select f-shadow-medium" v-if="wallpaperSource">
+	<div class="widget-wallpaper-details widget-no-select f-shadow-medium" v-if="showAny">
 		<div class="row-bottom">
-			<div class="buttons" v-if="!showDefaultWallpaper">
+			<div class="buttons" v-if="showExternal">
 				<button class="icon-btn load-btn" @click="nextWallpaper" alt="Next wallpaper">
 					<StartSvgIcon icon="refresh"/>
 				</button>
@@ -13,29 +13,29 @@
 				</button>
 			</div>
 
-			<div class="buttons" v-else>
+			<div class="buttons" v-else-if="showDefault">
 				<button class="icon-btn load-btn" @click="nextWallpaper" alt="Retry loading wallpaper">
 					<StartSvgIcon icon="refresh"/>
 				</button>
 			</div>
 
 			<p
-				v-if="wallpaperToShow.user"
+				v-if="currentWallpaper.user"
 				class="attribution f-shadow-heavy"
-			>Photo by <a :href="userUrl" target="_blank">{{wallpaperToShow.user}}</a> on <a :href="unsplashUrl" target="_blank">Unsplash</a></p>
+			>Photo by <a :href="userUrl" target="_blank">{{currentWallpaper.user}}</a> on <a :href="unsplashUrl" target="_blank">Unsplash</a></p>
 			<p
 				v-else
 				class="attribution"
-				:class="{'default-wallpaper': showDefaultWallpaper}"
+				:class="{'default-wallpaper': showDefault}"
 			>Photo from <a :href="unsplashUrl" target="_blank">Unsplash</a></p>
 		</div>		
 
 		<transition name="fade-location" mode="out-in">
 		<p
-			v-if="wallpaperToShow.location"
+			v-if="currentWallpaper.location"
 			class="location"
-			:key="wallpaperToShow.location"
-		>{{wallpaperToShow.location}}</p>
+			:key="currentWallpaper.location"
+		>{{currentWallpaper.location}}</p>
 		</transition>
 	</div>
 </template>
@@ -51,11 +51,17 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('wallpaper', []),
-		...mapGetters('wallpaper', ['showDefaultWallpaper', 'wallpaperToShow']),
+		...mapGetters('wallpaper', [
+			'dataLoadSuccessful',
+			'dataLoadFailed',
+			'showAny',
+			'showExternal',
+			'showDefault',
+			'currentWallpaper'
+		]),
 		userUrl() {
 			try {
-				return `${this.wallpaperToShow.urlUser}${this.unsplashReferralSuffix}`;
+				return `${this.currentWallpaper.urlUser}${this.unsplashReferralSuffix}`;
 			}
 			catch(e) {
 				return "";
@@ -65,13 +71,13 @@ export default {
 			return `${this.unsplashBaseUrl}${this.unsplashReferralSuffix}`;
 		},
 		wallpaperSource() {
-			const wp = this.wallpaperToShow;
+			const wp = this.currentWallpaper;
 			return (wp && wp.url) ? wp.url : null;
 		},
 		downloadUrl() {
 			try {
-				if (this.wallpaperToShow.urlDownload) return `${this.wallpaperToShow.urlDownload}${this.unsplashReferralSuffix}`;
-				else return `${this.wallpaperToShow.url}${this.unsplashReferralSuffix}`;
+				if (this.currentWallpaper.urlDownload) return `${this.currentWallpaper.urlDownload}${this.unsplashReferralSuffix}`;
+				else return `${this.currentWallpaper.url}${this.unsplashReferralSuffix}`;
 			}
 			catch(e) {
 				return;
@@ -80,8 +86,10 @@ export default {
 	},
 	methods: {
 		nextWallpaper() {
-			if (!this.showDefaultWallpaper) this.$store.dispatch('wallpaper/goToNextWallpaper');
-			else this.retryLoadWallpapers();
+			if (this.showExternal) {
+				this.$store.dispatch('wallpaper/goToNext');
+			}
+			
 		},
 		retryLoadWallpapers() {
 			this.$store.dispatch('wallpaper/retryLoadingWallpapers');

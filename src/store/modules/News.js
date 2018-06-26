@@ -78,7 +78,7 @@ const newsStore = {
 
 
 
-
+		/*
 		async getNewsFromServer({ dispatch }, commitOnFail) {
 			try {
 				let data = await apiRequest({});				
@@ -108,7 +108,7 @@ const newsStore = {
 		newsSetFromApi({ commit }, apiData) {
 			const { data: articles = [], expires } = apiData;
 			commit('setData', { articles, expires });
-		}
+		}*/
 	}
 
 }

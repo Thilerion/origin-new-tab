@@ -6,27 +6,32 @@ const wallpaperStore = {
 	namespaced: true,
 
 	state: {
+		wallpapers: [],
+		currentWallpaperId: 0,
+		expires: null,
+		idLastSet: null,
+		arrayUpdated: new Date().getTime(),
+		arrayUpdateChangeAmount: null,
+		hiddenIds: [],
+
 		defaultWallpaper: {
 			url: require('@/assets/wallpaper/default_wallpaper.jpg'),
 			urlUser: "https://unsplash.com/@goodvybesdaily",
 			user: "mike anderson",
 			location: "Ganekogorta, Spain",
 			urlDownload: require('@/assets/wallpaper/default_wallpaper.jpg'),
-			urlRaw: require('@/assets/wallpaper/default_wallpaper.jpg')
+			urlRaw: require('@/assets/wallpaper/default_wallpaper.jpg'),
+			id: 0
 		},
-		dataLoaded: null,
-		wallpaperLoaded: null,
 
-		wallpapers: [],
-		currentWallpaperId: 0,
-		expires: null,
-		idLastSet: null,
-		//TODO: two props below
-		arrayUpdated: new Date().getTime(),
-		arrayUpdateChangeAmount: null
+		finishedLoading: false,
+		dataStatus: null,
+
+		errorLoadingImage: false
 	},
 
 	getters: {
+		// COMMMON GETTERS
 		toWatch(state) {
 			const { wallpapers, currentWallpaperId, expires, idLastSet, arrayUpdated, arrayUpdateChangeAmount } = state;
 			return { wallpapers, currentWallpaperId, expires, idLastSet, arrayUpdated, arrayUpdateChangeAmount };
@@ -36,15 +41,55 @@ const wallpaperStore = {
 			return state.expires - new Date().getTime() < 0;
 		},
 
-		//TODO: what if a new wallpaper is being loaded?
-		showExternalWallpaper(state) {
+		// UNIQUE GETTERS
+		collection({ }, { }, { }, rootGetters) {
+			return rootGetters.wallpaperCollection;	
+		},
+		refreshTime({ }, { }, { }, rootGetters) {
+			return rootGetters.wallpaperRefresh;	
+		},
+		nextWallpaperId(state) {
+			return state.wallpapers.length === 0 ? 0 : (state.currentWallpaperId + 1) % state.wallpapers.length;
+		},
+
+		dataLoadSuccessful(state) {
+			//dataStatus either "fresh" or "stale" and loading is finished
+			return state.dataStatus != null && state.finishedLoading;
+		},
+		dataLoadFailed(state) {
+			//this means data could not be loaded
+			return state.dataStatus === null && state.finishedLoading;
+		},
+		showExternal(state, getters) {
+			//TODO: AND NO ERROR LOADING IMAGE
+			return !!getters.dataLoadSuccessful && !state.errorLoadingImage;
+		},
+		showDefault(state, getters) {
+			//TODO: OR ERROR LOADING IMAGE
+			return !!getters.dataLoadFailed || state.errorLoadingImage;
+		},
+		showAny(state, getters) {
+			return getters.showExternal || getters.showDefault;
+		},
+
+		currentWallpaper(state, getters) {
+			if (getters.showExternal) return state.wallpapers[state.currentWallpaperId];
+			else return state.defaultWallpaper;
+		},
+		nextWallpaper(state, getters) {
+			if (getters.dataLoadSuccessful) return state.wallpapers[getters.nextWallpaperId];
+			else return null;
+		},
+
+		// OLD BELOW
+		/*showExternalWallpaper(state) {
 			//if DataLoaded (storage or server) && image load success
-			return state.dataLoaded && state.wallpaperLoaded;
+			return !!state.finishedLoading;
 		},
 		showDefaultWallpaper(state) {
 			//if DataLoaded === false (no external wallpaper to show)
 			//or if DataLoaded === true, but Image Load failed
-			return state.dataLoaded === false || state.wallpaperLoaded === false;
+			return state.finishedLoading === false;
 		},
 
 		wallpaperToShow(state, getters) {
@@ -59,25 +104,57 @@ const wallpaperStore = {
 
 		wallpapersLength: state => state.wallpapers.length || 0,
 
-		nextWallpaperId(state) {
-			const l = state.wallpapers.length;
-			if (l === 0) return 0;
-			return (state.currentWallpaperId + 1) % l;
-		},
 		nextWallpaperUrl: (state, getters) => {
 			if (getters.showDefaultWallpaper) return state.defaultWallpaper.url;
 			else if (!state.dataLoaded) return;
 			return state.wallpapers[getters.nextWallpaperId].url;
-		},
+		},*/
 		arrayUpdateChangePercentage(state, getters) {
 			return state.arrayUpdateChangeAmount / getters.wallpapersLength;
 		}
 	},
 
 	mutations: {
-		setDataLoaded(state, loaded) {
-			state.dataLoaded = loaded;
+		// COMMON MUTATIONS
+		setData(state, data) {
+			let {
+				wallpapers,
+				expires,
+				arrayUpdated,
+				arrayUpdateChangeAmount,
+				idLastSet,
+				currentWallpaperId,
+				hiddenIds
+			} = data;
+
+			state.expires = expires;
+			state.wallpapers = [...wallpapers];
+
+			state.arrayUpdated = arrayUpdated;
+			state.arrayUpdateChangeAmount = arrayUpdateChangeAmount;
+
+			state.idLastSet = idLastSet;
+			state.currentWallpaperId = currentWallpaperId;
+
+			state.hiddenIds = [...hiddenIds];
 		},
+		setFinishedLoading(state, bool) {
+			state.finishedLoading = !!bool;
+		},
+		setDataStatus(state, status) {
+			state.dataStatus = status;
+		},
+
+		// UNIQUE MUTATIONS
+		setWallpaperId(state, { currentWallpaperId = 0, idLastSet = new Date().getTime() }) {
+			state.currentWallpaperId = currentWallpaperId;
+			state.idLastSet = idLastSet;
+		},
+		setErrorLoadingImage(state, bool) {
+			state.errorLoadingImage = bool;
+		},
+
+		//OLD BELOW
 		setWallpaperImageLoaded(state, loaded) {
 			state.wallpaperLoaded = loaded;
 		},
@@ -89,9 +166,6 @@ const wallpaperStore = {
 		addCombinedWallpapers(state, wps) {
 			state.wallpapers = deepClone(wps);
 			state.arrayUpdated = new Date().getTime();
-		},
-		setWallpaperId(state, id = 0) {
-			state.currentWallpaperId = id;
 		},
 		setWallpaperDataExpires(state, expiresOn) {
 			state.expires = expiresOn;
@@ -111,24 +185,131 @@ const wallpaperStore = {
 	},
 
 	actions: {
-		getWallpapersFromServer({ rootGetters, commit, dispatch }, commitOnFail) {
-			apiRequest({collection: rootGetters.wallpaperCollection})
-				.then(data => {
-					console.log("Got data from wallpaper API!");
-					dispatch('wallpaperSetFromApi', data);
-				})
-				.catch(err => {
-					console.log(err);
-					if (commitOnFail) {
-						console.warn("Error in retrieving data from server (wallpaper), so committing stale data to store.")
-						dispatch('wallpaperSetFromStorage', commitOnFail);
-					} else {
-						console.warn("Error in retrieving data from server (wallpaper).");
-						dispatch('loadingDataFailed');
-					}
+		// COMMON ACTIONS
+		settingsChanged() {
+			//Some sort of check for if the collection setting has changed
+		},
+		async storageLoadFail({ commit, dispatch }) {
+			await dispatch('fetchApiData');
+			commit('setFinishedLoading', true);
+		},
+		async storageLoadSuccess({ getters, commit, dispatch }, localData) {
+			dispatch('setLocalData', localData);
+			if (getters.hasExpired) {
+				commit('setDataStatus', "stale");
+				await dispatch('fetchApiData');
+			} else {
+				commit('setDataStatus', "fresh");
+				//checkWallpaperId: increase/decrease/set to 0?
+				//must come after the setData dispatch, for wallpaper array length
+				dispatch('checkWallpaperId');
+			}			
+
+			commit('setFinishedLoading', true);
+		},
+		setLocalData({ commit }, localData) {
+			let {
+				wallpapers = [],
+				expires,
+				arrayUpdated,
+				arrayUpdateChangeAmount,
+				idLastSet,
+				currentWallpaperId,
+				hiddenIds = []
+			} = localData;
+			
+			// set all
+			commit('setData', {
+				wallpapers,
+				expires,
+				arrayUpdated,
+				arrayUpdateChangeAmount,
+				idLastSet,
+				currentWallpaperId,
+				hiddenIds
+			});
+		},
+		setApiData({ commit }, apiData) {
+			let {
+				wallpapers,
+				expires
+			} = apiData;
+			
+			const arrayUpdated = new Date().getTime();
+			const arrayUpdateChangeAmount = wallpapers.length;
+
+			const idLastSet = new Date().getTime();
+			const currentWallpaperId = 0;
+
+			const hiddenIds = [];
+
+			// set all
+			commit('setData', {
+				wallpapers,
+				expires,
+				arrayUpdated,
+				arrayUpdateChangeAmount,
+				idLastSet,
+				currentWallpaperId,
+				hiddenIds
+			});
+			
+			commit('setDataStatus', "fresh");
+		},
+		async fetchApiData({getters, dispatch}) {
+			try {
+				const category = getters.category;
+				let apiData = await apiRequest({category});
+				dispatch('setApiData', {
+					expires: apiData.expires,
+					wallpapers: apiData.data
 				});
+			} catch (e) {
+				console.warn("Could not load WALLPAPER api data...");
+				console.warn(e);
+			}			
 		},
 
+		// UNIQUE ACTIONS
+		retrieveExtraWallpapers() {
+			//uses getters.allowedToGetExtra
+			//set array updated to prevent numerous retries
+			//fetch data
+			//merge unique
+			//commit wallpapers
+			//commit expires
+			//commit change amount
+		},
+
+		goToNext({state, getters, commit}) {
+			//if not finishedLoading return
+			if (!state.finishedLoading) return;
+			//increase id by one, and set lastSetId to now
+			commit('setWallpaperId', { currentWallpaperId: getters.nextWallpaperId, idLastSet: new Date().getTime() });
+			//TODO: FIRST LOAD NEXT WALLPAPER, ONLY THEN SET NEXT WALLPAPER ID
+			//			MAYBE IN COMPONENT?
+		},
+
+		hideCurrent() {
+			//if not finishedLoading return
+		},
+
+		checkWallpaperId({ state, getters, commit }) {
+			const now = new Date().getTime();
+			const refresh = getters.refreshTime;
+
+			let currentWallpaperId = state.currentWallpaperId;
+			let idLastSet = state.idLastSet;
+
+			if (idLastSet + refresh > now) {
+				currentWallpaperId = getters.nextWallpaperId;
+				idLastSet = now;
+				commit('setWallpaperId', { currentWallpaperId, idLastSet });
+			}
+		},
+
+
+		// OLD BELOW
 		getAdditionalWallpapersFromServer({ state, getters, commit, dispatch, rootGetters }) {
 			if (getters.wallpapersLength > 70) {
 				console.warn("Wont load additional wallpapers because: too many wallpapers already loaded.", `${curLength} / 70`);
@@ -189,48 +370,7 @@ const wallpaperStore = {
 
 			commit('setWallpaperDataExpires', expires);
 		},
-
-		storageLoadFail({dispatch}) {
-			dispatch('getWallpapersFromServer');
-		},
-
-		storageLoadExpired({ commit, dispatch }, data) {
-			dispatch('getWallpapersFromServer', data);
-		},
-
-		storageLoadSuccess({ commit, dispatch }, localData) {
-			let {
-				wallpapers = [],
-				expires,
-				currentWallpaperId = 0,
-				idLastSet,
-				arrayUpdateChangeAmount
-			} = localData;
-
-			if (expires - new Date().getTime() < 0) return dispatch('storageLoadExpired', localData);
-
-			//TODO: refresh to next wallpaper if lastSet is too long ago
-			commit('setWallpapers', wallpapers);
-			dispatch('setCurrentWallpaperId', { id: currentWallpaperId, lastSet: idLastSet });
-			commit('setWallpaperDataExpires', expires);
-			commit('setArrayUpdateChangeAmount', arrayUpdateChangeAmount);
-			dispatch('loadingDataSucces');
-		},
-
-		wallpaperSetFromApi({ commit, dispatch }, apiData) {
-			const {
-				data: wallpapers = [],
-				expires
-			} = apiData;
-
-			commit('setWallpapers', wallpapers);
-			commit('setWallpaperDataExpires', expires);
-			dispatch('setCurrentWallpaperId', {});
-
-			dispatch('loadingDataSucces');			
-		},
-
-		goToNextWallpaper({ state, getters, commit, dispatch }) {
+		/*goToNextWallpaper({ state, getters, commit, dispatch }) {
 			if (!state.dataLoaded) {
 				console.warn("No wallpaper data is loaded, so can't go to next.");
 				return;
@@ -254,7 +394,7 @@ const wallpaperStore = {
 				.catch(e => {
 					console.warn(e);
 				});
-		},
+		},*/
 
 		hideCurrentWallpaper({ state, getters, commit, dispatch }) {
 			const arrayLength = state.wallpapers.length;
@@ -304,7 +444,7 @@ const wallpaperStore = {
 					resolve(url);
 				}
 
-				function errorLoading() {
+				function errorLoading(e) {
 					reject('Error loading image');
 				}
 				function abortedLoading() {

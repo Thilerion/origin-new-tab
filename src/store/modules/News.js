@@ -53,7 +53,7 @@ const newsStore = {
 		settingsChanged() {
 			//
 		},
-		async storageLoadFail() {
+		async storageLoadFail({commit, dispatch}) {
 			await dispatch('fetchApiData');
 			commit('setFinishedLoading', true);
 		},

@@ -8,6 +8,7 @@ export default function (defaultSettings, oldUserData) {
 	
 	if (oldData.language) newData.general.language = oldData.language;
 	if (oldData.username) newData.greeting.username = oldData.username;
+	if (oldData.user) newData.greeting.username = oldData.user;
 	if (oldData.fontSize) newData.general.fontSize = oldData.fontSize;
 	if (oldData.widgets) newData.widgets = oldData.widgets;
 

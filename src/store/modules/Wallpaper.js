@@ -43,9 +43,10 @@ const wallpaperStore = {
 	getters: {
 		// COMMMON GETTERS
 		toWatch(state) {
-			const { wallpapers, currentWallpaperId, expires, idLastSet, arrayUpdated, arrayUpdateChangeAmount } = state;
-			return { wallpapers, currentWallpaperId, expires, idLastSet, arrayUpdated, arrayUpdateChangeAmount };
+			const { wallpapers, currentWallpaperId, expires, idLastSet, arrayUpdated, arrayUpdateChangeAmount, hiddenIds } = state;
+			return { wallpapers, currentWallpaperId, expires, idLastSet, arrayUpdated, arrayUpdateChangeAmount, hiddenIds };
 		},
+
 
 		hasExpired(state) {
 			return state.expires - new Date().getTime() < 0;
@@ -63,12 +64,14 @@ const wallpaperStore = {
 
 		dataInvalid(state) {
 			if (state.finishedLoading) return false;
-
 			if (!state.expires) return true;
 			if (!Array.isArray(state.wallpapers)) return true;
 			if (state.wallpapers.length < 1) return true;
 			if (!Number.isInteger(state.currentWallpaperId)) return true;
 			if (!Array.isArray(state.hiddenIds)) return true;
+			if (state.currentWallpaperId > state.wallpapers.length - 1) return true;
+			if (state.hiddenIds.includes(null) || state.hiddenIds.includes(undefined)) return true;
+			if (!state.wallpapers[0].hasOwnProperty("id")) return true;
 		},
 
 		// UNIQUE GETTERS

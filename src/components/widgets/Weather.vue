@@ -1,10 +1,10 @@
 <template>
-	<div class="widget-weather f-shadow-medium widget-no-select" @click="extend" v-if="dataLoaded">
+	<div class="widget-weather f-shadow-medium widget-no-select" @click="extend" v-if="dataLoadSuccessful">
 		<StartClimacon v-if="icon" :icon="icon" class="icon f-shadow-light"></StartClimacon>
 		<p class="temperature">{{currently.temperature | roundNumber}}&deg;</p>
 		<p class="location">{{addressCity}}</p>
 		<div class="row-extended">
-			<StartWeatherExtended class="extended" v-show="showExtended && dataLoaded" :forecast="forecast.daily" />
+			<StartWeatherExtended class="extended" v-show="showExtended && dataLoadSuccessful" :forecast="forecast.daily" />
 		</div>		
 	</div>
 </template>
@@ -26,8 +26,12 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('weather', ['forecast', 'dataLoaded']),
-		...mapGetters('weather', ['addressCity']),
+		...mapState('weather', ['forecast']),
+		...mapGetters('weather', [
+			'addressCity',
+			'dataLoadSuccessful',
+			'dataLoadFailed'
+		]),
 		currently() {
 			return this.forecast.currently;
 		},

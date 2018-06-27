@@ -46,16 +46,21 @@ const weatherStore = {
 		forecast(state) {
 			return state.forecast;
 		},
+		
 		useCustomLocation({}, {}, {}, rootGetters) {
 			return rootGetters.useCustomLocation;
 		},
 
 		customLocationQuery({ }, { }, { }, rootGetters) {
-			
+			return rootGetters.customLocationQuery;
 		},
 
 		customCoordinatesAvailable(state) {
-			return state.customCoordinates.latitude && state.customCoordinates.longitude;
+			return !!state.customCoordinates.latitude && !!state.customCoordinates.longitude;
+		},
+
+		coordinatesAvailable(state) {
+			return !!state.coordinates.latitude && !!state.coordinates.longitude;
 		},
 
 		coordinates(state, getters) {
@@ -65,7 +70,7 @@ const weatherStore = {
 				return state.coordinates;
 			}
 		},
-		
+
 		addressCity(state) {
 			return state.address.city;
 		}
@@ -74,31 +79,43 @@ const weatherStore = {
 	mutations: {
 		// COMMON MUTATIONS
 		setData(state, data) {
+			let {
+				expires,
+				forecast,
+				address
+			} = data;
 
+			let {
+				city,
+				street
+			} = address;
+
+			state.expires = expires;
+			state.forecast = forecast;
+			state.address.city = city || "";
+			state.address.street = street || "";
 		},
 		setFinishedLoading(state, bool) {
-
+			state.finishedLoading = !!bool;
 		},
 		setDataStatus(state, status) {
-
+			state.dataStatus = status;
 		},
 
 		// UNIQUE MUTATIONS
-		setCustomAddressQuery() {
-
+		setCoordinates(state, {latitude, longitude}) {
+			state.coordinates = { latitude, longitude };
 		},
-		setAddress() {
-
+		setCustomCoordinates(state, {latitude, longitude}) {
+			state.customCoordinates = { latitude, longitude };
 		},
-		setCoordinates() {
-
-		},
-		setCustomCoordinates() {
-
-		},
+		resetCustomCoordinates(state) {
+			state.customCoordinates = { latitude: null, longitude: null };
+		}
 
 
 		// OLD BELOW
+		/*
 		setWeatherDataExpires(state, expires) {
 			state.expires = expires;
 		},
@@ -117,7 +134,7 @@ const weatherStore = {
 			} else {
 				state.dataLoaded = bool;
 			}
-		}
+		}*/
 	},
 
 	actions: {
@@ -125,26 +142,125 @@ const weatherStore = {
 		settingsChanged({}, changes = []) {
 
 		},
-		async storageLoadFail() {
-
+		async storageLoadFail({commit, dispatch}) {
+			await dispatch('fetchApiData');
+			commit('setFinishedLoading', true);
 		},
-		async storageLoadSuccess() {
+		async storageLoadSuccess({getters, commit, dispatch}, localData) {
+			dispatch('setLocalData', localData);
+			if (getters.hasExpired) {
+				commit('setDataStatus', 'stale');
+				await dispatch('fetchApiData');
+			} else {
+				commit('setDataStatus', "fresh");
+			}
 
+			commit('setFinishedLoading', true);
 		},
-		setLocalData() {
+		setLocalData({commit}, localData) {
+			let {
+				expires,
+				forecast,
+				address,
+				customCoordinates
+			} = localData;
 
+			commit('setData', {
+				expires,
+				forecast,
+				address
+			});
+
+			if (customCoordinates && customCoordinates.latitude) {
+				commit('setCustomCoordinates', customCoordinates);
+			}			
 		},
-		setApiData() {
+		setApiData({ commit }, apiData) {
+			let {
+				expires,
+				forecast,
+				address
+			} = apiData;
 
+			const city = address.bestAddress.split(',')[0];
+
+			commit('setData', {
+				expires,
+				forecast,
+				address: {
+					city,
+					street: null
+				}
+			})
+
+			commit('setDataStatus', 'fresh');
 		},
-		fetchApiData() {
-
+		async fetchApiData({dispatch}) {
+			try {
+				let coordinates = await dispatch('getSetCorrectLocation');
+				const {latitude, longitude} = coordinates;
+				let apiData = await weatherRequest({ latitude, longitude });
+				dispatch('setApiData', {
+					expires: apiData.expires,
+					forecast: apiData.data.forecast,
+					address: apiData.data.address
+				});
+			} catch (e) {
+				console.warn("Could not load WEATHER api data...");
+				console.warn(e);
+			}
 		},
 		
 		// UNIQUE ACTIONS
+		async getSetCorrectLocation({ state, getters, commit, dispatch }) {
+			const useCustom = getters.useCustomLocation;
+			const customCoordsAvailable = getters.customCoordinatesAvailable;
+			const locationQueryAvailable = !!getters.customLocationQuery;
+
+			let coords = {
+				latitude: null,
+				longitude: null
+			}
+
+			try {
+				if (useCustom && customCoordsAvailable) {
+					//return customCoords
+					coords = { ...state.customCoordinates };
+				} else if (useCustom && locationQueryAvailable) {
+					//get location from locationRequest API
+					let customLocation = await dispatch('fetchCustomLocation');
+					coords = { ...customLocation };
+				} else {
+					//get location from browser
+					let browserLocation = await getPosition();
+					coords = { ...browserLocation };
+					commit('resetCustomCoordinates');
+					commit('setCoordinates', coords);
+				}
+				return Promise.resolve(coords);
+			}
+			catch (e) {
+				console.warn("Could not get LOCATION data");
+				return Promise.reject(e);
+			}
+		},
+
+		async fetchCustomLocation({getters, commit}) {
+			try {
+				let locationQuery = getters.customLocationQuery;
+				let data = await locationRequest({ address: locationQuery });
+				const { coordinates } = data.data;
+				commit('setCustomCoordinates', coordinates);
+				return Promise.resolve(coordinates);
+			} catch (e) {
+				console.warn("Getting custom location failed");
+				return Promise.reject(e);
+			}
+			//commit setCustomCoordinates
+		},
 
 		// OLD BELOW
-
+		/*
 		storageLoadFailOLD({ dispatch }) {
 			dispatch('initiateGetWeather');
 		},
@@ -273,7 +389,7 @@ const weatherStore = {
 					return Promise.reject(e);
 				}
 			}
-		}
+		}*/
 	}
 }
 

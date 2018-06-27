@@ -78,5 +78,14 @@ export default {
 	},
 	setWidgetAlignment(state, { index, alignment }) {
 		state.settingsData.widgets[index].align = alignment;
+	},
+	showHorizontalLine(state, bool) {
+		state.showHorizontalLine = bool;
+	},
+	showVerticalLine(state, bool) {
+		state.showVerticalLine = bool;
+	},
+	showEdgeLines(state, lines = [false, false, false, false]) {
+		state.showEdgeLines = [...lines];
 	}
 };

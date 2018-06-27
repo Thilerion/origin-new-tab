@@ -27,7 +27,7 @@
 
 		<div class="widget-slot-wrapper">
 			<slot/>
-		</div>		
+		</div>
 	</div>
 </template>
 
@@ -214,6 +214,29 @@ export default {
 			if (newRows[1] > gridRows + 1) newRows[1] = gridRows + 1;
 			if (newRows[1] === null) debugger;
 			return {cols: newCols, rows: newRows};
+		},
+		isCenteredHorizontal() {
+			if (!this.resizeData.resizing && !this.dragData.dragging) return;
+			const start = this.widgetCols[0];
+			const end = this.widgetCols[1];
+			const cols = this.gridCols;
+			return (start - 1) === (cols + 1) - end;
+		},
+		isCenteredVertical() {
+			if (!this.resizeData.resizing && !this.dragData.dragging) return;
+			const start = this.widgetRows[0];
+			const end = this.widgetRows[1];
+			const rows = this.gridRows;
+			return (start - 1) === (rows + 1) - end;
+		},
+		showEdgeLines() {
+			if (!this.resizeData.resizing && !this.dragData.dragging) return;
+			let edges = [false, false, false, false];
+			if (this.widgetRows[0] === 1) edges[0] = true;
+			if (this.widgetRows[1] === this.gridRows + 1) edges[2] = true;
+			if (this.widgetCols[0] === 1) edges[3] = true;
+			if (this.widgetCols[1] === this.gridCols + 1) edges[1] = true;
+			return edges;
 		}
 	},
 	methods: {
@@ -344,6 +367,36 @@ export default {
 					}
 				}
 			}, deep: true
+		},
+		isCenteredHorizontal(newValue, oldValue) {
+			this.$store.commit('showHorizontalLine', !!newValue);
+		},
+		isCenteredVertical(newValue, oldValue) {
+			this.$store.commit('showVerticalLine', !!newValue);
+		},
+		showEdgeLines: {
+			handler(newValue, oldValue) {
+				console.log(newValue, oldValue);
+				let doCommit = false;
+
+				if (!oldValue && !!newValue) {
+					doCommit = true;
+				} else if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+					doCommit = true;
+				}
+
+				if (doCommit) {
+					console.log("Doing commit!");
+					if (Array.isArray(newValue) && newValue.length === 4) {
+						this.$store.commit('showEdgeLines', [...newValue]);
+					} else {
+						this.$store.commit('showEdgeLines', [false, false, false, false]);
+					}
+					
+				}
+							
+			},
+			deep: true
 		}
 	}
 }
@@ -596,5 +649,24 @@ export default {
 				var(--blur)
 				-10px
 				var(--edge-colour);
+}
+
+.line {
+	position: absolute;
+	background-color: blue;
+}
+
+.line-horizontal {
+	height: 2px;
+	left: 0;
+	right: 0;
+	top: calc((100% - 2px) / 2);
+}
+
+.line-vertical {
+	width: 2px;
+	top: 0;
+	bottom: 0;
+	left: calc((100% - 2px) / 2);
 }
 </style>

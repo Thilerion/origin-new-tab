@@ -3,6 +3,9 @@ const state = {
 	showSettings: window.location.hash.substr(1) === 'settings',
 	gridCols: null,
 	gridRows: null,
+	showHorizontalLine: false,
+	showVerticalLine: false,
+	showEdgeLines: [false, false, false, false],
 	editingUsername: false,
 
 	settingsData: {

@@ -1,6 +1,15 @@
 <template>
 	<div class="grid" ref="grid" :class="{'dnd': dndEnabled}" @dragover="dragOver">
-		<div class="grid-lines" v-if="dndEnabled">
+		<div
+			class="grid-lines"
+			v-if="dndEnabled"
+			:class="{
+				'edge-left': showLeftLine,
+				'edge-right': showRightLine,
+				'edge-top': showTopLine,
+				'edge-bottom': showBottomLine
+			}"
+		>
 			<div class="grid-lines-cell" v-for="box in (gridRows * gridCols)" :key="box"></div>
 			<div class="grid-align hor" v-show="showHor"></div>
 			<div class="grid-align ver" v-show="showVer"></div>
@@ -58,10 +67,25 @@ export default {
 			})
 		},
 		showHor() {
-
+			return this.$store.state.showHorizontalLine;
 		},
 		showVer() {
-
+			return this.$store.state.showVerticalLine;
+		},
+		showEdgeLines() {
+			return this.$store.state.showEdgeLines;
+		},
+		showLeftLine() {
+			return this.showEdgeLines && this.showEdgeLines[3];
+		},
+		showRightLine() {
+			return this.showEdgeLines && this.showEdgeLines[1];
+		},
+		showTopLine() {
+			return this.showEdgeLines && this.showEdgeLines[0];
+		},
+		showBottomLine() {
+			return this.showEdgeLines && this.showEdgeLines[2];
 		}
 	},
 	methods: {
@@ -120,6 +144,12 @@ export default {
 }
 
 .grid-lines {
+	--widget-align-colour-base: 0, 255, 179;
+	--widget-align-colour: rgba(var(--widget-align-colour-base), 0.774);
+	--widget-edge-colour: rgba(185, 43, 18, 0.884);
+}
+
+.grid-lines {
 	display: grid;
 	grid-template-columns: repeat(var(--cols), 1fr);
 	grid-template-rows: repeat(var(--rows), 1fr);
@@ -128,6 +158,23 @@ export default {
 	top: 0; right: 0; bottom: 0; left: 0;
 	margin: calc(.75em - 3px) calc(.5em - 3px);
 	border: 2px solid rgba(200, 227, 255, 0.2);
+}
+
+.grid-lines.edge-left {
+	border-left: 4px solid var(--widget-edge-colour);
+	left: -2px;
+}
+.grid-lines.edge-right {
+	border-right: 4px solid var(--widget-edge-colour);
+	right: -2px;
+}
+.grid-lines.edge-top {
+	border-top: 4px solid var(--widget-edge-colour);
+	top: -2px;
+}
+.grid-lines.edge-bottom {
+	border-bottom: 4px solid var(--widget-edge-colour);
+	bottom: -2px;
 }
 
 .grid-lines-cell {
@@ -142,7 +189,7 @@ export default {
 
 .grid-align {
 	position: absolute;
-	background: rgba(0, 255, 179, 0.774);
+	background: var(--widget-align-colour);
 }
 
 .grid-align.hor {

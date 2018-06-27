@@ -21,7 +21,6 @@
 <script>
 import StartWidget from './widget-base/Widget.vue';
 
-import {deepClone} from '@/utils/deepObject';
 import {settingsOptions} from '@/store/libs/defaultUserSettings';
 import {mapState, mapGetters, mapMutations} from 'vuex';
 
@@ -48,11 +47,6 @@ export default {
 				return w.active || !canBeInactive;
 			});
 		},
-		draggableWidgets() {
-			return this.activeWidgets.filter(w => {
-				return settingsOptions.widgets.widgetOptions[w.name].move;
-			})
-		},
 		widgetGridPlacement() {
 			return this.activeWidgets.map(val => {
 				return {
@@ -64,30 +58,14 @@ export default {
 			})
 		},
 		showHor() {
-			//return this.currentlyDragging.isCenterHorizontal;
+
 		},
 		showVer() {
-			//return this.currentlyDragging.isCenterVertical;
+
 		}
 	},
 	methods: {
 		...mapMutations(['toggleDnd', 'setGridSize']),
-		checkCenter(widgetCols, widgetRows) {
-			/*let cols = this.gridCols;
-			let rows = this.gridRows;
-
-			let fromLeft = widgetCols[0] - 1;
-			let toRight = (cols + 1) - widgetCols[1];
-			let horizontal = fromLeft === toRight;
-
-			let fromTop = widgetRows[0] - 1;
-			let toBottom = (rows + 1) - widgetRows[1];
-			let vertical = fromTop === toBottom;
-
-			console.log(horizontal, vertical);
-			this.currentlyDragging.isCenterVertical = vertical;
-			this.currentlyDragging.isCenterHorizontal = horizontal;*/
-		},
 		getCSSGridVariables() {
 			const el = this.$refs.grid;
 			const gridCols = parseInt(getComputedStyle(el).getPropertyValue('--cols'));

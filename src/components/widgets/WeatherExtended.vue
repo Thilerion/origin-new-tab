@@ -3,7 +3,9 @@
 	<div class="widget-weather-extended">		
 		
 		<ul class="forecast-list">
-			<div class="background-image" :style="backgroundImage"></div>
+			<transition name="fade">
+			<div class="background-image" :style="backgroundImage" :key="currentLoadedURL"></div>
+			</transition>
 			
 			<li class="forecast-item" v-for="(day, index) in forecastDays" :key="day.time">
 				<div class="forecast-item-background" :style="{'background-color': bgColors[index]}"></div>
@@ -32,6 +34,8 @@ import nlLocale from 'date-fns/locale/nl';
 
 const BG_COLORS = ['#333333','#434343','#525252','#636363','#747474','#868686','#989898','#aaaaaa'];
 
+import {mapState, mapGetters} from 'vuex';
+
 export default {
 	components: {
 		StartClimacon
@@ -51,6 +55,9 @@ export default {
 		}
 	},
 	computed: {
+		...mapState('wallpaper', [
+			'currentLoadedURL'
+		]),
 		forecastDays() {
 			return this.forecast.reduce((acc, day) => {
 				if (!acc) acc = {};
@@ -65,15 +72,8 @@ export default {
 			}, {})
 		},
 		backgroundImage() {
-			if (!this.wallpaperUrl) return;
-			return {'background-image': `url(${this.wallpaperUrl})`};
-		},
-		wallaperToShow() {
-			return this.$store.getters['wallpaper/wallpaperToShow'];
-		},
-		wallpaperUrl() {
-			const wp = this.wallaperToShow;
-			return (wp && wp.url) ? wp.url : null;
+			if (!this.currentLoadedURL) return;
+			return {'background-image': `url(${this.currentLoadedURL})`};
 		}
 	},
 	filters: {
@@ -249,5 +249,17 @@ export default {
 
 .forecast-ds-text:hover {
 	text-decoration: underline;
+}
+
+.fade-enter-active {
+	transition: opacity 0.75s ease-in;
+}
+
+.fade-leave-active {
+	transition: opacity 1s ease-in;
+}
+
+.fade-enter, .fade-leave-to {
+	opacity: 0;
 }
 </style>

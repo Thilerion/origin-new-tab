@@ -29,6 +29,7 @@ const wallpaperStore = {
 
 		loadingImage: false,
 		errorLoadingImage: false,
+		currentLoadedURL: "",
 
 		loadAdditionalRequirements: {
 			minTime: 10 * 60 * 60 * 1000, //10 minutes
@@ -176,6 +177,9 @@ const wallpaperStore = {
 
 		setExpiresToNow(state) {
 			state.expires = new Date().getTime();
+		},
+		setCurrentLoadedURL(state, url) {
+			state.currentLoadedURL = url;
 		}
 	},
 

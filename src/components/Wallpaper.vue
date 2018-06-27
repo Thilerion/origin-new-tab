@@ -190,6 +190,11 @@ export default {
 			if (newValue !== oldValue) {
 				this.$store.dispatch('wallpaper/settingsChanged', ['collection']);
 			}
+		},
+		currentLoadedURL(newValue, oldValue) {
+			if (newValue !== oldValue) {
+				this.$store.commit('wallpaper/setCurrentLoadedURL', newValue);
+			}
 		}
 	}
 }

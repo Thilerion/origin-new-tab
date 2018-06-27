@@ -30,13 +30,18 @@ export default {
 		...mapGetters('weather', [
 			'addressCity',
 			'dataLoadSuccessful',
-			'dataLoadFailed'
+			'dataLoadFailed',
+			'useCustomLocation',
+			'customLocationQuery'
 		]),
 		currently() {
 			return this.forecast.currently;
 		},
 		icon() {
 			if (this.currently) return this.currently.icon;
+		},
+		watchSettings() {
+			return [this.useCustomLocation, this.customLocationQuery];
 		}
 	},
 	methods: {
@@ -47,6 +52,32 @@ export default {
 	filters: {
 		roundNumber(n) {
 			return Math.round(n);
+		}
+	},
+	watch: {
+		watchSettings: {
+			handler(newValue, oldValue) {
+				const useCustom = newValue[0];
+				const useCustomOld = oldValue[0];
+				const customQuery = newValue[1];
+				const customQueryOld = oldValue[1];
+
+				const useCustomChanged = useCustom !== useCustomOld;
+				const customQueryChanged = customQuery !== customQueryOld;
+
+				console.log(newValue, oldValue);
+
+				if (customQueryChanged) {
+					this.$store.commit('weather/resetCustomCoordinates');
+				}
+				if (useCustom && !customQuery) {
+					return;
+				}
+
+				console.log("Dispatching settings changed now");
+				this.$store.dispatch('weather/settingsChanged');
+			},
+			deep: true
 		}
 	}
 }

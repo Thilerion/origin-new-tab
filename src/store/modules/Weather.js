@@ -111,36 +111,19 @@ const weatherStore = {
 		},
 		resetCustomCoordinates(state) {
 			state.customCoordinates = { latitude: null, longitude: null };
+		},
+		setExpires(state, time) {
+			state.expires = time;
 		}
-
-
-		// OLD BELOW
-		/*
-		setWeatherDataExpires(state, expires) {
-			state.expires = expires;
-		},
-		setForecast(state, forecast) {
-			state.forecast = { ...forecast };
-		},
-		setAddress(state, {city, street = null}) {
-			state.address = { city, street };
-		},
-		setCoordinates(state, coords) {
-			state.coordinates = { ...coords };
-		},
-		setWeatherDataLoaded(state, bool) {
-			if (bool == null) {
-				state.dataLoaded = !state.dataLoaded;
-			} else {
-				state.dataLoaded = bool;
-			}
-		}*/
 	},
 
 	actions: {
 		// COMMON ACTIONS
-		settingsChanged({}, changes = []) {
-
+		async settingsChanged({ commit, dispatch }, changes = []) {
+			commit('setExpires', new Date().getTime());
+			commit('setDataStatus', 'stale');
+			await dispatch('fetchApiData');
+			commit('setFinishedLoading', true);
 		},
 		async storageLoadFail({commit, dispatch}) {
 			await dispatch('fetchApiData');

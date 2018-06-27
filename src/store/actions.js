@@ -1,5 +1,6 @@
 import lodashMerge from 'lodash.merge';
 import { defaultSettings } from '@/store/libs/defaultUserSettings';
+import mergeUserStorageIntoSettings from '@/store/libs/mergeUserStorageIntoSettings';
 
 export default {
 	saveUpdatedSettings({ getters, commit, dispatch }, settings) {
@@ -22,7 +23,16 @@ export default {
 	},
 
 	settingsStorageLoadFail({ commit }) {
-		commit('setSettingsData', defaultSettings);	
+		let oldUserData = window.localStorage.getItem('sp_user');
+		if (!oldUserData) {
+			commit('setSettingsData', defaultSettings);
+			return;
+		}
+		
+		const merged = mergeUserStorageIntoSettings(defaultSettings, oldUserData);
+
+		window.localStorage.removeItem('sp_user');
+		commit('setSettingsData', merged);
 	},
 
 	changeWidgetFontSize({ getters, commit }, { name, value }) {

@@ -61,6 +61,16 @@ const wallpaperStore = {
 			return state.dataStatus === null && state.finishedLoading;
 		},
 
+		dataInvalid(state) {
+			if (state.finishedLoading) return false;
+
+			if (!state.expires) return true;
+			if (!Array.isArray(state.wallpapers)) return true;
+			if (state.wallpapers.length < 1) return true;
+			if (!Number.isInteger(state.currentWallpaperId)) return true;
+			if (!Array.isArray(state.hiddenIds)) return true;
+		},
+
 		// UNIQUE GETTERS
 		collection({ }, { }, { }, rootGetters) {
 			return rootGetters.wallpaperCollection;	
@@ -199,7 +209,7 @@ const wallpaperStore = {
 		},
 		async storageLoadSuccess({ getters, commit, dispatch }, localData) {
 			dispatch('setLocalData', localData);
-			if (getters.hasExpired) {
+			if (getters.hasExpired || getters.dataInvalid) {
 				commit('setDataStatus', "stale");
 				await dispatch('fetchApiData');
 			} else {

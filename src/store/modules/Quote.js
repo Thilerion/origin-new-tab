@@ -21,6 +21,16 @@ const quoteStore = {
 			return state.expires - new Date().getTime() < 0;
 		},
 
+		dataInvalid(state) {
+			if (state.finishedLoading) return false;
+
+			if (!state.expires) return true;
+			if (typeof state.quote !== "string") return true;
+			if (typeof state.author !== "string") return true;
+			if (state.quote.length < 1) return true;
+			if (state.author.length < 1) return true;
+		},
+
 		// UNIQUE GETTERS
 		quote(state) {
 			return state.quote;
@@ -62,7 +72,7 @@ const quoteStore = {
 		},
 		async storageLoadSuccess({ getters, commit, dispatch }, localData) {
 			dispatch('setLocalData', localData);
-			if (getters.hasExpired) {
+			if (getters.hasExpired || getters.dataInvalid) {
 				commit('setDataStatus', "stale");
 				await dispatch('fetchApiData');
 			} else {

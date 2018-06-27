@@ -29,6 +29,15 @@ const newsStore = {
 		dataLoadFailed(state) {
 			//this means data could not be loaded
 			return state.dataStatus === null && state.finishedLoading;
+		},
+
+		dataInvalid(state) {
+			//to prevent rechecking this getter??? TODO
+			if (state.finishedLoading) return false;
+
+			if (!state.expires) return true;
+			if (!Array.isArray(state.articles)) return true;
+			if (state.articles.length < 1) return true;
 		}
 
 		// UNIQUE GETTERS
@@ -59,7 +68,7 @@ const newsStore = {
 		},
 		async storageLoadSuccess({ getters, commit, dispatch }, localData) {
 			dispatch('setLocalData', localData);
-			if (getters.hasExpired) {
+			if (getters.hasExpired || getters.dataInvalid) {
 				commit('setDataStatus', "stale");
 				await dispatch('fetchApiData');
 			} else {

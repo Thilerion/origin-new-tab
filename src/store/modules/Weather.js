@@ -42,6 +42,21 @@ const weatherStore = {
 			return state.dataStatus === null && state.finishedLoading;
 		},
 
+		dataInvalid(state) {
+			if (state.finishedLoading) return false;
+
+			if (!state.expires) return true;
+			if (typeof state.address !== 'object') return true;
+			if (!state.address.city) return true;
+			if (typeof state.coordinates !== 'object') return true;
+			if (!state.coordinates.hasOwnProperty('latitude')) return true;
+			if (typeof state.customCoordinates !== 'object') return true;
+			if (!state.customCoordinates.hasOwnProperty('latitude')) return true;
+			if (typeof state.forecast !== 'object') return true;
+			if (!state.forecast.daily || !Array.isArray(state.forecast.daily)) return true;
+			if (!state.forecast.currently || !state.forecast.currently.temperature) return true;
+		},
+
 		// UNIQUE GETTERS
 		forecast(state) {
 			return state.forecast;
@@ -131,7 +146,7 @@ const weatherStore = {
 		},
 		async storageLoadSuccess({getters, commit, dispatch}, localData) {
 			dispatch('setLocalData', localData);
-			if (getters.hasExpired) {
+			if (getters.hasExpired || getters.dataInvalid) {
 				commit('setDataStatus', 'stale');
 				await dispatch('fetchApiData');
 			} else {

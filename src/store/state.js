@@ -67,7 +67,11 @@ const getters = {
 		return state.editingUsername || !state.settingsData.greeting.username;
 	},
 	gridCols: state => state.gridCols,
-	gridRows: state => state.gridRows
+	gridRows: state => state.gridRows,
+	showEdgeLines(state) {
+		if (!state.dndEnabled) return [false, false, false, false];
+		return state.showEdgeLines;
+	}
 };
 
 export { state, getters };

@@ -5,10 +5,10 @@
 			v-if="dndEnabled"
 		>
 			<div class="grid-lines-cell" v-for="box in (gridRows * gridCols)" :key="box"></div>
-			<div v-show="showLeftLine" class="edge-line edge-left"></div>
-			<div v-show="showBottomLine" class="edge-line edge-bottom"></div>
-			<div v-show="showTopLine" class="edge-line edge-top"></div>
-			<div v-show="showRightLine" class="edge-line edge-right"></div>
+			<div v-show="showEdgeLines[3]" class="edge-line edge-left"></div>
+			<div v-show="showEdgeLines[2]" class="edge-line edge-bottom"></div>
+			<div v-show="showEdgeLines[0]" class="edge-line edge-top"></div>
+			<div v-show="showEdgeLines[1]" class="edge-line edge-right"></div>
 			<div class="grid-align hor" v-show="showHor"></div>
 			<div class="grid-align ver" v-show="showVer"></div>
 		</div>
@@ -71,19 +71,7 @@ export default {
 			return this.$store.state.showVerticalLine;
 		},
 		showEdgeLines() {
-			return this.$store.state.showEdgeLines;
-		},
-		showLeftLine() {
-			return this.showEdgeLines && this.showEdgeLines[3];
-		},
-		showRightLine() {
-			return this.showEdgeLines && this.showEdgeLines[1];
-		},
-		showTopLine() {
-			return this.showEdgeLines && this.showEdgeLines[0];
-		},
-		showBottomLine() {
-			return this.showEdgeLines && this.showEdgeLines[2];
+			return this.$store.getters.showEdgeLines;
 		}
 	},
 	methods: {

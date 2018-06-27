@@ -229,14 +229,21 @@ export default {
 			const rows = this.gridRows;
 			return (start - 1) === (rows + 1) - end;
 		},
-		showEdgeLines() {
-			if (!this.resizeData.resizing && !this.dragData.dragging) return;
-			let edges = [false, false, false, false];
-			if (this.widgetRows[0] === 1) edges[0] = true;
-			if (this.widgetRows[1] === this.gridRows + 1) edges[2] = true;
-			if (this.widgetCols[0] === 1) edges[3] = true;
-			if (this.widgetCols[1] === this.gridCols + 1) edges[1] = true;
-			return edges;
+		touchesLeftEdge() {
+			if (!this.resizeData.resizing && !this.dragData.dragging) return false;
+			return this.widgetCols[0] === 1;
+		},
+		touchesRightEdge() {
+			if (!this.resizeData.resizing && !this.dragData.dragging) return false;
+			return this.widgetCols[1] === this.gridCols + 1;
+		},
+		touchesTopEdge() {
+			if (!this.resizeData.resizing && !this.dragData.dragging) return false;
+			return this.widgetRows[0] === 1;
+		},
+		touchesBottomEdge() {
+			if (!this.resizeData.resizing && !this.dragData.dragging) return false;
+			return this.widgetRows[1] === this.gridRows + 1;
 		}
 	},
 	methods: {
@@ -374,29 +381,25 @@ export default {
 		isCenteredVertical(newValue, oldValue) {
 			this.$store.commit('showVerticalLine', !!newValue);
 		},
-		showEdgeLines: {
-			handler(newValue, oldValue) {
-				console.log(newValue, oldValue);
-				let doCommit = false;
-
-				if (!oldValue && !!newValue) {
-					doCommit = true;
-				} else if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
-					doCommit = true;
-				}
-
-				if (doCommit) {
-					console.log("Doing commit!");
-					if (Array.isArray(newValue) && newValue.length === 4) {
-						this.$store.commit('showEdgeLines', [...newValue]);
-					} else {
-						this.$store.commit('showEdgeLines', [false, false, false, false]);
-					}
-					
-				}
-							
-			},
-			deep: true
+		touchesLeftEdge(newValue, oldValue) {
+			if (newValue !== oldValue) {
+				this.$store.commit('showEdgeLine', {side: 3, value: newValue});
+			}
+		},
+		touchesRightEdge(newValue, oldValue) {
+			if (newValue !== oldValue) {
+				this.$store.commit('showEdgeLine', {side: 1, value: newValue});
+			}
+		},
+		touchesTopEdge(newValue, oldValue) {
+			if (newValue !== oldValue) {
+				this.$store.commit('showEdgeLine', {side: 0, value: newValue});
+			}
+		},
+		touchesBottomEdge(newValue, oldValue) {
+			if (newValue !== oldValue) {
+				this.$store.commit('showEdgeLine', {side: 2, value: newValue});
+			}
 		}
 	}
 }

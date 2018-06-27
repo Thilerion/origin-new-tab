@@ -3,14 +3,12 @@
 		<div
 			class="grid-lines"
 			v-if="dndEnabled"
-			:class="{
-				'edge-left': showLeftLine,
-				'edge-right': showRightLine,
-				'edge-top': showTopLine,
-				'edge-bottom': showBottomLine
-			}"
 		>
 			<div class="grid-lines-cell" v-for="box in (gridRows * gridCols)" :key="box"></div>
+			<div v-show="showLeftLine" class="edge-line edge-left"></div>
+			<div v-show="showBottomLine" class="edge-line edge-bottom"></div>
+			<div v-show="showTopLine" class="edge-line edge-top"></div>
+			<div v-show="showRightLine" class="edge-line edge-right"></div>
 			<div class="grid-align hor" v-show="showHor"></div>
 			<div class="grid-align ver" v-show="showVer"></div>
 		</div>
@@ -146,7 +144,9 @@ export default {
 .grid-lines {
 	--widget-align-colour-base: 0, 255, 179;
 	--widget-align-colour: rgba(var(--widget-align-colour-base), 0.774);
-	--widget-edge-colour: rgba(185, 43, 18, 0.884);
+	--widget-edge-colour-base: 253, 63, 29;
+	--widget-edge-colour: rgba(var(--widget-edge-colour-base), 0.884);
+	--widget-edge-shadow-colour: rgba(var(--widget-edge-colour-base), 0.3);
 }
 
 .grid-lines {
@@ -160,21 +160,38 @@ export default {
 	border: 2px solid rgba(200, 227, 255, 0.2);
 }
 
-.grid-lines.edge-left {
-	border-left: 4px solid var(--widget-edge-colour);
+.edge-line {
+	position: absolute;
+	background-color: var(--widget-edge-colour);
+	z-index: 1000;
+}
+.edge-left {
 	left: -2px;
-}
-.grid-lines.edge-right {
-	border-right: 4px solid var(--widget-edge-colour);
-	right: -2px;
-}
-.grid-lines.edge-top {
-	border-top: 4px solid var(--widget-edge-colour);
 	top: -2px;
-}
-.grid-lines.edge-bottom {
-	border-bottom: 4px solid var(--widget-edge-colour);
 	bottom: -2px;
+	width: 4px;
+	box-shadow: 1px 0 4px 2px var(--widget-edge-shadow-colour);
+}
+.edge-right {
+	right: -2px;
+	top: -2px;
+	bottom: -2px;
+	width: 4px;
+	box-shadow: -1px 0 4px 2px var(--widget-edge-shadow-colour);
+}
+.edge-top {
+	right: -2px;
+	left: -2px;
+	top: -2px;
+	height: 4px;
+	box-shadow: 0 1px 4px 2px var(--widget-edge-shadow-colour);
+}
+.edge-bottom {
+	right: -2px;
+	left: -2px;
+	bottom: -2px;
+	height: 4px;
+	box-shadow: 0 -1px 4px 2px var(--widget-edge-shadow-colour);
 }
 
 .grid-lines-cell {

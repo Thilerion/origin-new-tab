@@ -17,7 +17,7 @@ const state = {
 		widgets: [],
 		weather: {
 			useCustomLocation: false,
-			customLocationToUse: ""
+			customLocationQuery: ""
 		},
 		wallpaper: {
 			wallpaperCollection: null,
@@ -48,10 +48,8 @@ const getters = {
 	widgetByIndex: state => index => state.settingsData.widgets[index],
 	widgetByName: state => name => state.settingsData.widgets.find(w => w.name === name),
 	widgetIndexByName: state => name => state.settingsData.widgets.findIndex(w => w.name === name),
-	customLocationToUse: (state, getters) => {
-		return state.settingsData.weather.customLocationToUse || getters['weather/addressCity'];
-	},
 	useCustomLocation: state => state.settingsData.weather.useCustomLocation,
+	customLocationQuery: state => state.settingsData.weather.customLocationQuery,
 	wallpaperCollection: state => state.settingsData.wallpaper.wallpaperCollection,
 	wallpaperRefresh: state => state.settingsData.wallpaper.wallpaperRefresh,
 	quoteCategory: state => state.settingsData.quote.category,

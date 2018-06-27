@@ -28,11 +28,6 @@ export default {
 	computed: {
 		...mapState('weather', ['forecast', 'dataLoaded']),
 		...mapGetters('weather', ['addressCity']),
-		watchingLocationChange() {
-			let customLocationToUse = this.$store.getters.customLocationToUse;
-			let useCustomLocation = this.$store.getters.useCustomLocation;
-			return {customLocationToUse, useCustomLocation};
-		},
 		currently() {
 			return this.forecast.currently;
 		},
@@ -48,21 +43,6 @@ export default {
 	filters: {
 		roundNumber(n) {
 			return Math.round(n);
-		}
-	},
-	watch: {
-		watchingLocationChange(newValue, oldValue) {
-			if (!this.dataLoaded) return;
-
-			const newLocation = newValue.customLocationToUse !== oldValue.customLocationToUse ? newValue.customLocationToUse : null;
-			const newSetting = newValue.useCustomLocation !== oldValue.useCustomLocation;
-			const enable = !!newValue.useCustomLocation;
-			console.warn('Weather watcher triggered');
-			if (newSetting && newLocation) {
-				this.$store.dispatch('weather/weatherSettingsChanged', {enable, disable: !enable, newLocation});
-			} else if (newLocation) {
-				this.$store.dispatch('weather/weatherSettingsChanged', {newLocation});
-			}
 		}
 	}
 }

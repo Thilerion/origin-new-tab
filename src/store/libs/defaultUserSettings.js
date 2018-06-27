@@ -77,7 +77,7 @@ const defaultSettings = {
 	],
 	weather: {
 		useCustomLocation: false,
-		customLocationToUse: ""
+		customLocationQuery: ""
 	},
 	wallpaper: {
 		// any valid unsplash collection id. maybe provide a list as well?

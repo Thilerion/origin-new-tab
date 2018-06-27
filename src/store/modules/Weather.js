@@ -11,10 +11,6 @@ const weatherStore = {
 			city: null,
 			street: null
 		},
-		customAddress: {
-			city: null,
-			street: null
-		},
 		coordinates: {
 			latitude: null,
 			longitude: null
@@ -38,12 +34,28 @@ const weatherStore = {
 			return state.expires - new Date().getTime() < 0;
 		},
 
+		dataLoadSuccessful(state) {
+			return state.dataStatus != null && state.finishedLoading;
+		},
+
+		dataLoadFailed(state) {
+			return state.dataStatus === null && state.finishedLoading;
+		},
+
 		// UNIQUE GETTERS
 		forecast(state) {
 			return state.forecast;
 		},
 		useCustomLocation({}, {}, {}, rootGetters) {
-			return rootGetters.useCustomLocation && !!rootGetters.customLocationToUse;
+			return rootGetters.useCustomLocation;
+		},
+
+		customLocationQuery({ }, { }, { }, rootGetters) {
+			
+		},
+
+		customCoordinatesAvailable(state) {
+			return state.customCoordinates.latitude && state.customCoordinates.longitude;
 		},
 
 		coordinates(state, getters) {
@@ -53,12 +65,9 @@ const weatherStore = {
 				return state.coordinates;
 			}
 		},
-		addressCity(state, getters) {
-			if (getters.useCustomLocation) {
-				return state.customAddress.city;
-			} else if (!getters.useCustomLocation) {
-				return state.address.city;
-			}
+		
+		addressCity(state) {
+			return state.address.city;
 		}
 	},
 
@@ -79,9 +88,6 @@ const weatherStore = {
 
 		},
 		setAddress() {
-
-		},
-		setCustomAddress() {
 
 		},
 		setCoordinates() {

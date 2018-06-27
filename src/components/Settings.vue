@@ -100,7 +100,7 @@
 								>Ja: <input
 									type="text"
 									class="input-text"
-									v-model="currentSettings.weather.customLocationToUse"
+									v-model="currentSettings.weather.customLocationQuery"
 								></label>
 								<label v-else>Nee, gebruik browser locatie.</label>
 							</div>

@@ -25,8 +25,8 @@ export default {
 		//TODO: dispatch to weather component (from action)
 		state.settingsData.weather.useCustomLocation = !!bool;
 	},
-	setCustomLocationToUse(state, loc) {
-		state.settingsData.weather.customLocationToUse = loc;
+	setCustomLocationQuery(state, loc) {
+		state.settingsData.weather.customLocationQuery = loc;
 	},
 	setWallpaperCollection(state, collection) {
 		state.settingsData.wallpaper.wallpaperCollection = collection;

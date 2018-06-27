@@ -5,7 +5,7 @@ export default {
 	saveUpdatedSettings({ getters, commit, dispatch }, settings) {
 		const currentSettings = getters.settingsWatch;
 
-		if (settings.weather.useCustomLocation && !settings.weather.customLocationToUse) {
+		if (settings.weather.useCustomLocation && !settings.weather.customLocationQuery) {
 			settings.weather.useCustomLocation = false;
 		}
 		
@@ -26,25 +26,6 @@ export default {
 			console.log('quote cat changed');
 			dispatch('quote/settingsChanged', null, {root: true});
 		}
-		/*
-		const useCustomLocChanged = settings.weather.useCustomLocation !== currentSettings.weather.useCustomLocation;
-		const customLocChanged = settings.weather.customLocationToUse !== currentSettings.weather.customLocationToUse;
-		if (useCustomLocChanged) {
-			if (!settings.weather.useCustomLocation) {
-				//disable using custom location
-				commit('setUseCustomLocation', false);
-				console.warn("disable custom location");
-				dispatch('weather/weatherSettingsChanged', { disable: true });
-			} else {
-				//enable use custom location
-				console.warn("enable custom location");
-				dispatch('weather/weatherSettingsChanged', { enable: true, newLocation: settings.weather.customLocationToUse });
-			}
-		} else if (settings.weather.useCustomLocation && customLocChanged) {
-			//only update new custom location
-			console.warn('use new custom location');
-			dispatch('weather/weatherSettingsChanged', { newLocation: settings.weather.customLocationToUse });
-		}*/
 
 		if (settings.wallpaper.wallpaperCollection !== currentSettings.wallpaper.wallpaperCollection) {
 			console.log('wallpaper collection changed');

@@ -144,6 +144,8 @@ export default {
 			return absoluteMoved;
 		},
 		widgetMoved() {
+			if (!this.dragData.dragging) return;
+			if (!this.columnsMoved && !this.rowsMoved) return;
 			return [this.columnsMoved, this.rowsMoved];
 		},
 		columnsResized() {
@@ -350,13 +352,12 @@ export default {
 	watch: {
 		widgetMoved: {
 			handler(newValue, oldValue) {
+				if (!newValue) return;
 				const cols = newValue[0];
 				const rows = newValue[1];
 
 				if (cols === 0 && rows === 0) return;
-				if (cols === oldValue[0] && rows === oldValue[1]) return;
 				if (!this.dragData.dragging) return;
-				
 				this.$emit('moveWidget', cols, rows);					
 			},
 			deep: true

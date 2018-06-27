@@ -64,8 +64,14 @@ export default {
 		state.gridRows = rows;
 	},
 	setWidgetPositionOnGrid(state, { index, moveCols, moveRows }) {
-		let row = [...state.settingsData.widgets[index].row].map(n => n += moveRows);
-		let col = [...state.settingsData.widgets[index].column].map(n => n += moveCols);
+		let row = [...state.settingsData.widgets[index].row];
+		let col = [...state.settingsData.widgets[index].column];
+		if (!!moveRows) {
+			row = row.map(n => n += moveRows);
+		}
+		if (!!moveCols) {
+			col = col.map(n => n += moveCols);
+		}
 		state.settingsData.widgets[index].column = [...col];
 		state.settingsData.widgets[index].row = [...row];
 	},

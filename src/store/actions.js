@@ -54,7 +54,7 @@ export default {
 		commit('setWidgetAlignment', {index, alignment})
 	},
 
-	moveWidget({ getters, commit }, { name, moveCols, moveRows }) {
+	moveWidget({ getters, commit }, { name, moveCols = 0, moveRows = 0 }) {
 		commit('setWidgetPositionOnGrid', {
 			index: getters.widgetIndexByName(name),
 			moveCols,

@@ -338,7 +338,6 @@ const wallpaperStore = {
 
 		async retrieveExtraWallpapers({ state, getters, commit }) {
 			try {
-				debugger;
 				//uses getters.allowedToGetExtra
 				if (!getters.canRetrieveAdditional) return;
 

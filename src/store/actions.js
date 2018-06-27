@@ -15,25 +15,6 @@ export default {
 		commit('setSettingsData', merged);
 	},
 
-	checkImmediateModuleUpdates({ commit, dispatch }, { settings, currentSettings }) {
-		/*
-		need updates in components:
-			quote category
-			if: useCustomLocation => customLocationToUse
-			wallpaper collection
-		*/
-		if (settings.quote.category !== currentSettings.quote.category) {
-			console.log('quote cat changed');
-			dispatch('quote/settingsChanged', null, {root: true});
-		}
-
-		if (settings.wallpaper.wallpaperCollection !== currentSettings.wallpaper.wallpaperCollection) {
-			console.log('wallpaper collection changed');
-			commit('setWallpaperCollection', settings.wallpaper.wallpaperCollection);
-			dispatch('wallpaper/wallpaperSettingsChanged');
-		}
-	},
-
 	settingsStorageLoadSuccess({ commit }, storageData) {
 		const def = defaultSettings;
 		const merged = lodashMerge(def, storageData);

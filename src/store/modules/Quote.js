@@ -45,14 +45,16 @@ const quoteStore = {
 		},
 		setDataStatus(state, status) {
 			state.dataStatus = status;
+		},
+		setExpiresToNow(state) {
+			state.expires = new Date().getTime();
 		}
 	},
 
 	actions: {
 		// COMMON ACTIONS
-		settingsChanged({ getters, dispatch }) {
-			const currentQuoteData = getters.quoteWatch;
-			dispatch('getQuoteFromServer', currentQuoteData);
+		settingsChanged({ dispatch }) {
+			dispatch('getNewQuote');
 		},
 		async storageLoadFail({ commit, dispatch }) {
 			await dispatch('fetchApiData');
@@ -93,6 +95,7 @@ const quoteStore = {
 		// UNIQUE ACTIONS
 		async getNewQuote({commit, dispatch}) {
 			commit('setDataStatus', "stale");
+			commit('setExpiresToNow');
 			commit('setFinishedLoading', false);
 			await dispatch('fetchApiData');
 			commit('setFinishedLoading', true);

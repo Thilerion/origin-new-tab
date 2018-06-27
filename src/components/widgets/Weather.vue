@@ -67,6 +67,10 @@ export default {
 
 				console.log(newValue, oldValue);
 
+				if (!useCustomChanged && !customQueryChanged) {
+					console.log("No weather settings changes");
+					return;
+				}
 				if (customQueryChanged) {
 					this.$store.commit('weather/resetCustomCoordinates');
 				}

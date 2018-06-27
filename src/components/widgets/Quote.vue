@@ -15,7 +15,7 @@ import {mapState, mapGetters} from 'vuex';
 export default {
 	computed: {
 		...mapState('quote', ['finishedLoading']),
-		...mapGetters('quote', ['quote', 'author'])
+		...mapGetters('quote', ['quote', 'author', 'category'])
 	},
 	methods: {
 		reloadQuote() {
@@ -27,6 +27,13 @@ export default {
 			if (str.endsWith('.')) {
 				return str.slice(0, -1);
 			} else return str;
+		}
+	},
+	watch: {
+		category(newValue, oldValue) {
+			if (newValue && newValue !== oldValue) {
+				this.$store.dispatch('quote/settingsChanged');
+			}
 		}
 	}
 }

@@ -168,7 +168,7 @@
 					<h2>Nieuws</h2>
 					<div class="setting-group-content">
 						<div class="setting-item">
-							<h3 class="setting-item-name">Nieuws slide snelheid</h3>
+							<h3 class="setting-item-name">Tijd tussen nieuwsberichten</h3>
 							<div class="input-range-wrap">
 								<input
 									type="range"

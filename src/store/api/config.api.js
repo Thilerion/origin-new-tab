@@ -9,7 +9,7 @@ const API_URL =
 
 const baseRequest = axios.create({
 	baseURL: API_URL,
-	timeout: 12000,
+	timeout: 20000,
 	method: 'get'
 })
 
@@ -22,7 +22,7 @@ const calendarBaseRequest = axios.create({
 		timeMin: parse(new Date().setHours(0, 0, 0, 0)),
 		timeMax: addDays(new Date().setHours(0, 0, 0, 0), 14)
 	},
-	timeout: 12000,
+	timeout: 20000,
 	method: 'get'
 });
 

@@ -1,5 +1,6 @@
 html {
-	font-size: 100%;
+	--font-size: 100%;
+	font-size: var(--font-size);
 	box-sizing: border-box;
 }
 

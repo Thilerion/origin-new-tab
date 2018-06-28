@@ -27,11 +27,13 @@ export default {
 		...mapGetters(['fontSize'])
 	},
 	methods: {
-		setDocumentFontSize(px) {
-			if (!px) {
-				document.documentElement.style.fontSize = ``;
+		setDocumentFontSize(px = null) {
+			const doc = document.documentElement;
+			console.log(doc);
+			if (px === null) {
+				doc.style.setProperty('--font-size', '100%');
 			} else {
-				document.documentElement.style.fontSize = `${px}px`;
+				doc.style.setProperty('--font-size', `${px}px`);
 			}			
 		}
 	},
@@ -40,7 +42,7 @@ export default {
 			this.setDocumentFontSize(newValue);
 		}
 	},
-	beforeMount() {
+	created() {
 		this.setDocumentFontSize(this.fontSize);
 	}
 };

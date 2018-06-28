@@ -15,7 +15,7 @@
 
 		<StartWidget
 			class="widget"
-			:style="widgetGridPlacement[index]"
+			:style="[widgetGridPlacement[index], {'z-index': zIndexSettings[widget.name].zIndex}]"
 			:widget="widget"
 			:dndEnabled="dndEnabled"
 			v-for="(widget, index) of activeWidgets"
@@ -38,7 +38,8 @@ export default {
 	data() {
 		return {
 			gridCols: 0,
-			gridRows: 0
+			gridRows: 0,
+			zIndexSettings: settingsOptions.widgets.widgetOptions
 		}
 	},
 	computed: {

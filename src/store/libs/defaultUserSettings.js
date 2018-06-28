@@ -13,6 +13,14 @@ const defaultSettings = {
 	},
 	widgets: [
 		{ 
+			name: 'greeting',
+			active: true,
+			row: [7, 13],
+			column: [9, 33],
+			align: 1,
+			fontSize: -1,
+		},
+		{ 
 			name: 'news',
 			active: true,
 			row: [1, 3],
@@ -67,14 +75,6 @@ const defaultSettings = {
 			column: [1, 11],
 			align: 0,
 			fontSize: -1
-		},
-		{ 
-			name: 'greeting',
-			active: true,
-			row: [7, 13],
-			column: [9, 33],
-			align: 1,
-			fontSize: -1,
 		}
 	],
 	weather: {
@@ -126,8 +126,18 @@ const settingsOptions = {
 			'calendar'
 		],
 		widgetOptions: {
+			greeting: {
+				disable: true,
+				zIndex: 1,
+				move: true,
+				grid: true,
+				resize: true,
+				align: true,
+				fontSize: true
+			},
 			news: {
 				disable: true,
+				zIndex: 20,
 				move: true,
 				grid: true,
 				resize: true,
@@ -136,6 +146,7 @@ const settingsOptions = {
 			},
 			quote: {
 				disable: true,
+				zIndex: 20,
 				move: true,
 				grid: true,
 				resize: true,
@@ -144,6 +155,7 @@ const settingsOptions = {
 			},
 			weather: {
 				disable: true,
+				zIndex: 10,
 				move: true,
 				grid: true,
 				resize: true,
@@ -152,6 +164,7 @@ const settingsOptions = {
 			},
 			topPages: {
 				disable: true,
+				zIndex: 30,
 				move: true,
 				grid: true,
 				resize: true,
@@ -160,6 +173,7 @@ const settingsOptions = {
 			},
 			calendar: {
 				disable: true,
+				zIndex: 10,
 				move: true,
 				grid: true,
 				resize: true,
@@ -168,14 +182,7 @@ const settingsOptions = {
 			},
 			wallpaperDetails: {
 				disable: false,
-				move: true,
-				grid: true,
-				resize: true,
-				align: true,
-				fontSize: true
-			},
-			greeting: {
-				disable: true,
+				zIndex: 10,
 				move: true,
 				grid: true,
 				resize: true,
@@ -184,6 +191,7 @@ const settingsOptions = {
 			},
 			settingsButton: {
 				disable: false,
+				zIndex: 100,
 				move: false,
 				grid: true,
 				resize: false,

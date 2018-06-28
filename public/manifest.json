@@ -1,9 +1,9 @@
 {
-	"name": "Origin New Tab",
-	"short_name": "Origin Tab",
+	"name": "__MSG_extName__",
+	"short_name": "__MSG_extShortName__",
 	"manifest_version": 2,
 	"version": "0.13.2",
-	"description": "Mijn startpagina/nieuw tabblad extensie, in ontwikkeling.",
+	"description": "__MSG_extDescription__",
 	"chrome_url_overrides": {
 		"newtab": "index.html"
 	},
@@ -26,5 +26,6 @@
 	},
 	"browser_action": {
 		"default_title": "Origin New Tab"
-	}
+	},
+	"default_locale": "en"
   }

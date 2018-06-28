@@ -1,0 +1,11 @@
+{
+	"extName": {
+		"message": "Origin New Tab"
+	},
+	"extShortName": {
+		"message": "OriginTab"
+	},
+	"extDescription": {
+		"message": "Chrome New Tab/startpage extension, currently in development."
+	}
+}

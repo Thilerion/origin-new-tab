@@ -11,7 +11,8 @@
 <script>
 import StartWallpaper from "./components/Wallpaper.vue";
 import StartGrid from './components/Grid.vue'
-import StartSettings from './components/Settings.vue';
+const StartSettings = () => import(
+	/* webpackChunkName: "settings" */ './components/Settings.vue');
 
 import {mapState, mapGetters} from 'vuex';
 

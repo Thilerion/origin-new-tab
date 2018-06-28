@@ -42,11 +42,11 @@
 		</p>
 
 		<transition name="fade-location" mode="out-in">
-			<p
+			<div class="location"><p
 				v-if="currentWallpaper.location"
-				class="location"
+				class="location-inner"
 				:key="currentWallpaper.location"
-			>{{currentWallpaper.location}}</p>
+			>{{currentWallpaper.location}}</p></div>
 		</transition>
 	</div>
 </template>
@@ -154,15 +154,15 @@ export default {
 	text-align: right;
 }
 
-.w-align-left .row-bottom {
+.w-align-left .row-bottom, .w-align-left {
 	justify-content: flex-start;	
 }
 
-.w-align-center .row-bottom {
+.w-align-center .row-bottom, .w-align-center {
 	justify-content: center;	
 }
 
-.w-align-right .row-bottom {
+.w-align-right .row-bottom, .w-align-right {
 	justify-content: flex-end;
 }
 
@@ -210,6 +210,14 @@ export default {
 
 .w-align-right .default-bg .attribution {
 	transform: translateX(22px);
+}
+
+.w-align-right .location-inner {
+	float: right;
+}
+
+.location, .location-inner {
+	text-align: inherit;
 }
 
 .widget-wallpaper-details {	

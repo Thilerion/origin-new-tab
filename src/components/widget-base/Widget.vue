@@ -144,7 +144,7 @@ export default {
 	pointer-events: none;
 }
 
-.widget-inner {
+.widget-no-pointer .widget-inner {
 	pointer-events: auto;
 }
 

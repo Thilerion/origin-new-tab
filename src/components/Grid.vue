@@ -119,6 +119,7 @@ export default {
 	justify-items: stretch;
 	padding: .75em .5em;
 	grid-row-gap: 0.5rem;
+	position: relative;
 }
 
 @media only screen and (max-width: 700px) {
@@ -219,5 +220,6 @@ export default {
 	border: none!important;
 	width: 2.5rem;
 	height: 1.5rem;
+	z-index: 1000;
 }
 </style>

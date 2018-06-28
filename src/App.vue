@@ -1,9 +1,9 @@
 <template>
 	<div id="app">
-		<StartWallpaper/>
-		<StartGrid/>
+		<StartWallpaper class="base-wallpaper"/>
+		<StartGrid class="base-grid" />
 		<transition name="settings-transition">	
-			<StartSettings v-if="showSettings" />
+			<StartSettings class="base-settings" v-if="showSettings" />
 		</transition>
 	</div>
 </template>
@@ -48,4 +48,18 @@ export default {
 </script>
 
 <style>
+.base-wallpaper {
+	position: relative;
+	z-index: 1;
+}
+
+.base-grid {
+	position: relative;
+	z-index: 1;
+}
+
+.base-settings {
+	position: relative;
+	z-index: 1;	
+}
 </style>

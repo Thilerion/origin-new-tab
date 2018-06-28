@@ -1,3 +1,5 @@
+import getUILanguage from '@/store/libs/getUILanguage';
+
 const defaultSettings = {
 	general: {
 		// [nl, en]
@@ -241,5 +243,12 @@ const settingsOptions = {
 		}
 	}
 };
+
+const uiLang = getUILanguage();
+const languageOptions = settingsOptions.general.language;
+if (languageOptions.find(o => o.id === uiLang)) {
+	console.warn("Setting default language to " + uiLang);
+	defaultSettings.language = uiLang;
+}
 
 export { settingsOptions, defaultSettings };

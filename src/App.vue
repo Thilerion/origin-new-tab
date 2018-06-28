@@ -29,7 +29,6 @@ export default {
 	methods: {
 		setDocumentFontSize(px = null) {
 			const doc = document.documentElement;
-			console.log(doc);
 			if (px === null) {
 				doc.style.setProperty('--font-size', '100%');
 			} else {

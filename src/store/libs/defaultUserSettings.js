@@ -155,7 +155,7 @@ const settingsOptions = {
 			},
 			weather: {
 				disable: true,
-				zIndex: 10,
+				zIndex: 40,
 				move: true,
 				grid: true,
 				resize: true,

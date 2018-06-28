@@ -77,6 +77,9 @@ export default {
 			this.showItem = Math.floor(Math.random() * amount);
 		}
 	},
+	beforeCreate() {
+		this.$store.initializeWidget.news();
+	},
 	beforeMount() {
 		this.loadRandomArticle();
 		this.startTimeout();

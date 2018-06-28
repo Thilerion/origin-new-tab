@@ -41,29 +41,40 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 	}
 
 	function initializeModulePersistence(store, moduleName, namespaced = true) {
-		//Initializing ${moduleName} watcher
-		createWatcher(store, moduleName, namespaced);
+		return function () {
+			//Initializing ${moduleName} watcher
+			createWatcher(store, moduleName, namespaced);
 
-		//Loading ${moduleName} storage data
-		const storageData = loadFromStorage(moduleName);
+			//Loading ${moduleName} storage data
+			const storageData = loadFromStorage(moduleName);
 
-		//Dispatching ${moduleName} storage data to module
-		if (!storageData) {
-			let action = `${moduleName}/storageLoadFail`;
-			if (!namespaced) action = `${moduleName}StorageLoadFail`;
-			store.dispatch(action);
-		}
-		else {
-			let action = `${moduleName}/storageLoadSuccess`;
-			if (!namespaced) action = `${moduleName}StorageLoadSuccess`;
-			store.dispatch(action, storageData);
+			//Dispatching ${moduleName} storage data to module
+			if (!storageData) {
+				let action = `${moduleName}/storageLoadFail`;
+				if (!namespaced) action = `${moduleName}StorageLoadFail`;
+				store.dispatch(action);
+			}
+			else {
+				let action = `${moduleName}/storageLoadSuccess`;
+				if (!namespaced) action = `${moduleName}StorageLoadSuccess`;
+				store.dispatch(action, storageData);
+			}
 		}
 	}
 
 	return function persistStatePlugin(store) {
-		initializeModulePersistence(store, 'settings', false);
+		initializeModulePersistence(store, 'settings', false)();
+		initializeModulePersistence(store, 'wallpaper')();
+		// initializeModulePersistence(store)
 
-		widgets.forEach(w => initializeModulePersistence(store, w));
+		store.initializeWidget = {};
+
+		widgets.forEach(w => {
+			store.initializeWidget[w] = initializeModulePersistence(store, w);
+			// initializeModulePersistence(store, w)
+		});
+
+		console.log(store);
 
 		store.resetAllStorage = createResetAllStorage(widgets);
 	}

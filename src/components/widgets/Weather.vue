@@ -54,6 +54,9 @@ export default {
 			return Math.round(n);
 		}
 	},
+	beforeCreate() {
+		this.$store.initializeWidget.weather();
+	},
 	watch: {
 		watchSettings: {
 			handler(newValue, oldValue) {

@@ -29,6 +29,9 @@ export default {
 			} else return str;
 		}
 	},
+	beforeCreate() {
+		this.$store.initializeWidget.quote();
+	},
 	watch: {
 		category(newValue, oldValue) {
 			if (newValue && newValue !== oldValue) {

@@ -76,6 +76,9 @@ export default {
 			const date = addDays(new Date(), daysFromNow);
 			return format(date, calendarFormat, {locale: nlLocale});
 		}
+	},
+	beforeCreate() {
+		this.$store.initializeWidget.calendar();
 	}
 }
 </script>

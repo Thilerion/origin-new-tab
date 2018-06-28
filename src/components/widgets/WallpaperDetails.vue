@@ -227,6 +227,8 @@ export default {
 	flex-direction: column-reverse;
 	transition: all .3s ease-out;
 	white-space: nowrap;
+	min-height: 2em;
+	justify-content: flex-start;
 }
 
 .widget-wallpaper-details:hover {

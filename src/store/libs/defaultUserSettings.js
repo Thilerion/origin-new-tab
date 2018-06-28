@@ -13,14 +13,6 @@ const defaultSettings = {
 	},
 	widgets: [
 		{ 
-			name: 'greeting',
-			active: true,
-			row: [7, 13],
-			column: [9, 33],
-			align: 1,
-			fontSize: -1,
-		},
-		{ 
 			name: 'news',
 			active: true,
 			row: [1, 3],
@@ -75,6 +67,14 @@ const defaultSettings = {
 			column: [1, 11],
 			align: 0,
 			fontSize: -1
+		},
+		{ 
+			name: 'greeting',
+			active: true,
+			row: [7, 13],
+			column: [9, 33],
+			align: 1,
+			fontSize: -1,
 		}
 	],
 	weather: {
@@ -126,14 +126,6 @@ const settingsOptions = {
 			'calendar'
 		],
 		widgetOptions: {
-			greeting: {
-				disable: true,
-				move: true,
-				grid: true,
-				resize: true,
-				align: true,
-				fontSize: true
-			},
 			news: {
 				disable: true,
 				move: true,
@@ -176,6 +168,14 @@ const settingsOptions = {
 			},
 			wallpaperDetails: {
 				disable: false,
+				move: true,
+				grid: true,
+				resize: true,
+				align: true,
+				fontSize: true
+			},
+			greeting: {
+				disable: true,
 				move: true,
 				grid: true,
 				resize: true,

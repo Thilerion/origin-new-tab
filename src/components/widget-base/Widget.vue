@@ -1,6 +1,7 @@
 <template>
 	<div
 		class="widget"
+		:class="widgetPointerEvents"
 	>
 		<StartDragResize
 			:canDrag="canDrag"
@@ -80,6 +81,10 @@ export default {
 
 		...mapState(['gridCols', 'gridRows']),
 
+		widgetPointerEvents() {
+			if (!this.dndEnabled) return "widget-no-pointer";
+		},
+
 		canResize() {
 			return settingsOptions.widgets.widgetOptions[this.widget.name].resize;
 		},
@@ -133,6 +138,14 @@ export default {
 .widget {
 	position: relative;
 	opacity: 1;
+}
+
+.widget-no-pointer {
+	pointer-events: none;
+}
+
+.widget-inner {
+	pointer-events: auto;
 }
 
 .widget-settings {	

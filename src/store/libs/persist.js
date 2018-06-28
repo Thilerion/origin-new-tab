@@ -41,7 +41,12 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 	}
 
 	function initializeModulePersistence(store, moduleName, namespaced = true) {
+		let hasRunOnce = false;
 		return function () {
+			if (hasRunOnce) {
+				console.warn("Persistence already initialized! Returning...");
+				return;
+			}
 			//Initializing ${moduleName} watcher
 			createWatcher(store, moduleName, namespaced);
 
@@ -59,6 +64,7 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 				if (!namespaced) action = `${moduleName}StorageLoadSuccess`;
 				store.dispatch(action, storageData);
 			}
+			hasRunOnce = true;
 		}
 	}
 

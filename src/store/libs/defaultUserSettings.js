@@ -102,7 +102,7 @@ const defaultSettings = {
 
 const settingsOptions = {
 	general: {
-		language: [{ name: 'Nederlands', id: 'nl'}, { name: 'English', id: 'en'}],
+		language: [{ name: 'Nederlands', id: 'nl', altIds: []}, { name: 'English', id: 'en', altIds: ['en-GB', 'en-US']}],
 		fontSize: {
 			min: 10,
 			max: 22
@@ -245,10 +245,18 @@ const settingsOptions = {
 };
 
 const uiLang = getUILanguage();
-const languageOptions = settingsOptions.general.language;
-if (languageOptions.find(o => o.id === uiLang)) {
-	console.warn("Setting default language to " + uiLang);
-	defaultSettings.language = uiLang;
+let foundLanguage;
+if (uiLang) {
+	foundLanguage = settingsOptions.general.language.find(o => {
+		return (o.id === uiLang || o.altIds.includes(uiLang))
+	});
+}
+console.log(foundLanguage);
+if (!!foundLanguage) {
+	console.warn("Setting default language to " + foundLanguage.id);
+	defaultSettings.general.language = foundLanguage.id;
+} else {
+	console.warn("Default language stays " + defaultSettings.general.language);
 }
 
 export { settingsOptions, defaultSettings };

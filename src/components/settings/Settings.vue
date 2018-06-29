@@ -1,7 +1,7 @@
 <template>
 	<div class="settings-page">
 		<div class="settings-content custom-scrollbar">
-			<button class="close-btn icon-btn" @click="setShowSettings(false)">
+			<button class="close-btn icon-btn" @click="saveSettings">
 				<StartSvgIcon icon="close" size="36px" />
 			</button>
 			<div class="settings-content-inner">
@@ -388,15 +388,34 @@ export default {
 		toggleDnd() {
 			this.$store.commit('toggleDnd');
 			this.saveSettings();
+		},
+
+		keyUpEvent(e) {
+			if (e.key === "Enter") {
+				this.saveSettings();
+			} else if (e.target !== document.body) {
+				return;
+			} else if (e.key === "Escape") {
+				this.saveSettings();
+			};
+		},
+
+		createShortcuts() {
+			document.addEventListener('keyup', this.keyUpEvent);
+		},
+		removeShortcuts() {
+			document.removeEventListener('keyup', this.keyUpEvent);
 		}
 	},
 	created() {
 		let currentSettings = this.$store.getters.settingsToWatch;
 		this.currentSettings = {...this.deepClone(currentSettings)};
 		this.initialSettings = {...this.deepClone(currentSettings)};
+		this.createShortcuts();
 	},
 	beforeDestroy() {
 		this.initialSettings = {};
+		this.removeShortcuts();
 	},
 	watch: {
 		language(newValue, oldValue) {

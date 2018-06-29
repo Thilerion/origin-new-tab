@@ -68,5 +68,9 @@ export default {
 		on: " on ",
 		photoFrom: "Photo from ",
 		loadError: "Problem loading wallpaper. Showing default."
+	},
+	dates: {
+		today: "Today",
+		tomorrow: "Tomorrow"
 	}
 }

@@ -68,5 +68,9 @@ export default {
 		on: " op ",
 		photoFrom: "Foto van ",
 		loadError: "Probleem met laden. Standaardafbeelding wordt weergegeven."
+	},
+	dates: {
+		today: "Vandaag",
+		tomorrow: "Morgen"
 	}
 }

@@ -11,7 +11,7 @@
 				<div class="forecast-item-background" :style="{'background-color': bgColors[index]}"></div>
 				<div class="forecast-item-content">
 					<StartClimacon class="small-climacon" :icon="day.icon" no-night />
-					<p class="day">{{day.time | formatDate}}</p>
+					<p class="day">{{formatDate(day.time, language)}}</p>
 					<p class="temperatures">{{day.temperatureHigh | roundNumber}}&deg; <span class="night">{{day.temperatureLow | roundNumber}}&deg;</span></p>
 				</div>
 			</li>
@@ -31,6 +31,12 @@ import StartClimacon from '../shared/Climacon.vue';
 import differenceInDays from 'date-fns/difference_in_calendar_days';
 import format from 'date-fns/format';
 import nlLocale from 'date-fns/locale/nl';
+import enLocale from 'date-fns/locale/en';
+
+const locales = {
+	en: enLocale,
+	nl: nlLocale
+}
 
 const BG_COLORS = ['#333333','#434343','#525252','#636363','#747474','#868686','#989898','#aaaaaa'];
 
@@ -58,6 +64,7 @@ export default {
 		...mapState('wallpaper', [
 			'currentLoadedURL'
 		]),
+		...mapGetters(['language']),
 		forecastDays() {
 			return this.forecast.reduce((acc, day) => {
 				if (!acc) acc = {};
@@ -76,18 +83,20 @@ export default {
 			return {'background-image': `url(${this.currentLoadedURL})`};
 		}
 	},
-	filters: {
-		roundNumber(n) {
-			return Math.round(n);
-		},
-		formatDate(time) {
+	methods: {
+		formatDate(time, language) {
 			const ms = time * 1000;
 			const diff = differenceInDays(new Date(ms), new Date());
 
-			if (diff === 0) return 'Vandaag';
-			if (diff === 1) return 'Morgen';
+			if (diff === 0) return this.$t('dates.today');
+			if (diff === 1) return this.$t('dates.tomorrow');
 
-			return format(new Date(ms), 'dd D MMM', {locale: nlLocale});
+			return format(new Date(ms), 'dd D MMM', {locale: locales[language]});
+		}
+	},
+	filters: {
+		roundNumber(n) {
+			return Math.round(n);
 		}
 	}
 }

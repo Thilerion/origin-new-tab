@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import StartClock from "../widgets/Clock/Clock.vue";
+import StartClock from "../widgets/Clock.vue";
 import StartWallpaperDetails from '../widgets/WallpaperDetails.vue';
 import StartQuote from '../widgets/Quote.vue';
 import StartWeather from '../widgets/Weather.vue';

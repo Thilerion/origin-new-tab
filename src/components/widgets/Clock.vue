@@ -7,6 +7,11 @@
 			:class="{'is-12': hasAmPm}"
 			class="time">{{formattedTime[0]}}<small v-if="hasAmPm"> {{formattedTime[1]}}</small>
 		</div>
+
+		<div
+			class="date"
+		>{{time.toLocaleDateString(language, { weekday: "long", year: "numeric", month: "long", day: "numeric" })}}			
+		</div>
 		
 		<div
 			class="message"
@@ -39,7 +44,7 @@ export default {
 	},
 	computed: {
 		...mapGetters(['username', 'isEditingUsername', 'showTextGreeting']),
-		...mapGetters(['timeFormat']),
+		...mapGetters(['timeFormat', 'language']),
 		msUntilMinute() {
 			return diffInMs(this.minuteEndsAt, this.time);
 		},
@@ -133,12 +138,15 @@ export default {
 	margin-top: auto;
 }
 
-.time.is-12 {
-	margin-left: 0.1em;
-}
-
 .time > small {
 	font-size: 0.3em;
+}
+
+.date {
+	font-size: 2.5em;
+	line-height: 1em;
+	margin-bottom: 0.25em;
+	flex: 0 0 auto;
 }
 
 .username {

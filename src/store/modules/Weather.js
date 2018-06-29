@@ -198,7 +198,8 @@ const weatherStore = {
 				let coordinates = await dispatch('getSetCorrectLocation');
 				const { latitude, longitude } = coordinates;
 				const units = rootGetters.units;
-				let apiData = await weatherRequest({ latitude, longitude, units });
+				const lang = rootGetters.language;
+				let apiData = await weatherRequest({ latitude, longitude, units, lang });
 				dispatch('setApiData', {
 					expires: apiData.expires,
 					forecast: apiData.data.forecast,

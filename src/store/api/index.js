@@ -12,35 +12,41 @@ export async function quoteRequest({category}) {
 	return data.data;
 }
 
-export async function wallpaperRequest({collection}) {
+export async function wallpaperRequest({collection, lang}) {
 	let url = `/wallpapers/${collection}`;
 	
-	let data = await baseRequest({url});
+	let data = await baseRequest({url, params: {lang}});
 	console.log(...logString('WALLPAPER'), data.data);
 	return data.data;
 }
 
-export async function weatherRequest({latitude, longitude, units}) {
+export async function weatherRequest({latitude, longitude, units, lang}) {
 	let url = `/forecast/${latitude}/${longitude}`;
 	
-	let data = await baseRequest({ url, params: { units } });
+	let data = await baseRequest({
+		url,
+		params: {
+			units,
+			lang
+		}
+	});
 	console.log(...logString('WEATHER'), data.data);
 	return data.data;
 }
 
-export async function locationRequest({address}) {
+export async function locationRequest({address, lang}) {
 	let url = `/location`;
-	let params = { address };
+	let params = { address, lang };
 	
 	let data = await baseRequest({url, params});
 	console.log(...logString('LOCATION'), data.data);
 	return data.data;
 }
 
-export async function newsRequest() {
+export async function newsRequest({ lang } = {}) {
 	let url = `/news`;
 	
-	let data = await baseRequest({url});
+	let data = await baseRequest({url, params: { lang }});
 	console.log(...logString('NEWS'), data.data);
 	return data.data;
 }

@@ -58,5 +58,9 @@ export default {
 		topSitesColumns: "Columns",
 		resetSettings: "Restore default settings",
 		save: "Save"
+	},
+	greeting: {
+		messages: ['Good morning', "Hi", 'Good evening', 'Good night'],
+		saveHint: "Press [enter] to save"
 	}
 }

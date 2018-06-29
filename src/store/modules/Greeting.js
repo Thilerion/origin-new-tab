@@ -1,23 +1,13 @@
 // import localeMessages from '../../i18n/greeting.locale.js';
 
-const localeMessages = {
-	nl: {
-		timeOfDay: ['Goedemorgen', 'Hallo', 'Goedenavond', 'Goedenacht']
-	},
-	en: {
-		timeOfDay: ['Good morning', "Hi", 'Good evening', 'Good night']
-	}
-}
 
 const greetingStore = {
 	namespaced: true,
 
-	state: {		
-		localeMessages
+	state: {
 	},
 
 	getters: {
-		greetingMessages: (state, getters, rootState) => state.localeMessages[rootState.settingsData.general.language]
 	},
 
 	mutations: {

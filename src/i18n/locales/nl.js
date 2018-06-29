@@ -58,5 +58,9 @@ export default {
 		topSitesColumns: "Kolommen",
 		resetSettings: "Herstel standaardinstellingen",
 		save: "Opslaan"
+	},
+	greeting: {
+		messages: ['Goedemorgen', 'Hallo', 'Goedenavond', 'Goedenacht'],
+		saveHint: "Druk op [enter] om op te slaan"
 	}
 }

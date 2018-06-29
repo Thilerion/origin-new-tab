@@ -1,12 +1,12 @@
 <template>
 	<div class="widget-greeting widget-no-select f-shadow-heavy f-shadow-wide cursor-default" v-show="timeOfDay != null">
-		<div class="time">{{time | toTimeString(timeFormat)}}</div>
+		<div :class="{'is-12': hasAmPm}" class="time">{{formattedTime[0]}}<small v-if="hasAmPm"> {{formattedTime[1]}}</small></div>
 		
 		<div
 			class="message"
 			@dblclick="editUsername"
 			v-if="showTextGreeting"
-		>{{timeOfDayMessage}}, <span class="username" v-if="!isEditingUsername">{{username}}</span><input class="username-input" v-else v-focus v-model="usernameInput" @keyup.enter="saveUsername"><span class="input-help">Druk op [enter] om op te slaan</span>.</div>
+		>{{$t(`greeting.messages[${timeOfDay}]`)}}, <span class="username" v-if="!isEditingUsername">{{username}}</span><input class="username-input" v-else v-focus v-model="usernameInput" @keyup.enter="saveUsername"><span class="input-help">{{ $t('greeting.saveHint') }}</span>.</div>
 	</div>
 </template>
 
@@ -40,8 +40,14 @@ export default {
 		timeOfDay() {
 			return this.getTimeOfDay(this.time);
 		},
-		timeOfDayMessage() {
-			return this.$store.getters['greeting/greetingMessages'].timeOfDay[this.timeOfDay];
+		formattedTime() {
+			const format = this.timeFormat;
+			const dateObject = this.time;
+			let formatted = formatTime(dateObject, format).split(' ');
+			return formatted;
+		},
+		hasAmPm() {
+			return !!this.formattedTime[1];
 		}
 	},
 	methods: {
@@ -116,6 +122,14 @@ export default {
 	font-size: 8em;
 	flex: 0 0 1.2em;
 	margin-top: auto;
+}
+
+.time.is-12 {
+	margin-left: 0.1em;
+}
+
+.time > small {
+	font-size: 0.3em;
 }
 
 .username {

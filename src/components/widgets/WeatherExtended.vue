@@ -15,12 +15,12 @@
 					<p class="temperatures">{{day.temperatureHigh | roundNumber}}&deg; <span class="night">{{day.temperatureLow | roundNumber}}&deg;</span></p>
 				</div>
 			</li>
-			<li class="forecast-item forecast-ds">
-				<div class="forecast-item-background" :style="{'background-color': bgColors[bgColors.length - 1]}"></div>
-				<a href="https://darksky.net/poweredby/" target="_blank" class="forecast-ds-text">Powered by Dark Sky</a>
-			</li>
 		</ul>
 		</transition>
+		<div class="forecast-ds">
+				<div class="forecast-item-background"></div>
+				<a href="https://darksky.net/poweredby/" target="_blank" class="forecast-ds-text">{{$t('weather.goToDarkSky')}}</a>
+			</div>
 	</div>
 	</transition>
 </template>
@@ -107,17 +107,47 @@ export default {
 	--transform-list: -103%;
 	--ds-order: 2;
 	--item-order: 1;
+	padding-bottom: 1.23em;
 }
 
 .w-v-align-bottom .widget-weather-extended {
 	--transform-list: 103%;
 	--ds-order: 1;
 	--item-order: 2;
+	padding-top: 1.23em;
 }
 
 .w-v-align-bottom .background-image {
 	top: unset;
 	bottom: -10%;
+}
+
+.w-align-left .forecast-ds, .w-align-center .forecast-ds {
+	text-align: left;
+}
+
+.w-align-right .forecast-ds {
+	text-align: right;
+}
+
+.forecast-ds {
+	position: absolute;
+	left: 0;
+	right: 0;
+	transition: opacity 0.1s ease;
+	opacity: 0.5;
+}
+
+.w-v-align-bottom .forecast-ds {
+	top: 0;
+}
+
+.w-v-align-top .forecast-ds, .w-v-align-middle .forecast-ds {
+	bottom: 0;
+}
+
+.forecast-ds:hover {
+	opacity: 0.9;
 }
 
 .widget-weather-extended {
@@ -194,8 +224,9 @@ export default {
 	order: var(--item-order);
 }
 
-.forecast-ds {
-	order: var(--ds-order);
+.slide-list-leave-active .forecast-ds, .slide-list-enter-active .forecast-ds {
+	transition: opacity .1s ease;
+	opacity: 0;
 }
 
 .forecast-item-background {

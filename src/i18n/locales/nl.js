@@ -82,5 +82,8 @@ export default {
 	dates: {
 		today: "Vandaag",
 		tomorrow: "Morgen"
+	},
+	weather: {
+		goToDarkSky: "Meer..."
 	}
 }

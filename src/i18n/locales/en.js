@@ -82,5 +82,8 @@ export default {
 	dates: {
 		today: "Today",
 		tomorrow: "Tomorrow"
+	},
+	weather: {
+		goToDarkSky: "More..."
 	}
 }

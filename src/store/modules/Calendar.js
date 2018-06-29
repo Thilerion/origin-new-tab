@@ -9,7 +9,6 @@ import {
 } from '../libs/identity';
 
 const CALENDAR_FORMAT = "dddd D MMMM";
-const TIME_FORMAT = "HH:mm";
 
 const calendarStore = {
 	namespaced: true,
@@ -17,7 +16,6 @@ const calendarStore = {
 	state: {
 
 		calendarFormat: CALENDAR_FORMAT,
-		timeFormat: TIME_FORMAT,
 
 		token: null,
 		dataLoaded: null,
@@ -67,8 +65,8 @@ const calendarStore = {
 			return state.calendarFormat;
 		},
 
-		calendarTimeFormat(state) {
-			return state.timeFormat;
+		calendarTimeFormat({}, {}, {}, rootGetters) {
+			return rootGetters.timeFormat;
 		}
 
 	},

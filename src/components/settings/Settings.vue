@@ -31,6 +31,19 @@
 					</StartSettingItem>
 
 					<StartSettingItem>
+						<template slot="header">Tijdsnotatie</template>
+						<label
+							v-for="format in settingsOptions.general.timeFormat"
+							:key="format.value"
+						><input
+							class="input-radio"
+							type="radio"
+							:value="format.value"
+							v-model="currentSettings.general.timeFormat"
+						>{{format.name}}</label>
+					</StartSettingItem>
+
+					<StartSettingItem>
 						<template slot="header">Tekstgrootte</template>
 						<div class="checkbox-group">
 							<label><input

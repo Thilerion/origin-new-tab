@@ -30,7 +30,7 @@ export default {
 	},
 	computed: {
 		...mapGetters(['username', 'isEditingUsername', 'showTextGreeting']),
-		...mapGetters('greeting', ['timeFormat']),
+		...mapGetters(['timeFormat']),
 		msUntilMinute() {
 			return diffInMs(this.minuteEndsAt, this.time);
 		},

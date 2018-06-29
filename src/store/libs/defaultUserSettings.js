@@ -6,6 +6,7 @@ const defaultSettings = {
 		language: "nl",
 		// range: 10-20, or null (which resets to 100% in base css file)
 		fontSize: null,
+		timeFormat: 'HH:mm'
 	},
 	greeting: {
 		username: "",
@@ -79,7 +80,8 @@ const defaultSettings = {
 	],
 	weather: {
 		useCustomLocation: false,
-		customLocationQuery: ""
+		customLocationQuery: "",
+		units: 'ca'
 	},
 	wallpaper: {
 		// any valid unsplash collection id. maybe provide a list as well?
@@ -106,7 +108,17 @@ const settingsOptions = {
 		fontSize: {
 			min: 10,
 			max: 22
-		}
+		},
+		timeFormat: [
+			{ name: 12, value: 'hh:mm A' },
+			{ name: 24, value: 'HH:mm' }
+		]
+	},
+	weather: {
+		units: [
+			{ name: 'Metric', value: 'ca' },
+			{ name: 'Imperial', value: 'us' }
+		]
 	},
 	widgets: {
 		fontSize: {

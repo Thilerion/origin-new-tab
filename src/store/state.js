@@ -12,6 +12,7 @@ const state = {
 		general: {
 			language: null,
 			fontSize: null,
+			timeFormat: ""
 		},
 		greeting: {
 			username: '',
@@ -20,7 +21,8 @@ const state = {
 		widgets: [],
 		weather: {
 			useCustomLocation: false,
-			customLocationQuery: ""
+			customLocationQuery: "",
+			units: ""
 		},
 		wallpaper: {
 			wallpaperCollection: null,
@@ -47,12 +49,14 @@ const getters = {
 	fontSize: state => state.settingsData.general.fontSize,
 	username: state => state.settingsData.greeting.username,
 	showTextGreeting: state => state.settingsData.greeting.showTextGreeting,
+	timeFormat: state => state.settingsData.general.timeFormat,
 	widgets: state => state.settingsData.widgets,
 	widgetByIndex: state => index => state.settingsData.widgets[index],
 	widgetByName: state => name => state.settingsData.widgets.find(w => w.name === name),
 	widgetIndexByName: state => name => state.settingsData.widgets.findIndex(w => w.name === name),
 	useCustomLocation: state => state.settingsData.weather.useCustomLocation,
 	customLocationQuery: state => state.settingsData.weather.customLocationQuery,
+	units: state => state.settingsData.weather.units,
 	wallpaperCollection: state => state.settingsData.wallpaper.wallpaperCollection,
 	wallpaperRefresh: state => state.settingsData.wallpaper.wallpaperRefresh,
 	quoteCategory: state => state.settingsData.quote.category,

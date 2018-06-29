@@ -133,6 +133,19 @@
 						</div>
 
 					</StartSettingItem>
+
+					<StartSettingItem>
+						<template slot="header">Eenheden</template>
+						<label
+							v-for="unit in settingsOptions.weather.units"
+							:key="unit.value"
+						><input
+							class="input-radio"
+							type="radio"
+							:value="unit.value"
+							v-model="currentSettings.weather.units"
+						>{{unit.name}}</label>
+					</StartSettingItem>
 					
 				</StartSettingGroup>
 

@@ -1,13 +1,14 @@
 <template>
 	<div
 		class="setting-group"
-		:class="{'accordion': canCompress, 'compressed': !isExpanded && canCompress}"
-		@click="toggleExpand"
+		:class="{'accordion': canCompress, 'compressed': !isExpanded && canCompress}" @click="toggleExpandIfCompressed"
 	>
 		<h2
-			class="setting-group-heading"
+			class="setting-group-heading"			
+			@click.stop="toggleExpand"
 		><slot name="header" /></h2>
-		<div class="accordion-icon" :class="{rotated: !isExpanded}">
+		<div class="accordion-icon" :class="{rotated: !isExpanded}" 
+		@click.stop="toggleExpand">
 			<StartSvgIcon v-if="canCompress" icon="arrow-down" size="24" />
 		</div>
 		
@@ -39,6 +40,10 @@ export default {
 		toggleExpand() {
 			if (!this.canCompress) return;
 			this.isExpanded = !this.isExpanded;
+		},
+		toggleExpandIfCompressed() {
+			if (!this.canCompress) return;
+			if (!this.isExpanded) this.isExpanded = !this.isExpanded;
 		}
 	}
 }
@@ -53,7 +58,6 @@ export default {
 }
 
 .setting-group.accordion {
-	cursor: pointer;
 	margin-top: -1rem;
 	padding-top: 1rem;
 }
@@ -71,7 +75,8 @@ export default {
 }
 
 .accordion .accordion-icon {
-	flex: 0 0 3rem;
+	flex: 0 0 1.5rem;
+	margin-right: 1.5rem;
 }
 
 .accordion-icon svg {
@@ -86,5 +91,17 @@ export default {
 	flex: 1 1 auto;
 	position: relative;
 	height: auto;
+}
+
+.setting-group-heading, .accordion-icon {
+	user-select: none;
+}
+
+.accordion .setting-group-heading, .accordion .accordion-icon {
+	cursor: pointer;
+}
+
+.compressed {
+	cursor: pointer;
 }
 </style>

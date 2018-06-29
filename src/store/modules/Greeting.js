@@ -1,4 +1,13 @@
-import localeMessages from '../../locale/greeting.locale.js';
+// import localeMessages from '../../i18n/greeting.locale.js';
+
+const localeMessages = {
+	nl: {
+		timeOfDay: ['Goedemorgen', 'Hallo', 'Goedenavond', 'Goedenacht']
+	},
+	en: {
+		timeOfDay: ['Good morning', "Hi", 'Good evening', 'Good night']
+	}
+}
 
 const greetingStore = {
 	namespaced: true,

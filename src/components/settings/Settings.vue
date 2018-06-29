@@ -5,10 +5,10 @@
 				<StartSvgIcon icon="close" size="36px" />
 			</button>
 			<div class="settings-content-inner">
-				<h1>Instellingen</h1>
+				<h1>{{ $t('components.settings') }}</h1>
 
 				<StartSettingGroup>
-					<template slot="header">Algemeen</template>
+					<template slot="header">{{ $t('components.general') }}</template>
 					<StartSettingItem>
 						<template slot="header">Naam</template>
 						<input
@@ -86,7 +86,7 @@
 				</StartSettingGroup>
 
 				<StartSettingGroup>
-					<template slot="header">Widgets</template>
+					<template slot="header">{{ $t('components.widgets') }}</template>
 
 					<StartSettingItem>
 						<template slot="header">Actieve widgets</template>
@@ -113,7 +113,7 @@
 				</StartSettingGroup>
 
 				<StartSettingGroup can-compress>
-					<template slot="header">Weer</template>
+					<template slot="header">{{ $t('components.weather') }}</template>
 
 					<StartSettingItem>
 						<template slot="header">Gebruik aangepaste locatie</template>
@@ -150,7 +150,7 @@
 				</StartSettingGroup>
 
 				<StartSettingGroup can-compress>
-					<template slot="header">Achtergrond</template>
+					<template slot="header">{{ $t('components.wallpaper') }}</template>
 
 					<StartSettingItem>
 						<template slot="header">Achtergrond collectie</template>
@@ -185,7 +185,7 @@
 				</StartSettingGroup>
 
 				<StartSettingGroup can-compress>
-					<template slot="header">Quote</template>
+					<template slot="header">{{ $t('components.quote') }}</template>
 
 					<StartSettingItem>
 						<template slot="header">Quote categorie</template>
@@ -208,7 +208,7 @@
 				</StartSettingGroup>
 
 				<StartSettingGroup can-compress>
-					<template slot="header">Nieuws</template>
+					<template slot="header">{{ $t('components.news') }}</template>
 
 					<StartSettingItem>
 						<template slot="header">Tijd tussen nieuwsberichten</template>
@@ -228,7 +228,7 @@
 				</StartSettingGroup>
 
 				<StartSettingGroup can-compress>
-					<template slot="header">TopSites</template>
+					<template slot="header">{{ $t('components.topSites') }}</template>
 
 					<StartSettingItem>
 						<template slot="header">Hoeveel websites</template>

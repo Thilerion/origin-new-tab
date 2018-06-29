@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import store from './store/'
 
+import {i18n} from './i18n';
+
 import './assets/style/base.css';
 
 import StartSvgIcon from './components/shared/SvgIcon';
@@ -19,6 +21,7 @@ Vue.directive('focus', {
 Vue.config.productionTip = false
 
 new Vue({
-  store,
-  render: h => h(App)
+	store,
+	i18n,
+  	render: h => h(App)
 }).$mount('#app')

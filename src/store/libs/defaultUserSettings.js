@@ -3,7 +3,7 @@ import getUILanguage from '@/store/libs/getUILanguage';
 const defaultSettings = {
 	general: {
 		// [nl, en]
-		language: "nl",
+		language: "en",
 		// range: 10-20, or null (which resets to 100% in base css file)
 		fontSize: null,
 		timeFormat: 'HH:mm'

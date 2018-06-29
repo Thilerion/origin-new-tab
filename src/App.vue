@@ -15,6 +15,7 @@ const StartSettings = () => import(
 	/* webpackChunkName: "settings" */ './components/settings/Settings.vue');
 
 import {mapState, mapGetters} from 'vuex';
+import {changeLocale} from '@/i18n';
 
 export default {
 	name: "app",
@@ -25,7 +26,7 @@ export default {
 	},
 	computed: {
 		...mapState(['showSettings']),
-		...mapGetters(['fontSize'])
+		...mapGetters(['fontSize', 'language'])
 	},
 	methods: {
 		setDocumentFontSize(px = null) {
@@ -40,6 +41,13 @@ export default {
 	watch: {
 		fontSize(newValue, oldValue) {
 			this.setDocumentFontSize(newValue);
+		},
+		language: {
+			handler(newValue, oldValue) {
+				console.log("New locale: " + newValue);
+				changeLocale(newValue);
+			},
+			immediate: true
 		}
 	},
 	created() {

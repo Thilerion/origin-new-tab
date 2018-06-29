@@ -17,8 +17,8 @@ export default {
 		language: "Taal",
 		timeFormat: {
 			title: "Tijdsnotatie",
-			'12': "12-uurs",
-			'24': "24-uurs"
+			'12': "12 uur",
+			'24': "24 uur"
 		},
 		fontSize: {
 			title: "Textgrootte",

@@ -7,6 +7,9 @@ import './assets/style/base.css';
 import StartSvgIcon from './components/shared/SvgIcon';
 Vue.component('StartSvgIcon', StartSvgIcon);
 
+import StartTransitionExpand from './components/shared/TransitionExpand';
+Vue.component('StartTransitionExpand', StartTransitionExpand);
+
 Vue.directive('focus', {
 	inserted(el) {
 		el.focus();

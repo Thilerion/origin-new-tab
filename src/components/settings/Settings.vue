@@ -99,7 +99,7 @@
 
 				</StartSettingGroup>
 
-				<StartSettingGroup>
+				<StartSettingGroup can-compress>
 					<template slot="header">Weer</template>
 
 					<StartSettingItem>
@@ -123,7 +123,7 @@
 					
 				</StartSettingGroup>
 
-				<StartSettingGroup>
+				<StartSettingGroup can-compress>
 					<template slot="header">Achtergrond</template>
 
 					<StartSettingItem>
@@ -158,7 +158,7 @@
 					
 				</StartSettingGroup>
 
-				<StartSettingGroup>
+				<StartSettingGroup can-compress>
 					<template slot="header">Quote</template>
 
 					<StartSettingItem>
@@ -181,7 +181,7 @@
 					
 				</StartSettingGroup>
 
-				<StartSettingGroup>
+				<StartSettingGroup can-compress>
 					<template slot="header">Nieuws</template>
 
 					<StartSettingItem>
@@ -201,7 +201,7 @@
 					
 				</StartSettingGroup>
 
-				<StartSettingGroup>
+				<StartSettingGroup can-compress>
 					<template slot="header">TopSites</template>
 
 					<StartSettingItem>

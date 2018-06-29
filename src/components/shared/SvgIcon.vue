@@ -48,6 +48,14 @@
 			<path d="M3 21h18v-2H3v2zm6-4h12v-2H9v2zm-6-4h18v-2H3v2zm6-4h12V7H9v2zM3 3v2h18V3H3z"/>
  			<path d="M0 0h24v24H0z" fill="none"/>
 		</g>
+		<g v-else-if="icon === 'arrow-up'">
+			<path d="M7 14l5-5 5 5z"/>
+  			<path d="M0 0h24v24H0z" fill="none"/>
+		</g>
+		<g v-else-if="icon === 'arrow-down'">
+			<path d="M7 10l5 5 5-5z"/>
+  			<path d="M0 0h24v24H0z" fill="none"/>
+		</g>
 	</svg>
 </template>
 

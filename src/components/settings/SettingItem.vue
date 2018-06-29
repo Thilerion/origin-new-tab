@@ -17,6 +17,6 @@ export default {
 }
 
 .setting-item-heading {
-	margin-bottom: 0.25rem;
+	line-height: 24px;
 }
 </style>

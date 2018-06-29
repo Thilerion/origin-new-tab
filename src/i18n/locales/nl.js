@@ -30,7 +30,7 @@ export default {
 		activeWidgets: "Actieve widgets",
 		presetLayouts: {
 			title: "Kies een voorinstelling",
-			note: "Let op: voorinstellingen zijn nog in beta; het is mogelijk dat de grootten van de widgets nog aangepast moeten worden.",
+			note: "Let op: voorinstellingen zijn nog in beta; het is mogelijk dat er nog enkele aanpassingen gedaan moeten worden.",
 			standard: "Standaard",
 			basic: "Simpel",
 			minimal: "Minimalistisch",

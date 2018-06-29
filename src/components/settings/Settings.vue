@@ -94,7 +94,7 @@
 					</StartSettingItem>
 				</StartSettingGroup>
 
-				<StartSettingGroup>
+				<StartSettingGroup can-compress>
 					<template slot="header">{{ $t('components.widgets') }}</template>
 
 					<StartSettingItem>

@@ -181,8 +181,8 @@ export default {
 			const w = dir.includes('w');
 			const e = dir.includes('e');
 
-			const MIN_WIDTH = 3;
-			const MIN_HEIGHT = 2;
+			const MIN_WIDTH = 2;
+			const MIN_HEIGHT = 1;
 
 			if (n) {
 				newRows[0] += rows;

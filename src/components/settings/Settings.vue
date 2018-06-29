@@ -119,6 +119,11 @@
 						class="dnd-btn setting-btn"
 					>{{ $t('settings.changeWidgetDisplay') }}</button>
 
+					<StartSettingItem>
+						<template slot="header">Gebruik preset layout</template>
+						<button v-for="item in layoutOptions" :key="item" @click="changeLayout(item)">{{item}}</button>
+					</StartSettingItem>
+
 				</StartSettingGroup>
 
 				<StartSettingGroup can-compress>
@@ -298,6 +303,7 @@
 <script>
 import {settingsOptions} from '@/store/libs/defaultUserSettings';
 import {mapMutations, mapActions} from 'vuex';
+import {layoutOptions} from '@/store/libs/presetLayouts';
 
 import StartSettingGroup from './SettingGroup.vue'
 import StartSettingItem from './SettingItem.vue'
@@ -330,6 +336,7 @@ export default {
 				calendar: {}
 			},
 			settingsOptions: {...settingsOptions},
+			layoutOptions,
 
 			showTopPagePreview: false
 		}
@@ -414,6 +421,10 @@ export default {
 		},
 		removeShortcuts() {
 			document.removeEventListener('keyup', this.keyUpEvent);
+		},
+		changeLayout(item) {
+			this.$store.dispatch('usePresetLayout', item);
+			this.saveSettings();
 		}
 	},
 	created() {

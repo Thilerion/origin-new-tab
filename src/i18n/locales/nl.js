@@ -28,7 +28,7 @@ export default {
 		showGreeting: "Welkomsttekst weergeven",
 		showDate: "Datum weergeven",
 		activeWidgets: "Actieve widgets",
-		changeWidgetDisplay: "Weergave widgets aanpassen",
+		changeWidgetDisplay: "Layout aanpassen",
 		useCustomLocation: {
 			title: "Gebruik aangepaste locatie",
 			disabled: "Nee, gebruik browser locatie",

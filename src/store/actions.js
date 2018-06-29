@@ -2,9 +2,11 @@ import lodashMerge from 'lodash.merge';
 import { defaultSettings } from '@/store/libs/defaultUserSettings';
 import mergeUserStorageIntoSettings from '@/store/libs/mergeUserStorageIntoSettings';
 
+import {layouts as presetLayouts} from '@/store/libs/presetLayouts';
+
 export default {
 	saveUpdatedSettings({ getters, commit, dispatch }, settings) {
-		const currentSettings = getters.settingsWatch;
+		const currentSettings = getters.settingsToWatch;
 
 		if (settings.weather.useCustomLocation && !settings.weather.customLocationQuery) {
 			settings.weather.useCustomLocation = false;
@@ -65,5 +67,13 @@ export default {
 			cols,
 			rows
 		})
+	},
+
+	usePresetLayout({ getters, commit }, key) {
+		const currentSettings = getters.settingsToWatch;
+		const settingsToAdd = presetLayouts[key];
+		const merged = lodashMerge(currentSettings, settingsToAdd);
+		commit('setSettingsData', merged);
+
 	}
 }

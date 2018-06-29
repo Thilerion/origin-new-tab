@@ -26,6 +26,7 @@ export default {
 			custom: "Custom"
 		},
 		showGreeting: "Show greeting",
+		showDate: "Show date",
 		activeWidgets: "Active widgets",
 		changeWidgetDisplay: "Adjust widget layout",
 		useCustomLocation: {

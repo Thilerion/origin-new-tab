@@ -25,7 +25,8 @@ export default {
 			default: "Standaard",
 			custom: "Aangepast"
 		},
-		showGreeting: "Laat welkomsttekst zien",
+		showGreeting: "Welkomsttekst weergeven",
+		showDate: "Datum weergeven",
 		activeWidgets: "Actieve widgets",
 		changeWidgetDisplay: "Weergave widgets aanpassen",
 		useCustomLocation: {

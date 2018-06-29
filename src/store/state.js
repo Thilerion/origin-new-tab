@@ -16,7 +16,8 @@ const state = {
 		},
 		clock: {
 			username: '',
-			showTextGreeting: null
+			showTextGreeting: null,
+			showDate: null
 		},
 		widgets: [],
 		weather: {
@@ -49,6 +50,7 @@ const getters = {
 	fontSize: state => state.settingsData.general.fontSize,
 	username: state => state.settingsData.clock.username,
 	showTextGreeting: state => state.settingsData.clock.showTextGreeting,
+	showDate: state => state.settingsData.clock.showDate,
 	timeFormat: state => state.settingsData.general.timeFormat,
 	widgets: state => state.settingsData.widgets,
 	widgetByIndex: state => index => state.settingsData.widgets[index],

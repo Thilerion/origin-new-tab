@@ -83,6 +83,15 @@
 							class="input-checkbox"
 						>
 					</StartSettingItem>
+
+					<StartSettingItem>
+						<template slot="header">{{ $t('settings.showDate') }}</template>
+						<input
+							type="checkbox"
+							v-model="currentSettings.clock.showDate"
+							class="input-checkbox"
+						>
+					</StartSettingItem>
 				</StartSettingGroup>
 
 				<StartSettingGroup>

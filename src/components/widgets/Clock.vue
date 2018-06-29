@@ -10,6 +10,7 @@
 
 		<div
 			class="date"
+			v-if="showDate"
 		>{{time.toLocaleDateString(language, { weekday: "long", year: "numeric", month: "long", day: "numeric" })}}			
 		</div>
 		
@@ -44,7 +45,7 @@ export default {
 	},
 	computed: {
 		...mapGetters(['username', 'isEditingUsername', 'showTextGreeting']),
-		...mapGetters(['timeFormat', 'language']),
+		...mapGetters(['timeFormat', 'language', 'showDate']),
 		msUntilMinute() {
 			return diffInMs(this.minuteEndsAt, this.time);
 		},

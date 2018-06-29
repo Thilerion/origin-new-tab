@@ -10,7 +10,8 @@ const defaultSettings = {
 	},
 	clock: {
 		username: "",
-		showTextGreeting: true
+		showTextGreeting: true,
+		showDate: false
 	},
 	widgets: [
 		{ 

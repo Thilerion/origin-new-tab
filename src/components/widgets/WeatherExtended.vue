@@ -1,7 +1,7 @@
 <template>
 <transition name="slide-list" appear>
 	<div class="widget-weather-extended">		
-		
+		<transition name="slide-list">
 		<ul class="forecast-list">
 			<transition name="fade">
 			<div class="background-image" :style="backgroundImage" :key="currentLoadedURL"></div>
@@ -20,7 +20,7 @@
 				<a href="https://darksky.net/poweredby/" target="_blank" class="forecast-ds-text">Powered by Dark Sky</a>
 			</li>
 		</ul>
-		
+		</transition>
 	</div>
 	</transition>
 </template>
@@ -162,6 +162,8 @@ export default {
 	will-change: transform;
 	display: flex;
 	flex-direction: column;
+	
+	/* transform: translateY(0); */
 }
 
 .slide-list-enter-active {
@@ -176,7 +178,7 @@ export default {
 	opacity: 0.2!important;
 }
 
-.slide-list-enter-active .forecast-list, .slide-list-leave-active .forecast-list {
+.slide-list-enter-active .forecast-list, .slide-list-leave-active .forecast-list, .forecast-list {
 	transition-property: transform;
 	transition-duration: var(--transition-dur);
 	transition-timing-function: ease-in-out;

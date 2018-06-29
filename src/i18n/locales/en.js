@@ -62,5 +62,11 @@ export default {
 	greeting: {
 		messages: ['Good morning', "Hi", 'Good evening', 'Good night'],
 		saveHint: "Press [enter] to save"
+	},
+	wallpaperDetails: {
+		photoBy: "Photo by ",
+		on: " on ",
+		photoFrom: "Photo from ",
+		loadError: "Problem loading wallpaper. Showing default."
 	}
 }

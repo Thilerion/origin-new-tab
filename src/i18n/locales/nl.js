@@ -62,5 +62,11 @@ export default {
 	greeting: {
 		messages: ['Goedemorgen', 'Hallo', 'Goedenavond', 'Goedenacht'],
 		saveHint: "Druk op [enter] om op te slaan"
+	},
+	wallpaperDetails: {
+		photoBy: "Foto door ",
+		on: " op ",
+		photoFrom: "Foto van ",
+		loadError: "Probleem met laden. Standaardafbeelding wordt weergegeven."
 	}
 }

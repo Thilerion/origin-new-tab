@@ -27,18 +27,18 @@
 			<p
 				v-if="currentWallpaper.user"
 				class="attribution f-shadow-heavy"
-			>Photo by <a :href="userUrl" target="_blank">{{currentWallpaper.user}}</a> on <a :href="unsplashUrl" target="_blank">Unsplash</a></p>
+			>{{$t('wallpaperDetails.photoBy')}}<a :href="userUrl" target="_blank">{{currentWallpaper.user}}</a>{{$t('wallpaperDetails.on')}}<a :href="unsplashUrl" target="_blank">Unsplash</a></p>
 			<p
 				v-else
 				class="attribution"
 				:class="{'default-wallpaper': showDefault}"
-			>Photo from <a :href="unsplashUrl" target="_blank">Unsplash</a></p>
+			>{{$t('wallpaperDetails.photoFrom')}}<a :href="unsplashUrl" target="_blank">Unsplash</a></p>
 		</div>		
 
 		<p
 			v-if="showDefault"
 			class="load-error-message"
-		>Problem loading wallpaper. Showing default.
+		>{{$t('wallpaperDetails.loadError')}}
 		</p>
 
 		<transition name="fade-location" mode="out-in">

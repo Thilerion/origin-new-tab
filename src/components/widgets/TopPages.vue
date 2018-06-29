@@ -142,6 +142,18 @@ export default {
 </script>
 
 <style scoped>
+.w-v-align-top {
+	align-self:flex-start;
+}
+
+.w-v-align-middle {
+	align-self: center;
+}
+
+.w-v-align-bottom {
+	align-self:flex-end;
+}
+
 .w-align-left {
 	margin-right: auto;
 	margin-left: -1em;

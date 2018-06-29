@@ -10,7 +10,7 @@
 				<StartSettingGroup>
 					<template slot="header">{{ $t('components.general') }}</template>
 					<StartSettingItem>
-						<template slot="header">Naam</template>
+						<template slot="header">{{ $t('settings.name') }}</template>
 						<input
 							type="text"
 							class="input-text"
@@ -18,7 +18,7 @@
 					</StartSettingItem>
 
 					<StartSettingItem>
-						<template slot="header">Taal</template>
+						<template slot="header">{{ $t('settings.language') }}</template>
 						<label
 							v-for="lang in settingsOptions.general.language"
 							:key="lang.id"
@@ -31,7 +31,7 @@
 					</StartSettingItem>
 
 					<StartSettingItem>
-						<template slot="header">Tijdsnotatie</template>
+						<template slot="header">{{ $t('settings.timeFormat.title') }}</template>
 						<label
 							v-for="format in settingsOptions.general.timeFormat"
 							:key="format.value"
@@ -40,24 +40,24 @@
 							type="radio"
 							:value="format.value"
 							v-model="currentSettings.general.timeFormat"
-						>{{format.name}}</label>
+						>{{ $t(`settings.timeFormat.${format.name}`) }}</label>
 					</StartSettingItem>
 
 					<StartSettingItem>
-						<template slot="header">Tekstgrootte</template>
+						<template slot="header">{{ $t('settings.fontSize.title') }}</template>
 						<div class="checkbox-group">
 							<label><input
 								type="radio"
 								v-model="currentSettings.general.fontSize"
 								:value="null"
 								class="input-radio"
-							>Standaard</label>
+							>{{ $t('settings.fontSize.default') }}</label>
 							<label><input
 								type="radio"
 								:checked="currentSettings.general.fontSize !== null"
 								@input="$event.target.value ? currentSettings.general.fontSize = '16' : currentSettings.general.fontSize = null"
 								class="input-radio"
-							>Aangepast</label>
+							>{{ $t('settings.fontSize.custom') }}</label>
 						</div>
 						<div
 							class="input-range-wrap"
@@ -76,7 +76,7 @@
 					</StartSettingItem>
 
 					<StartSettingItem>
-						<template slot="header">Laat welkomsttekst zien</template>
+						<template slot="header">{{ $t('settings.showGreeting') }}</template>
 						<input
 							type="checkbox"
 							v-model="currentSettings.greeting.showTextGreeting"
@@ -89,7 +89,7 @@
 					<template slot="header">{{ $t('components.widgets') }}</template>
 
 					<StartSettingItem>
-						<template slot="header">Actieve widgets</template>
+						<template slot="header">{{ $t('settings.activeWidgets') }}</template>
 
 						<div
 							class="checkbox-group"
@@ -100,7 +100,7 @@
 								type="checkbox"
 								class="input-checkbox"
 								v-model="widget.active"
-							><label class="text-capitalize">{{widget.name}}</label>
+							><label>{{ $t(`components.${widget.name}`) }}</label>
 						</div>
 
 					</StartSettingItem>
@@ -108,7 +108,7 @@
 					<button
 						@click="toggleDnd"
 						class="dnd-btn setting-btn"
-					>Weergave widgets aanpassen</button>
+					>{{ $t('settings.changeWidgetDisplay') }}</button>
 
 				</StartSettingGroup>
 
@@ -116,7 +116,7 @@
 					<template slot="header">{{ $t('components.weather') }}</template>
 
 					<StartSettingItem>
-						<template slot="header">Gebruik aangepaste locatie</template>
+						<template slot="header">{{ $t('settings.useCustomLocation.title') }}</template>
 
 						<div class="checkbox-group checkbox-group-optional-text input-text-height">
 							<input
@@ -124,18 +124,18 @@
 								class="input-checkbox"
 								v-model="currentSettings.weather.useCustomLocation"
 							><label v-if="currentSettings.weather.useCustomLocation"
-							>Ja: <input
+							>{{ $t('settings.useCustomLocation.enabled') }}<input
 								type="text"
 								class="input-text"
 								v-model="currentSettings.weather.customLocationQuery"
 							></label>
-							<label v-else>Nee, gebruik browser locatie.</label>
+							<label v-else>{{ $t('settings.useCustomLocation.disabled') }}</label>
 						</div>
 
 					</StartSettingItem>
 
 					<StartSettingItem>
-						<template slot="header">Eenheden</template>
+						<template slot="header">{{ $t('settings.units.title') }}</template>
 						<label
 							v-for="unit in settingsOptions.weather.units"
 							:key="unit.value"
@@ -144,7 +144,7 @@
 							type="radio"
 							:value="unit.value"
 							v-model="currentSettings.weather.units"
-						>{{unit.name}}</label>
+						>{{ $t(`settings.units.${unit.name.toLowerCase()}`) }}</label>
 					</StartSettingItem>
 					
 				</StartSettingGroup>
@@ -153,7 +153,7 @@
 					<template slot="header">{{ $t('components.wallpaper') }}</template>
 
 					<StartSettingItem>
-						<template slot="header">Achtergrond collectie</template>
+						<template slot="header">{{ $t('settings.wallpaperCollection') }}</template>
 						<div class="input-select">
 							<select
 								v-model="currentSettings.wallpaper.wallpaperCollection"
@@ -168,7 +168,7 @@
 					</StartSettingItem>
 
 					<StartSettingItem>
-						<template slot="header">Nieuwe achtergrond</template>
+						<template slot="header">{{ $t('settings.newWallpaper.title') }}</template>
 						<div class="input-select">
 							<select
 								v-model="currentSettings.wallpaper.wallpaperRefresh"
@@ -177,7 +177,7 @@
 									v-for="opt in settingsOptions.wallpaper.wallpaperRefresh"
 									:key="opt.value"
 									:value="opt.value"
-								>{{opt.name}}</option>
+								>{{ $t(`settings.newWallpaper.${opt.id}`)}}</option>
 							</select>	
 						</div>
 					</StartSettingItem>
@@ -188,7 +188,7 @@
 					<template slot="header">{{ $t('components.quote') }}</template>
 
 					<StartSettingItem>
-						<template slot="header">Quote categorie</template>
+						<template slot="header">{{ $t('settings.quoteCategory.title') }}</template>
 
 						<div class="input-select">
 							<select
@@ -199,7 +199,7 @@
 									v-for="cat in settingsOptions.quote.quoteCategory"
 									:key="cat"
 									:value="cat"
-								>{{cat}}</option>
+								>{{ $t(`settings.quoteCategory.${cat}`) }}</option>
 							</select>
 						</div>
 
@@ -211,7 +211,7 @@
 					<template slot="header">{{ $t('components.news') }}</template>
 
 					<StartSettingItem>
-						<template slot="header">Tijd tussen nieuwsberichten</template>
+						<template slot="header">{{ $t('settings.newsInterval') }}</template>
 						<div class="input-range-wrap">
 							<input
 								type="range"
@@ -231,7 +231,7 @@
 					<template slot="header">{{ $t('components.topSites') }}</template>
 
 					<StartSettingItem>
-						<template slot="header">Hoeveel websites</template>
+						<template slot="header">{{ $t('settings.topSitesAmount') }}</template>
 						<div class="input-range-wrap">
 							<input
 								type="range"
@@ -246,7 +246,7 @@
 					</StartSettingItem>
 
 					<StartSettingItem>
-						<template slot="header">Kolommen</template>
+						<template slot="header">{{ $t('settings.topSitesColumns') }}</template>
 						<div class="input-range-wrap">
 							<input
 								type="range"
@@ -278,10 +278,10 @@
 					
 				</StartSettingGroup>
 
-				<button @click="resetAllStorage" class="reset-btn setting-btn">Reset alle instellingen</button>
+				<button @click="resetAllStorage" class="reset-btn setting-btn">{{ $t('settings.resetSettings') }}</button>
 			</div>
 			
-			<button @click="saveSettings" class="save-btn setting-btn">Opslaan</button>
+			<button @click="saveSettings" class="save-btn setting-btn">{{ $t('settings.save') }}</button>
 		</div>
 	</div>
 </template>
@@ -356,6 +356,9 @@ export default {
 				}
 			}
 			return arr;
+		},
+		language() {
+			return this.currentSettings.general.language;
 		}
 	},
 	methods: {
@@ -394,6 +397,11 @@ export default {
 	},
 	beforeDestroy() {
 		this.initialSettings = {};
+	},
+	watch: {
+		language(newValue, oldValue) {
+			this.$store.commit('setLanguage', newValue);
+		}
 	}
 }
 </script>

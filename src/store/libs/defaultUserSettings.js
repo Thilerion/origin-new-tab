@@ -236,11 +236,11 @@ const settingsOptions = {
 			{ name: 'Au Naturel', id: 881815 }
 		],
 		wallpaperRefresh: [
-			{ name: 'Altijd', value: 10 },
-			{ name: 'Elk uur', value: 1 * 60 * 60 * 1000 },
-			{ name: 'Elke 4 uur', value: 4 * 60 * 60 * 1000 },
-			{ name: 'Elke dag', value: 18 * 60 * 60 * 1000 },
-			{ name: 'Nooit', value: 100000000 }
+			{ id: 'always', value: 10 },
+			{ id: 'hourlyOne', value: 1 * 60 * 60 * 1000 },
+			{ id: 'hourlyFour', value: 4 * 60 * 60 * 1000 },
+			{ id: 'daily', value: 18 * 60 * 60 * 1000 },
+			{ id: 'never', value: 100000000 }
 		]
 	},
 	quote: {

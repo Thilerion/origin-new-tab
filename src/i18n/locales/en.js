@@ -8,7 +8,55 @@ export default {
 		quote: "Quote",
 		news: "News",
 		topSites: "Most visited sites",
-		greeting: "Greeting",
+		topPages: "Most visited sites",
+		greeting: "Clock",
 		calendar: "Calendar"
+	},
+	settings: {
+		name: "Name",
+		language: "Language",
+		timeFormat: {
+			title: "Time notation",
+			'12': '12 hour',
+			'24': '24 hour'
+		},
+		fontSize: {
+			title: "Font size",
+			default: "Default",
+			custom: "Custom"
+		},
+		showGreeting: "Show greeting",
+		activeWidgets: "Active widgets",
+		changeWidgetDisplay: "Adjust widget layout",
+		useCustomLocation: {
+			title: "Use custom location",
+			disabled: "No, use browser location",
+			enabled: "Yes: "
+		},
+		units: {
+			title: "Units",
+			metric: "Metric",
+			imperial: "Imperial"
+		},
+		wallpaperCollection: "Wallpaper collection",
+		newWallpaper: {
+			title: "New wallpaper every:",
+			always: "New tab",
+			hourlyOne: "Hour",
+			hourlyFour: "4 hours",
+			daily: "Day",
+			never: "Never"
+		},
+		quoteCategory: {
+			title: "Quote category",
+			motivinspirational: "Inspirational",
+			movies: "Movies",
+			famous: "Famous persons"
+		},
+		newsInterval: "News article interval",
+		topSitesAmount: "Amount of tiles",
+		topSitesColumns: "Columns",
+		resetSettings: "Restore default settings",
+		save: "Save"
 	}
 }

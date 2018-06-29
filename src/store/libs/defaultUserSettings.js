@@ -121,10 +121,6 @@ const settingsOptions = {
 		]
 	},
 	widgets: {
-		fontSize: {
-			min: -4,
-			max: 4
-		},
 		align: {
 			0: 'left',
 			1: 'center',
@@ -145,7 +141,11 @@ const settingsOptions = {
 				grid: true,
 				resize: true,
 				align: true,
-				fontSize: true
+				fontSize: {
+					canChange: true,
+					min: -8,
+					max: 2
+				}
 			},
 			news: {
 				disable: true,
@@ -154,7 +154,11 @@ const settingsOptions = {
 				grid: true,
 				resize: true,
 				align: false,
-				fontSize: true
+				fontSize: {
+					canChange: true,
+					min: -4,
+					max: 4
+				}
 			},
 			quote: {
 				disable: true,
@@ -163,7 +167,11 @@ const settingsOptions = {
 				grid: true,
 				resize: true,
 				align: true,
-				fontSize: true
+				fontSize: {
+					canChange: true,
+					min: -4,
+					max: 4
+				}
 			},
 			weather: {
 				disable: true,
@@ -172,7 +180,11 @@ const settingsOptions = {
 				grid: true,
 				resize: true,
 				align: true,
-				fontSize: true
+				fontSize: {
+					canChange: true,
+					min: -4,
+					max: 4
+				}
 			},
 			topPages: {
 				disable: true,
@@ -181,7 +193,11 @@ const settingsOptions = {
 				grid: true,
 				resize: true,
 				align: true,
-				fontSize: true
+				fontSize: {
+					canChange: true,
+					min: -4,
+					max: 4
+				}
 			},
 			calendar: {
 				disable: true,
@@ -190,7 +206,11 @@ const settingsOptions = {
 				grid: true,
 				resize: true,
 				align: true,
-				fontSize: true
+				fontSize: {
+					canChange: true,
+					min: -4,
+					max: 4
+				}
 			},
 			wallpaperDetails: {
 				disable: false,
@@ -199,7 +219,11 @@ const settingsOptions = {
 				grid: true,
 				resize: true,
 				align: true,
-				fontSize: true
+				fontSize: {
+					canChange: true,
+					min: -4,
+					max: 4
+				}
 			},
 			settingsButton: {
 				disable: false,
@@ -208,7 +232,11 @@ const settingsOptions = {
 				grid: true,
 				resize: false,
 				align: false,
-				fontSize: false
+				fontSize: {
+					canChange: false,
+					min: 0,
+					max: 0
+				}
 			}
 		}
 	},

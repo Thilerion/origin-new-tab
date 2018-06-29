@@ -65,13 +65,13 @@ export default {
 	},
 	computed: {
 		canChangeFontSize() {
-			return !!this.widgetOptions.fontSize;
+			return !!this.widgetOptions.fontSize.canChange;
 		},
 		minFontSizeReached() {
-			return this.widget.fontSize <= this.fontSizeOptions.min;
+			return this.widget.fontSize <= this.widgetOptions.fontSize.min;
 		},
 		maxFontSizeReached() {
-			return this.widget.fontSize >= this.fontSizeOptions.max;
+			return this.widget.fontSize >= this.widgetOptions.fontSize.max;
 		},
 		defaultFontSize() {
 			return this.widgetDefaults.fontSize;

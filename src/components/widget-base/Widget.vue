@@ -147,11 +147,4 @@ export default {
 .widget-no-pointer .widget-inner {
 	pointer-events: auto;
 }
-
-.widget-settings {	
-	position: absolute;
-	top: 0;
-	right: 0;	
-	max-height: 100%;
-}
 </style>

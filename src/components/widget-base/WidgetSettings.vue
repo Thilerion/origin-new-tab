@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-settings">
+	<div class="widget-settings" ref="widgetSettings" :style="positionStyles">
 		<div class="widget-setting-group widget-settings-font" v-if="canChangeFontSize">
 			<button 
 				class="widget-setting-btn font-btn decrease icon-btn"
@@ -60,7 +60,10 @@ export default {
 			widgetDefaults: WIDGET_DEFAULTS.find(w => w.name === this.widget.name),
 
 			fontSizeOptions: FONT_SIZE_OPTIONS,
-			alignOptions: ALIGN_OPTIONS
+			alignOptions: ALIGN_OPTIONS,
+
+			positionTop: null,
+			positionLeft: null
 		}
 	},
 	computed: {
@@ -85,6 +88,29 @@ export default {
 		},
 		currentAlignment() {
 			return this.widget.align;
+		},
+
+		positionStyles() {
+			if (this.positionTop == null || this.positionLeft == null) {
+				return {display: "none"};
+			}
+			let tY = 0;
+			let tX = 0;
+			let styles = {};
+
+			if (this.positionTop) {
+				styles.top = 0;
+			} else styles.bottom = 0;
+
+			if (this.positionLeft) {
+				styles.left = 0;
+			} else styles.right = 0;
+
+			return styles;
+		},
+
+		currentPosition() {
+			return [...this.widget.column, ...this.widget.row];
 		}
 	},
 	methods: {
@@ -96,6 +122,32 @@ export default {
 		},
 		changeAlignment(alignment) {
 			this.$store.dispatch('changeWidgetAlignment', {name: this.widget.name, alignment});
+		},
+		getElementRelativePosition() {
+			const rect = this.$parent.$el.getBoundingClientRect();
+			const x = (rect.left + rect.right) / 2;
+			const y = (rect.top + rect.bottom) / 2;
+
+			console.log(this.widget.name, x, y);
+
+			const windowHeight = window.innerHeight;
+			const windowWidth = window.innerWidth;
+			if (x < windowWidth / 2) this.positionLeft = false;
+			else this.positionLeft = true;
+
+			if (y < windowHeight / 2) this.positionTop = false;
+			else this.positionTop = true;
+		}
+	},
+	mounted() {
+		this.getElementRelativePosition();
+	},
+	watch: {
+		currentPosition: {
+			handler(newValue, oldValue) {
+				this.getElementRelativePosition();
+			},
+			deep: true
 		}
 	}
 }
@@ -111,7 +163,9 @@ export default {
 	align-items: stretch;
 	justify-content:stretch;
 	flex-wrap: wrap-reverse;
-	transition: opacity .2s ease;
+	transition: opacity .2s ease;	
+	position: absolute;	
+	max-height: 100%;
 }
 
 .widget:hover .widget-settings {

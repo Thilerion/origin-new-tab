@@ -193,11 +193,12 @@ const weatherStore = {
 
 			commit('setDataStatus', 'fresh');
 		},
-		async fetchApiData({dispatch}) {
+		async fetchApiData({dispatch, rootGetters}) {
 			try {
 				let coordinates = await dispatch('getSetCorrectLocation');
-				const {latitude, longitude} = coordinates;
-				let apiData = await weatherRequest({ latitude, longitude });
+				const { latitude, longitude } = coordinates;
+				const units = rootGetters.units;
+				let apiData = await weatherRequest({ latitude, longitude, units });
 				dispatch('setApiData', {
 					expires: apiData.expires,
 					forecast: apiData.data.forecast,

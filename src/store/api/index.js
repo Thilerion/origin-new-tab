@@ -20,10 +20,10 @@ export async function wallpaperRequest({collection}) {
 	return data.data;
 }
 
-export async function weatherRequest({latitude, longitude}) {
+export async function weatherRequest({latitude, longitude, units}) {
 	let url = `/forecast/${latitude}/${longitude}`;
 	
-	let data = await baseRequest({url});
+	let data = await baseRequest({ url, params: { units } });
 	console.log(...logString('WEATHER'), data.data);
 	return data.data;
 }

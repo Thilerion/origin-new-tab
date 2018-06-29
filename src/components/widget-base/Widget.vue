@@ -17,7 +17,7 @@
 				:is="widgetComponent"
 				class="widget-inner"
 				:style="{'font-size': widgetFontSize}"
-				:class="alignmentClass"
+				:class="[alignmentClass, vAlignmentClass]"
 			/>	
 		</transition>		
 		</StartDragResize>
@@ -113,6 +113,10 @@ export default {
 		
 		alignmentClass() {
 			return `w-align-${settingsOptions.widgets.align[this.widget.align]}`;
+		},
+
+		vAlignmentClass() {
+			return `w-v-align-${settingsOptions.widgets.vAlign[this.widget.vAlign]}`;
 		}
 
 	},
@@ -146,12 +150,5 @@ export default {
 
 .widget-no-pointer .widget-inner {
 	pointer-events: auto;
-}
-
-.widget-settings {	
-	position: absolute;
-	top: 0;
-	right: 0;	
-	max-height: 100%;
 }
 </style>

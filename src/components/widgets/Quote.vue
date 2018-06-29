@@ -43,14 +43,29 @@ export default {
 </script>
 
 <style scoped>
+.w-v-align-top {
+	align-self:flex-start;
+}
+
+.w-v-align-middle {
+	align-self: center;
+}
+
+.w-v-align-bottom {
+	align-self:flex-end;
+}
+
 .w-align-left {
 	text-align: left;
-	margin: auto auto auto 1em;
+	margin-left: 1em;
+	margin-right: auto;
+	/* margin: auto auto auto 1em; */
 }
 
 .w-align-center {
 	min-width: 20em;
-	margin: auto;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .w-align-center .quote {
@@ -64,7 +79,8 @@ export default {
 
 .w-align-right {
 	text-align: right;
-	margin: auto 1em auto auto;
+	margin-left: auto;
+	margin-right: 1em;
 }
 
 .widget-quote {

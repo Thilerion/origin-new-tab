@@ -54,6 +54,11 @@ export default {
 		commit('setWidgetAlignment', {index, alignment})
 	},
 
+	changeWidgetVerticalAlignment({ getters, commit }, { name, alignment }) {
+		const index = getters.widgetIndexByName(name);
+		commit('setWidgetVerticalAlignment', {index, alignment})
+	},
+
 	moveWidget({ getters, commit }, { name, moveCols = 0, moveRows = 0 }) {
 		commit('setWidgetPositionOnGrid', {
 			index: getters.widgetIndexByName(name),

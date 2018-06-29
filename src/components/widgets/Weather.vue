@@ -91,21 +91,60 @@ export default {
 </script>
 
 <style scoped>
+.w-v-align-top {
+	align-self:flex-start;
+	margin-top: 0;
+	margin-bottom: auto;
+	--row1: 1;
+	--row2: 2;
+	--row3: 3;
+}
+
+.w-v-align-top .extended, .w-v-align-middle .extended {
+	top: 0;
+}
+
+.w-v-align-bottom .extended {
+	bottom: 0;
+}
+
+.w-v-align-middle {
+	align-self: center;
+	--row1: 1;
+	--row2: 2;
+	--row3: 3;
+}
+
+.w-v-align-bottom {
+	align-self:flex-end;
+	margin-top: auto;
+	margin-bottom: 0;
+	--row1: 3;
+	--row2: 2;
+	--row3: 1;
+}
+
 .w-align-left {
-	margin: 0 auto auto 0;
+	margin-right: auto;
+	margin-left: 0;
+	/* margin: 0 auto auto 0; */
 	padding-left: 1em;
 	grid-template-columns: auto auto auto;
 	justify-items: start;
 }
 
 .w-align-center {
-	margin: 0 auto auto auto;
+	/* margin: 0 auto auto auto; */
+	margin-left: auto;
+	margin-right: auto;
 	grid-template-columns: repeat(4, 1fr);
 	justify-items: start;
 }
 
 .w-align-right {
-	margin: 0 0 auto auto;
+	/* margin: 0 0 auto auto; */
+	margin-right: 0;
+	margin-left: auto;
 	padding-right: 1em;
 	grid-template-columns: auto auto auto;
 	justify-items: start;
@@ -184,6 +223,19 @@ export default {
 	justify-self: end;
 }
 
+.w-align-left .extended {
+	left: 0;
+}
+
+.w-align-center .extended {
+	left: 0;
+	right: 0;
+}
+
+.w-align-right .extended {
+	right: 0;
+}
+
 .widget-weather {
 	position: relative;
 	display: grid;
@@ -193,19 +245,19 @@ export default {
 }
 
 .icon {
-	grid-row: 1;
+	grid-row: var(--row1);
 	height: 3em;
 	width: 3em;
 }
 
 .temperature {
 	font-size: 2em;
-	grid-row: 1;
+	grid-row: var(--row1);
 	align-self: center;
 }
 
 .location {
-	grid-row: 2;
+	grid-row: var(--row2);
 	color: rgba(255,255,255,1);
 	font-weight: 300;
 	font-size: 0.75em;
@@ -215,13 +267,13 @@ export default {
 }
 
 .row-extended {
-	grid-row: 3;
+	grid-row: var(--row3);
 	position: relative;
 	cursor: default;
+	width: 100%;
 }
 
 .extended {
-	top: 0;
-	/* position: absolute; */
+	position: absolute;
 }
 </style>

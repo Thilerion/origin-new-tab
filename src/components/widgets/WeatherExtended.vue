@@ -1,7 +1,7 @@
 <template>
 <transition name="slide-list" appear>
 	<div class="widget-weather-extended">		
-		
+		<transition name="slide-list">
 		<ul class="forecast-list">
 			<transition name="fade">
 			<div class="background-image" :style="backgroundImage" :key="currentLoadedURL"></div>
@@ -20,7 +20,7 @@
 				<a href="https://darksky.net/poweredby/" target="_blank" class="forecast-ds-text">Powered by Dark Sky</a>
 			</li>
 		</ul>
-		
+		</transition>
 	</div>
 	</transition>
 </template>
@@ -103,6 +103,23 @@ export default {
 </script>
 
 <style scoped>
+.w-v-align-top .widget-weather-extended, .w-v-align-middle .widget-weather-extended {
+	--transform-list: -103%;
+	--ds-order: 2;
+	--item-order: 1;
+}
+
+.w-v-align-bottom .widget-weather-extended {
+	--transform-list: 103%;
+	--ds-order: 1;
+	--item-order: 2;
+}
+
+.w-v-align-bottom .background-image {
+	top: unset;
+	bottom: -10%;
+}
+
 .widget-weather-extended {
 	font-size: inherit;
 	margin-top: 0.5em;
@@ -143,6 +160,10 @@ export default {
 	opacity: 1;
 	box-shadow: 0 1px 2px 1px rgba(0,0,0,0.3);	
 	will-change: transform;
+	display: flex;
+	flex-direction: column;
+	
+	/* transform: translateY(0); */
 }
 
 .slide-list-enter-active {
@@ -157,19 +178,24 @@ export default {
 	opacity: 0.2!important;
 }
 
-.slide-list-enter-active .forecast-list, .slide-list-leave-active .forecast-list {
+.slide-list-enter-active .forecast-list, .slide-list-leave-active .forecast-list, .forecast-list {
 	transition-property: transform;
 	transition-duration: var(--transition-dur);
 	transition-timing-function: ease-in-out;
 }
 
 .slide-list-enter .forecast-list, .slide-list-leave-to .forecast-list {
-	transform: translateY(-103%);
+	transform: translateY(var(--transform-list));
 }
 
 .forecast-item {
 	position: relative;
 	overflow: hidden;
+	order: var(--item-order);
+}
+
+.forecast-ds {
+	order: var(--ds-order);
 }
 
 .forecast-item-background {

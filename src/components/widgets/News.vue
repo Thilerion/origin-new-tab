@@ -91,10 +91,22 @@ export default {
 </script>
 
 <style scoped>
+.w-v-align-top {
+	align-self:flex-start;
+}
+
+.w-v-align-middle {
+	align-self: center;
+}
+
+.w-v-align-bottom {
+	align-self:flex-end;
+}
+
 .widget-news {
 	font-size: inherit;
-	margin: 0 auto;
-	align-self: start;
+	margin-left: auto;
+	margin-right: auto;
 	width: 100%;
 	position: relative;
 	display: flex;

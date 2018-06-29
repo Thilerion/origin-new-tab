@@ -137,20 +137,46 @@ export default {
 </script>
 
 <style scoped>
+.w-v-align-top {
+	align-self:flex-start;
+	flex-direction: column;
+}
+
+.w-v-align-top .row-bottom {
+	margin-top: 0;
+	margin-bottom: 0.1em;
+}
+
+.w-v-align-middle {
+	align-self: center;
+	flex-direction: column-reverse;
+}
+
+.w-v-align-bottom {
+	align-self:flex-end;
+	flex-direction: column-reverse;
+}
+
 .w-align-left {
 	padding-left: 0.5em;
-	margin: auto auto 0 0;
+	/* margin: auto auto 0 0; */
+	margin-right: auto;
+	margin-left: 0;
 	text-align: left;
 }
 
 .w-align-center {
-	margin: auto auto 0 auto;
+	/* margin: auto auto 0 auto; */
+	margin-left: auto;
+	margin-right: auto;
 	text-align: center;
 }
 
 .w-align-right {
 	padding-right: 0.5em;
-	margin: auto 0 0 auto;
+	/* margin: auto 0 0 auto; */
+	margin-right: 0;
+	margin-left: auto;
 	text-align: right;
 }
 
@@ -224,7 +250,6 @@ export default {
 	opacity: 0.5;
 	display: flex;
 	max-width: 100%;
-	flex-direction: column-reverse;
 	transition: all .3s ease-out;
 	white-space: nowrap;
 	min-height: 2em;

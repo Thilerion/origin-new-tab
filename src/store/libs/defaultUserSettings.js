@@ -20,6 +20,7 @@ const defaultSettings = {
 			row: [7, 13],
 			column: [9, 33],
 			align: 1,
+			vAlign: 1,
 			fontSize: -1,
 		},
 		{ 
@@ -28,6 +29,7 @@ const defaultSettings = {
 			row: [1, 3],
 			column: [9, 33],
 			align: 1,
+			vAlign: 1,
 			fontSize: -1
 		},
 		{ 
@@ -36,6 +38,7 @@ const defaultSettings = {
 			row: [2, 4],
 			column: [9, 33],
 			align: 1,
+			vAlign: 1,
 			fontSize: -2
 		},
 		{ 
@@ -44,6 +47,7 @@ const defaultSettings = {
 			row: [1, 4],
 			column: [35, 41],
 			align: 2,
+			vAlign: 0,
 			fontSize: -1
 		},
 		{ 
@@ -52,6 +56,7 @@ const defaultSettings = {
 			row: [16, 21],
 			column: [11, 31],
 			align: 1,
+			vAlign: 1,
 			fontSize: -3
 		},
 		{
@@ -60,6 +65,7 @@ const defaultSettings = {
 			row: [20, 21],
 			column: [40, 41],
 			align: 2,
+			vAlign: 2,
 			fontSize: 0
 		},
 		{
@@ -68,6 +74,7 @@ const defaultSettings = {
 			row: [19, 21],
 			column: [1, 13],
 			align: 0,
+			vAlign: 2,
 			fontSize: -1
 		},
 		{
@@ -76,6 +83,7 @@ const defaultSettings = {
 			row: [1, 7],
 			column: [1, 11],
 			align: 0,
+			vAlign: 0,
 			fontSize: -1
 		}
 	],
@@ -127,6 +135,11 @@ const settingsOptions = {
 			1: 'center',
 			2: 'right'
 		},
+		vAlign: {
+			0: 'top',
+			1: 'middle',
+			2: 'bottom'
+		},
 		storageModules: [
 			'news',
 			'quote',
@@ -142,6 +155,7 @@ const settingsOptions = {
 				grid: true,
 				resize: true,
 				align: true,
+				vAlign: true,
 				fontSize: {
 					canChange: true,
 					min: -8,
@@ -155,6 +169,7 @@ const settingsOptions = {
 				grid: true,
 				resize: true,
 				align: false,
+				vAlign: true,
 				fontSize: {
 					canChange: true,
 					min: -4,
@@ -168,6 +183,7 @@ const settingsOptions = {
 				grid: true,
 				resize: true,
 				align: true,
+				vAlign: true,
 				fontSize: {
 					canChange: true,
 					min: -4,
@@ -181,6 +197,7 @@ const settingsOptions = {
 				grid: true,
 				resize: true,
 				align: true,
+				vAlign: true,
 				fontSize: {
 					canChange: true,
 					min: -4,
@@ -194,6 +211,7 @@ const settingsOptions = {
 				grid: true,
 				resize: true,
 				align: true,
+				vAlign: true,
 				fontSize: {
 					canChange: true,
 					min: -4,
@@ -207,6 +225,7 @@ const settingsOptions = {
 				grid: true,
 				resize: true,
 				align: true,
+				vAlign: true,
 				fontSize: {
 					canChange: true,
 					min: -4,
@@ -220,6 +239,7 @@ const settingsOptions = {
 				grid: true,
 				resize: true,
 				align: true,
+				vAlign: true,
 				fontSize: {
 					canChange: true,
 					min: -4,
@@ -233,6 +253,7 @@ const settingsOptions = {
 				grid: true,
 				resize: false,
 				align: false,
+				vAlign: false,
 				fontSize: {
 					canChange: false,
 					min: 0,

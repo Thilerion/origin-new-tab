@@ -126,6 +126,18 @@ export default {
 	white-space: nowrap;
 }
 
+.w-v-align-top {
+	align-self:flex-start;
+}
+
+.w-v-align-middle {
+	align-self: center;
+}
+
+.w-v-align-bottom {
+	align-self:flex-end;
+}
+
 .widget-clock {
 	font-size: inherit;
 	width: 100%;

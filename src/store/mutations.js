@@ -85,6 +85,9 @@ export default {
 	setWidgetAlignment(state, { index, alignment }) {
 		state.settingsData.widgets[index].align = alignment;
 	},
+	setWidgetVerticalAlignment(state, { index, alignment }) {
+		state.settingsData.widgets[index].vAlign = alignment;
+	},
 	showHorizontalLine(state, bool) {
 		state.showHorizontalLine = bool;
 	},

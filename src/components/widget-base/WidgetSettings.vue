@@ -36,6 +36,29 @@
 				<StartSvgIcon icon="align-right" />
 			</button>
 		</div>
+		<div class="widget-setting-group widget-settings-align" v-if="canChangeVAlignment">
+			<button
+				class="widget-setting-btn icon-btn align-btn"
+				@click="changeVAlignment(0)"
+				:class="{'active-alignment': currentVAlignment === 0}"
+			>
+				Top
+			</button>
+			<button
+				class="widget-setting-btn icon-btn align-btn"
+				@click="changeVAlignment(1)"
+				:class="{'active-alignment': currentVAlignment === 1}"
+			>
+				Middle
+			</button>
+			<button
+				class="widget-setting-btn icon-btn align-btn"
+				@click="changeVAlignment(2)"
+				:class="{'active-alignment': currentVAlignment === 2}"
+			>
+				Bottom
+			</button>
+		</div>
 	</div>
 </template>
 
@@ -90,6 +113,16 @@ export default {
 			return this.widget.align;
 		},
 
+		canChangeVAlignment() {
+			return !!this.widgetOptions.vAlign;
+		},
+		defaultVAlignment() {
+			return this.widgetDefaults.vAlign;
+		},
+		currentVAlignment() {
+			return this.widget.vAlign;
+		},
+
 		positionStyles() {
 			if (this.positionTop == null || this.positionLeft == null) {
 				return {display: "none"};
@@ -122,6 +155,9 @@ export default {
 		},
 		changeAlignment(alignment) {
 			this.$store.dispatch('changeWidgetAlignment', {name: this.widget.name, alignment});
+		},
+		changeVAlignment(alignment) {
+			this.$store.dispatch('changeWidgetVerticalAlignment', {name: this.widget.name, alignment});
 		},
 		getElementRelativePosition() {
 			const rect = this.$parent.$el.getBoundingClientRect();

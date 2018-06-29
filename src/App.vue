@@ -36,6 +36,25 @@ export default {
 			} else {
 				doc.style.setProperty('--font-size', `${px}px`);
 			}			
+		},
+
+		keyboardDownEvent(e) {
+			if (e.key === "a" && e.ctrlKey) {
+				console.log("No select all!");
+				e.preventDefault();
+				e.stopPropagation();
+			}
+		},
+		keyboardUpEvent(e) {
+			
+		},
+		setKeyboardShortcuts() {
+			document.addEventListener('keydown', this.keyboardDownEvent);
+			document.addEventListener('keyup', this.keyboardUpEvent);
+		},
+		removeKeyboardShortcuts() {
+			document.removeEventListener('keydown', this.keyboardDownEvent);
+			document.removeEventListener('keyup', this.keyboardUpEvent);
 		}
 	},
 	watch: {
@@ -52,6 +71,10 @@ export default {
 	},
 	created() {
 		this.setDocumentFontSize(this.fontSize);
+		this.setKeyboardShortcuts();
+	},
+	beforeDestroy() {
+		this.removeKeyboardShortcuts();
 	}
 };
 </script>

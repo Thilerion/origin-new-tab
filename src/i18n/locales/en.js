@@ -28,6 +28,15 @@ export default {
 		showGreeting: "Show greeting",
 		showDate: "Show date",
 		activeWidgets: "Active widgets",
+		presetLayouts: {
+			title: "Choose a preset layout",
+			note: "Warning: presets are still in beta; it is possible that some presets require you to make some adjustments.",
+			standard: "Default",
+			basic: "Basic",
+			minimal: "Minimal",
+			quote: "Quote",
+			news: "News"
+		},
 		changeWidgetDisplay: "Customize layout",
 		useCustomLocation: {
 			title: "Use custom location",

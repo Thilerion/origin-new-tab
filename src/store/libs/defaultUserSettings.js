@@ -14,26 +14,26 @@ const defaultSettings = {
 		showDate: false
 	},
 	widgets: [
-		{ 
-			name: 'clock',
+		{
+			name: "clock",
 			active: true,
 			row: [7, 13],
 			column: [9, 33],
 			align: 1,
 			vAlign: 1,
-			fontSize: -1,
+			fontSize: -1
 		},
-		{ 
-			name: 'news',
+		{
+			name: "news",
 			active: true,
 			row: [1, 3],
 			column: [9, 33],
 			align: 1,
-			vAlign: 1,
+			vAlign: 0,
 			fontSize: -1
 		},
-		{ 
-			name: 'quote',
+		{
+			name: "quote",
 			active: true,
 			row: [2, 4],
 			column: [9, 33],
@@ -41,8 +41,8 @@ const defaultSettings = {
 			vAlign: 1,
 			fontSize: -2
 		},
-		{ 
-			name: 'weather',
+		{
+			name: "weather",
 			active: true,
 			row: [1, 4],
 			column: [35, 41],
@@ -50,17 +50,17 @@ const defaultSettings = {
 			vAlign: 0,
 			fontSize: -1
 		},
-		{ 
-			name: 'topPages',
+		{
+			name: "topPages",
 			active: true,
 			row: [16, 21],
 			column: [11, 31],
 			align: 1,
-			vAlign: 1,
+			vAlign: 2,
 			fontSize: -3
 		},
 		{
-			name: 'settingsButton',
+			name: "settingsButton",
 			active: true,
 			row: [20, 21],
 			column: [40, 41],
@@ -69,7 +69,7 @@ const defaultSettings = {
 			fontSize: 0
 		},
 		{
-			name: 'wallpaperDetails',
+			name: "wallpaperDetails",
 			active: true,
 			row: [19, 21],
 			column: [1, 13],
@@ -78,7 +78,7 @@ const defaultSettings = {
 			fontSize: -1
 		},
 		{
-			name: 'calendar',
+			name: "calendar",
 			active: false,
 			row: [1, 7],
 			column: [1, 11],

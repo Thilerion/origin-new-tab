@@ -120,8 +120,9 @@
 					>{{ $t('settings.changeWidgetDisplay') }}</button>
 
 					<StartSettingItem>
-						<template slot="header">Gebruik preset layout</template>
-						<button v-for="item in layoutOptions" :key="item" @click="changeLayout(item)">{{item}}</button>
+						<template slot="header">{{ $t('settings.presetLayouts.title')}} (beta)</template>
+						<p class="preset-note">{{ $t('settings.presetLayouts.note')}}</p>
+						<button class="preset-button" v-for="item in layoutOptions" :key="item" @click="changeLayout(item)">{{ $t(`settings.presetLayouts.${item}`)}}</button>
 					</StartSettingItem>
 
 				</StartSettingGroup>
@@ -437,6 +438,9 @@ export default {
 		this.initialSettings = {};
 		this.removeShortcuts();
 	},
+	mounted() {
+		console.log(this.deepClone(this.currentSettings.widgets));
+	},
 	watch: {
 		language(newValue, oldValue) {
 			this.$store.commit('setLanguage', newValue);
@@ -627,6 +631,28 @@ label {
 	bottom: -8em;
 	left: 0;
 	opacity: 0.2;
+}
+
+.preset-note {
+	margin-bottom: 0.25em;
+}
+
+.preset-button {
+	margin: 0.25em 0 0 0.75em;
+	border-radius: 4px;
+	border: 2px solid white;;
+	background: white;
+	transition: all .2s ease;
+	padding: 0.5rem;
+}
+
+.preset-button:first-of-type {
+	margin-left: 0;
+}
+
+.preset-button:hover {
+	background: black;
+	color: white;
 }
 
 </style>

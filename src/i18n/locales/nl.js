@@ -28,6 +28,15 @@ export default {
 		showGreeting: "Welkomsttekst weergeven",
 		showDate: "Datum weergeven",
 		activeWidgets: "Actieve widgets",
+		presetLayouts: {
+			title: "Kies een voorinstelling",
+			note: "Let op: voorinstellingen zijn nog in beta; het is mogelijk dat de grootten van de widgets nog aangepast moeten worden.",
+			standard: "Standaard",
+			basic: "Simpel",
+			minimal: "Minimalistisch",
+			quote: "Quote",
+			news: "Nieuws"
+		},
 		changeWidgetDisplay: "Layout aanpassen",
 		useCustomLocation: {
 			title: "Gebruik aangepaste locatie",

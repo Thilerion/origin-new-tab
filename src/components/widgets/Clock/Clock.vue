@@ -1,12 +1,21 @@
 <template>
-	<div class="widget-greeting widget-no-select f-shadow-heavy f-shadow-wide cursor-default" v-show="timeOfDay != null">
-		<div :class="{'is-12': hasAmPm}" class="time">{{formattedTime[0]}}<small v-if="hasAmPm"> {{formattedTime[1]}}</small></div>
+	<div
+		class="widget-clock widget-no-select f-shadow-heavy f-shadow-wide cursor-default"
+		v-show="timeOfDay != null"
+	>
+		<div
+			:class="{'is-12': hasAmPm}"
+			class="time">{{formattedTime[0]}}<small v-if="hasAmPm"> {{formattedTime[1]}}</small>
+		</div>
 		
 		<div
 			class="message"
 			@dblclick="editUsername"
 			v-if="showTextGreeting"
-		>{{$t(`greeting.messages[${timeOfDay}]`)}}, <span class="username" v-if="!isEditingUsername">{{username}}</span><input class="username-input" v-else v-focus v-model="usernameInput" @keyup.enter="saveUsername"><span class="input-help">{{ $t('greeting.saveHint') }}</span>.</div>
+		>{{$t(`clock.messages[${timeOfDay}]`)}}, <span class="username" v-if="!isEditingUsername">{{username}}</span>
+		
+			<input class="username-input" v-else v-focus v-model="usernameInput" @keyup.enter="saveUsername"><span class="input-help">{{ $t('clock.saveHint') }}</span>.
+		</div>
 	</div>
 </template>
 
@@ -111,7 +120,7 @@ export default {
 	white-space: nowrap;
 }
 
-.widget-greeting {
+.widget-clock {
 	font-size: inherit;
 	width: 100%;
 	display: flex;

@@ -17,6 +17,13 @@ export default {
 	},
 
 	settingsStorageLoadSuccess({ commit }, storageData) {
+		if (storageData.greeting) {
+			storageData.clock = storageData.greeting;
+			delete storageData.greeting;
+		}
+		let greetingWidget = storageData.widgets.find(w => w.name === "greeting");
+		if (greetingWidget) greetingWidget.name = "clock";
+		
 		const def = defaultSettings;
 		const merged = lodashMerge(def, storageData);
 		commit('setSettingsData', merged);

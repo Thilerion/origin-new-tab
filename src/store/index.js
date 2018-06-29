@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import wallpaper from './modules/Wallpaper'
-import greeting from './modules/Greeting'
 import quote from './modules/Quote'
 import weather from './modules/Weather'
 import news from './modules/News'
@@ -25,7 +24,6 @@ const store = new Vuex.Store({
 
 	modules: {
 		wallpaper,
-		greeting,
 		quote,
 		weather,
 		news,

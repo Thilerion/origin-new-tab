@@ -14,7 +14,7 @@ const state = {
 			fontSize: null,
 			timeFormat: ""
 		},
-		greeting: {
+		clock: {
 			username: '',
 			showTextGreeting: null
 		},
@@ -47,8 +47,8 @@ const getters = {
 
 	language: state => state.settingsData.general.language,
 	fontSize: state => state.settingsData.general.fontSize,
-	username: state => state.settingsData.greeting.username,
-	showTextGreeting: state => state.settingsData.greeting.showTextGreeting,
+	username: state => state.settingsData.clock.username,
+	showTextGreeting: state => state.settingsData.clock.showTextGreeting,
 	timeFormat: state => state.settingsData.general.timeFormat,
 	widgets: state => state.settingsData.widgets,
 	widgetByIndex: state => index => state.settingsData.widgets[index],
@@ -68,7 +68,7 @@ const getters = {
 		return !!state.showSettings;
 	},
 	isEditingUsername(state) {
-		return state.editingUsername || !state.settingsData.greeting.username;
+		return state.editingUsername || !state.settingsData.clock.username;
 	},
 	gridCols: state => state.gridCols,
 	gridRows: state => state.gridRows,

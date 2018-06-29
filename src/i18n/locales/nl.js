@@ -9,7 +9,7 @@ export default {
 		news: "Nieuws",
 		topSites: "Meest bezochte sites",
 		topPages: "Meest bezochte sites",
-		greeting: "Klok",
+		clock: "Klok",
 		calendar: "Agenda"
 	},
 	settings: {
@@ -59,7 +59,7 @@ export default {
 		resetSettings: "Herstel standaardinstellingen",
 		save: "Opslaan"
 	},
-	greeting: {
+	clock: {
 		messages: ['Goedemorgen', 'Hallo', 'Goedenavond', 'Goedenacht'],
 		saveHint: "Druk op [enter] om op te slaan"
 	},

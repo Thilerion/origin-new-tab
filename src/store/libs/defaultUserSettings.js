@@ -8,13 +8,13 @@ const defaultSettings = {
 		fontSize: null,
 		timeFormat: 'HH:mm'
 	},
-	greeting: {
+	clock: {
 		username: "",
 		showTextGreeting: true
 	},
 	widgets: [
 		{ 
-			name: 'greeting',
+			name: 'clock',
 			active: true,
 			row: [7, 13],
 			column: [9, 33],
@@ -138,7 +138,7 @@ const settingsOptions = {
 			'calendar'
 		],
 		widgetOptions: {
-			greeting: {
+			clock: {
 				disable: true,
 				zIndex: 1,
 				move: true,

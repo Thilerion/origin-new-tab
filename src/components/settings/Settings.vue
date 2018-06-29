@@ -14,7 +14,7 @@
 						<input
 							type="text"
 							class="input-text"
-							v-model="currentSettings.greeting.username">
+							v-model="currentSettings.clock.username">
 					</StartSettingItem>
 
 					<StartSettingItem>
@@ -79,7 +79,7 @@
 						<template slot="header">{{ $t('settings.showGreeting') }}</template>
 						<input
 							type="checkbox"
-							v-model="currentSettings.greeting.showTextGreeting"
+							v-model="currentSettings.clock.showTextGreeting"
 							class="input-checkbox"
 						>
 					</StartSettingItem>

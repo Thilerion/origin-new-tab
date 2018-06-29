@@ -9,7 +9,7 @@ export default {
 		state.settingsData.general.language = language;
 	},
 	setUsername(state, username) {
-		state.settingsData.greeting.username = username;
+		state.settingsData.clock.username = username;
 		if (state.editingUsername) state.editingUsername = false;
 	},
 	setFontSize(state, fontSize = null) {

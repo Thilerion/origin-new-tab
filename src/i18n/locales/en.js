@@ -9,7 +9,7 @@ export default {
 		news: "News",
 		topSites: "Most visited sites",
 		topPages: "Most visited sites",
-		greeting: "Clock",
+		clock: "Clock",
 		calendar: "Calendar"
 	},
 	settings: {
@@ -59,7 +59,7 @@ export default {
 		resetSettings: "Restore default settings",
 		save: "Save"
 	},
-	greeting: {
+	clock: {
 		messages: ['Good morning', "Hi", 'Good evening', 'Good night'],
 		saveHint: "Press [enter] to save"
 	},

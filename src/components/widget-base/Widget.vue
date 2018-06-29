@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import StartGreeting from "../widgets/Greeting.vue";
+import StartClock from "../widgets/Clock/Clock.vue";
 import StartWallpaperDetails from '../widgets/WallpaperDetails.vue';
 import StartQuote from '../widgets/Quote.vue';
 import StartWeather from '../widgets/Weather.vue';
@@ -46,7 +46,7 @@ import {mapState} from 'vuex';
 
 export default {
 	components: {
-		StartGreeting,
+		StartClock,
 		StartWallpaperDetails,
 		StartQuote,
 		StartWeather,

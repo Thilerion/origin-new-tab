@@ -2,6 +2,8 @@ import {wallpaperRequest as apiRequest} from '../api/';
 
 import { deepClone, uniqueBy } from '@/utils/deepObject';
 
+import DefaultWallpaper from '@/assets/wallpaper/default_wallpaper.jpg';
+
 const wallpaperStore = {
 	namespaced: true,
 
@@ -15,12 +17,12 @@ const wallpaperStore = {
 		hiddenIds: [],
 
 		defaultWallpaper: {
-			url: require('@/assets/wallpaper/default_wallpaper.jpg'),
+			url: DefaultWallpaper,
 			urlUser: "https://unsplash.com/@goodvybesdaily",
 			user: "mike anderson",
 			location: "Ganekogorta, Spain",
-			urlDownload: require('@/assets/wallpaper/default_wallpaper.jpg'),
-			urlRaw: require('@/assets/wallpaper/default_wallpaper.jpg'),
+			urlDownload: DefaultWallpaper,
+			urlRaw: DefaultWallpaper,
 			id: 0
 		},
 

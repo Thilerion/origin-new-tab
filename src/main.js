@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store/'
-
 import {i18n} from './i18n';
 
 import './assets/style/base.css';
@@ -9,11 +8,9 @@ import './assets/style/base.css';
 import baseComponents from './plugins/baseComponents';
 Vue.use(baseComponents);
 
-Vue.directive('focus', {
-	inserted(el) {
-		el.focus();
-	}
-})
+import focusDirective from './plugins/focusDirective';
+Vue.use(focusDirective);
+
 
 Vue.config.productionTip = false
 

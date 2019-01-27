@@ -15,7 +15,7 @@ const StartSettings = () => import(
 	/* webpackChunkName: "settings" */ './components/settings/Settings.vue');
 
 import {mapState, mapGetters} from 'vuex';
-import {changeLocale} from '@/i18n';
+import {changeLocale} from '@/plugins/i18n';
 
 export default {
 	name: "app",

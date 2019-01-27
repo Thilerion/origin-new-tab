@@ -1,6 +1,5 @@
 export const deepClone = obj => JSON.parse(JSON.stringify(obj));
 export const deepEqual = (objA, objB) => JSON.stringify(objA) === JSON.stringify(objB);
-export const deepUnequal = (objA, objB) => !deepEqual(objA, objB);
 export const uniqueBy = (arr, prop) => {
 	return arr.filter((elem, pos, curArr) => {
 		return pos === curArr.findIndex(el => {
@@ -9,10 +8,10 @@ export const uniqueBy = (arr, prop) => {
 	});
 }
 
-import lodashMerge from 'lodash.merge';
+import _merge from 'lodash.merge';
 export const deepMergeArray = (arrA, arrB) => {
 	const objA = { obj: arrA };
 	const objB = { obj: arrB };
-	const merged = lodashMerge(objA, objB);
+	const merged = _merge(objA, objB);
 	return merged.obj;
 }

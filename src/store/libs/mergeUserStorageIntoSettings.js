@@ -1,4 +1,4 @@
-import lodashMerge from 'lodash.merge';
+import _merge from 'lodash.merge';
 
 export default function (defaultSettings, oldUserData) {
 	let oldData = JSON.parse(oldUserData);
@@ -14,6 +14,6 @@ export default function (defaultSettings, oldUserData) {
 
 	console.warn("Getting old SP_USER data and converting it to SP_SETTINGS data");
 	console.log(defaultData, newData);
-	const merged = lodashMerge(defaultData, newData);
+	const merged = _merge(defaultData, newData);
 	return merged;
 }

@@ -1,6 +1,6 @@
 import {wallpaperRequest as apiRequest} from '../api/';
 
-import { deepClone, uniqueBy } from '@/utils/deepObject';
+import { uniqueBy } from '@/utils/deepObject';
 
 import DefaultWallpaper from '@/assets/wallpaper/default_wallpaper.jpg';
 

@@ -1,4 +1,4 @@
-import lodashMerge from 'lodash.merge';
+import _merge from 'lodash.merge';
 import { defaultSettings } from '@/store/libs/defaultUserSettings';
 import mergeUserStorageIntoSettings from '@/store/libs/mergeUserStorageIntoSettings';
 
@@ -14,7 +14,7 @@ export default {
 		
 		//dispatch('checkImmediateModuleUpdates', { settings, currentSettings });		
 
-		const merged = lodashMerge(currentSettings, settings);
+		const merged = _merge(currentSettings, settings);
 		commit('setSettingsData', merged);
 	},
 
@@ -27,7 +27,7 @@ export default {
 		if (greetingWidget) greetingWidget.name = "clock";
 		
 		const def = defaultSettings;
-		const merged = lodashMerge(def, storageData);
+		const merged = _merge(def, storageData);
 		commit('setSettingsData', merged);
 	},
 
@@ -77,7 +77,7 @@ export default {
 	usePresetLayout({ getters, commit }, key) {
 		const currentSettings = getters.settingsToWatch;
 		const settingsToAdd = presetLayouts[key];
-		const merged = lodashMerge(currentSettings, settingsToAdd);
+		const merged = _merge(currentSettings, settingsToAdd);
 		commit('setSettingsData', merged);
 
 	}

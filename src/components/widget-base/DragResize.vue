@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import throttle from 'lodash.throttle';
+import _throttle from 'lodash.throttle';
 import {mapState} from 'vuex';
 
 export default {
@@ -266,7 +266,7 @@ export default {
 			e.target.addEventListener('drag', this.dragging)
 			e.target.addEventListener('dragend', this.dragEnd)
 		},
-		dragging: throttle(function(e) {
+		dragging: _throttle(function(e) {
 			e.preventDefault();
 			if (e.clientX > 5 && e.clientY > 5) {
 				this.dragData.current = [e.clientX, e.clientY];
@@ -302,7 +302,7 @@ export default {
 			document.addEventListener('mouseup', this.resizeEnd, true);
 		},
 
-		resizing: throttle(function(e) {
+		resizing: _throttle(function(e) {
 			if (e.clientX > 5 && e.clientY > 5) {
 				this.resizeData.current = [e.clientX, e.clientY];
 			}

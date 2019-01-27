@@ -1,4 +1,4 @@
-import debounce from 'lodash.debounce';
+import _debounce from 'lodash.debounce';
 
 function createPersistedState(storagePrefix = "sp_", widgets = []) {
 	const toWatch = (moduleName, namespaced) => {
@@ -7,7 +7,7 @@ function createPersistedState(storagePrefix = "sp_", widgets = []) {
 		return (state, getters) => getters[moduleGetter];
 	};
 
-	const moduleDataChanged = moduleName => debounce((newValue, _) => {
+	const moduleDataChanged = moduleName => _debounce((newValue, _) => {
 		console.log(`Watcher is triggered for module '${moduleName}'.`);
 		saveToStorage(moduleName, newValue);
 	}, 500, { maxWait: 10000 });
@@ -95,7 +95,7 @@ function createPersistedState2(storagePrefix = "sp_", widgets = []) {
 
 	const toWatch = (val) => (state, getters) => getters[`${val}/${val}Watch`];
 
-	const watchCallback = (val) => debounce((newValue, oldValue) => {
+	const watchCallback = (val) => _debounce((newValue, oldValue) => {
 		console.log(`Watcher is triggered for module '${val}'.`);
 		saveToStorage(val, newValue);
 	}, 500, {maxWait: 10000});

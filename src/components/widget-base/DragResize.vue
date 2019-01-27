@@ -7,8 +7,7 @@
 		<div class="event-areas" v-if="dndEnabled">
 
 			<div
-				v-if="canResize"
-				v-for="handle in handles"
+				v-for="handle in showHandlesAt"
 				:key="handle"
 				class="resize-handle"
 				:class="handleClasses(handle)"
@@ -80,6 +79,10 @@ export default {
 	},
 	computed: {
 		...mapState(['dndEnabled']),
+		showHandlesAt() {
+			if (!this.canResize) return [];
+			return this.handles;
+		},
 		dragResizeClasses() {
 			if (!this.dndEnabled) return [];
 

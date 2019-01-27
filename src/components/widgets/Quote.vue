@@ -3,7 +3,7 @@
 		<p class="quote"><span class="q-mark q-mark-top f-shadow-medium">‟ </span>{{quote | removeDot}}<span class="q-mark q-mark-bot f-shadow-medium">&nbsp;„</span></p>
 		<p class="author f-style-italic">~ {{author}}</p>	
 		<button class="icon-btn reload-btn" @click="reloadQuote">
-			<StartSvgIcon icon="refresh"/>
+			<SvgIcon icon="refresh"/>
 		</button>
 		
 	</div>

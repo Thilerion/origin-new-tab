@@ -8,19 +8,19 @@
 					alt="Next wallpaper"
 					:class="{spinning: loadingImage}"
 				>
-					<StartSvgIcon icon="refresh"/>
+					<SvgIcon icon="refresh"/>
 				</button>
 				<a :href="downloadUrl" class="icon-btn dl-btn" target="_blank" alt="Download wallpaper">
-					<StartSvgIcon icon="download"/>
+					<SvgIcon icon="download"/>
 				</a>
 				<button class="icon-btn hide-btn" @click="hideWallpaper" alt="Hide wallpaper">
-					<StartSvgIcon icon="close"/>
+					<SvgIcon icon="close"/>
 				</button>
 			</div>
 
 			<div class="buttons default-buttons" v-else-if="showDefault">
 				<button class="icon-btn load-btn" @click="retryLoadingWallpapers" alt="Retry loading wallpaper">
-					<StartSvgIcon icon="refresh"/>
+					<SvgIcon icon="refresh"/>
 				</button>
 			</div>
 

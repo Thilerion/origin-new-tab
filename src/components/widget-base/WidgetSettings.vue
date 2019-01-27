@@ -19,21 +19,21 @@
 				@click="changeAlignment(0)"
 				:class="{'active-alignment': currentAlignment === 0}"
 			>
-				<StartSvgIcon icon="align-left" />
+				<SvgIcon icon="align-left" />
 			</button>
 			<button
 				class="widget-setting-btn icon-btn align-btn"
 				@click="changeAlignment(1)"
 				:class="{'active-alignment': currentAlignment === 1}"
 			>
-				<StartSvgIcon icon="align-center" />
+				<SvgIcon icon="align-center" />
 			</button>
 			<button
 				class="widget-setting-btn icon-btn align-btn"
 				@click="changeAlignment(2)"
 				:class="{'active-alignment': currentAlignment === 2}"
 			>
-				<StartSvgIcon icon="align-right" />
+				<SvgIcon icon="align-right" />
 			</button>
 		</div>
 		<div class="widget-setting-group widget-settings-align" v-if="canChangeVAlignment">

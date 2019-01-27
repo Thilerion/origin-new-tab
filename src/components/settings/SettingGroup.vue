@@ -9,17 +9,17 @@
 		><slot name="header" /></h2>
 		<div class="accordion-icon" :class="{rotated: !isExpanded}" 
 		@click.stop="toggleExpand">
-			<StartSvgIcon v-if="canCompress" icon="arrow-down" size="24" />
+			<SvgIcon v-if="canCompress" icon="arrow-down" size="24" />
 		</div>
 		
-		<StartTransitionExpand>
+		<TransitionExpand>
 			<div
 				class="setting-group-content"
 				v-show="isExpanded || !canCompress"
 			>
 				<slot/>
 			</div>
-		</StartTransitionExpand>
+		</TransitionExpand>
 	</div>
 </template>
 

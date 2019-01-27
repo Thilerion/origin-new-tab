@@ -2,7 +2,7 @@
 	<div class="settings-page">
 		<div class="settings-content custom-scrollbar">
 			<button class="close-btn icon-btn" @click="saveSettings">
-				<StartSvgIcon icon="close" size="36px" />
+				<SvgIcon icon="close" size="36px" />
 			</button>
 			<div class="settings-content-inner">
 				<h1>{{ $t('components.settings') }}</h1>

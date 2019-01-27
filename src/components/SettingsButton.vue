@@ -1,6 +1,6 @@
 <template>
 	<button class="icon-btn settings-btn" @click="toggleSettings">
-		<StartSvgIcon icon="cog" size="24px" />
+		<SvgIcon icon="cog" size="24px" />
 	</button>	
 </template>
 

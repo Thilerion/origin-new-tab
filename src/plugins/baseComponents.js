@@ -3,7 +3,7 @@ import TransitionExpand from '@/components/shared/TransitionExpand';
 
 export default {
 	install(Vue) {
-		Vue.component('svg-icon', SvgIcon);
-		Vue.component('transition-expand', TransitionExpand);
+		Vue.component('SvgIcon', SvgIcon);
+		Vue.component('TransitionExpand', TransitionExpand);
 	}
 }

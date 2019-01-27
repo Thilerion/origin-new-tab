@@ -6,11 +6,8 @@ import {i18n} from './i18n';
 
 import './assets/style/base.css';
 
-import StartSvgIcon from './components/shared/SvgIcon';
-Vue.component('StartSvgIcon', StartSvgIcon);
-
-import StartTransitionExpand from './components/shared/TransitionExpand';
-Vue.component('StartTransitionExpand', StartTransitionExpand);
+import baseComponents from './plugins/baseComponents';
+Vue.use(baseComponents);
 
 Vue.directive('focus', {
 	inserted(el) {

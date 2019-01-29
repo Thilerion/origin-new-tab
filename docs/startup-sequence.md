@@ -73,7 +73,7 @@ const userSettings = {
 3. Filter the UI Settings array for incorrect [widgetName] properties. If the list is now empty, use a specific base LayoutTemplate.
 4. For each remaining item in UI Settings array:
    1. Create new GridItem object (`instanceof GridItem`)
-   2. Load the previously create [WidgetName]Settings object (`instanceof Settings[widgetName]`) in the GridItem object to retrieve widget-specific options such as minHeight, minWidth, etc.
+   2. Load the previously create [WidgetName]Settings object (`instanceof Settings[widgetName]`) in the GridItem object to retrieve widget-specific options such as minHeight, minWidth, **its associated Vue component**, etc.
    3. Load the current UI Settings-item into the GridItem object, validating each property.
       - Validation includes, among others, checks for minHeight, minWidth, maxHeight, maxWidth. Possibly the widget may only be shown on a specific side, or with a specific horizontal/vertical alignment.
       - If a property is missing, or has an incorrect value, use the default (unless a better fallback is available. Such as when height is too large, reset the height to the maxHeight value).

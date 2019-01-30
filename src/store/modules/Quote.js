@@ -4,39 +4,48 @@ const quoteStore = {
 	namespaced: true,
 
 	state: {
-		quote: "",
-		author: "",
+		data: {
+			quote: "",
+			author: ""
+		},
+
 		expires: null,
+
 		finishedLoading: false,		//true, false
 		dataStatus: null			//fresh, stale, null
 	},
 
 	getters: {
-		// COMMMON GETTERS
-		toWatch(state) {
-			const { quote, author, expires } = state;
-			return { quote, author, expires };
-		},
-		hasExpired(state) {
-			return state.expires - new Date().getTime() < 0;
-		},
 
+		toWatch: state => ({ data: state.data, expires: state.expires }),
+		hasExpired: state => (state.expires - Date.now() < 0),
+		
+		dataLoadSuccessful: state => state.dataStatus != null && state.finishedLoading,
+		dataLoadFailed: state => state.dataStatus === null && state.finishedLoading,
+
+
+		// TODO: specific function that returns true if the current state.data is not valid
+		/*
+		dataInvalid: state => {
+			specific function here
+		},
+		*/
 		dataInvalid(state) {
 			if (state.finishedLoading) return false;
 
 			if (!state.expires) return true;
-			if (typeof state.quote !== "string") return true;
-			if (typeof state.author !== "string") return true;
-			if (state.quote.length < 1) return true;
-			if (state.author.length < 1) return true;
+			if (typeof state.data.quote !== "string") return true;
+			if (typeof state.data.author !== "string") return true;
+			if (state.data.quote.length < 1) return true;
+			if (state.data.author.length < 1) return true;
 		},
 
 		// UNIQUE GETTERS
 		quote(state) {
-			return state.quote;
+			return state.data.quote;
 		},
 		author(state) {
-			return state.author;
+			return state.data.author;
 		},
 		category({ }, { }, { }, rootGetters) {
 			return rootGetters.quoteCategory;
@@ -44,10 +53,8 @@ const quoteStore = {
 	},
 
 	mutations: {
-		// COMMON MUTATIONS
-		setData(state, { quote, author, expires }) {
-			state.quote = quote;
-			state.author = author;
+		setData(state, { data, expires }) {
+			state.data = { ...data };
 			state.expires = expires;
 		},
 		setFinishedLoading(state, bool) {
@@ -56,22 +63,25 @@ const quoteStore = {
 		setDataStatus(state, status) {
 			state.dataStatus = status;
 		},
+
+		// UNIQUE MUTATIONS
+		// TODO: maybe a "can be reset"-mixin?
 		setExpiresToNow(state) {
 			state.expires = new Date().getTime();
 		}
 	},
 
 	actions: {
-		// COMMON ACTIONS
 		settingsChanged({ dispatch }) {
+			console.log(`Settings for "${widgetName}"-module changed.`);
 			dispatch('getNewQuote');
 		},
 		async storageLoadFail({ commit, dispatch }) {
 			await dispatch('fetchApiData');
 			commit('setFinishedLoading', true);
 		},
-		async storageLoadSuccess({ getters, commit, dispatch }, localData) {
-			dispatch('setLocalData', localData);
+		async storageLoadSuccess({ getters, commit, dispatch }, data) {
+			dispatch('setLocalData', data);
 			if (getters.hasExpired || getters.dataInvalid) {
 				commit('setDataStatus', "stale");
 				await dispatch('fetchApiData');
@@ -80,8 +90,8 @@ const quoteStore = {
 			}
 			commit('setFinishedLoading', true);
 		},
-		setLocalData({commit}, localData) {
-			commit('setData', localData);
+		setLocalData({commit}, data) {
+			commit('setData', data);
 		},
 		setApiData({commit}, apiData) {
 			commit('setData', apiData);
@@ -89,20 +99,22 @@ const quoteStore = {
 		},
 		async fetchApiData({getters, dispatch}) {
 			try {
+				// TODO: this is specific to this api needed args
 				const category = getters.category;
+
 				let apiData = await apiRequest({category});
 				dispatch('setApiData', {
 					expires: apiData.expires,
-					quote: apiData.data.quote,
-					author: apiData.data.author
+					data: apiData.data
 				});
 			} catch (e) {
-				console.warn("Could not load QUOTE api data...");
+				console.warn(`Could not load ${widgetName.toUpperCase()} api data...`);
 				console.warn(e);
 			}			
 		},
 
 		// UNIQUE ACTIONS
+		// TODO: maybe a "can be reset"-mixin?
 		async getNewQuote({commit, dispatch}) {
 			commit('setDataStatus', "stale");
 			commit('setExpiresToNow');

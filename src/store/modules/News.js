@@ -47,6 +47,9 @@ const newsStore = {
 	},
 
 	actions: {
+		settingsChanged({}) {
+			console.log(`Settings for "${widgetName}"-module changed.`);
+		},
 		async storageLoadFail({ commit, dispatch }) {
 			await dispatch('fetchApiData');
 			commit('setFinishedLoading', true);

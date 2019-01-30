@@ -1,79 +1,78 @@
-import {wallpaperRequest as apiRequest} from '../api/';
+import { wallpaperRequest as apiRequest } from '../api/';
 
 import { uniqueBy } from '@/utils/deepObject';
 
 import DefaultWallpaper from '@/assets/wallpaper/default_wallpaper.jpg';
 
+const defaultWallpaperObj = {
+	url: DefaultWallpaper,
+	urlUser: "https://unsplash.com/@goodvybesdaily",
+	user: "mike anderson",
+	location: "Ganekogorta, Spain",
+	urlDownload: DefaultWallpaper,
+	urlRaw: DefaultWallpaper,
+	id: 0
+};
+
+const loadAdditionalRequirements = {
+	minTime: 10 * 60 * 60 * 1000, //10 minutes
+	maxWallpaperAmount: 70,
+	minChangeAmount: 5,
+	minChangePercentage: 0.05,
+	distanceFromEnd: 2
+};
+
 const wallpaperStore = {
 	namespaced: true,
 
 	state: {
-		wallpapers: [],
-		currentWallpaperId: 0,
-		expires: null,
-		idLastSet: null,
-		arrayUpdated: new Date().getTime(),
-		arrayUpdateChangeAmount: null,
-		hiddenIds: [],
-
-		defaultWallpaper: {
-			url: DefaultWallpaper,
-			urlUser: "https://unsplash.com/@goodvybesdaily",
-			user: "mike anderson",
-			location: "Ganekogorta, Spain",
-			urlDownload: DefaultWallpaper,
-			urlRaw: DefaultWallpaper,
-			id: 0
+		data: {
+			wallpapers: [],
+			currentWallpaperId: 0,
+			idLastSet: null,
+			arrayUpdated: Date.now(),
+			arrayUpdateChangeAmount: null,
+			hiddenIds: [],
 		},
+
+		expires: null,
 
 		finishedLoading: false,
 		dataStatus: null,
 
+		// UNIQUE WIDGET-SPECIFIC SETTINGs
+		defaultWallpaper: { ...defaultWallpaperObj },
+		loadAdditionalRequirements: loadAdditionalRequirements,
+
+		// UNIQUE WIDGET-SPECIFIC FUNCTIONALITY
 		loadingImage: false,
 		errorLoadingImage: false,
-		currentLoadedURL: "",
-
-		loadAdditionalRequirements: {
-			minTime: 10 * 60 * 60 * 1000, //10 minutes
-			maxWallpaperAmount: 70,
-			minChangeAmount: 5,
-			minChangePercentage: 0.05,
-			distanceFromEnd: 2
-		}
+		currentLoadedURL: ""
 	},
 
 	getters: {
-		// COMMMON GETTERS
-		toWatch(state) {
-			const { wallpapers, currentWallpaperId, expires, idLastSet, arrayUpdated, arrayUpdateChangeAmount, hiddenIds } = state;
-			return { wallpapers, currentWallpaperId, expires, idLastSet, arrayUpdated, arrayUpdateChangeAmount, hiddenIds };
-		},
+		toWatch: state => ({ data: state.data, expires: state.expires }),		
+		hasExpired: state => (state.expires - Date.now() < 0),
 
+		dataLoadSuccessful: state => state.dataStatus != null && state.finishedLoading,
+		dataLoadFailed: state => state.dataStatus === null && state.finishedLoading,
 
-		hasExpired(state) {
-			return state.expires - new Date().getTime() < 0;
+		// TODO: specific function that returns true if the current state.data is not valid
+		/*
+		dataInvalid: state => {
+			specific function here
 		},
-
-		dataLoadSuccessful(state) {
-			//dataStatus either "fresh" or "stale" and loading is finished
-			return state.dataStatus != null && state.finishedLoading;
-		},
-		
-		dataLoadFailed(state) {
-			//this means data could not be loaded
-			return state.dataStatus === null && state.finishedLoading;
-		},
-
+		*/
 		dataInvalid(state) {
 			if (state.finishedLoading) return false;
 			if (!state.expires) return true;
-			if (!Array.isArray(state.wallpapers)) return true;
-			if (state.wallpapers.length < 1) return true;
-			if (!Number.isInteger(state.currentWallpaperId)) return true;
-			if (!Array.isArray(state.hiddenIds)) return true;
-			if (state.currentWallpaperId > state.wallpapers.length - 1) return true;
-			if (state.hiddenIds.includes(null) || state.hiddenIds.includes(undefined)) return true;
-			if (!state.wallpapers[0].hasOwnProperty("id")) return true;
+			if (!Array.isArray(state.data.wallpapers)) return true;
+			if (state.data.wallpapers.length < 1) return true;
+			if (!Number.isInteger(state.data.currentWallpaperId)) return true;
+			if (!Array.isArray(state.data.hiddenIds)) return true;
+			if (state.data.currentWallpaperId > state.data.wallpapers.length - 1) return true;
+			if (state.data.hiddenIds.includes(null) || state.data.hiddenIds.includes(undefined)) return true;
+			if (!state.data.wallpapers[0].hasOwnProperty("id")) return true;
 		},
 
 		// UNIQUE GETTERS
@@ -84,7 +83,7 @@ const wallpaperStore = {
 			return rootGetters.wallpaperRefresh;	
 		},
 		nextWallpaperId(state) {
-			return state.wallpapers.length === 0 ? 0 : (state.currentWallpaperId + 1) % state.wallpapers.length;
+			return state.data.wallpapers.length === 0 ? 0 : (state.data.currentWallpaperId + 1) % state.data.wallpapers.length;
 		},
 
 		showExternal(state, getters) {
@@ -98,30 +97,30 @@ const wallpaperStore = {
 		},
 
 		currentWallpaper(state, getters) {
-			if (getters.showExternal) return state.wallpapers[state.currentWallpaperId];
+			if (getters.showExternal) return state.data.wallpapers[state.data.currentWallpaperId];
 			else if (getters.showDefault) return state.defaultWallpaper;
 		},
 		nextWallpaper(state, getters) {
-			if (getters.dataLoadSuccessful) return state.wallpapers[getters.nextWallpaperId];
+			if (getters.dataLoadSuccessful) return state.data.wallpapers[getters.nextWallpaperId];
 			else return null;
 		},
 
 		arrayUpdateChangePercentage(state) {
-			return state.arrayUpdateChangeAmount / state.wallpapers.length;
+			return state.data.arrayUpdateChangeAmount / state.data.wallpapers.length;
 		},
 		canRetrieveAdditional(state, getters) {
 			const reqs = state.loadAdditionalRequirements;
 
-			const distanceFromEnd = state.wallpapers.length - 1 - state.currentWallpaperId;
-			const timePassedSinceUpdate = new Date().getTime() - state.arrayUpdated;
+			const distanceFromEnd = state.data.wallpapers.length - 1 - state.data.currentWallpaperId;
+			const timePassedSinceUpdate = new Date().getTime() - state.data.arrayUpdated;
 
 			if (distanceFromEnd > reqs.distanceFromEnd) {				
 				return false;
-			} else if (state.wallpapers.length > reqs.maxWallpaperAmount) {
+			} else if (state.data.wallpapers.length > reqs.maxWallpaperAmount) {
 				return false;
 			} else if (getters.arrayUpdateChangePercentage < reqs.minChangePercentage) {
 				return false;
-			} else if (state.arrayUpdateChangeAmount < reqs.minChangeAmount) {
+			} else if (state.data.arrayUpdateChangeAmount < reqs.minChangeAmount) {
 				return false;
 			} else if (timePassedSinceUpdate < reqs.minTime) {
 				return false;
@@ -132,28 +131,10 @@ const wallpaperStore = {
 	},
 
 	mutations: {
-		// COMMON MUTATIONS
-		setData(state, data) {
-			let {
-				wallpapers,
-				expires,
-				arrayUpdated,
-				arrayUpdateChangeAmount,
-				idLastSet,
-				currentWallpaperId,
-				hiddenIds
-			} = data;
-
+		setData(state, { expires, data }) {
+			// TODO: because nested arrays, do some kind of deep merge/clone
 			state.expires = expires;
-			state.wallpapers = [...wallpapers];
-
-			state.arrayUpdated = arrayUpdated;
-			state.arrayUpdateChangeAmount = arrayUpdateChangeAmount;
-
-			state.idLastSet = idLastSet;
-			state.currentWallpaperId = currentWallpaperId;
-
-			state.hiddenIds = [...hiddenIds];
+			state.data = { ...state.data, ...data };
 		},
 		setFinishedLoading(state, bool) {
 			state.finishedLoading = !!bool;
@@ -164,8 +145,8 @@ const wallpaperStore = {
 
 		// UNIQUE MUTATIONS
 		setWallpaperId(state, { currentWallpaperId = 0, idLastSet = new Date().getTime() }) {
-			state.currentWallpaperId = currentWallpaperId;
-			state.idLastSet = idLastSet;
+			state.data.currentWallpaperId = currentWallpaperId;
+			state.data.idLastSet = idLastSet;
 		},
 		setErrorLoadingImage(state, bool) {
 			state.errorLoadingImage = bool;
@@ -175,19 +156,19 @@ const wallpaperStore = {
 			state.loadingImage = bool;
 		},
 		removeWallpaper(state, index) {
-			state.wallpapers.splice(index, 1);
+			state.data.wallpapers.splice(index, 1);
 		},
 		addToHiddenIds(state, id) {
-			state.hiddenIds.push(id);
+			state.data.hiddenIds.push(id);
 		},
 
 		setArrayUpdated(state, t = new Date().getTime()) {
-			state.arrayUpdated = t;
+			state.data.arrayUpdated = t;
 		},
 		setAdditionalWallpapers(state, { wallpapers, expires, arrayUpdateChangeAmount }) {
-			state.wallpapers = [...wallpapers];
+			state.data.wallpapers = [...wallpapers];
 			state.expires = expires;
-			state.arrayUpdateChangeAmount = arrayUpdateChangeAmount;
+			state.data.arrayUpdateChangeAmount = arrayUpdateChangeAmount;
 		},
 
 		setExpiresToNow(state) {
@@ -226,34 +207,12 @@ const wallpaperStore = {
 
 			commit('setFinishedLoading', true);
 		},
-		setLocalData({ commit }, localData) {
-			let {
-				wallpapers = [],
-				expires,
-				arrayUpdated,
-				arrayUpdateChangeAmount,
-				idLastSet,
-				currentWallpaperId,
-				hiddenIds = []
-			} = localData;
-			
-			// set all
-			commit('setData', {
-				wallpapers,
-				expires,
-				arrayUpdated,
-				arrayUpdateChangeAmount,
-				idLastSet,
-				currentWallpaperId,
-				hiddenIds
-			});
+		setLocalData({ commit }, { data, expires }) {
+			commit('setData', {	expires, data });
 		},
-		setApiData({ commit }, apiData) {
-			let {
-				wallpapers,
-				expires
-			} = apiData;
-			
+		// TODO: in fetchApiData, merge these defaults in with "data" prop to make
+		// TODO: 	this action at least reusable
+		setApiData({ commit }, { wallpapers, expires }) {			
 			const arrayUpdated = new Date().getTime();
 			const arrayUpdateChangeAmount = wallpapers.length;
 
@@ -262,17 +221,9 @@ const wallpaperStore = {
 
 			const hiddenIds = [];
 
-			// set all
-			commit('setData', {
-				wallpapers,
-				expires,
-				arrayUpdated,
-				arrayUpdateChangeAmount,
-				idLastSet,
-				currentWallpaperId,
-				hiddenIds
-			});
-			
+			const data = { wallpapers, arrayUpdated, arrayUpdateChangeAmount, idLastSet, currentWallpaperId, hiddenIds };
+
+			commit('setData', { data, expires });			
 			commit('setDataStatus', "fresh");
 		},
 		async fetchApiData({getters, dispatch}) {
@@ -318,31 +269,31 @@ const wallpaperStore = {
 			//if not finishedLoading, or showing default, return
 			if (!state.finishedLoading || state.showingDefault) return;
 			//if only 1 wallpaper left return
-			if (state.wallpapers.length <= 1) return;
+			if (state.data.wallpapers.length <= 1) return;
 			//get current wallpaper id (not index, its unique id)
 			const idToHide = getters.currentWallpaper.id;
-			const indexToHide = state.currentWallpaperId;
+			const indexToHide = state.data.currentWallpaperId;
 			//get next wallpaper id, and if it is 0, the currentWallpaper id is the last one.
 			//in that case, go to next wallpaper, else, set idLastSet to now
 			if (getters.nextWallpaperId === 0) {
 				dispatch('goToNext');
 			} else {
-				commit('setWallpaperId', { currentWallpaperId: state.currentWallpaperId, idLastSet: new Date().getTime() });
+				commit('setWallpaperId', { currentWallpaperId: state.data.currentWallpaperId, idLastSet: new Date().getTime() });
 			}
 			//remove wallpaper and add to hiddenIds
 			//then, when new wallpapers are loaded, remove any wallpapers with id in hiddenIds
 			commit('removeWallpaper', indexToHide);
 			commit('addToHiddenIds', idToHide);
 
-			console.log(`Hidden wallpaper. Previous 'currentWallpaperId' was ${indexToHide}, and currently is ${state.currentWallpaperId}. The id of the hidden wallpaper is ${idToHide}.`);
+			console.log(`Hidden wallpaper. Previous 'currentWallpaperId' was ${indexToHide}, and currently is ${state.data.currentWallpaperId}. The id of the hidden wallpaper is ${idToHide}.`);
 		},
 
 		checkWallpaperId({ state, getters, commit }) {
 			const now = new Date().getTime();
 			const refresh = getters.refreshTime;
 
-			let currentWallpaperId = state.currentWallpaperId;
-			let idLastSet = state.idLastSet;
+			let currentWallpaperId = state.data.currentWallpaperId;
+			let idLastSet = state.data.idLastSet;
 
 			if (idLastSet + refresh < now) {
 				currentWallpaperId = getters.nextWallpaperId;
@@ -364,13 +315,13 @@ const wallpaperStore = {
 				let apiData = await apiRequest({collection});
 				
 				//merge unique, remove all in hiddenIds
-				const wallpapersInitial = [...state.wallpapers];
+				const wallpapersInitial = [...state.data.wallpapers];
 				const lengthInitial = wallpapersInitial.length;
 
 				const merged = wallpapersInitial.concat(apiData.data);
 				const dupesRemoved = uniqueBy(merged, 'id');
 
-				const wallpapersAfter = dupesRemoved.filter(w => !state.hiddenIds.includes(w.id));
+				const wallpapersAfter = dupesRemoved.filter(w => !state.data.hiddenIds.includes(w.id));
 				const lengthAfter = wallpapersAfter.length;
 				const changeAmount = lengthAfter - lengthInitial;
 

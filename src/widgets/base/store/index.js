@@ -9,7 +9,7 @@ import { MIXIN_TYPES, storeMixins } from './mixins.js';
  * @param {Array} mixins - Mixins for storeModules that add specific state-properties, getters, mutations and/or actions
  * @returns {Object} StoreModule for this widget
  */
-export default function createWidgetModule({mixins = [], widgetOptions = {}} = {}) {
+function createWidgetModule({mixins = [], widgetOptions = {}} = {}) {
 	const mixinObjs = mixins.map(n => {
 		let curMixin = n;
 
@@ -25,3 +25,5 @@ export default function createWidgetModule({mixins = [], widgetOptions = {}} = {
 
 	return _merge(baseModule, ...mixinObjs, widgetOptions);
 }
+
+export { createWidgetModule, MIXIN_TYPES };

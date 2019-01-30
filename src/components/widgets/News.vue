@@ -24,7 +24,9 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('news', ['articles']),
+		...mapState('news', {
+			articles: state => state.data.articles
+		}),
 		...mapGetters('news', ['dataLoadSuccessful']),
 		...mapGetters(['newsSlideInterval']),
 		transitionName() {

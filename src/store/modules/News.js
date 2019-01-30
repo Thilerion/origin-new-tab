@@ -1,52 +1,41 @@
-import {newsRequest as apiRequest} from '../api/';
+import { newsRequest as apiRequest } from '../api/';
+
+const widgetName = "news";
 
 const newsStore = {
 	namespaced: true,
-
+	
 	state: {
-		expires: null,
-		articles: [],
+		data: {
+			articles: []
+		},
 
+		expires: null,
+		
 		finishedLoading: false,
 		dataStatus: null
 	},
 
 	getters: {
-		// COMMMON GETTERS
-		toWatch(state) {
-			const { expires, articles } = state;
-			return { expires, articles };
+		
+		toWatch: state => ({ data: state.data, expires: state.expires }),
+		hasExpired: state => (state.expires - Date.now() < 0),
+		
+		// dataStatus either fresh or stale, and loading is finished
+		dataLoadSuccessful: state => state.dataStatus != null && state.finishedLoading,
+		dataLoadFailed: state => state.dataStatus === null && state.finishedLoading,
+		
+		// TODO: specific function that returns true if the current state.data is not valid
+		/*
+		dataInvalid: state => {
+			specific function here
 		},
-		hasExpired(state) {
-			return state.expires - new Date().getTime() < 0;
-		},
-
-		dataLoadSuccessful(state) {
-			//dataStatus either "fresh" or "stale" and loading is finished
-			return state.dataStatus != null && state.finishedLoading;
-		},
-
-		dataLoadFailed(state) {
-			//this means data could not be loaded
-			return state.dataStatus === null && state.finishedLoading;
-		},
-
-		dataInvalid(state) {
-			//to prevent rechecking this getter??? TODO
-			if (state.finishedLoading) return false;
-
-			if (!state.expires) return true;
-			if (!Array.isArray(state.articles)) return true;
-			if (state.articles.length < 1) return true;
-		}
-
-		// UNIQUE GETTERS
+		*/
 	},
 
 	mutations: {
-		// COMMON MUTATIONS
-		setData(state, {articles, expires}) {
-			state.articles = [...articles];
+		setData(state, { data, expires }) {
+			state.data = { ...data };
 			state.expires = expires;
 		},
 		setFinishedLoading(state, bool) {
@@ -58,16 +47,12 @@ const newsStore = {
 	},
 
 	actions: {
-		// COMMON ACTIONS
-		settingsChanged() {
-			//
-		},
-		async storageLoadFail({commit, dispatch}) {
+		async storageLoadFail({ commit, dispatch }) {
 			await dispatch('fetchApiData');
 			commit('setFinishedLoading', true);
 		},
-		async storageLoadSuccess({ getters, commit, dispatch }, localData) {
-			dispatch('setLocalData', localData);
+		async storageLoadSuccess({ getters, commit, dispatch }, data) {
+			dispatch('setLocalData', data);
 			if (getters.hasExpired || getters.dataInvalid) {
 				commit('setDataStatus', "stale");
 				await dispatch('fetchApiData');
@@ -76,27 +61,29 @@ const newsStore = {
 			}
 			commit('setFinishedLoading', true);
 		},
-		setLocalData({commit}, localData) {
-			commit('setData', localData);
+		setLocalData({ commit }, data) {
+			commit('setData', data);
 		},
-		setApiData({commit}, apiData) {
+		setApiData({ commit }, apiData) {
 			commit('setData', apiData);
 			commit('setDataStatus', "fresh");
 		},
-		async fetchApiData({dispatch}) {
+		async fetchApiData({ dispatch }) {
 			try {
 				let apiData = await apiRequest();
 				dispatch('setApiData', {
 					expires: apiData.expires,
-					articles: apiData.data
+					data: {
+						// TODO: this is specific to this api return data
+						articles: apiData.data
+					}
 				});
 			} catch (e) {
-				console.warn("Could not load NEWS api data...");
+				console.warn(`Could not load ${widgetName.toUpperCase()} api data...`);
 				console.warn(e);
 			}
 		}
 	}
-
 }
 
 export default newsStore;

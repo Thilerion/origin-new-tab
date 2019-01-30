@@ -1,41 +1,60 @@
 const storeMixins = {
-	// TODO: maybe constructors that adds Widget API function etc
-	externalAPI: {
+	externalAPI: (validateFn, fetchApiDataFn) => ({
 		state: {
 			expires: null,
+
 			finishedLoading: false,
 			dataStatus: null
 		},
 		getters: {
+			toWatch: state => ({ data: state.data, expires: state.expires }),
+			hasExpired: state => state.expires != null && (state.expires - Date.now() < 0),
+			
+			dataLoadSuccessful: state => state.dataStatus != null && state.finishedLoading,
+			dataLoadFailed: state => state.dataStatus === null && state.finishedLoading,
 
+			dataInvalid: state => !!validateFn(state)
+		},
+		mutations: {
+			setData(state, { data, expires }) {
+				state.data = { ...data };
+				state.expires = expires;
+			},
+			setFinishedLoading(state, bool) {
+				state.finishedLoading = !!bool;
+			},
+			setDataStatus(state, status) {
+				state.dataStatus = status;
+			}
+		},
+		actions: {
+			async storageLoadFail({ commit, dispatch }) {
+				await dispatch('fetchApiData');
+				commit('setFinishedLoading', true);
+			},
+			async storageLoadSuccess({ getters, commit, dispatch }, data) {
+				dispatch('setLocalData', data);
+				if (getters.hasExpired || getters.dataInvalid) {
+					commit('setDataStatus', "stale");
+					await dispatch('fetchApiData');
+				} else {
+					commit('setDataStatus', "fresh");
+				}
+				commit('setFinishedLoading', true);
+			},
+			setLocalData({commit}, data) {
+				commit('setData', data);
+			},
+			setApiData({commit}, apiData) {
+				commit('setData', apiData);
+				commit('setDataStatus', "fresh");
+			},
+			// TODO: must be done this way for now because certain
+			// TODO: params must be sent to ApiRequest function
+			fetchApiData: fetchApiDataFn
 		}
-	},
-
-	// TODO: maybe make it a function that adds paths to persist (with _get())
-	// persist: {
-	// 	getters: {
-	// 		toWatch: state => {
-	// 			return { expires: state.expires, data: state.data };
-	// 		}
-	// 	}
-	// },
-
-	// TODO: definitely make this a function that accepts paths,
-	// TODO: 	and actions for when the settings change,
-	// TODO:	should contain a reducer for the received settings
-	// TODO: a normal store plugin should watch when settings change,
-	// TODO: 	and notify each widget if they changed
-	// actionOnSettingsChange: {
-	// 	actions(ctx, mySettings) {
-	// 		console.log("I reduce 'mySettings' based on certain paths");
-	// 		console.log("I must do something when those settings change");
-	// 	}
-	// }
-};
-
-// Prevents new properties from being added, or existing properties to be modified
-// The objects inside can still be changed however
-Object.seal(storeMixins);
+	}),
+}
 
 // Create enum variable for the storeMixins keys
 const MIXIN_TYPES = Object.freeze(Object.keys(storeMixins)); //?

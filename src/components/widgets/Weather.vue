@@ -26,7 +26,9 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('weather', ['forecast']),
+		...mapState('weather', {
+			forecast: state => state.data.forecast
+		}),
 		...mapGetters('weather', [
 			'addressCity',
 			'dataLoadSuccessful',

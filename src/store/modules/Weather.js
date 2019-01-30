@@ -5,63 +5,67 @@ const weatherStore = {
 	namespaced: true,
 
 	state: {
+		data: {
+			forecast: {},
+			address: {
+				city: null,
+				street: null
+			},
+			coordinates: {
+				latitude: null,
+				longitude: null
+			},
+			// TODO: custom coordinates should be in settings
+			customCoordinates: {
+				latitude: null,
+				longitude: null
+			}
+		},
+
 		expires: null,
-		forecast: {},
-		address: {
-			city: null,
-			street: null
-		},
-		coordinates: {
-			latitude: null,
-			longitude: null
-		},
-		customCoordinates: {
-			latitude: null,
-			longitude: null
-		},
 
 		finishedLoading: false,
 		dataStatus: null
 	},
 
 	getters: {
-		// COMMMON GETTERS
-		toWatch(state) {
-			const { expires, forecast, address, customAddress, coordinates, customCoordinates } = state;
-			return { expires, forecast, address, customAddress, coordinates, customCoordinates };
-		},
-		hasExpired(state) {
-			return state.expires - new Date().getTime() < 0;
-		},
+		toWatch: state => ({ data: state.data, expires: state.expires }),		
+		hasExpired: state => (state.expires - Date.now() < 0),
 
-		dataLoadSuccessful(state) {
-			return state.dataStatus != null && state.finishedLoading;
-		},
+		dataLoadSuccessful: state => state.dataStatus != null && state.finishedLoading,
+		dataLoadFailed: state => state.dataStatus === null && state.finishedLoading,
 
-		dataLoadFailed(state) {
-			return state.dataStatus === null && state.finishedLoading;
-		},
 
+		// TODO: specific function that returns true if the current state.data is not valid
+		/*
+		dataInvalid: state => {
+			specific function here
+		},
+		*/
 		dataInvalid(state) {
 			if (state.finishedLoading) return false;
 
 			if (!state.expires) return true;
-			if (typeof state.address !== 'object') return true;
-			if (!state.address.city) return true;
-			if (typeof state.coordinates !== 'object') return true;
-			if (!state.coordinates.hasOwnProperty('latitude')) return true;
-			if (typeof state.customCoordinates !== 'object') return true;
-			if (!state.customCoordinates.hasOwnProperty('latitude')) return true;
-			if (typeof state.forecast !== 'object') return true;
-			if (!state.forecast.daily || !Array.isArray(state.forecast.daily)) return true;
-			if (!state.forecast.currently || !state.forecast.currently.temperature) return true;
+			if (typeof state.data.address !== 'object') return true;
+			if (!state.data.address.city) return true;
+			if (typeof state.data.coordinates !== 'object') return true;
+			if (!state.data.coordinates.hasOwnProperty('latitude')) return true;
+			if (typeof state.data.customCoordinates !== 'object') return true;
+			if (!state.data.customCoordinates.hasOwnProperty('latitude')) return true;
+			if (typeof state.data.forecast !== 'object') return true;
+			if (!state.data.forecast.daily || !Array.isArray(state.data.forecast.daily)) return true;
+			if (!state.data.forecast.currently || !state.data.forecast.currently.temperature) return true;
 		},
 
+
 		// UNIQUE GETTERS
+		// TODO: is not necessary, can be accessed by state
 		forecast(state) {
-			return state.forecast;
+			return state.data.forecast;
 		},
 		
+		// TODO: these two access the "settings", should do something about this as well
+		// TODO: happens in "Quote" as well (category)
 		useCustomLocation({}, {}, {}, rootGetters) {
 			return rootGetters.useCustomLocation;
 		},
@@ -71,44 +75,31 @@ const weatherStore = {
 		},
 
 		customCoordinatesAvailable(state) {
-			return !!state.customCoordinates.latitude && !!state.customCoordinates.longitude;
+			return !!state.data.customCoordinates.latitude && !!state.data.customCoordinates.longitude;
 		},
 
 		coordinatesAvailable(state) {
-			return !!state.coordinates.latitude && !!state.coordinates.longitude;
+			return !!state.data.coordinates.latitude && !!state.data.coordinates.longitude;
 		},
 
 		coordinates(state, getters) {
 			if (getters.useCustomLocation) {
-				return state.customCoordinates;
+				return state.data.customCoordinates;
 			} else if (!getters.useCustomLocation) {
-				return state.coordinates;
+				return state.data.coordinates;
 			}
 		},
 
 		addressCity(state) {
-			return state.address.city;
+			return state.data.address.city;
 		}
 	},
 
 	mutations: {
-		// COMMON MUTATIONS
-		setData(state, data) {
-			let {
-				expires,
-				forecast,
-				address
-			} = data;
-
-			let {
-				city,
-				street
-			} = address;
-
+		// TODO: should refactor how the data is given by the action
+		setData(state, { expires, data }) {
 			state.expires = expires;
-			state.forecast = forecast;
-			state.address.city = city || "";
-			state.address.street = street || "";
+			state.data = { ...state.data, ...data };
 		},
 		setFinishedLoading(state, bool) {
 			state.finishedLoading = !!bool;
@@ -118,14 +109,14 @@ const weatherStore = {
 		},
 
 		// UNIQUE MUTATIONS
-		setCoordinates(state, {latitude, longitude}) {
-			state.coordinates = { latitude, longitude };
+		setCoordinates(state, { latitude, longitude }) {
+			state.data.coordinates = { latitude, longitude };
 		},
 		setCustomCoordinates(state, {latitude, longitude}) {
-			state.customCoordinates = { latitude, longitude };
+			state.data.customCoordinates = { latitude, longitude };
 		},
 		resetCustomCoordinates(state) {
-			state.customCoordinates = { latitude: null, longitude: null };
+			state.data.customCoordinates = { latitude: null, longitude: null };
 		},
 		setExpires(state, time) {
 			state.expires = time;
@@ -133,19 +124,19 @@ const weatherStore = {
 	},
 
 	actions: {
-		// COMMON ACTIONS
-		async settingsChanged({ commit, dispatch }, changes = []) {
+		// TODO: unique "settingsChanged" function
+		async settingsChanged({ commit, dispatch }) {
 			commit('setExpires', new Date().getTime());
 			commit('setDataStatus', 'stale');
 			await dispatch('fetchApiData');
 			commit('setFinishedLoading', true);
 		},
-		async storageLoadFail({commit, dispatch}) {
+		async storageLoadFail({ commit, dispatch }) {
 			await dispatch('fetchApiData');
 			commit('setFinishedLoading', true);
 		},
-		async storageLoadSuccess({getters, commit, dispatch}, localData) {
-			dispatch('setLocalData', localData);
+		async storageLoadSuccess({ getters, commit, dispatch }, {data, expires}) {
+			dispatch('setLocalData', {data, expires});
 			if (getters.hasExpired || getters.dataInvalid) {
 				commit('setDataStatus', 'stale');
 				await dispatch('fetchApiData');
@@ -155,22 +146,12 @@ const weatherStore = {
 
 			commit('setFinishedLoading', true);
 		},
-		setLocalData({commit}, localData) {
-			let {
-				expires,
-				forecast,
-				address,
-				customCoordinates
-			} = localData;
+		setLocalData({commit}, { data, expires }) {
+			commit('setData', {	expires, data });
 
-			commit('setData', {
-				expires,
-				forecast,
-				address
-			});
-
-			if (customCoordinates && customCoordinates.latitude) {
-				commit('setCustomCoordinates', customCoordinates);
+			// TODO: this is specific to this module
+			if (data.customCoordinates && data.customCoordinates.latitude) {
+				commit('setCustomCoordinates', data.customCoordinates);
 			}			
 		},
 		setApiData({ commit }, apiData) {
@@ -184,10 +165,12 @@ const weatherStore = {
 
 			commit('setData', {
 				expires,
-				forecast,
-				address: {
-					city,
-					street: null
+				data: {
+					forecast,
+					address: {
+						city,
+						street: null
+					}
 				}
 			})
 
@@ -225,7 +208,7 @@ const weatherStore = {
 			try {
 				if (useCustom && customCoordsAvailable) {
 					//return customCoords
-					coords = { ...state.customCoordinates };
+					coords = { ...state.data.customCoordinates };
 				} else if (useCustom && locationQueryAvailable) {
 					//get location from locationRequest API
 					let customLocation = await dispatch('fetchCustomLocation');

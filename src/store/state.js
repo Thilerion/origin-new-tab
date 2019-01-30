@@ -38,8 +38,7 @@ const state = {
 		topSites: {
 			maxTopSites: null,
 			columns: null
-		},
-		calendar: {}
+		}
 	}
 };
 

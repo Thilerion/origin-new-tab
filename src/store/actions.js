@@ -22,9 +22,21 @@ export default {
 		if (storageData.greeting) {
 			storageData.clock = storageData.greeting;
 			delete storageData.greeting;
-		}
+		}		
 		let greetingWidget = storageData.widgets.find(w => w.name === "greeting");
 		if (greetingWidget) greetingWidget.name = "clock";
+
+		const availWidgets = Object.keys(defaultSettings);
+		
+		for (const storageKey in storageData) {
+			if (!availWidgets.includes(storageKey)) {
+				delete storageData[storageKey];
+				const isActiveWidget = storageData.widgets.findIndex(w => w.name === storageKey);
+				if (isActiveWidget > -1) {
+					storageData.widgets.splice(isActiveWidget, 1);
+				}
+			}
+		}
 		
 		const def = defaultSettings;
 		const merged = _merge(def, storageData);

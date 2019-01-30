@@ -1,20 +1,36 @@
 const storeMixins = {
-	empty: {
-		state: {},
-		getters: {},
-		mutations: {},
-		actions: {}
-	},
-	test2: {
+	// TODO: maybe constructors that adds Widget API function etc
+	externalAPI: {
 		state: {
-			test: true,
-			really: "Yes"
+			expires: null,
+			finishedLoading: false,
+			dataStatus: null
 		},
 		getters: {
-			isTest: state => !!state.test,
-			isReallyTest: state => state.really
+
 		}
-	}
+	},
+
+	// TODO: maybe make it a function that adds paths to persist (with _get())
+	// persist: {
+	// 	getters: {
+	// 		toWatch: state => {
+	// 			return { expires: state.expires, data: state.data };
+	// 		}
+	// 	}
+	// },
+
+	// TODO: definitely make this a function that accepts paths,
+	// TODO: 	and actions for when the settings change,
+	// TODO:	should contain a reducer for the received settings
+	// TODO: a normal store plugin should watch when settings change,
+	// TODO: 	and notify each widget if they changed
+	// actionOnSettingsChange: {
+	// 	actions(ctx, mySettings) {
+	// 		console.log("I reduce 'mySettings' based on certain paths");
+	// 		console.log("I must do something when those settings change");
+	// 	}
+	// }
 };
 
 // Prevents new properties from being added, or existing properties to be modified

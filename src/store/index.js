@@ -5,7 +5,6 @@ import wallpaper from './modules/Wallpaper'
 import quote from './modules/Quote'
 import weather from './modules/Weather'
 import news from './modules/News'
-import calendar from './modules/Calendar'
 
 Vue.use(Vuex)
 
@@ -27,7 +26,6 @@ const store = new Vuex.Store({
 		quote,
 		weather,
 		news,
-		calendar
 	},
 
 	state,

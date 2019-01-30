@@ -37,7 +37,6 @@ import StartWeather from '../widgets/Weather.vue';
 import StartNews from '../widgets/News.vue';
 import StartSettingsButton from '../SettingsButton.vue';
 import StartTopPages from '../widgets/TopPages.vue';
-import StartCalendar from '../widgets/Calendar.vue';
 import StartWidgetSettings from './WidgetSettings.vue';
 import StartDragResize from './DragResize.vue';
 
@@ -53,7 +52,6 @@ export default {
 		StartNews,
 		StartSettingsButton,
 		StartTopPages,
-		StartCalendar,
 		StartWidgetSettings,
 		StartDragResize
 	},

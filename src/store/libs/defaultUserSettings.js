@@ -76,15 +76,6 @@ const defaultSettings = {
 			align: 0,
 			vAlign: 2,
 			fontSize: -1
-		},
-		{
-			name: "calendar",
-			active: false,
-			row: [1, 7],
-			column: [1, 11],
-			align: 0,
-			vAlign: 0,
-			fontSize: -1
 		}
 	],
 	weather: {
@@ -107,8 +98,7 @@ const defaultSettings = {
 	topSites: {
 		maxTopSites: 10,
 		columns: 5
-	},
-	calendar: {}
+	}
 }
 
 const settingsOptions = {
@@ -144,8 +134,7 @@ const settingsOptions = {
 			'news',
 			'quote',
 			'weather',
-			'wallpaper',
-			'calendar'
+			'wallpaper'
 		],
 		widgetOptions: {
 			clock: {
@@ -207,20 +196,6 @@ const settingsOptions = {
 			topPages: {
 				disable: true,
 				zIndex: 30,
-				move: true,
-				grid: true,
-				resize: true,
-				align: true,
-				vAlign: true,
-				fontSize: {
-					canChange: true,
-					min: -4,
-					max: 4
-				}
-			},
-			calendar: {
-				disable: true,
-				zIndex: 10,
 				move: true,
 				grid: true,
 				resize: true,

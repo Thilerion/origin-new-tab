@@ -1,9 +1,11 @@
 const baseModule = {
-	state: {
+	namespaced: true,
 
+	state: {
+		data: {}
 	},
 	getters: {
-
+		
 	},
 	mutations: {
 

@@ -1,3 +1,3 @@
-const Clock = () => import(/* webpackChunkName: 'Clock' */'./Clock.vue');
+import Clock from './Clock.vue';
 
 export default Clock;

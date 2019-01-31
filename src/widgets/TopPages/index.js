@@ -1,3 +1,3 @@
-const TopPages = () => import(/* webpackChunkName: 'TopPages' */'./TopPages.vue');
+import TopPages from './TopPages.vue';
 
 export default TopPages;

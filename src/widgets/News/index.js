@@ -1,3 +1,3 @@
-const News = () => import(/* webpackChunkName: 'News' */'./News.vue');
+import News from './News.vue';
 
 export default News;

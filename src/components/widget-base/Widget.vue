@@ -31,11 +31,7 @@
 
 <script>
 // WIDGETS
-import StartClock from "@/widgets/Clock";
-import StartQuote from '@/widgets/Quote';
-import StartWeather from '@/widgets/Weather';
-import StartNews from '@/widgets/News';
-import StartTopPages from '@/widgets/TopPages';
+import {components as Widgets} from '@/widgets';
 
 import StartWallpaperDetails from '../widgets/WallpaperDetails.vue';
 import StartSettingsButton from '../SettingsButton.vue';
@@ -47,13 +43,13 @@ import {mapState} from 'vuex';
 
 export default {
 	components: {
-		StartClock,
+		StartClock: Widgets.Clock,
 		StartWallpaperDetails,
-		StartQuote,
-		StartWeather,
-		StartNews,
+		StartQuote: Widgets.Quote,
+		StartWeather: Widgets.Weather,
+		StartNews: Widgets.News,
 		StartSettingsButton,
-		StartTopPages,
+		StartTopPages: Widgets.TopPages,
 		StartWidgetSettings,
 		StartDragResize
 	},

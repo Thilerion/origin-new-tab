@@ -1,3 +1,3 @@
-const Weather = () => import(/* webpackChunkName: 'Weather' */'./Weather.vue');
+import Weather from './Weather.vue';
 
 export default Weather;

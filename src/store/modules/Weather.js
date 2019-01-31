@@ -1,6 +1,8 @@
 import { weatherRequest, locationRequest } from '../api/';
 import getPosition from '../libs/geolocation';
 
+const widgetName = "weather";
+
 const weatherStore = {
 	namespaced: true,
 

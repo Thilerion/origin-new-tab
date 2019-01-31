@@ -5,6 +5,8 @@ const externalApiMixin = storeMixins.externalAPI(validateData, fetchApiData);
 
 import { createWidgetModule } from '../../widgets/base/store/index.js';
 
+const widgetName = "quote";
+
 async function fetchApiData({getters, dispatch}) {
 	try {
 		// TODO: this is specific to this api needed args

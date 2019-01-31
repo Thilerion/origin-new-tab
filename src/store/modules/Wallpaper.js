@@ -4,6 +4,8 @@ import { uniqueBy } from '@/utils/deepObject';
 
 import DefaultWallpaper from '@/assets/wallpaper/default_wallpaper.jpg';
 
+const widgetName = "wallpaper";
+
 const defaultWallpaperObj = {
 	url: DefaultWallpaper,
 	urlUser: "https://unsplash.com/@goodvybesdaily",

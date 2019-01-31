@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import StartClimacon from '../shared/Climacon.vue';
+import StartClimacon from '@/components/shared/Climacon.vue';
 
 import differenceInDays from 'date-fns/difference_in_calendar_days';
 import format from 'date-fns/format';

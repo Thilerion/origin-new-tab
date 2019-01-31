@@ -30,13 +30,15 @@
 </template>
 
 <script>
-import StartClock from "../widgets/Clock.vue";
+// WIDGETS
+import StartClock from "@/widgets/Clock";
+import StartQuote from '@/widgets/Quote';
+import StartWeather from '@/widgets/Weather';
+import StartNews from '@/widgets/News';
+import StartTopPages from '@/widgets/TopPages';
+
 import StartWallpaperDetails from '../widgets/WallpaperDetails.vue';
-import StartQuote from '../widgets/Quote.vue';
-import StartWeather from '../widgets/Weather.vue';
-import StartNews from '../widgets/News.vue';
 import StartSettingsButton from '../SettingsButton.vue';
-import StartTopPages from '../widgets/TopPages.vue';
 import StartWidgetSettings from './WidgetSettings.vue';
 import StartDragResize from './DragResize.vue';
 

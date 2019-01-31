@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import StartClimacon from '../shared/Climacon.vue';
+import StartClimacon from '@/components/shared/Climacon.vue';
 import StartWeatherExtended from './WeatherExtended.vue';
 
 import {mapState, mapGetters} from 'vuex';

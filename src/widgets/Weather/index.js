@@ -1,3 +1,5 @@
-import Weather from './Weather.vue';
+const Weather = () => import(/* webpackChunkName: 'Weather'*/'./Weather.vue');
 
-export default Weather;
+import weatherConfig from './config.js';
+
+export {Weather, weatherConfig};

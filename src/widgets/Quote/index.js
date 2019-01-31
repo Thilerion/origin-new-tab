@@ -1,3 +1,5 @@
-import Quote from './Quote.vue';
+const Quote = () => import(/* webpackChunkName: 'Quote'*/'./Quote.vue');
 
-export default Quote;
+import quoteConfig from './config.js';
+
+export {Quote, quoteConfig};

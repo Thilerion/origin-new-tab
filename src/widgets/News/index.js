@@ -1,3 +1,5 @@
-import News from './News.vue';
+const News = () => import(/* webpackChunkName: 'News'*/'./News.vue');
 
-export default News;
+import newsConfig from './config.js';
+
+export {News, newsConfig};

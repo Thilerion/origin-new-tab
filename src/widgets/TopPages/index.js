@@ -1,3 +1,5 @@
-import TopPages from './TopPages.vue';
+const TopPages = () => import(/* webpackChunkName: 'TopPages'*/'./TopPages.vue');
 
-export default TopPages;
+import topPagesConfig from './config.js';
+
+export {TopPages, topPagesConfig};

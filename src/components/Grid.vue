@@ -31,14 +31,16 @@ import StartWidget from './widget-base/Widget.vue';
 import {settingsOptions} from '@/store/libs/defaultUserSettings';
 import {mapState, mapGetters, mapMutations} from 'vuex';
 
+import { GRID_COLS, GRID_ROWS } from '@/constants';
+
 export default {
 	components: {
 		StartWidget
 	},
 	data() {
 		return {
-			gridCols: 0,
-			gridRows: 0,
+			gridCols: GRID_COLS,
+			gridRows: GRID_ROWS,
 			zIndexSettings: settingsOptions.widgets.widgetOptions
 		}
 	},
@@ -76,37 +78,28 @@ export default {
 		}
 	},
 	methods: {
-		...mapMutations(['toggleDnd', 'setGridSize']),
-		getCSSGridVariables() {
-			const el = this.$refs.grid;
-			const gridCols = parseInt(getComputedStyle(el).getPropertyValue('--cols'));
-			const gridRows = parseInt(getComputedStyle(el).getPropertyValue('--rows'));
-			this.gridCols = gridCols;
-			this.gridRows = gridRows;
-			this.setGridSize({cols: gridCols, rows: gridRows});
-		},
+		...mapMutations(['toggleDnd']),
+
 		dragOver(e) {
 			// used to show the "move" icon when dnd is enabled and dragging
 			if (this.dndEnabled)  {
 				e.preventDefault();
 				e.dataTransfer.dropEffect = "move";
 			}
+		},
+
+		setGridColsRows() {
+			document.body.style.setProperty('--cols', parseInt(this.gridCols));
+			document.body.style.setProperty('--rows', parseInt(this.gridRows));
 		}
 	},
 	beforeMount() {
-		setTimeout(() => {
-			this.getCSSGridVariables();
-		}, 0);
+		this.setGridColsRows();
 	}
 }
 </script>
 
 <style>
-.grid {
-	--cols: 40;
-	--rows: 20;
-}
-
 .grid {
 	display: grid;
 	font-size: 1em;

@@ -59,10 +59,6 @@ export default {
 	setEditingUsername(state, bool) {
 		state.editingUsername = !!bool;
 	},
-	setGridSize(state, { cols, rows }) {
-		state.gridCols = cols;
-		state.gridRows = rows;
-	},
 	setWidgetPositionOnGrid(state, { index, moveCols, moveRows }) {
 		let row = [...state.settingsData.widgets[index].row];
 		let col = [...state.settingsData.widgets[index].column];

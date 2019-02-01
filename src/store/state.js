@@ -1,11 +1,12 @@
 const state = {
+	// GRID
 	dndEnabled: false,
-	showSettings: window.location.hash.substr(1) === 'settings',
-	gridCols: null,
-	gridRows: null,
 	showHorizontalLine: false,
 	showVerticalLine: false,
 	showEdgeLines: [false, false, false, false],
+
+	// SETTINGS ETC.
+	showSettings: window.location.hash.substr(1) === 'settings',
 	editingUsername: false,
 
 	settingsData: {
@@ -71,8 +72,6 @@ const getters = {
 	isEditingUsername(state) {
 		return state.editingUsername || !state.settingsData.clock.username;
 	},
-	gridCols: state => state.gridCols,
-	gridRows: state => state.gridRows,
 	showEdgeLines(state) {
 		if (!state.dndEnabled) return [false, false, false, false];
 		return state.showEdgeLines;

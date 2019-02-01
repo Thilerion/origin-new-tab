@@ -1,14 +1,17 @@
 import _merge from 'lodash.merge';
 import { defaultSettings } from '@/store/libs/defaultUserSettings';
 import mergeUserStorageIntoSettings from '@/store/libs/mergeUserStorageIntoSettings';
+import { layouts as presetLayouts } from '@/store/libs/presetLayouts';
 
 export default {
 	setSettings({ commit }, settings) {
-		const activeWidgets = [...settings.widgets];
-		delete settings.widgets;
+		if (settings.widgets) {
+			const activeWidgets = [...settings.widgets];
+			delete settings.widgets;
+			commit('activeWidgets/setWidgets', activeWidgets);
+		}
 
 		commit('setSettingsData', settings);
-		commit('activeWidgets/setWidgets', activeWidgets);
 	},
 	saveUpdatedSettings({ getters, dispatch }, settings) {
 		const currentSettings = getters.settingsToWatch;
@@ -41,5 +44,19 @@ export default {
 		window.localStorage.removeItem('sp_user');
 
 		dispatch('setSettings', merged);
+	},
+
+	usePresetLayout({ state, commit, dispatch }, key) {
+		const settingsToAdd = presetLayouts[key];
+
+		if (settingsToAdd.widgets) {
+			const activeWidgets = [...settingsToAdd.widgets];
+			delete settingsToAdd.widgets;
+			commit('activeWidgets/setWidgets', activeWidgets);
+		}
+
+		const curSettings = state.settingsData;
+		const merged = _merge(curSettings, settingsToAdd);
+		commit('setSettingsData', merged);
 	}
 }

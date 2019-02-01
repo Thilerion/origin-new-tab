@@ -1,5 +1,3 @@
-import { layouts as presetLayouts } from '@/store/libs/presetLayouts';
-
 export default {
 	namespaced: true,
 
@@ -77,11 +75,6 @@ export default {
 				cols,
 				rows
 			})
-		},
-	
-		usePresetLayout({ commit }, key) {
-			const settingsToAdd = presetLayouts[key];
-			commit('setWidgets', settingsToAdd);
 		}
 	}
 }

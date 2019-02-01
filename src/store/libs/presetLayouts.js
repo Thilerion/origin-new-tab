@@ -67,15 +67,15 @@ const standard = {
 			vAlign: 2,
 			fontSize: -1
 		},
-		{
-			name: "calendar",
-			active: false,
-			row: [1, 7],
-			column: [1, 11],
-			align: 0,
-			vAlign: 0,
-			fontSize: -1
-		}
+		// {
+		// 	name: "calendar",
+		// 	active: false,
+		// 	row: [1, 7],
+		// 	column: [1, 11],
+		// 	align: 0,
+		// 	vAlign: 0,
+		// 	fontSize: -1
+		// }
 	]
 };
 
@@ -148,15 +148,15 @@ const basic = {
 			vAlign: 2,
 			fontSize: -1
 		},
-		{
-			name: "calendar",
-			active: false,
-			row: [1, 7],
-			column: [1, 11],
-			align: 0,
-			vAlign: 0,
-			fontSize: -1
-		}
+		// {
+		// 	name: "calendar",
+		// 	active: false,
+		// 	row: [1, 7],
+		// 	column: [1, 11],
+		// 	align: 0,
+		// 	vAlign: 0,
+		// 	fontSize: -1
+		// }
 	]
 };
 
@@ -271,21 +271,21 @@ const minimal = {
 		  "vAlign": 1,
 		  "fontSize": -1
 		},
-		{
-		  "name": "calendar",
-		  "active": false,
-		  "row": [
-			1,
-			7
-		  ],
-		  "column": [
-			1,
-			11
-		  ],
-		  "align": 0,
-		  "vAlign": 0,
-		  "fontSize": -1
-		}
+		// {
+		//   "name": "calendar",
+		//   "active": false,
+		//   "row": [
+		// 	1,
+		// 	7
+		//   ],
+		//   "column": [
+		// 	1,
+		// 	11
+		//   ],
+		//   "align": 0,
+		//   "vAlign": 0,
+		//   "fontSize": -1
+		// }
 	  ]
 };
 
@@ -400,21 +400,21 @@ const quote = {
 		  "vAlign": 2,
 		  "fontSize": -1
 		},
-		{
-		  "name": "calendar",
-		  "active": false,
-		  "row": [
-			1,
-			7
-		  ],
-		  "column": [
-			1,
-			11
-		  ],
-		  "align": 0,
-		  "vAlign": 0,
-		  "fontSize": -1
-		}
+		// {
+		//   "name": "calendar",
+		//   "active": false,
+		//   "row": [
+		// 	1,
+		// 	7
+		//   ],
+		//   "column": [
+		// 	1,
+		// 	11
+		//   ],
+		//   "align": 0,
+		//   "vAlign": 0,
+		//   "fontSize": -1
+		// }
 	  ]
 };
 
@@ -529,21 +529,21 @@ const news = {
 		  "vAlign": 0,
 		  "fontSize": -1
 		},
-		{
-		  "name": "calendar",
-		  "active": false,
-		  "row": [
-			1,
-			7
-		  ],
-		  "column": [
-			1,
-			11
-		  ],
-		  "align": 0,
-		  "vAlign": 0,
-		  "fontSize": -1
-		}
+		// {
+		//   "name": "calendar",
+		//   "active": false,
+		//   "row": [
+		// 	1,
+		// 	7
+		//   ],
+		//   "column": [
+		// 	1,
+		// 	11
+		//   ],
+		//   "align": 0,
+		//   "vAlign": 0,
+		//   "fontSize": -1
+		// }
 	  ]
 };
 

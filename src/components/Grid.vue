@@ -50,7 +50,15 @@ export default {
 		...mapState('grid', ['dndEnabled', 'boundaryIndicators', 'showHorizontalLine', 'showVerticalLine', 'gridCols', 'gridRows']),
 
 		widgetsInGrid() {
-			return this.widgets.filter(w => settingsOptions.widgets.widgetOptions[w.name].grid);
+			console.log(this.widgets);
+			return this.widgets.filter(w => {
+				try {
+					const val = settingsOptions.widgets.widgetOptions[w.name].grid;
+					return val;
+				} catch(e) {
+					return false;
+				}
+			});
 		},
 
 		activeWidgets() {

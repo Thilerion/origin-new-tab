@@ -16,6 +16,8 @@
 <script>
 import WallpaperDefault from './WallpaperDefault.vue';
 
+import {loadWidget as loadUnsplash} from '@/widgets/WallpaperUnsplash/index.js';
+
 export default {
 	components: {
 		WallpaperDefault
@@ -39,7 +41,8 @@ export default {
 			}
 		},
 		wallpaperComponent() {
-			return 'WallpaperDefault';
+			// return 'WallpaperDefault';
+			return loadUnsplash();
 		}
 	},
 	mounted() {

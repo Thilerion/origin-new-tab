@@ -1,9 +1,7 @@
 <template>
 	<div
 		:style="{'background-image': `url(${this.src})`}"
-	>
-
-	</div>
+	></div>
 </template>
 
 <script>

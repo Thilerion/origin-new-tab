@@ -15,7 +15,7 @@ export default {
 	},
 	data() {
 		return {
-			showGridLines: true
+			showGridLines: false
 		}
 	},
 	computed: {

@@ -1,16 +1,21 @@
 <template>
-	<div class="grid">
-
+	<div class="grid" @click="showGridLines = !showGridLines">
+		<GridLines v-if="showGridLines" />
 	</div>
 </template>
 
 <script>
 import {mapState} from 'vuex';
 
+import GridLines from './GridLines.vue'
+
 export default {
+	components: {
+		GridLines
+	},
 	data() {
 		return {
-
+			showGridLines: true
 		}
 	},
 	computed: {
@@ -25,6 +30,13 @@ export default {
 	},
 	created() {
 		this.setGridColsRows(this.cols, this.rows);
+	},
+	mounted() {
+		const el = this.$el;
+		const style = window.getComputedStyle(el);
+		const h = style.getPropertyValue('height');
+		const w = style.getPropertyValue('width');
+		console.log(h, w)
 	}
 }
 </script>

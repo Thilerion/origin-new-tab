@@ -36,7 +36,6 @@ export default {
 		const style = window.getComputedStyle(el);
 		const h = style.getPropertyValue('height');
 		const w = style.getPropertyValue('width');
-		console.log(h, w)
 	}
 }
 </script>

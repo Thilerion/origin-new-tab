@@ -43,6 +43,14 @@ const unsplashModule = {
 				return state.data.wallpapers[state.data.currentIdx];
 			}			
 		},
+		nextWallpaper: state => {
+			const n = state.data.wallpapers.length;
+			if (!n) return;
+
+			const curIdx = state.data.currentIdx;
+			const nextIdx = (curIdx + 1) % n;
+			return state.data.wallpapers[nextIdx];
+		},
 
 		showComponent(state) {
 			return state.finishedLoading && state.dataHasLoaded;

@@ -1,16 +1,19 @@
 <template>
 	<div id="app">
 		<BaseBackground />
+		<BaseGrid />
 	</div>
 </template>
 
 <script>
-import BaseBackground from '@/components/BaseBackground';
+import BaseBackground from '@/components/BaseBackground.vue';
+import BaseGrid from '@/components/BaseGrid.vue';
 
 export default {
 	name: "app",
 	components: {
-		BaseBackground
+		BaseBackground,
+		BaseGrid
 	},
 	computed: {
 

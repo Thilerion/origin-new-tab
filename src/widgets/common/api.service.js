@@ -18,7 +18,7 @@ const ApiLogger = {
 }
 
 const BaseRequest = axios.create({
-	baseUrl: API_URL,
+	baseURL: API_URL,
 	timeout: 20000,
 	method: 'get'
 });

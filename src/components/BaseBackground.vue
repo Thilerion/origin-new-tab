@@ -5,6 +5,7 @@
 				v-if="wallpaperComponent"
 				:is="wallpaperComponent"
 				class="background-image"
+				@loadError="setDefaultWallpaper"
 			/>
 			<div class="loading" v-else>
 				<span>Loading...</span>
@@ -17,6 +18,7 @@
 import WallpaperDefault from './WallpaperDefault.vue';
 
 import {loadWidget as loadUnsplash} from '@/widgets/WallpaperUnsplash/index.js';
+const unsplashComponent = loadUnsplash();
 
 export default {
 	components: {
@@ -24,7 +26,8 @@ export default {
 	},
 	data() {
 		return {
-			canAnimate: false
+			canAnimate: false,
+			wallpaperComponent: unsplashComponent
 		}
 	},
 	computed: {
@@ -39,10 +42,15 @@ export default {
 			} else {
 				return;
 			}
-		},
-		wallpaperComponent() {
-			// return 'WallpaperDefault';
-			return loadUnsplash();
+		}
+	},
+	methods: {
+		setDefaultWallpaper() {
+			this.canAnimate = false;
+			this.wallpaperComponent = 'WallpaperDefault';
+			this.$nextTick(() => {
+				this.canAnimate = true;
+			})
 		}
 	},
 	mounted() {

@@ -3,7 +3,12 @@ const state = {
 	dndEnabled: false,
 	showHorizontalLine: false,
 	showVerticalLine: false,
-	showEdgeLines: [false, false, false, false],
+	boundaryIndicators: {
+		top: false,
+		bottom: false,
+		left: false,
+		right: false
+	},
 
 	// SETTINGS ETC.
 	showSettings: window.location.hash.substr(1) === 'settings',
@@ -71,10 +76,6 @@ const getters = {
 	},
 	isEditingUsername(state) {
 		return state.editingUsername || !state.settingsData.clock.username;
-	},
-	showEdgeLines(state) {
-		if (!state.dndEnabled) return [false, false, false, false];
-		return state.showEdgeLines;
 	}
 };
 

@@ -90,10 +90,7 @@ export default {
 	showVerticalLine(state, bool) {
 		state.showVerticalLine = bool;
 	},
-	showEdgeLine(state, { side, value }) {
-		/*let lines = [...state.showEdgeLines];
-		lines[side] = value;
-		state.showEdgeLines = [...lines];*/
-		state.showEdgeLines.splice(side, 1, value);
+	toggleBoundaryIndicator(state, { side, value }) {
+		state.boundaryIndicators = { ...state.boundaryIndicators, [side]: value };
 	}
 };

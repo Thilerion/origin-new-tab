@@ -387,22 +387,22 @@ export default {
 		},
 		touchesLeftEdge(newValue, oldValue) {
 			if (newValue !== oldValue) {
-				this.$store.commit('showEdgeLine', {side: 3, value: newValue});
+				this.$store.commit('toggleBoundaryIndicator', {side: 'left', value: newValue});
 			}
 		},
 		touchesRightEdge(newValue, oldValue) {
 			if (newValue !== oldValue) {
-				this.$store.commit('showEdgeLine', {side: 1, value: newValue});
+				this.$store.commit('toggleBoundaryIndicator', {side: 'right', value: newValue});
 			}
 		},
 		touchesTopEdge(newValue, oldValue) {
 			if (newValue !== oldValue) {
-				this.$store.commit('showEdgeLine', {side: 0, value: newValue});
+				this.$store.commit('toggleBoundaryIndicator', {side: 'top', value: newValue});
 			}
 		},
 		touchesBottomEdge(newValue, oldValue) {
 			if (newValue !== oldValue) {
-				this.$store.commit('showEdgeLine', {side: 2, value: newValue});
+				this.$store.commit('toggleBoundaryIndicator', {side: 'bottom', value: newValue});
 			}
 		}
 	}

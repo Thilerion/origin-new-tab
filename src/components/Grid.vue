@@ -5,10 +5,18 @@
 			v-if="dndEnabled"
 		>
 			<div class="grid-lines-cell" v-for="box in (gridRows * gridCols)" :key="box"></div>
-			<div v-show="showEdgeLines[3]" class="edge-line edge-left"></div>
+
+			<div
+				class="edge-line"
+				:class="`edge-${side}`"
+				v-for="side in shownBoundaryIndicators"
+				:key="side"
+			></div>
+
+			<!-- <div v-show="showEdgeLines[3]" class="edge-line edge-left"></div>
 			<div v-show="showEdgeLines[2]" class="edge-line edge-bottom"></div>
 			<div v-show="showEdgeLines[0]" class="edge-line edge-top"></div>
-			<div v-show="showEdgeLines[1]" class="edge-line edge-right"></div>
+			<div v-show="showEdgeLines[1]" class="edge-line edge-right"></div> -->
 			<div class="grid-align hor" v-show="showHor"></div>
 			<div class="grid-align ver" v-show="showVer"></div>
 		</div>
@@ -46,7 +54,16 @@ export default {
 	},
 	computed: {
 		...mapGetters(['widgets']),
-		...mapState(['dndEnabled']),
+		...mapState(['dndEnabled', 'boundaryIndicators']),
+		shownBoundaryIndicators() {
+			let sides = [];
+			for (const side in this.boundaryIndicators) {
+				if (this.boundaryIndicators[side]) {
+					sides.push(side);
+				}
+			}
+			return sides;
+		},
 		widgetsInGrid() {
 			return this.widgets.filter(w => settingsOptions.widgets.widgetOptions[w.name].grid);
 		},
@@ -73,9 +90,6 @@ export default {
 		showVer() {
 			return this.$store.state.showVerticalLine;
 		},
-		showEdgeLines() {
-			return this.$store.getters.showEdgeLines;
-		}
 	},
 	methods: {
 		...mapMutations(['toggleDnd']),

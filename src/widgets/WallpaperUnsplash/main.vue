@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import storeModule from './store.js';
+
 export default {
 	name: 'WallpaperUnsplash',
 	data() {
@@ -42,14 +44,21 @@ export default {
 		}
 	},
 	beforeMount() {
-		this.$store.dispatch('unsplash/fetchApiData');
+		if (!this.canShow) {
+			this.$store.dispatch('unsplash/fetchApiData');
+		} else {
+			console.log("Unsplash component: not fetching data because data already fetched");
+		}
 	},
 	watch: {
-		errorLoading(newValue, oldValue) {
-			if (newValue) {
-				console.log("Emitting load error");
-				this.$emit('loadError');
-			}
+		errorLoading: {
+			handler(newValue, oldValue) {
+				if (newValue) {
+					console.log("Emitting load errorr");
+					this.$emit('loadError');
+				}
+			},
+			immediate: true
 		}
 	}
 }

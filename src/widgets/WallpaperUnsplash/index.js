@@ -1,15 +1,13 @@
 import store from '@/store';
 
-const module = () => import(/* webpackChunkName: 'unsplash' */'./store.js');
-const component = () => import(/* webpackChunkName: 'unsplash' */'./main.vue');
+import storeModule from './store';
+import component from './main.vue';
 
-
-function loadWidget() {
-	if (!store.state.unsplash) {
-		console.log("Registering unsplash store module.");
-		module().then(m => store.registerModule('unsplash', m.default));
-	}
-	return component;
+if (store.state.unsplash) {
+	console.log("Unsplash module is already registered");
+} else {
+	console.log("Registering unsplash module...");
+	store.registerModule('unsplash', storeModule);
 }
 
-export { loadWidget };
+export default component;

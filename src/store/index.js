@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 
 import grid from './modules/grid.js';
+import settings from './modules/settings.js';
 
 const store = new Vuex.Store({
 	strict: process.env.NODE_ENV !== 'development',
@@ -10,7 +11,8 @@ const store = new Vuex.Store({
 	plugins: [],
 
 	modules: {
-		grid
+		grid,
+		settings
 	},
 
 	state: {

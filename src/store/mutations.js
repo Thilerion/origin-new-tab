@@ -15,12 +15,6 @@ export default {
 	setFontSize(state, fontSize = null) {
 		state.settingsData.general.fontSize = fontSize;
 	},
-	setWidgets(state, widgets) {
-		state.settingsData.widgets = [...widgets];
-	},
-	setWidgetActive(state, { name, active }) {
-		state.settingsData.widgets.find(w => w.name === name).active = active;
-	},
 	setUseCustomLocation(state, bool) {
 		//TODO: dispatch to weather component (from action)
 		state.settingsData.weather.useCustomLocation = !!bool;
@@ -54,30 +48,5 @@ export default {
 	},
 	setEditingUsername(state, bool) {
 		state.editingUsername = !!bool;
-	},
-	setWidgetPositionOnGrid(state, { index, moveCols, moveRows }) {
-		let row = [...state.settingsData.widgets[index].row];
-		let col = [...state.settingsData.widgets[index].column];
-		if (!!moveRows) {
-			row = row.map(n => n += moveRows);
-		}
-		if (!!moveCols) {
-			col = col.map(n => n += moveCols);
-		}
-		state.settingsData.widgets[index].column = [...col];
-		state.settingsData.widgets[index].row = [...row];
-	},
-	setWidgetSizeOnGrid(state, { index, cols, rows }) {
-		state.settingsData.widgets[index].column = [...cols];
-		state.settingsData.widgets[index].row = [...rows];
-	},
-	changeWidgetFontSize(state, { index, amount }) {
-		state.settingsData.widgets[index].fontSize += amount;
-	},
-	setWidgetAlignment(state, { index, alignment }) {
-		state.settingsData.widgets[index].align = alignment;
-	},
-	setWidgetVerticalAlignment(state, { index, alignment }) {
-		state.settingsData.widgets[index].vAlign = alignment;
 	}
 };

@@ -2,48 +2,34 @@ import _merge from 'lodash.merge';
 import { defaultSettings } from '@/store/libs/defaultUserSettings';
 import mergeUserStorageIntoSettings from '@/store/libs/mergeUserStorageIntoSettings';
 
-import {layouts as presetLayouts} from '@/store/libs/presetLayouts';
-
 export default {
-	saveUpdatedSettings({ getters, commit, dispatch }, settings) {
+	setSettings({ commit }, settings) {
+		const activeWidgets = [...settings.widgets];
+		delete settings.widgets;
+
+		commit('setSettingsData', settings);
+		commit('activeWidgets/setWidgets', activeWidgets);
+	},
+	saveUpdatedSettings({ getters, dispatch }, settings) {
 		const currentSettings = getters.settingsToWatch;
 
 		if (settings.weather.useCustomLocation && !settings.weather.customLocationQuery) {
 			settings.weather.useCustomLocation = false;
-		}
-		
-		//dispatch('checkImmediateModuleUpdates', { settings, currentSettings });		
+		}		
 
 		const merged = _merge(currentSettings, settings);
-		commit('setSettingsData', merged);
+		
+		dispatch('setSettings', merged);
 	},
 
-	settingsStorageLoadSuccess({ commit }, storageData) {
-		if (storageData.greeting) {
-			storageData.clock = storageData.greeting;
-			delete storageData.greeting;
-		}		
-		let greetingWidget = storageData.widgets.find(w => w.name === "greeting");
-		if (greetingWidget) greetingWidget.name = "clock";
-
-		const availWidgets = Object.keys(defaultSettings);
-		
-		for (const storageKey in storageData) {
-			if (!availWidgets.includes(storageKey)) {
-				delete storageData[storageKey];
-				const isActiveWidget = storageData.widgets.findIndex(w => w.name === storageKey);
-				if (isActiveWidget > -1) {
-					storageData.widgets.splice(isActiveWidget, 1);
-				}
-			}
-		}
-		
+	settingsStorageLoadSuccess({ dispatch }, storageData) {		
 		const def = defaultSettings;
 		const merged = _merge(def, storageData);
-		commit('setSettingsData', merged);
+
+		dispatch('setSettings', merged);
 	},
 
-	settingsStorageLoadFail({ commit }) {
+	settingsStorageLoadFail({ commit, dispatch }) {
 		let oldUserData = window.localStorage.getItem('sp_user');
 		if (!oldUserData) {
 			commit('setSettingsData', defaultSettings);
@@ -53,44 +39,7 @@ export default {
 		const merged = mergeUserStorageIntoSettings(defaultSettings, oldUserData);
 
 		window.localStorage.removeItem('sp_user');
-		commit('setSettingsData', merged);
-	},
 
-	changeWidgetFontSize({ getters, commit }, { name, value }) {
-		const index = getters.widgetIndexByName(name);
-		commit('changeWidgetFontSize', { index, amount: value });
-	},
-
-	changeWidgetAlignment({ getters, commit }, { name, alignment }) {
-		const index = getters.widgetIndexByName(name);
-		commit('setWidgetAlignment', {index, alignment})
-	},
-
-	changeWidgetVerticalAlignment({ getters, commit }, { name, alignment }) {
-		const index = getters.widgetIndexByName(name);
-		commit('setWidgetVerticalAlignment', {index, alignment})
-	},
-
-	moveWidget({ getters, commit }, { name, moveCols = 0, moveRows = 0 }) {
-		commit('setWidgetPositionOnGrid', {
-			index: getters.widgetIndexByName(name),
-			moveCols,
-			moveRows
-		});
-	},
-	resizeWidget({ getters, commit }, { name, cols, rows }) {
-		commit('setWidgetSizeOnGrid', {
-			index: getters.widgetIndexByName(name),
-			cols,
-			rows
-		})
-	},
-
-	usePresetLayout({ getters, commit }, key) {
-		const currentSettings = getters.settingsToWatch;
-		const settingsToAdd = presetLayouts[key];
-		const merged = _merge(currentSettings, settingsToAdd);
-		commit('setSettingsData', merged);
-
+		dispatch('setSettings', merged);
 	}
 }

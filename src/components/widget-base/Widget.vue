@@ -119,10 +119,10 @@ export default {
 
 	methods: {
 		moveWidget(moveCols, moveRows) {
-			this.$store.dispatch('moveWidget', {name: this.widget.name, moveCols, moveRows});
+			this.$store.dispatch('activeWidgets/moveWidget', {name: this.widget.name, moveCols, moveRows});
 		},
 		resizeWidget(cols, rows) {
-			this.$store.dispatch('resizeWidget', {name: this.widget.name, cols, rows});
+			this.$store.dispatch('activeWidgets/resizeWidget', {name: this.widget.name, cols, rows});
 		}
 	}
 }

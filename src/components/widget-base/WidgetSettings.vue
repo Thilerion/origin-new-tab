@@ -148,16 +148,16 @@ export default {
 	},
 	methods: {
 		increaseFontSize() {
-			this.$store.dispatch('changeWidgetFontSize', {name: this.widget.name, value: 1});
+			this.$store.dispatch('activeWidgets/changeWidgetFontSize', {name: this.widget.name, value: 1});
 		},
 		decreaseFontSize() {
-			this.$store.dispatch('changeWidgetFontSize', {name: this.widget.name, value: -1});
+			this.$store.dispatch('activeWidgets/changeWidgetFontSize', {name: this.widget.name, value: -1});
 		},
 		changeAlignment(alignment) {
-			this.$store.dispatch('changeWidgetAlignment', {name: this.widget.name, alignment});
+			this.$store.dispatch('activeWidgets/changeWidgetAlignment', {name: this.widget.name, alignment});
 		},
 		changeVAlignment(alignment) {
-			this.$store.dispatch('changeWidgetVerticalAlignment', {name: this.widget.name, alignment});
+			this.$store.dispatch('activeWidgets/changeWidgetVerticalAlignment', {name: this.widget.name, alignment});
 		},
 		getElementRelativePosition() {
 			const rect = this.$parent.$el.getBoundingClientRect();

@@ -1,11 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+// Widget modules
 import wallpaper from './modules/Wallpaper'
 import quote from './modules/Quote'
 import weather from './modules/Weather'
 import news from './modules/News'
+
+// Base modules
 import grid from './modules/Grid';
+import activeWidgets from './modules/ActiveWidgets';
 
 Vue.use(Vuex)
 
@@ -24,6 +28,8 @@ const store = new Vuex.Store({
 
 	modules: {
 		grid,
+		activeWidgets,
+		
 		wallpaper,
 		quote,
 		weather,

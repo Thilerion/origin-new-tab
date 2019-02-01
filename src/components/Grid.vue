@@ -45,7 +45,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['widgets']),
+		...mapGetters('activeWidgets', ['widgets']),
 		...mapGetters('grid', ['shownBoundaryIndicators']),
 		...mapState('grid', ['dndEnabled', 'boundaryIndicators', 'showHorizontalLine', 'showVerticalLine', 'gridCols', 'gridRows']),
 

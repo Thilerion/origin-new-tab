@@ -38,7 +38,9 @@ const state = {
 };
 
 const getters = {
-	settingsToWatch: state => state.settingsData,
+	settingsToWatch: state => {
+		return { ...state.settingsData, widgets: [...state.activeWidgets.widgets] };
+	},
 
 	language: state => state.settingsData.general.language,
 	fontSize: state => state.settingsData.general.fontSize,
@@ -46,10 +48,6 @@ const getters = {
 	showTextGreeting: state => state.settingsData.clock.showTextGreeting,
 	showDate: state => state.settingsData.clock.showDate,
 	timeFormat: state => state.settingsData.general.timeFormat,
-	widgets: state => state.settingsData.widgets,
-	widgetByIndex: state => index => state.settingsData.widgets[index],
-	widgetByName: state => name => state.settingsData.widgets.find(w => w.name === name),
-	widgetIndexByName: state => name => state.settingsData.widgets.findIndex(w => w.name === name),
 	useCustomLocation: state => state.settingsData.weather.useCustomLocation,
 	customLocationQuery: state => state.settingsData.weather.customLocationQuery,
 	units: state => state.settingsData.weather.units,

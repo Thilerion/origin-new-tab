@@ -13,12 +13,8 @@
 				:key="side"
 			></div>
 
-			<!-- <div v-show="showEdgeLines[3]" class="edge-line edge-left"></div>
-			<div v-show="showEdgeLines[2]" class="edge-line edge-bottom"></div>
-			<div v-show="showEdgeLines[0]" class="edge-line edge-top"></div>
-			<div v-show="showEdgeLines[1]" class="edge-line edge-right"></div> -->
-			<div class="grid-align hor" v-show="showHor"></div>
-			<div class="grid-align ver" v-show="showVer"></div>
+			<div class="grid-align hor" v-if="showHorizontalLine"></div>
+			<div class="grid-align ver" v-if="showVerticalLine"></div>
 		</div>
 
 		<StartWidget
@@ -39,34 +35,24 @@ import StartWidget from './widget-base/Widget.vue';
 import {settingsOptions} from '@/store/libs/defaultUserSettings';
 import {mapState, mapGetters, mapMutations} from 'vuex';
 
-import { GRID_COLS, GRID_ROWS } from '@/constants';
-
 export default {
 	components: {
 		StartWidget
 	},
 	data() {
 		return {
-			gridCols: GRID_COLS,
-			gridRows: GRID_ROWS,
 			zIndexSettings: settingsOptions.widgets.widgetOptions
 		}
 	},
 	computed: {
 		...mapGetters(['widgets']),
-		...mapState(['dndEnabled', 'boundaryIndicators']),
-		shownBoundaryIndicators() {
-			let sides = [];
-			for (const side in this.boundaryIndicators) {
-				if (this.boundaryIndicators[side]) {
-					sides.push(side);
-				}
-			}
-			return sides;
-		},
+		...mapGetters('grid', ['shownBoundaryIndicators']),
+		...mapState('grid', ['dndEnabled', 'boundaryIndicators', 'showHorizontalLine', 'showVerticalLine', 'gridCols', 'gridRows']),
+
 		widgetsInGrid() {
 			return this.widgets.filter(w => settingsOptions.widgets.widgetOptions[w.name].grid);
 		},
+
 		activeWidgets() {
 			return this.widgetsInGrid.filter(w => {
 				const active = w.active;
@@ -74,6 +60,7 @@ export default {
 				return w.active || !canBeInactive;
 			});
 		},
+
 		widgetGridPlacement() {
 			return this.activeWidgets.map(val => {
 				return {
@@ -83,16 +70,10 @@ export default {
 					'grid-column-end': val.column[1]
 				}
 			})
-		},
-		showHor() {
-			return this.$store.state.showHorizontalLine;
-		},
-		showVer() {
-			return this.$store.state.showVerticalLine;
-		},
+		}
 	},
 	methods: {
-		...mapMutations(['toggleDnd']),
+		...mapMutations('grid', ['toggleDnd']),
 
 		dragOver(e) {
 			// used to show the "move" icon when dnd is enabled and dragging

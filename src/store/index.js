@@ -5,6 +5,7 @@ import wallpaper from './modules/Wallpaper'
 import quote from './modules/Quote'
 import weather from './modules/Weather'
 import news from './modules/News'
+import grid from './modules/Grid';
 
 Vue.use(Vuex)
 
@@ -22,6 +23,7 @@ const store = new Vuex.Store({
 	plugins: [createPersistedState('sp_', settingsOptions.widgets.storageModules)],
 
 	modules: {
+		grid,
 		wallpaper,
 		quote,
 		weather,

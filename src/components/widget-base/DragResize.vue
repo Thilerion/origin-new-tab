@@ -32,7 +32,7 @@
 
 <script>
 import _throttle from 'lodash.throttle';
-import {mapState} from 'vuex';
+import {mapState, mapMutations} from 'vuex';
 
 export default {
 	props: {
@@ -71,14 +71,12 @@ export default {
 				initialCols: [null, null],
 				initialRows: [null, null]
 			},
-			gridCols: null,
-			gridRows: null,
 			windowWidth: window.innerWidth,
 			windowHeight: window.innerHeight
 		}
 	},
 	computed: {
-		...mapState(['dndEnabled']),
+		...mapState('grid', ['dndEnabled', 'gridCols', 'gridRows']),
 		showHandlesAt() {
 			if (!this.canResize) return [];
 			return this.handles;
@@ -249,6 +247,14 @@ export default {
 		touchesBottomEdge() {
 			if (!this.resizeData.resizing && !this.dragData.dragging) return false;
 			return this.widgetRows[1] === this.gridRows + 1;
+		},
+		touchingEdges() {
+			return {
+				top: this.touchesTopEdge,
+				bottom: this.touchesBottomEdge,
+				left: this.touchesLeftEdge,
+				right: this.touchesRightEdge
+			}
 		}
 	},
 	methods: {
@@ -348,10 +354,6 @@ export default {
 			}
 		}
 	},
-	mounted() {
-		this.gridCols = parseInt(getComputedStyle(this.$el).getPropertyValue('--cols'));
-		this.gridRows = parseInt(getComputedStyle(this.$el).getPropertyValue('--rows'));
-	},
 	watch: {
 		widgetMoved: {
 			handler(newValue, oldValue) {
@@ -380,30 +382,22 @@ export default {
 			}, deep: true
 		},
 		isCenteredHorizontal(newValue, oldValue) {
-			this.$store.commit('showHorizontalLine', !!newValue);
+			this.$store.commit('grid/showHorizontalLine', !!newValue);
 		},
 		isCenteredVertical(newValue, oldValue) {
-			this.$store.commit('showVerticalLine', !!newValue);
+			this.$store.commit('grid/showVerticalLine', !!newValue);
 		},
-		touchesLeftEdge(newValue, oldValue) {
-			if (newValue !== oldValue) {
-				this.$store.commit('toggleBoundaryIndicator', {side: 'left', value: newValue});
-			}
-		},
-		touchesRightEdge(newValue, oldValue) {
-			if (newValue !== oldValue) {
-				this.$store.commit('toggleBoundaryIndicator', {side: 'right', value: newValue});
-			}
-		},
-		touchesTopEdge(newValue, oldValue) {
-			if (newValue !== oldValue) {
-				this.$store.commit('toggleBoundaryIndicator', {side: 'top', value: newValue});
-			}
-		},
-		touchesBottomEdge(newValue, oldValue) {
-			if (newValue !== oldValue) {
-				this.$store.commit('toggleBoundaryIndicator', {side: 'bottom', value: newValue});
-			}
+		touchingEdges: {
+			handler(newValue, oldValue) {
+				const shallowDiff = (obj1, obj2) => 
+					!Object.keys(obj1).every(key => obj1[key] === obj2[key]);
+
+				if (shallowDiff(newValue, oldValue)) {
+					console.log({...newValue}, {...oldValue});
+					this.$store.commit('grid/setBoundaryIndicators', newValue);
+				}
+			},
+			deep: true
 		}
 	}
 }

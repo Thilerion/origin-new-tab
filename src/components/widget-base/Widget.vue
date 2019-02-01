@@ -75,7 +75,7 @@ export default {
 
 	computed: {
 
-		...mapState(['gridCols', 'gridRows']),
+		...mapState('grid', ['gridCols', 'gridRows']),
 
 		widgetPointerEvents() {
 			if (!this.dndEnabled) return "widget-no-pointer";

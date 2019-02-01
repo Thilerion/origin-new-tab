@@ -1,15 +1,4 @@
 const state = {
-	// GRID
-	dndEnabled: false,
-	showHorizontalLine: false,
-	showVerticalLine: false,
-	boundaryIndicators: {
-		top: false,
-		bottom: false,
-		left: false,
-		right: false
-	},
-
 	// SETTINGS ETC.
 	showSettings: window.location.hash.substr(1) === 'settings',
 	editingUsername: false,

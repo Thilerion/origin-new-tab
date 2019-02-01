@@ -40,10 +40,6 @@ export default {
 	setNewsSlideInterval(state, interval) {
 		state.settingsData.news.slideInterval = interval;
 	},
-	
-	toggleDnd(state) {
-		state.dndEnabled = !state.dndEnabled;
-	},
 	setShowSettings(state, bool) {
 		if (bool == null) {
 			state.showSettings = !state.showSettings;
@@ -83,14 +79,5 @@ export default {
 	},
 	setWidgetVerticalAlignment(state, { index, alignment }) {
 		state.settingsData.widgets[index].vAlign = alignment;
-	},
-	showHorizontalLine(state, bool) {
-		state.showHorizontalLine = bool;
-	},
-	showVerticalLine(state, bool) {
-		state.showVerticalLine = bool;
-	},
-	toggleBoundaryIndicator(state, { side, value }) {
-		state.boundaryIndicators = { ...state.boundaryIndicators, [side]: value };
 	}
 };

@@ -403,7 +403,7 @@ export default {
 			location.reload();
 		},
 		toggleDnd() {
-			this.$store.commit('toggleDnd');
+			this.$store.commit('grid/toggleDnd');
 			this.saveSettings();
 		},
 

@@ -424,7 +424,7 @@ export default {
 			document.removeEventListener('keyup', this.keyUpEvent);
 		},
 		changeLayout(item) {
-			this.$store.dispatch('usePresetLayout', item);
+			this.$store.dispatch('activeWidgets/usePresetLayout', item);
 			this.saveSettings();
 		}
 	},

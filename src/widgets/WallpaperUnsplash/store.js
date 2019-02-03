@@ -1,4 +1,5 @@
 import { ApiRequest } from '../common/api.service.js';
+import _merge from 'lodash.merge';
 
 const unsplashModule = {
 	namespaced: true,
@@ -27,8 +28,6 @@ const unsplashModule = {
 
 		finishedLoading: false,
 		dataHasLoaded: false
-
-		//finishedloading, datastatus
 	},
 
 	getters: {

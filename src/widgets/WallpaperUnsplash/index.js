@@ -1,13 +1,15 @@
-import store from '@/store';
+import registerAndPersistModule from '@/utils/persistModule.js';
 
 import storeModule from './store';
 import component from './main.vue';
 
-if (store.state.unsplash) {
-	console.log("Unsplash module is already registered");
-} else {
-	console.log("Registering unsplash module...");
-	store.registerModule('unsplash', storeModule);
+const reducer = (state, getters) => {
+	return {
+		data: state.unsplash.data,
+		expires: state.unsplash.expires
+	};
 }
+
+registerAndPersistModule(storeModule, 'unsplash', 'sp_unsplash', reducer);
 
 export default component;

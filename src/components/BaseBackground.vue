@@ -1,14 +1,16 @@
 <template>
 	<div class="background-wrapper">
+		<transition :name="transitionName">
 			<component
 				v-if="wallpaperComponent"
 				:is="wallpaperComponent"
 				class="background-image"
-				@loadError="setDefaultWallpaper"
+				@loadError="wallpaperErrorEvent"
 			/>
 			<div class="loading" v-else>
 				<span>Loading...</span>
 			</div>
+		</transition>
 	</div>
 </template>
 
@@ -27,6 +29,8 @@ export default {
 		return {
 			canAnimate: false,
 			wallpaperComponent: 'WallpaperUnsplash',
+
+			wallpaperError: false
 		}
 	},
 	computed: {
@@ -44,18 +48,27 @@ export default {
 		}
 	},
 	methods: {
+		wallpaperErrorEvent() {
+			this.wallpaperError = true;
+			this.setDefaultWallpaper();
+		},
 		setDefaultWallpaper() {
 			this.canAnimate = false;
 			this.wallpaperComponent = 'WallpaperDefault';
-			this.$nextTick(() => {
-				this.canAnimate = true;
-			})
 		}
 	},
 	mounted() {
-		this.$nextTick(() => {
-			this.canAnimate = true;
-		})
+		this.canAnimate = false;
+	},
+	watch: {
+		wallpaperComponent(newValue, oldValue) {
+			if (newValue !== oldValue && oldValue != null && !this.wallpaperError) {
+				this.canAnimate = true;
+				setTimeout(() => {
+					this.canAnimate = false;
+				}, 200);
+			}
+		}
 	}
 }
 </script>

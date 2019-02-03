@@ -16,11 +16,14 @@ export default function registerAndPersistModule(storeModule, moduleName, key, r
 
 	// Gets assigned the hydrated (merged) module, or just the base module if no prevState
 	let toRegister;
+	let hasPrevState;
 
 	if (prevState) {
 		toRegister = hydrateModule(storeModule, prevState);
+		hasPrevState = true;
 	} else {
 		toRegister = storeModule;
+		hasPrevState = false;
 	}
 
 	// Register module in store
@@ -43,6 +46,8 @@ export default function registerAndPersistModule(storeModule, moduleName, key, r
 	);
 
 	modulesPersisted.push(moduleName);
+
+	return { hasPrevState, prevState };
 }
 
 // Merge the baseState and prevState, but only any key that is set on the baseState
@@ -50,13 +55,16 @@ function hydrateModule(baseModule, prevState) {
 	const base = baseModule.state;
 	const merged = {};
 
+	debugger;
 	for (const key in base) {
 		if (base[key] && prevState[key]) {
 			merged[key] = (prevState[key] === undefined ? base[key] : prevState[key]);
 		}
 	}
 
-	const hydrated = { ...baseModule, state: { ...merged } };
+	const hydratedState = { ...base, ...merged };
+
+	const hydrated = { ...baseModule, state: hydratedState };
 	console.log(hydrated);
 	return hydrated;
 }

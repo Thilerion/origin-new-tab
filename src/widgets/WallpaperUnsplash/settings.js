@@ -14,14 +14,58 @@ const config = {
 		{
 			name: 'collection',
 			type: String, // TODO: actually enum
-			default: defaultSettings.collection
+			defaultValue: () => defaultSettings.collection
 		},
 		{
 			name: 'refreshInterval',
 			type: Number,
-			default: defaultSettings.refreshInterval
+			defaultValue: () => defaultSettings.refreshInterval
 		}
-	]
+	],
+	moduleData: {
+		wallpapers: {
+			validate(val) {
+				return val && Array.isArray(val) && val.length > 0;
+			},
+			required: true,
+			defaultValue: () => []
+		},
+		currentIdx: {
+			validate(val, { wallpapers }) {
+				return Number.isInteger(val) && wallpapers && wallpapers.length > val;
+			},
+			required: false,
+			defaultValue: () => 0
+		},
+		hiddenIds: {
+			validate(val) {
+				return Array.isArray(val);
+			},
+			required: false,
+			defaultValue: () => []
+		},
+		lastCurrentIdxChange: {
+			validate(val) {
+				return Number.isInteger(val);
+			},
+			required: false,
+			defaultValue: () => null
+		},
+		lastArrayChange: {
+			validate(val) {
+				return Number.isInteger(val);
+			},
+			required: false,
+			defaultValue: () => null
+		},
+		lastArrayChangeAmount: {
+			validate(val, { wallpapers }) {
+				return Number.isInteger(val) && wallpapers && val <= wallpapers.length;
+			},
+			required: false,
+			defaultValue: ({wallpapers}) => wallpapers ? wallpapers.length : null
+		}
+	}
 }
 
 export { config, defaultSettings };

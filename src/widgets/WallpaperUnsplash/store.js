@@ -56,7 +56,7 @@ const unsplashModule = {
 		},
 		nextWallpaper: (state, getters) => {
 			const nextIdx = getters.nextWallpaperIdx;
-			if (!nextIdx) return;
+			if (nextIdx == null) return;
 			return state.data.wallpapers[nextIdx];
 		},
 

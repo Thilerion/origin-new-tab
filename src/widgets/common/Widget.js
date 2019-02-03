@@ -29,7 +29,9 @@ export default class Widget {
 	}
 
 	loadStore() {
-		this.widgetStore.init();
+		if (!this.setupComplete) {
+			this.widgetStore.init();
+		}
 		return this;
 	}
 	

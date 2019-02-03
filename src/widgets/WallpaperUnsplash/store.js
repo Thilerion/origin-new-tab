@@ -32,9 +32,14 @@ const unsplashModule = {
 
 	getters: {
 		hasExpired: state => (state.expires - Date.now() < 0),
-
-		settings(s, g, rootState) {
-			return rootState.settings;
+		apiRequestParams(state, getters, rState) {
+			const collection = rState.settings.unsplash.collection;
+			const lang = rState.settings.general.language;
+			return [
+				'unsplash',
+				`/wallpapers/${collection}`,
+				{ lang }
+			];
 		},
 
 		currentWallpaper: state => {
@@ -83,17 +88,14 @@ const unsplashModule = {
 	},
 
 	actions: {
-		fetchApiData({ getters, commit, dispatch }) {
-			const collection = getters.settings.unsplash.collection;
-			ApiRequest('unsplash', `/wallpapers/${collection}`, {
-				lang: getters.settings.general.language
-			}).then(({data, expires}) => {
-				dispatch('setApiData', { data, expires });
-			}).catch(e => {
-				commit('setFinishedLoading', true);
-				commit('setDataHasLoaded', false);
-			})
-		},
+		// fetchApiData({ getters, commit, dispatch }) {
+		// 	ApiRequest(...getters.apiRequestParams).then(({data, expires}) => {
+		// 		dispatch('setApiData', { data, expires });
+		// 	}).catch(e => {
+		// 		commit('setFinishedLoading', true);
+		// 		commit('setDataHasLoaded', false);
+		// 	})
+		// },
 		setApiData({ commit }, { data, expires }) {
 			commit('setWallpapers', data);
 			commit('setExpires', expires);
@@ -103,6 +105,63 @@ const unsplashModule = {
 
 			commit('setFinishedLoading', true);
 			commit('setDataHasLoaded', true);
+		},
+
+		makeRequest({ getters }) {
+			return ApiRequest(...getters.apiRequestParams);
+		},
+
+		async fetchApiData({ dispatch }) {
+			try {
+				const response = await dispatch('makeRequest');
+				const { data, expires } = response;
+				dispatch('setApiData', { data, expires });
+				return true;
+			} catch (e) {
+				// fetching was not successful
+				return false;
+			}
+		},
+
+		/**
+		 * Called by component, initiating a fetch or not
+		 */
+		async init({ state, getters, commit, dispatch }) {
+			let hasFetched;
+			let hasData;
+
+			const expired = getters.hasExpired;
+			if (state.hasLocalStorageData) {
+				if (expired) {
+					console.warn("Has local storage, but expired.");
+					// fetch data, but use current if it fails
+					hasFetched = await dispatch('fetchApiData');
+				} else if (!expired) {
+					console.warn("Has local storage, and data fresh.");
+					hasFetched = true;
+				}
+				hasData = true;
+			} else if (!state.hasLocalStorageData) {
+				// try to fetch, no fallback possible
+				console.warn("No local storage data");
+				hasFetched = await dispatch('fetchApiData');
+				if (hasFetched) {
+					hasData = true;
+				} else {
+					hasData = false;
+				}
+			}
+
+			dispatch('finishInit', await hasData);
+		},
+
+		/**
+		 * Called by init() action, to set the finishedLoading and dataHasLoaded things
+		 */
+		finishInit({ commit }, success) {
+			console.warn("Finishing init with hasData as: ", success);
+			commit('setDataHasLoaded', !!success);
+			commit('setFinishedLoading', true);
 		}
 	}
 }

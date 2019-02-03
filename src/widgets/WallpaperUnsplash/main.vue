@@ -38,7 +38,7 @@ export default {
 			return this.$store.getters['unsplash/currentWallpaper'];
 		},
 		currentWallpaperUrl() {
-			if (!this.currentWallpaper) return '';
+			if (!this.currentWallpaper || !this.finishedLoading) return '';
 			return this.currentWallpaper.url;
 		},
 		nextWallpaperUrl() {
@@ -49,6 +49,12 @@ export default {
 		},
 		errorLoading() {
 			return this.$store.getters['unsplash/errorLoading'];
+		},
+		finishedLoading() {
+			return this.$store.state.unsplash.finishedLoading;
+		},
+		dataHasLoaded() {
+			return this.$store.state.unsplash.dataHasLoaded;
 		}
 	},
 	methods: {
@@ -63,11 +69,7 @@ export default {
 		}
 	},
 	beforeMount() {
-		if (!this.canShow) {
-			this.$store.dispatch('unsplash/fetchApiData');
-		} else {
-			console.log("Unsplash component: not fetching data because data already fetched");
-		}
+		this.$store.dispatch('unsplash/init');	
 	},
 	watch: {
 		errorLoading: {

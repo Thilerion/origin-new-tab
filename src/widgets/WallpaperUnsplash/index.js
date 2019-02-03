@@ -1,6 +1,6 @@
 import storeModule from './store';
 import component from './main.vue';
-import { config } from './settings.js';
+import { config } from './config.js';
 
 import Widget from '../common/Widget.js';
 

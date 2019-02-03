@@ -6,10 +6,11 @@ const defaultSettings = {
 }
 
 const config = {
-	widgetType: WIDGET_TYPE_BG,
-	hasComponent: true,
-	hasStore: true,
-	hasApi: true,
+	name: 'unsplash',
+	type: WIDGET_TYPE_BG,
+	// hasComponent: true,
+	// hasStore: true,
+	// hasApi: true,
 	settings: [
 		{
 			name: 'collection',
@@ -22,6 +23,10 @@ const config = {
 			defaultValue: () => defaultSettings.refreshInterval
 		}
 	],
+	moduleDataReducer: (state) => ({
+		data: state.unsplash.data,
+		expires: state.unsplash.expires
+	}),
 	moduleData: {
 		wallpapers: {
 			validate(val) {

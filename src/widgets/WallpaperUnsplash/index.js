@@ -1,36 +1,27 @@
-import registerAndPersistModule from '@/utils/persistModule.js';
-
 import storeModule from './store';
 import component from './main.vue';
-import validateStorageData from '../common/validateStorage.service.js';
 import { config } from './settings.js';
 
-const reducer = (state) => {
-	return {
+import WidgetStore from '../common/WidgetStore.js';
+
+const widgetStoreHelper = new WidgetStore({
+	persistReducer: (state) => ({
 		data: state.unsplash.data,
 		expires: state.unsplash.expires
-	};
-}
+	}),
+	widgetStore: storeModule,
+	widgetStoreName: 'unsplash',
+	widgetModuleDataConfig: config.moduleData
+});
 
-// TODO: should only register if component is loaded...
-const { hasPrevState, prevState } = registerAndPersistModule(storeModule, 'unsplash', 'sp_unsplash', reducer);
+console.log(widgetStoreHelper);
 
-debugger;
+widgetStoreHelper.init();
 
-if (hasPrevState) {
-	// validate hydrated data
-	// check if expired
-	const expired = hasExpired(prevState.expires);
-	const { validatedData, errors } = validateStorageData(prevState.data, config);
+import Widget from '../common/Widget.js';
 
-	console.log({ expired, validatedData, errors });
-	// if expired => dispatch('fetchApiData', {prevState, force: false});
-	// if not expired => dispatch('completeInit');
-	// if invalid data => dispatch('fetchApiData', {force: true});
-}
+const unsplashWidget = new Widget(config, component, storeModule);
+console.log(unsplashWidget);
 
-function hasExpired(expires) {
-	return (expires - Date.now() < 0);
-}
 
 export default component;

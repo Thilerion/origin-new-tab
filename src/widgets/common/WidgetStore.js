@@ -1,4 +1,11 @@
-export default class WidgetModule {
+// External helper functions
+import _merge from 'lodash.merge';
+
+// App helper functions
+import { loadFromStorage, saveToStorage } from '@/utils/lsHelpers';
+import { registerModule, watchModule } from '@/utils/persistHelpers';
+
+export default class WidgetStore {
 	constructor({
 		//shouldPersistStore,
 		//hasApi,
@@ -17,7 +24,77 @@ export default class WidgetModule {
 		this.persistReducer = persistReducer;
 	}
 
+	get storageKey() {
+		return `sp_${this.storeName}`;
+	}
 
+	/**
+	 * Retrieves {data, expires} from localStorage
+	 * Validates data, settings default values if necessary
+	 * Checks if data was loaded (if not, the module will fetch new data)
+	 * Registers store and sets up a watcher
+	 */
+	init() {		
+		let data = {};
+		let expires = null;
+
+		const storageData = this.getStored();
+		if (storageData && storageData.data) {
+			data = storageData.data;
+			if (storageData.expires) {
+				expires = storageData.expires;
+			}
+		}
+
+		// now the data and expires objects are set and we can validate
+		const {
+			defaultUsedFor,
+			validatedData,
+			dataWasFound
+		} = this.storeDataHelper.validate(data);
+
+		// merge state with new data
+		const mergedState = this.getMergedState(validatedData, expires, dataWasFound);
+
+		// merge the entire store module
+		const mergedStore = this.getMergedStore(mergedState);
+
+		// REGISTER STORE
+		registerModule(this.storeName, mergedStore);
+
+		// SETUP STORE WATCHER
+		const reducer = this.persistReducer;
+		const watchCb = (newValue) => {
+			console.log(`Watcher is triggered for module ${this.storeName}.`);
+			saveToStorage(this.storageKey, newValue);
+		}
+		
+		watchModule(
+			reducer,
+			watchCb,
+			{ deep: true, moduleName: this.storeName },
+			{ maxWait: 10000 }
+		);
+	}
+
+	getStored() {
+		return loadFromStorage(this.storageKey);
+	}
+
+	getMergedState(data, expires, hasLocalStorageData = false) {
+		const baseState = this.store.state;
+		const toMergeState = {
+			data,
+			expires,
+			hasLocalStorageData
+		};
+		return { ...baseState, ...toMergeState };
+	}
+
+	getMergedStore(state) {
+		const storeToMerge = { state };
+		return _merge(this.store, storeToMerge);
+	}
 }
 
 class WidgetModuleData {
@@ -43,7 +120,7 @@ class WidgetModuleData {
 
 	// Returns {validatedData: either all defaults, or the validatedData}
 	// Return {defaultUsedFor: values for which the defaultValues were used}
-	validateData(toValidate = {}) {
+	validate(toValidate = {}) {
 		const defaultUsedFor = [];
 		const validatedData = {};
 		
@@ -57,7 +134,11 @@ class WidgetModuleData {
 
 			if (!propFound && val.required) {
 				console.warn(`Key '${key}' in dataToValidate was not found while it was required. Immediately returning defaultValues now.`);
-				return { validatedData: this.dataDefaultValues, defaultUsedFor: this.dataKeys };
+				return {
+					validatedData: this.dataDefaultValues,
+					defaultUsedFor: this.dataKeys,
+					dataWasFound: false
+				};
 			} else if (!propFound) {
 				// prop not found, use defaultValue
 				defaultUsedFor.push(key);
@@ -71,7 +152,11 @@ class WidgetModuleData {
 				validatedData[key] = toValidate[key];
 			}
 		}
+				
+		// check if all required data was found
+		// TODO: only set this to false if defaults were used for API data
+		let dataWasFound = defaultUsedFor.length === 0;
 
-		return { validatedData, defaultUsedFor };
+		return { validatedData, defaultUsedFor, dataWasFound };
 	}
 }

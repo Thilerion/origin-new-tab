@@ -17,7 +17,7 @@ class ValidateProp {
 		if (!isValid && this._required) {
 			return { error: ERR_REQUIRED };
 		} else if (!isValid) {
-			return { value: this._getDefaultValue(parentObj) };
+			return { value: this._getDefaultValue(parentObj), error: ERR_USE_DEFAULT };
 		} else if (isValid) {
 			return { value };
 		}
@@ -58,11 +58,14 @@ export default class Validator {
 
 		for (const [key, val] of Object.entries(this.validations)) {
 			const validated = val.validate(toValidate[key], toValidate);
-			if (validated.error) {
+			if (validated.error === ERR_REQUIRED) {
 				console.warn("Fatal error in validation, returning all defaults");
 				this.error = ERR_REQUIRED;
 				return this.dataDefaultValues;
 			} else {
+				if (validated.error && validated.error === ERR_USE_DEFAULT) {
+					console.warn(`Minor error with value for key "${key}: ${toValidate[key]}". Using default of ${validated.value}.`);
+				}
 				validatedData[key] = validated.value;
 			}
 		}

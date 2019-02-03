@@ -5,6 +5,9 @@ import _merge from 'lodash.merge';
 import { loadFromStorage, saveToStorage } from '@/utils/lsHelpers';
 import { registerModule, watchModule } from '@/utils/persistHelpers';
 
+// Validation class
+import { ERR_REQUIRED, default as Validator } from '@/utils/validate.js';
+
 export default class WidgetStore {
 	constructor({
 		//shouldPersistStore,
@@ -17,7 +20,7 @@ export default class WidgetStore {
 		this.store = widgetStore;
 		this.storeName = widgetStoreName;
 
-		this.storeDataHelper = new WidgetModuleData(widgetModuleDataConfig);
+		this.storeDataHelper = new Validator(widgetModuleDataConfig);
 
 		this.shouldPersistStore = true;
 		this.hasApi = true;
@@ -34,8 +37,8 @@ export default class WidgetStore {
 	 * Checks if data was loaded (if not, the module will fetch new data)
 	 * Registers store and sets up a watcher
 	 */
-	init() {		
-		let data = {};
+	init() {
+		let data;
 		let expires = null;
 
 		const storageData = this.getStored();
@@ -47,11 +50,10 @@ export default class WidgetStore {
 		}
 
 		// now the data and expires objects are set and we can validate
-		const {
-			defaultUsedFor,
-			validatedData,
-			dataWasFound
-		} = this.storeDataHelper.validate(data);
+		let validatedData = this.storeDataHelper.validate(data);
+		let validateError = this.storeDataHelper.error;
+
+		let dataWasFound = !(validateError && validateError === ERR_REQUIRED);
 
 		// merge state with new data
 		const mergedState = this.getMergedState(validatedData, expires, dataWasFound);
@@ -94,69 +96,5 @@ export default class WidgetStore {
 	getMergedStore(state) {
 		const storeToMerge = { state };
 		return _merge(this.store, storeToMerge);
-	}
-}
-
-class WidgetModuleData {
-	constructor(config) {
-		this.moduleData = config;
-	}
-
-	get dataKeys() {
-		return Object.keys(this.moduleData);
-	}
-
-	get dataEntries() {
-		return Object.entries(this.moduleData);
-	}
-
-	get dataDefaultValues() {
-		const defaultData = {};
-		this.dataEntries.forEach(([key, val]) => {
-			defaultData[key] = val.defaultValue(this.moduleData);
-		})
-		return defaultData;
-	}
-
-	// Returns {validatedData: either all defaults, or the validatedData}
-	// Return {defaultUsedFor: values for which the defaultValues were used}
-	validate(toValidate = {}) {
-		const defaultUsedFor = [];
-		const validatedData = {};
-		
-		if (toValidate.state || toValidate.data) {
-			console.error("ValidateDate should receive the 'data' object from the store state.");
-			return;
-		}
-
-		for (const [key, val] of this.dataEntries) {
-			const propFound = toValidate.hasOwnProperty(key);
-
-			if (!propFound && val.required) {
-				console.warn(`Key '${key}' in dataToValidate was not found while it was required. Immediately returning defaultValues now.`);
-				return {
-					validatedData: this.dataDefaultValues,
-					defaultUsedFor: this.dataKeys,
-					dataWasFound: false
-				};
-			} else if (!propFound) {
-				// prop not found, use defaultValue
-				defaultUsedFor.push(key);
-				validatedData[key] = val.defaultValue(toValidate);
-			} else if (propFound && !val.validate(toValidate[key], toValidate)) {
-				// prop found but not valid, use defaultValue
-				defaultUsedFor.push(key);
-				validatedData[key] = val.defaultValue(toValidate);
-			} else {
-				// prop found and was valid, use its current value
-				validatedData[key] = toValidate[key];
-			}
-		}
-				
-		// check if all required data was found
-		// TODO: only set this to false if defaults were used for API data
-		let dataWasFound = defaultUsedFor.length === 0;
-
-		return { validatedData, defaultUsedFor, dataWasFound };
 	}
 }

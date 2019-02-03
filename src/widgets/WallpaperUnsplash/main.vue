@@ -1,11 +1,11 @@
 <template>
 	<transition
 		:name="transitionName"
-		:appear="canAnimate"
 	>
 		<div
 			:style="[wallpaperStyle]"
-			v-show="canShow && wallpaperSrc"
+			:key="wallpaperSrc"
+			v-if="canShow && !!wallpaperSrc"
 		></div>
 	</transition>
 </template>
@@ -25,7 +25,7 @@ export default {
 	computed: {
 		transitionName() {
 			if (this.canAnimate) {
-				return 'fade';
+				return 'fade-bg';
 			}
 		},
 		wallpaperStyle() {
@@ -69,7 +69,11 @@ export default {
 		}
 	},
 	beforeMount() {
-		this.$store.dispatch('unsplash/init');	
+		this.canAnimate = false;
+		this.$store.dispatch('unsplash/init');
+		setTimeout(() => {
+			this.canAnimate = true;
+		}, 200)
 	},
 	watch: {
 		errorLoading: {
@@ -93,7 +97,9 @@ export default {
 						console.warn("While loading, the current wallpaper changed...");
 						return;
 					}
-					this.wallpaperSrc = url;
+					if (url !== this.wallpaperSrc) {
+						this.wallpaperSrc = url;
+					}
 					requestIdleCallback(() => {
 						this.preloadNext();
 					})
@@ -109,5 +115,19 @@ export default {
 </script>
 
 <style scoped>
+.fade-bg-enter-active {
+	transition: opacity 0.75s ease-in, transform 0.75s ease-out;
+}
 
+.fade-bg-leave-active {
+	transition: opacity 1s ease-in;
+}
+
+.fade-bg-enter, .fade-bg-leave-to {
+	opacity: 0;
+}
+
+.fade-bg-enter {
+	transform: scale(1.1);
+}
 </style>

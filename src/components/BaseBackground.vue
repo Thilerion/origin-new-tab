@@ -1,6 +1,5 @@
 <template>
 	<div class="background-wrapper">
-		<transition :name="transitionName" :appear="canAnimate">
 			<component
 				v-if="wallpaperComponent"
 				:is="wallpaperComponent"
@@ -10,7 +9,6 @@
 			<div class="loading" v-else>
 				<span>Loading...</span>
 			</div>
-		</transition>
 	</div>
 </template>
 

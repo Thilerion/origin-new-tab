@@ -6,74 +6,38 @@ class ValidateProp {
 		this._validate = validatorFn;
 		this._required = required;
 		this._getDefaultValue = defaultValueFn;
-
-		this.toValidate;
-		this.parentObj;
-
-		this.error;
 	}
 
-	setItem(val) {
-		this.toValidate = val;
-		return this;
+	getAbsoluteDefault() {
+		return this._getDefaultValue({});
 	}
 
-	setParent(val) {
-		this.parentObj = val;
-		return this;
-	}
-
-	validate() {
-		const isValid = this.valid;
-
-		if (isValid) {
-			return { value: this.toValidate, error: null };
-		} else if (!isValid && this.error === ERR_USE_DEFAULT) {
-			return { value: this.defaultValue, error: this.error };
-		} else if (!isValid && this.error === ERR_REQUIRED) {
-			return { value: this.defaultValue, error: this.error };
-		} else {
-			console.error("Unreachable reached!");
+	validate(value, parentObj = {}) {
+		const isValid = this._validate(value, parentObj);
+		if (!isValid && this._required) {
+			return { error: ERR_REQUIRED };
+		} else if (!isValid) {
+			return { value: this._getDefaultValue(parentObj) };
+		} else if (isValid) {
+			return { value };
 		}
-	}
-
-	get defaultValue() {
-		return this._getDefaultValue(this.parentObj);
-	}
-
-	get valid() {
-		const valid = this._validate(this.toValidate, this.parentObj);
-
-		if (!valid && this._required) {
-			this.error = ERR_REQUIRED;
-		} else if (!valid && !this._required) {
-			this.error = ERR_USE_DEFAULT;
-		}
-
-		return !!valid;
 	}
 }
 
 export default class Validator {
 	constructor(config) {
 		this._config = config;
-		
 		this.validations = this._createValidations(this._config);
-		
-		this.toValidate;
-		this.errors;
-		this.result;
 	}
 
-	_getAllDefaultValues() {
-		const obj = {};
-		for (const [key, val] of Object.entries(this.validations)) {
-			val.setParent({})
-			obj[key] = val.defaultValue;
-		}
-		return obj;
+	get dataDefaultValues() {
+		const defaultData = {};
+		Object.entries(this.validations).forEach(([key, val]) => {
+			defaultData[key] = val.getAbsoluteDefault();
+		})
+		return defaultData;
 	}
-	
+
 	_createValidations(config) {
 		const entries = Object.entries(config);
 		const obj = {}
@@ -84,35 +48,23 @@ export default class Validator {
 		return obj;
 	}
 
-	setObjectToValidate(obj) {
-		this.toValidate = obj;
-		return this;
-	}
+	validate(toValidate) {
+		const validatedData = {};
 
-	validate() {
-		let result = {};
-		let errors = {};
+		if (!toValidate) {
+			return this.dataDefaultValues;
+		}
 
-		for (const [key, val] of Object.entries(this.validations)) {
-			const toValidateItem = this.toValidate[key];
-			const {
-				value,
-				error
-			} = val.setItem(toValidateItem).setParent(this.toValidate).validate();
-
-			if (error === ERR_REQUIRED) {
-				result = this._getAllDefaultValues();
-				errors = { [key]: ERR_REQUIRED };
-				break;
+		for (const [key, val] of Object.entries(toValidate)) {
+			const validated = val.validate(toValidate[key], toValidate);
+			if (validated.error) {
+				console.warn("Fatal error in validation, returning all defaults");
+				return this.dataDefaultValues;
 			} else {
-				result[key] = value;
-				if (error) {
-					errors[key] = ERR_USE_DEFAULT;
-				}
+				validatedData[key] = validated.value;
 			}
 		}
-		this.result = result;
-		this.errors = errors;
-		return { result, errors };
+
+		return validatedData;
 	}
 }

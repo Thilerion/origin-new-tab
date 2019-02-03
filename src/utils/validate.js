@@ -1,5 +1,5 @@
-const ERR_REQUIRED = 'Error: valid value is required';
-const ERR_USE_DEFAULT = 'Error: invalid value, use default value';
+export const ERR_REQUIRED = 'Error: valid value is required';
+export const ERR_USE_DEFAULT = 'Error: invalid value, use default value';
 
 class ValidateProp {
 	constructor(validatorFn, required, defaultValueFn) {
@@ -28,6 +28,7 @@ export default class Validator {
 	constructor(config) {
 		this._config = config;
 		this.validations = this._createValidations(this._config);
+		this.error = null;
 	}
 
 	get dataDefaultValues() {
@@ -55,16 +56,18 @@ export default class Validator {
 			return this.dataDefaultValues;
 		}
 
-		for (const [key, val] of Object.entries(toValidate)) {
+		for (const [key, val] of Object.entries(this.validations)) {
 			const validated = val.validate(toValidate[key], toValidate);
 			if (validated.error) {
 				console.warn("Fatal error in validation, returning all defaults");
+				this.error = ERR_REQUIRED;
 				return this.dataDefaultValues;
 			} else {
 				validatedData[key] = validated.value;
 			}
 		}
 
+		this.error = null;
 		return validatedData;
 	}
 }

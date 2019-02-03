@@ -34,6 +34,7 @@ export default class Widget {
 	}
 	
 	getComponent() {
-		return this.loadStore().component;
+		const c = this.loadStore().component;
+		return Promise.resolve(c);
 	}
 }

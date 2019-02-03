@@ -83,12 +83,16 @@ export default {
 		},
 		currentWallpaperUrl: {
 			handler(newValue, oldValue) {
-				if (!newValue || newValue === oldValue || !this.canShow) {
+				if (!newValue || newValue === this.wallpaperSrc || !this.canShow) {
 					return;
 				}
 
 				loadImage(newValue).then(url => {
 					console.log('Wallpaper was loaded! Setting it as wallpaperSrc now..');
+					if (url !== this.currentWallpaperUrl) {
+						console.warn("While loading, the current wallpaper changed...");
+						return;
+					}
 					this.wallpaperSrc = url;
 					requestIdleCallback(() => {
 						this.preloadNext();

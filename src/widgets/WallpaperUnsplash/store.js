@@ -47,12 +47,16 @@ const unsplashModule = {
 				return state.data.wallpapers[state.data.currentIdx];
 			}			
 		},
-		nextWallpaper: state => {
+		nextWallpaperIdx: state => {
 			const n = state.data.wallpapers.length;
 			if (!n) return;
 
 			const curIdx = state.data.currentIdx;
-			const nextIdx = (curIdx + 1) % n;
+			return (curIdx + 1) % n;
+		},
+		nextWallpaper: (state, getters) => {
+			const nextIdx = getters.nextWallpaperIdx;
+			if (!nextIdx) return;
 			return state.data.wallpapers[nextIdx];
 		},
 
@@ -88,14 +92,11 @@ const unsplashModule = {
 	},
 
 	actions: {
-		// fetchApiData({ getters, commit, dispatch }) {
-		// 	ApiRequest(...getters.apiRequestParams).then(({data, expires}) => {
-		// 		dispatch('setApiData', { data, expires });
-		// 	}).catch(e => {
-		// 		commit('setFinishedLoading', true);
-		// 		commit('setDataHasLoaded', false);
-		// 	})
-		// },
+		goToNextWallpaper({ getters, commit }) {
+			const idx = getters.nextWallpaperIdx;
+			commit('setCurrentIdx', idx);
+		},
+
 		setApiData({ commit }, { data, expires }) {
 			commit('setWallpapers', data);
 			commit('setExpires', expires);

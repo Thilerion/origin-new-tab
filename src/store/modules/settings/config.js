@@ -3,7 +3,7 @@ import { LANGUAGES, TIME_FORMATS } from '@/constants';
 export const generalSettingsConfig = {
 	language: {
 		validate(val) {
-			String(val) === val && LANGUAGES.includes(val);
+			return String(val) === val && LANGUAGES.includes(val);
 		},
 		required: false,
 		// TODO: use function to find user UI language

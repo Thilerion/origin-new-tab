@@ -24,6 +24,9 @@ export default class Widget {
 
 		// TODO: create class for creating settings, defaults, validating
 		this.settings = settings;
+
+		// TODO: create class for displaySettings
+		// this.displaySettings = displaySettings;
 		
 		this.setupComplete = false;
 	}

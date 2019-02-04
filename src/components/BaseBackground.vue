@@ -16,8 +16,6 @@
 
 <script>
 import WallpaperDefault from './WallpaperDefault.vue';
-// import WallpaperUnsplash from '@/widgets/WallpaperUnsplash';
-
 import UnsplashWidget from '@/widgets/WallpaperUnsplash';
 
 export default {
@@ -28,8 +26,6 @@ export default {
 	data() {
 		return {
 			canAnimate: false,
-			wallpaperComponent: 'WallpaperUnsplash',
-
 			wallpaperError: false
 		}
 	},
@@ -45,16 +41,23 @@ export default {
 			} else {
 				return;
 			}
+		},
+		activeBgComponent() {
+			const c = this.$store.getters['grid/currentWallpaperComponent'];
+			if (c && c.name) return c.name;
+		},
+		wallpaperComponent() {
+			if (this.wallpaperError || !this.activeBgComponent) {
+				return 'WallpaperDefault';
+			}
+
+			return this.activeBgComponent;
 		}
 	},
 	methods: {
 		wallpaperErrorEvent() {
-			this.wallpaperError = true;
-			this.setDefaultWallpaper();
-		},
-		setDefaultWallpaper() {
 			this.canAnimate = false;
-			this.wallpaperComponent = 'WallpaperDefault';
+			this.wallpaperError = true;
 		}
 	},
 	mounted() {

@@ -2,16 +2,16 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex);
 
-import grid from './modules/grid';
-import {settingsModule, settingsPersistPlugin} from './modules/settings';
+import { gridModule, activeWidgetsPersistPlugin } from './modules/grid/';
+import { settingsModule, settingsPersistPlugin } from './modules/settings';
 
 const store = new Vuex.Store({
 	strict: process.env.NODE_ENV !== 'development',
 
-	plugins: [settingsPersistPlugin],
+	plugins: [settingsPersistPlugin, activeWidgetsPersistPlugin],
 
 	modules: {
-		grid,
+		grid: gridModule,
 		settings: settingsModule
 	},
 

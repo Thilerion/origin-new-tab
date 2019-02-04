@@ -25,7 +25,9 @@ const settingsModule = {
 }
 
 const settingsPersistPlugin = store => {
-	const reducerFn = state => (state.settings);
+	const reducerFn = state => ({
+		...state.settings
+	});
 	const watchCb = (newValue, oldValue) => {
 		console.log(`Watcher is triggered for "settings" module.`);
 		saveToStorage('sp_settings', newValue);

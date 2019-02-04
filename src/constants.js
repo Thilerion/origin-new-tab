@@ -7,3 +7,16 @@ export const API_URL = process.env.NODE_ENV === 'development'
 
 export const WIDGET_TYPE_BG = 'wallpaper-widget';
 export const WIDGET_TYPE_GRID = 'grid-widget';
+
+export const LANGUAGES = ['en', 'nl'];
+
+export const TIME_FORMATS = [
+	'HH:mm',
+	'HH mm',
+	'H:m',
+	'H m',
+	'hh:mm a',
+	'hh mm a',
+	'h:m a',
+	'h m a'
+];

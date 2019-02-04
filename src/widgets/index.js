@@ -1,14 +1,14 @@
 /**
- * Import the defaultSettings of every Widget, without loading the
- * parts that are supposed to be async (such as store.js and main.vue)
+ * Import the config files of each widget, extracting the settings part and
+ * creating validators.
  */
-import { defaultSettings as unsplash } from './WallpaperUnsplash/config.js';
+import { config as unsplashConfig } from './WallpaperUnsplash/config.js';
 
 /**
  * Construct default settings
  */
-const defaultWidgetSettings = {
-	unsplash
+const widgetSettings = {
+	unsplash: unsplashConfig.settings
 };
 
-export { defaultWidgetSettings };
+export { widgetSettings };

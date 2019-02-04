@@ -1,28 +1,28 @@
 import { WIDGET_TYPE_BG } from '@/constants.js';
 
-const defaultSettings = {
-	collection: '477172',
-	refreshInterval: 1 * 60 * 60 * 10000 // 1 hour in ms
-}
-
 const config = {
 	name: 'unsplash',
 	type: WIDGET_TYPE_BG,
 	// hasComponent: true,
 	// hasStore: true,
 	// hasApi: true,
-	settings: [
-		{
-			name: 'collection',
-			type: String, // TODO: actually enum
-			defaultValue: () => defaultSettings.collection
+	settings: {
+		collection: {
+			validate(val) {
+				// TODO: enum of collection options
+				return Number.isInteger(parseInt(val));
+			},
+			required: true,
+			defaultValue: () => '477172'
 		},
-		{
-			name: 'refreshInterval',
-			type: Number,
-			defaultValue: () => defaultSettings.refreshInterval
+		refreshInterval: {
+			validate(val) {
+				return Number.isInteger(val);
+			},
+			required: false,
+			defaultValue: () => 1 * 60 * 60 * 10000 // 1 hour in ms
 		}
-	],
+	},
 	moduleDataReducer: (state) => ({
 		data: state.unsplash.data,
 		expires: state.unsplash.expires
@@ -73,4 +73,4 @@ const config = {
 	}
 }
 
-export { config, defaultSettings };
+export { config };

@@ -1,6 +1,7 @@
 <template>
 	<div class="grid" @click="showGridLines = !showGridLines">
 		<GridLines v-if="showGridLines" />
+		<WidgetClock />
 	</div>
 </template>
 
@@ -8,10 +9,12 @@
 import {mapState} from 'vuex';
 
 import GridLines from './GridLines.vue'
+import WidgetClock from '@/widgets/Clock/main.vue';
 
 export default {
 	components: {
-		GridLines
+		GridLines,
+		WidgetClock
 	},
 	data() {
 		return {

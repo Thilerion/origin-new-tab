@@ -6,12 +6,19 @@ import _debounce from 'lodash.debounce';
 
 const storageData = loadFromStorage('sp_widgets');
 
-// TODO: VALIDATORS ETC
+// TODO: VALIDATORS ETC; validate if widget name exists, if its settings are
+// 				valid, if there is max 1 background widget
 // TODO: FOR NOW, USE THIS DEFAULTS OBJECT
 const activeWidgetsDefaults = [
 	{
 		type: WIDGET_TYPE_BG,
 		name: 'WallpaperUnsplash'
+	},
+	{
+		type: WIDGET_TYPE_GRID,
+		name: 'WidgetClock',
+		row: [7, 13],
+		column: [9, 33]
 	}
 ];
 
@@ -27,7 +34,8 @@ export const gridModule = {
 	},
 
 	getters: {
-		currentWallpaperComponent: state => state.activeWidgets.find(w => w.type === WIDGET_TYPE_BG)
+		currentWallpaperComponent: state => state.activeWidgets.find(w => w.type === WIDGET_TYPE_BG),
+		gridComponents: state => state.activeWidgets.filter(w => w.type === WIDGET_TYPE_GRID)
 	},
 
 	mutations: {

@@ -1,27 +1,35 @@
 <template>
 	<div class="grid" @click="showGridLines = !showGridLines">
 		<GridLines v-if="showGridLines" />
-		<div
-			class="widget-base"
+		
+		<BaseWidget
 			v-for="(widget, idx) in gridComponents"
+			:widget="widget"
 			:key="`${widget.name}-${idx}`"
 			:style="getWidgetGridPlacement(widget)">
 
-			<component :is="widget.name" />
-			
-		</div>
+			<component
+				class="widget"
+				:is="widget.name"
+			/>
+
+		</BaseWidget>
+		
 	</div>
 </template>
 
 <script>
 import {mapState, mapGetters} from 'vuex';
 
-import GridLines from './GridLines.vue'
+import GridLines from './GridLines.vue';
+import BaseWidget from './BaseWidget.vue';
+
 import WidgetClock from '@/widgets/Clock/main.vue';
 
 export default {
 	components: {
 		GridLines,
+		BaseWidget,
 		WidgetClock
 	},
 	data() {

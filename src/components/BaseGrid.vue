@@ -1,8 +1,9 @@
 <template>
-	<div class="grid" @click="showGridLines = !showGridLines">
-		<GridLines v-if="showGridLines" />
+	<div class="grid" @dblclick="editing = !editing" :class="{editing}">
+		<GridLines v-if="editing" />
 		
 		<BaseWidget
+			:editing="editing"
 			v-for="(widget, idx) in gridComponents"
 			:widget="widget"
 			:key="`${widget.name}-${idx}`"
@@ -24,6 +25,7 @@ import {mapState, mapGetters} from 'vuex';
 import GridLines from './GridLines.vue';
 import BaseWidget from './BaseWidget.vue';
 
+// TODO: import all widget-components from '@/widgets' and check if 'gridComponent.name' is one of the available values
 import WidgetClock from '@/widgets/Clock/main.vue';
 
 export default {
@@ -34,7 +36,7 @@ export default {
 	},
 	data() {
 		return {
-			showGridLines: false
+			editing: false
 		}
 	},
 	computed: {
@@ -89,5 +91,13 @@ export default {
 :root {
 	--cols: 10;
 	--rows: 5;
+}
+
+.widget {
+	user-select: none;
+}
+
+.editing .widget {
+	
 }
 </style>

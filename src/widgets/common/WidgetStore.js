@@ -54,7 +54,6 @@ export default class WidgetStore {
 		let validateError = this.storeDataHelper.error;
 
 		let dataWasFound = !(validateError && validateError === ERR_REQUIRED);
-
 		// merge state with new data
 		const mergedState = this.getMergedState(validatedData, expires, dataWasFound);
 

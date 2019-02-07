@@ -51,9 +51,7 @@ export default {
 
 		},
 		calculateWidgetSize() {
-			const el = this.$el;
-			const rect = el.getBoundingClientRect();
-			console.log(rect);
+			
 		}
 	},
 	mounted() {

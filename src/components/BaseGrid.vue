@@ -88,12 +88,10 @@ export default {
 			}
 		},
 		onResize(target, contentRect) {
-			console.log('Grid resized');
+			
 		},
 		setGridDimensions() {
-			const grid = this.$el;
-			const rect = grid.getBoundingClientRect();
-			console.log(rect);
+			
 		}
 	},
 	created() {

@@ -19,9 +19,10 @@
 
 <script>
 import Movable from '@/mixins/Movable';
+import Resizable from '@/mixins/Resizable';
 
 export default {
-	mixins: [Movable({})],
+	mixins: [Movable({}), Resizable({})],
 	props: {
 		idx: {
 			type: Number,
@@ -66,6 +67,11 @@ export default {
 		originalColStart() {
 			const delta = this.widgetPos.x - this.gridSize.x;
 			return 1 + (Math.round(delta / this.cellSize.width));
+		},
+
+		showResizeHandles() {
+			// TODO: and only if canResize is true on widget config
+			return this.selected;
 		}
 	},
 	methods: {
@@ -107,12 +113,16 @@ export default {
 <style>
 .widget-base {
 	--overlay-color: rgba(230, 230, 255, 0.8);
-	--overlay-color-hover: rgba(230, 230, 255, 0.9);
 
 	--overlay-selected-color: rgba(175, 223, 255, 0.85);
-	--overlay-selected-color-hover: rgba(175, 223, 255, 0.9);
+	/* --overlay-selected-color-hover: rgba(175, 223, 255, 0.9); */
 
 	--border-selected-color: rgb(53, 174, 255);
+}
+
+.widget-base:hover {
+	--overlay-color: rgba(230, 230, 255, 0.9);
+	--overlay-selected-color: rgba(175, 223, 255, 0.9);
 }
 </style>
 
@@ -138,17 +148,9 @@ export default {
 	user-select: none;
 }
 
-.edit-overlay:hover {
-	background: var(--overlay-color-hover);
-}
-
 .edit-overlay.selected {
 	background: var(--overlay-selected-color);
 	border-color: var(--border-selected-color);
-}
-
-.edit-overlay.selected:hover {
-	background: var(--overlay-selected-color-hover);
 }
 
 .widget-name {
@@ -157,5 +159,61 @@ export default {
 	background-color: #333;
 	border-radius: 1em;
 	padding: 0.5em 1em;
+}
+
+.resize-handle {
+	--handle-size: 10px;
+	--half-handle-size: calc(-1 * var(--handle-size) / 2);
+
+	position: absolute;
+	width: var(--handle-size);
+	height: var(--handle-size);
+	border: 2px solid var(--border-selected-color);
+}
+
+.resize-handle.top,
+.resize-handle.top-left,
+.resize-handle.top-right {
+	top: var(--half-handle-size);
+}
+
+.resize-handle.bottom,
+.resize-handle.bottom-left,
+.resize-handle.bottom-right {
+	bottom: var(--half-handle-size);
+}
+
+.resize-handle.left,
+.resize-handle.top-left,
+.resize-handle.bottom-left {
+	left: var(--half-handle-size);
+}
+
+.resize-handle.right,
+.resize-handle.top-right,
+.resize-handle.bottom-right {
+	right: var(--half-handle-size);
+}
+
+.resize-handle.top,
+.resize-handle.bottom {
+	cursor: ns-resize;
+	left: calc(50% + var(--half-handle-size));
+}
+
+.resize-handle.left,
+.resize-handle.right {
+	cursor: ew-resize;
+	top: calc(50% + var(--half-handle-size));
+}
+
+.resize-handle.top-left,
+.resize-handle.bottom-right {
+	cursor: nwse-resize;
+}
+
+.resize-handle.top-right,
+.resize-handle.bottom-left {
+	cursor: nesw-resize;
 }
 </style>

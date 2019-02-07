@@ -89,9 +89,9 @@ export default {
 			}
 		},
 		toggleSelectWidget(widget, idx, event) {
-			if (this.editing && this.selectedWidget !== idx) {
+			if (this.editing) {
 				this.selectedWidget = idx;
-			} else if (this.editing && this.selectedWidget === idx) {
+			} else if (!this.editing) {
 				this.selectedWidget = null;
 			}
 		},

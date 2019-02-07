@@ -32,6 +32,11 @@ import BaseWidget from './BaseWidget.vue';
 
 import {gridComponents} from '@/widgets';
 
+const roundNumber = (num, digits = 2) => {
+	const mult = 10 * digits;
+	return Math.round(num * mult) / mult;
+}
+
 export default {
 	components: {
 		GridLines,
@@ -45,6 +50,10 @@ export default {
 			gridSize: {
 				x: null,
 				y: null,
+				width: null,
+				height: null
+			},
+			gridCellSize: {
 				width: null,
 				height: null
 			},
@@ -90,20 +99,22 @@ export default {
 			}
 		},
 		onCellResize(rect, el) {
-			
+			this.gridCellSize = {
+				width: roundNumber(rect.width),
+				height: roundNumber(rect.height)
+			};
 		},
 		onGridResize(rect, el) {
-			
-		},
-		setGridDimensions() {
-			
+			this.gridSize = {
+				x: rect.left,
+				y: rect.top,
+				width: roundNumber(rect.width),
+				height: roundNumber(rect.height),
+			}
 		}
 	},
 	created() {
 		this.setGridColsRows(this.cols, this.rows);
-	},
-	mounted() {
-		this.setGridDimensions();
 	}
 }
 </script>

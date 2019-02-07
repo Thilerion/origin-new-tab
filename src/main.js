@@ -4,6 +4,9 @@ import store from './store'
 
 import './assets/style/base.css';
 
+import onResizeDirective from '@/plugins/onResize';
+Vue.directive('resize', onResizeDirective);
+
 Vue.config.productionTip = false
 
 new Vue({

@@ -1,5 +1,5 @@
 <template>
-	<div class="grid" @dblclick="toggleEditing" :class="{editing}">
+	<div class="grid" @dblclick="toggleEditing" :class="{editing}" v-resize="onResize">
 		<GridLines v-if="editing" />
 		
 		<BaseWidget
@@ -88,6 +88,9 @@ export default {
 			if (!this.editing) {
 				this.selectedWidget = null;
 			}
+		},
+		onResize(target, contentRect) {
+			console.log('Grid resized');
 		},
 		setGridDimensions() {
 			const grid = this.$el;

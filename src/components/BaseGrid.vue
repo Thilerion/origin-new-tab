@@ -11,7 +11,7 @@
 
 			<component
 				class="widget"
-				:is="widget.name"
+				:is="gridComponents[widget.name]"
 			/>
 
 		</BaseWidget>
@@ -34,7 +34,8 @@ export default {
 	},
 	data() {
 		return {
-			editing: false
+			editing: false,
+			gridComponents
 		}
 	},
 	computed: {
@@ -53,8 +54,12 @@ export default {
 
 		getWidgetGridPlacement(widget) {
 			return {
-				'grid-row': `${widget.row.join(' / ')}`,
-				'grid-column': `${widget.column.join(' / ')}`
+				// 'grid-row': `${widget.row.join(' / ')}`,
+				// 'grid-column': `${widget.column.join(' / ')}`
+				'grid-row-start': widget.y,
+				'grid-column-start': widget.x,
+				'grid-row-end': (widget.y + widget.height),
+				'grid-column-end': (widget.x + widget.width)
 			}
 		}
 	},

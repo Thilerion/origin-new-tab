@@ -1,10 +1,10 @@
 import * as Unsplash from './Unsplash';
-// import * as Clock from './Clock';
+import * as Clock from './Clock';
 import standard from './_presets/standard';
 
 const WidgetTypes = {
 	Unsplash,
-	// Clock
+	Clock
 };
 
 const getWidgetSettings = (widgets) => {

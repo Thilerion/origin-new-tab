@@ -16,8 +16,7 @@
 
 <script>
 import WallpaperDefault from './WallpaperDefault.vue';
-
-import {wallpaperComponents} from '@/widgets';
+import { wallpaperComponents } from '@/widgets';
 
 export default {
 	components: {
@@ -27,8 +26,7 @@ export default {
 		return {
 			canAnimate: false,
 			wallpaperError: false,
-			wallpaperComponents,
-			currentWallpaper: 'WallpaperUnsplash'
+			wallpaperComponents
 		}
 	},
 	computed: {
@@ -45,15 +43,14 @@ export default {
 			}
 		},
 		activeBgComponent() {
-			const c = this.$store.getters['grid/currentWallpaperComponent'];
-			if (c && c.name) return c.name;
+			return this.$store.state.grid.wallpaperWidget;
 		},
 		wallpaperComponent() {
-			if (this.wallpaperError || !this.activeBgComponent) {
+			if (this.wallpaperError || !this.activeBgComponent || !Object.keys(this.wallpaperComponents).includes(this.activeBgComponent)) {
 				return 'WallpaperDefault';
+			} else {
+				return this.wallpaperComponents[this.activeBgComponent];
 			}
-
-			return this.activeBgComponent;
 		}
 	},
 	methods: {

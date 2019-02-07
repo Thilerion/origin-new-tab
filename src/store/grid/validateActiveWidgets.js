@@ -24,7 +24,7 @@ function validateActiveWidgets(savedState = {}) {
 	const invalidWallpaperWidget = !wallpaperComponentNames.includes(wallpaperWidget);
 
 	if (noWallpaperWidget || invalidWallpaperWidget) {
-		console.warn(`[ActiveWidgets]: no active wallpaper widget found!`);
+		// console.warn(`[ActiveWidgets]: no active wallpaper widget found!`);
 		wallpaperWidgetValid = getDefaultWallpaperWidget(wallpaperComponentNames);
 	} else {
 		wallpaperWidgetValid = wallpaperWidget;
@@ -33,7 +33,7 @@ function validateActiveWidgets(savedState = {}) {
 	const validatedGridWidgets = validateGridWidgets(gridWidgets, gridComponentNames, displayConfigs);
 
 	if (!validatedGridWidgets) {
-		console.warn(`[ActiveWidgets]: no valid/active grid widgets found!`);
+		// console.warn(`[ActiveWidgets]: no valid/active grid widgets found!`);
 		gridWidgetsValid = getDefaultGridPreset(gridComponentNames);
 	} else {
 		gridWidgetsValid = [...validatedGridWidgets];

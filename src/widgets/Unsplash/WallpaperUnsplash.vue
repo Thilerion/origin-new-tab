@@ -61,7 +61,7 @@ export default {
 		preloadNext() {
 			if (!this.nextWallpaperUrl) return;
 			loadImage(this.nextWallpaperUrl).then(url => {
-				console.log('Next wallpaper preloaded.');
+				// console.log('Next wallpaper preloaded.');
 			}).catch(e => {
 				console.log('Could not preload next wallpaper.');
 				console.error(e);
@@ -96,7 +96,7 @@ export default {
 				}
 
 				loadImage(newValue).then(url => {
-					console.log('Wallpaper was loaded! Setting it as wallpaperSrc now..');
+					// console.log('Wallpaper was loaded! Setting it as wallpaperSrc now..');
 					if (url !== this.currentWallpaperUrl) {
 						console.warn("While loading, the current wallpaper changed...");
 						return;

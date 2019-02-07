@@ -69,10 +69,8 @@ export default {
 		},
 		toggleSelectWidget(widget, idx, event) {
 			if (this.editing && this.selectedWidget !== idx) {
-				console.log('selecting widget', {widget, idx, event});
 				this.selectedWidget = idx;
 			} else if (this.editing && this.selectedWidget === idx) {
-				console.log('deselecting widget', {widget, idx, event});
 				this.selectedWidget = null;
 			}
 		},

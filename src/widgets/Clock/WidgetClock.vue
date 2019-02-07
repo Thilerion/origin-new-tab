@@ -54,12 +54,6 @@ export default {
 			if (curHour < 18) return msg[1];
 			return msg[2];
 		}
-	},
-	created() {
-		console.log("Clock created");
-	},
-	mounted() {
-		console.log("Clock mounted");
 	}
 }
 </script>

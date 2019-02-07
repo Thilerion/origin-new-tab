@@ -4,8 +4,8 @@ Vue.use(Vuex);
 
 import { persistModule } from '@/utils/storeModuleHelpers';
 
-import settings from './settings';
-import activeWidgets from './activeWidgets';
+import { settingsModule, STORAGE_KEY as settingsStorageKey } from './settings';
+import { gridModule, STORAGE_KEY as gridStorageKey } from './grid';
 
 const store = new Vuex.Store({
 	strict: process.env.NODE_ENV !== 'development',
@@ -14,20 +14,20 @@ const store = new Vuex.Store({
 		persistModule(
 			(state) => ({ ...state.settings }),
 			'settings',
-			'sp_settings',
+			settingsStorageKey,
 			{ deep: true, wait: 500, maxWait: 10000, immediate: true }
 		),
 		persistModule(
-			(state) => ({ wallpaperWidget: state.activeWidgets.wallpaperWidget, gridWidgets: state.activeWidgets.gridWidgets }),
-			'activeWidgets',
-			'sp_activeWidgets',
+			(state) => ({ wallpaperWidget: state.grid.wallpaperWidget, gridWidgets: state.grid.gridWidgets }),
+			'grid',
+			gridStorageKey,
 			{ deep: true, wait: 1000, maxWait: 10000, immediate: false }
 		)
 	],
 
 	modules: {
-		settings,
-		activeWidgets
+		settings: settingsModule,
+		grid: gridModule
 	},
 
 	state: {

@@ -4,7 +4,7 @@
 		
 		<BaseWidget
 			:editing="editing"
-			v-for="(widget, idx) in gridComponents"
+			v-for="(widget, idx) in gridWidgets"
 			:widget="widget"
 			:key="`${widget.name}-${idx}`"
 			:style="getWidgetGridPlacement(widget)">
@@ -38,8 +38,11 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('grid', ['rows', 'cols']),
-		...mapGetters('grid', ['gridComponents'])
+		...mapState({
+			rows: state => state.grid.rows,
+			cols: state => state.grid.cols,
+			gridWidgets: state => state.grid.gridWidgets
+		})
 	},
 	methods: {
 		setGridColsRows(cols, rows) {

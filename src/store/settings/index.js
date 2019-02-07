@@ -19,7 +19,7 @@ import { validateStoredSettings } from './createSettingsData';
  * Finally, save it all to localStorage again.
  */
 
-const STORAGE_KEY = 'sp_settings';
+export const STORAGE_KEY = 'sp_settings';
 
 const settingOptions = keysToLowerCase({ general, ...settings });
 const localSettingsData = getFromStorage(STORAGE_KEY);
@@ -27,7 +27,7 @@ const validatedSettings = validateStoredSettings(localSettingsData, settingOptio
 
 saveToStorage(STORAGE_KEY, validatedSettings);
 
-const settingsModule = {
+export const settingsModule = {
 	namespaced: false,
 
 	state: {

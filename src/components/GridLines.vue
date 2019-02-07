@@ -14,7 +14,10 @@ import {mapState} from 'vuex';
 
 export default {
 	computed: {
-		...mapState('grid', ['rows', 'cols'])
+		...mapState({
+			rows: state => state.grid.rows,
+			cols: state => state.grid.cols
+		})
 	}
 }
 </script>

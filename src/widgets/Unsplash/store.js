@@ -33,6 +33,11 @@ const baseStore = {
 	},
 	getters: {
 		hasExpired: state => (state.expires - Date.now() < 0),
+
+		refreshInterval(state, getters, rState) {
+			return rState.settings.unsplash.refreshInterval;
+		},
+
 		apiRequestParams(state, getters, rState) {
 			const collection = rState.settings.unsplash.collection;
 			const lang = rState.settings.general.language;
@@ -92,6 +97,16 @@ const baseStore = {
 	},
 
 	actions: {
+		checkRefreshInterval({state, getters, dispatch}) {
+			const refreshInterval = getters.refreshInterval;
+			const lastChange = state.data.lastCurrentIdxChange;
+
+			if (Date.now() - lastChange > refreshInterval) {
+				console.log(`[UnsplashStore]: refresh interval has passed (${Date.now() - lastChange} > ${refreshInterval}). Loading next wallpaper now.`);
+				dispatch('goToNextWallpaper');
+			}
+		},
+
 		goToNextWallpaper({ getters, commit }) {
 			const idx = getters.nextWallpaperIdx;
 			commit('setCurrentIdx', idx);
@@ -161,8 +176,12 @@ const baseStore = {
 		/**
 		 * Called by init() action, to set the finishedLoading and dataHasLoaded things
 		 */
-		finishInit({ commit }, success) {
+		finishInit({ dispatch, commit }, success) {
 			console.warn("Finishing init with hasData as: ", success);
+			
+			// Check if refreshInterval has passed since lastCurrentIdxChange, if next wallpaper should be loaded
+			dispatch('checkRefreshInterval');
+
 			commit('setDataHasLoaded', !!success);
 			commit('setFinishedLoading', true);
 		}

@@ -1,4 +1,5 @@
 import WallpaperUnsplash from './WallpaperUnsplash.vue';
+import { REFRESH_INTERVALS } from './constants';
 
 export const gridComponents = {};
 
@@ -13,7 +14,7 @@ export const settings = {
 	},
 	refreshInterval: {
 		name: 'refreshInterval',
-		getDefault: () => (1 * 60 * 60 * 1000) // 1 hour in ms
+		getDefault: () => REFRESH_INTERVALS.ALWAYS
 	}
 }
 

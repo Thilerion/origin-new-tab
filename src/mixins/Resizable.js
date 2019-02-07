@@ -4,7 +4,8 @@ export default function resizable({
 	return {
 		data() {
 			return {
-				resizeState: {}
+				resizeState: {},
+				resizing: false
 			}
 		},
 		created() {
@@ -26,20 +27,23 @@ export default function resizable({
 
 		},
 		methods: {
-			onResizeStart(e) {
+			onResizeStart(handle, e) {
 				this.$_resizeOrigin = {
 					x: e.clientX,
 					y: e.clientY
 				}
 				console.log('on resize start from origin:', this.$_resizeOrigin);
+				this.resizing = true;
 				this.addResizeListeners();
 			},
 			onResizeUpdate(e) {
 
 			},
 			onResizeEnd(e) {
+				console.log("Resize end");
 				this.onResizeUpdate(e);
 				this.removeResizeListeners();
+				this.resizing = false;
 				// TODO: what is resize state?
 				this.resizeState = {};
 				this.getWidgetSize();

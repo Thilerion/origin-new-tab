@@ -37,14 +37,16 @@ const getWidgetComponents = (widgets) => {
 }
 
 const getWidgetDisplayConfigs = (widgets) => {
-	let components = {};
-
-	for (const wName in widgets) {
-		if (widgets[wName].displayConfigs) {
-			components = { ...components, ...widgets[wName].displayConfigs };
+	let widgetConfigs = Object.keys(widgets).reduce((acc, val) => {
+		const w = widgets[val] && widgets[val].displayConfig;
+		if (w) {
+			for (const component in w) {
+				acc[component] = w[component];
+			}
 		}
-	}
-	return components;
+		return acc;
+	}, {});
+	return widgetConfigs;
 }
 
 const { gridComponents, wallpaperComponents } = getWidgetComponents(WidgetTypes);

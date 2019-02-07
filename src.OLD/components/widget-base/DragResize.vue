@@ -11,7 +11,7 @@
 				:key="handle"
 				class="resize-handle"
 				:class="handleClasses(handle)"
-				@mousedown.stop.prevent="resizeStart(handle, $event)"
+				@mousedown.stop="resizeStart(handle, $event)"
 				draggable
 			></div>
 

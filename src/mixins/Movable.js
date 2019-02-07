@@ -7,7 +7,8 @@ export default function movable({
 				moveDelta: {
 					x: 0,
 					y: 0
-				}
+				},
+				moving: false
 			}
 		},
 		beforeDestroy() {
@@ -63,6 +64,7 @@ export default function movable({
 					y: e.clientY
 				};
 				console.log('on move start from origin:', this.$_moveOrigin);
+				this.moving = true;
 				this.addMoveListeners();
 			},
 			onMoveUpdate(e) {
@@ -76,6 +78,7 @@ export default function movable({
 			onMoveEnd(e) {
 				this.onMoveUpdate(e);
 				this.removeMoveListeners();
+				this.moving = false;
 				console.log(`Total amount moved was: `, { ...this.moveDelta });
 				this.moveDelta = {
 					x: 0,

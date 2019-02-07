@@ -1,7 +1,12 @@
 <template>
 	<div
 		class="widget-base"
-		@mousedown="onMoveStart">
+		@mousedown="onMoveStart"
+		:class="{
+			resizing,
+			moving
+		}"
+	>
 
 		<slot />
 
@@ -21,6 +26,7 @@
 				:key="handle"
 				class="resize-handle"
 				:class="handle"
+				@mousedown.stop="onResizeStart(handle, $event)"
 			>
 
 			</div>
@@ -31,6 +37,8 @@
 <script>
 import Movable from '@/mixins/Movable';
 import Resizable from '@/mixins/Resizable';
+
+import { displayConfigs } from '@/widgets';
 
 export default {
 	mixins: [Movable({}), Resizable({})],
@@ -67,7 +75,8 @@ export default {
 				y: null,
 				width: null,
 				height: null
-			}
+			},
+			displayConf: {}
 		}
 	},
 	computed: {
@@ -109,6 +118,9 @@ export default {
 	},
 	mounted() {
 		this.getWidgetSize();
+	},
+	created() {
+		this.displayConf = displayConfigs[this.widget.name];
 	},
 	filters: {
 		removeWidgetStr(val) {

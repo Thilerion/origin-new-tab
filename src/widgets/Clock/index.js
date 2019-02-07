@@ -8,13 +8,13 @@ export const wallpaperComponents = {
 }
 
 export const settings = {
-	clockSettingA: {
-		name: 'clockSettingA',
-		getDefault: () => 'default Clock Setting A'
+	showDate: {
+		name: 'showDate',
+		getDefault: () => false
 	},
-	clockSettingB: {
-		name: 'clockSettingB',
-		getDefault: () => ['default', 'clock', 'settings', 'b']
+	showTextGreeting: {
+		name: 'showTextGreeting',
+		getDefault: () => true
 	}
 }
 

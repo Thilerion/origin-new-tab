@@ -1,5 +1,8 @@
 <template>
-	<div class="widget-base">
+	<div
+		class="widget-base"
+		@mousedown="onMoveStart">
+
 		<slot />
 
 		<div
@@ -7,8 +10,7 @@
 			:class="{selected}"
 			v-if="editing">
 
-			<div
-				class="widget-name"
+			<div class="widget-name"
 			>{{widget.name | removeWidgetStr}}</div>
 
 		</div>
@@ -16,7 +18,10 @@
 </template>
 
 <script>
+import Movable from '@/mixins/Movable';
+
 export default {
+	mixins: [Movable({})],
 	props: {
 		widget: {
 			type: Object,
@@ -31,6 +36,30 @@ export default {
 			default: false
 		}
 	},
+	data() {
+		return {
+			widgetSize: {
+				x: null,
+				y: null,
+				width: null,
+				height: null
+			}
+		}
+	},
+	methods: {
+		calculateGridSize() {
+
+		},
+		calculateWidgetSize() {
+			const el = this.$el;
+			const rect = el.getBoundingClientRect();
+			console.log(rect);
+		}
+	},
+	mounted() {
+		this.calculateGridSize();
+		this.calculateWidgetSize();
+	},	
 	filters: {
 		removeWidgetStr(val) {
 			if (val.startsWith('Widget')) {

@@ -22,7 +22,24 @@ export const gridModule = {
 	},
 
 	mutations: {
+		setGridWidgetDimensions(state, {
+			idx,
+			options
+		}) {
+			const w = state.gridWidgets[idx];
+			if (!w) {
+				console.error("Widget does not exist with index: ", idx);
+				return;
+			}
 
+			for (const option in options) {
+				if (w[option]) {
+					w[option] = options[option];
+				} else {
+					console.warn(`Widget does not have option "${option}"...`);
+				}
+			}
+		}
 	},
 
 	actions: {

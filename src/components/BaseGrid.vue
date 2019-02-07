@@ -40,6 +40,13 @@ export default {
 			editing: false,
 			selectedWidget: null,
 
+			gridSize: {
+				x: null,
+				y: null,
+				width: null,
+				height: null
+			},
+
 			gridComponents
 		}
 	},
@@ -81,16 +88,18 @@ export default {
 			if (!this.editing) {
 				this.selectedWidget = null;
 			}
+		},
+		setGridDimensions() {
+			const grid = this.$el;
+			const rect = grid.getBoundingClientRect();
+			console.log(rect);
 		}
 	},
 	created() {
 		this.setGridColsRows(this.cols, this.rows);
 	},
 	mounted() {
-		const el = this.$el;
-		const style = window.getComputedStyle(el);
-		const h = style.getPropertyValue('height');
-		const w = style.getPropertyValue('width');
+		this.setGridDimensions();
 	}
 }
 </script>

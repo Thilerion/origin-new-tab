@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="widget-base"
-		@mousedown="onMoveStart"
+		@mousedown.stop="onMoveStart"
 		:class="{
 			resizing,
 			moving
@@ -26,7 +26,7 @@
 				:key="handle"
 				class="resize-handle"
 				:class="handle"
-				@mousedown.stop="onResizeStart(handle, $event)"
+				@mousedown="onResizeStart(handle, $event)"
 			>
 
 			</div>
@@ -89,6 +89,20 @@ export default {
 			return 1 + (Math.round(delta / this.cellSize.width));
 		},
 
+		initialGridPos() {
+			const {x, y, width, height} = this.widgetPos;
+			if (x == null || y == null) {
+				const inStore = this.$store.state.grid.gridWidgets[this.idx];
+				return {x: inStore.x, y: inStore.y, width: inStore.width, height: inStore.height};
+			}
+			return {
+				x: Math.round(x / this.cellSize.width),
+				y: Math.round(y / this.cellSize.height),
+				width: Math.round(width / this.cellSize.width),
+				height: Math.round(height / this.cellSize.height)
+			};
+		},
+
 		showResizeHandles() {
 			// TODO: and only if canResize is true on widget config
 			return this.selected && !!this.resizeHandles && Array.isArray(this.resizeHandles);
@@ -106,12 +120,25 @@ export default {
 			}
 		},
 		updateWidgetGridPosition({x, y}) {
+			// debugger;
 			console.log({x, y});
 			this.$store.commit('setGridWidgetDimensions', {
 				idx: this.idx,
 				options: {
 					x: this.originalColStart + x,
 					y: this.originalRowStart + y
+				}
+			})
+		},
+		updateWidgetGridSize({x, y, width, height}) {
+			// debugger;
+			this.$store.commit('setGridWidgetDimensions', {
+				idx: this.idx,
+				options: {
+					x,
+					y,
+					width,
+					height
 				}
 			})
 		}

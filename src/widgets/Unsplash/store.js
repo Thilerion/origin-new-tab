@@ -131,8 +131,10 @@ const baseStore = {
 			let hasFetched;
 			let hasData;
 
+			const hasLocalStorageData = state.data.wallpapers.length > 0;
+
 			const expired = getters.hasExpired;
-			if (state.hasLocalStorageData) {
+			if (hasLocalStorageData) {
 				if (expired) {
 					console.warn("Has local storage, but expired.");
 					// fetch data, but use current if it fails
@@ -142,7 +144,7 @@ const baseStore = {
 					hasFetched = true;
 				}
 				hasData = true;
-			} else if (!state.hasLocalStorageData) {
+			} else if (!hasLocalStorageData) {
 				// try to fetch, no fallback possible
 				console.warn("No local storage data");
 				hasFetched = await dispatch('fetchApiData');
@@ -168,6 +170,12 @@ const baseStore = {
 }
 
 const mergedData = mergeStoreData(storeDataDefaults, STORAGE_KEY);
-const { register, persist } = createWidgetStore(baseStore, mergedData, STORE_NAME, STORAGE_KEY, (state) => ({ data: state[STORE_NAME].date, expires: state[STORE_NAME].expires }));
+const { register, persist } = createWidgetStore(
+	baseStore,
+	mergedData,
+	STORE_NAME,
+	STORAGE_KEY,
+	(state) => ({ data: state[STORE_NAME].data, expires: state[STORE_NAME].expires })
+);
 
 export { register, persist };

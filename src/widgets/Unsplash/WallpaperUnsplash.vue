@@ -69,13 +69,15 @@ export default {
 		}
 	},
 	beforeMount() {
-		register(this.$store);
-		persist(this.$store);
-		
 		this.canAnimate = false;
 		setTimeout(() => {
 			this.canAnimate = true;
 		}, 200)
+	},
+	beforeCreate() {
+		register(this.$store);
+		persist(this.$store);
+		this.$store.dispatch('unsplash/init');
 	},
 	watch: {
 		errorLoading: {

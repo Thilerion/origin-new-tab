@@ -7,16 +7,13 @@ export const wallpaperComponents = {
 }
 
 export const settings = {
-	unsplashSetting: {
-		name: 'unsplashSetting',
-		getDefault: () => 'default unsplash Setting A'
+	collection: {
+		name: 'collection',
+		getDefault: () => '477172'
 	},
-	anotherUnsplashSetting: {
-		name: 'anotherUnsplashSetting',
-		getDefault: () => ({
-			thisIs: 'a default setting for',
-			unsplashWidget: 'yes it is'
-		})
+	refreshInterval: {
+		name: 'refreshInterval',
+		getDefault: () => (1 * 60 * 60 * 1000) // 1 hour in ms
 	}
 }
 

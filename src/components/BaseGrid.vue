@@ -3,7 +3,6 @@
 		<GridLines v-if="editing" />
 
 		<div class="cell-measure" v-resize="onCellResize"></div>
-		<div class="cell-measure double" ref="gapMeasure" v-resize="onGapResize"></div>
 		
 		<BaseWidget
 			:editing="editing"
@@ -11,7 +10,6 @@
 			:widget="widget"
 			:gridSize="gridSize"
 			:cellSize="gridCellSize"
-			:gapSize="gridGapSize"
 			:key="`${widget.name}-${idx}`"
 			:style="getWidgetGridPlacement(widget)"
 			:selected="selectedWidget === idx"
@@ -61,14 +59,6 @@ export default {
 				width: null,
 				height: null
 			},
-			gridGapRect: {
-				width: 0,
-				height: 0
-			},
-			gridGapSize: {
-				width: null,
-				height: null
-			},
 
 			gridComponents
 		}
@@ -110,33 +100,14 @@ export default {
 				this.selectedWidget = null;
 			}
 		},
-		onGapResize(rect) {
-			const {left: x, top: y, width, height} = rect;
-			this.gridGapRect = {x, y, width, height};
-		},
 		onCellResize(rect, el) {
 			const w = roundNumber(rect.width);
 			const h = roundNumber(rect.height);
-			this.$nextTick(() => {
-				this.gridCellSize = {
-					width: w,
-					height: h
-				};
-				this.measureGridGapSize(w, h);
-			})
-		},
-		measureGridGapSize(singleW, singleH) {
-			const w = roundNumber((this.gridGapRect.width / 2), 3);
-			const h = roundNumber((this.gridGapRect.height / 2), 3);
 			
-			const diffW = Math.abs(singleW - w);
-			const diffH = Math.abs(singleH - h);
-			
-			const avgDiffW = Math.floor(((this.gridGapSize.width || 0) + diffW) / 2);
-			const avgDiffH = Math.floor(((this.gridGapSize.height || 0) + diffH) / 2);
-
-			this.gridGapSize.width = avgDiffW;
-			this.gridGapSize.height = avgDiffH;
+			this.gridCellSize = {
+				width: w,
+				height: h
+			}
 		},
 		onGridResize(rect, el) {
 			this.gridSize = {

@@ -34,6 +34,14 @@ export default {
 		selected: {
 			type: Boolean,
 			default: false
+		},
+		gridSize: {
+			type: Object,
+			required: true
+		},
+		cellSize: {
+			type: Object,
+			required: true
 		}
 	},
 	data() {

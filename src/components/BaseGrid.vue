@@ -1,5 +1,5 @@
 <template>
-	<div class="grid" @dblclick="editing = !editing" :class="{editing}">
+	<div class="grid" @dblclick="toggleEditing" :class="{editing}">
 		<GridLines v-if="editing" />
 		
 		<BaseWidget
@@ -7,7 +7,10 @@
 			v-for="(widget, idx) in gridWidgets"
 			:widget="widget"
 			:key="`${widget.name}-${idx}`"
-			:style="getWidgetGridPlacement(widget)">
+			:style="getWidgetGridPlacement(widget)"
+			:selected="selectedWidget === idx"
+			@click.native="toggleSelectWidget(widget, idx, $event)"
+		>
 
 			<component
 				class="widget"
@@ -35,6 +38,8 @@ export default {
 	data() {
 		return {
 			editing: false,
+			selectedWidget: null,
+
 			gridComponents
 		}
 	},
@@ -60,6 +65,21 @@ export default {
 				'grid-column-start': widget.x,
 				'grid-row-end': (widget.y + widget.height),
 				'grid-column-end': (widget.x + widget.width)
+			}
+		},
+		toggleSelectWidget(widget, idx, event) {
+			if (this.editing && this.selectedWidget !== idx) {
+				console.log('selecting widget', {widget, idx, event});
+				this.selectedWidget = idx;
+			} else if (this.editing && this.selectedWidget === idx) {
+				console.log('deselecting widget', {widget, idx, event});
+				this.selectedWidget = null;
+			}
+		},
+		toggleEditing() {
+			this.editing = !this.editing;
+			if (!this.editing) {
+				this.selectedWidget = null;
 			}
 		}
 	},

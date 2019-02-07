@@ -25,14 +25,12 @@ import {mapState, mapGetters} from 'vuex';
 import GridLines from './GridLines.vue';
 import BaseWidget from './BaseWidget.vue';
 
-// TODO: import all widget-components from '@/widgets' and check if 'gridComponent.name' is one of the available values
-import WidgetClock from '@/widgets/Clock/main.vue';
+import {gridComponents} from '@/widgets';
 
 export default {
 	components: {
 		GridLines,
-		BaseWidget,
-		WidgetClock
+		BaseWidget
 	},
 	data() {
 		return {

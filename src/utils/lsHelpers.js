@@ -1,17 +1,16 @@
-export const loadFromStorage = key => {
+export const getFromStorage = key => {
 	try {
-		const data = window.localStorage.getItem(key);
-		return JSON.parse(data);
+		const data = JSON.parse(localStorage.getItem(key));
+		return data;
 	} catch (e) {
-		return false;
+		return {};
 	}
 }
 
 export const saveToStorage = (key, data) => {
 	try {
 		const str = JSON.stringify(data);
-		window.localStorage.setItem(key, str);
-		return true;
+		return localStorage.setItem(key, str);
 	} catch (e) {
 		return false;
 	}

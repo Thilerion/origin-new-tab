@@ -16,17 +16,19 @@
 
 <script>
 import WallpaperDefault from './WallpaperDefault.vue';
-import UnsplashWidget from '@/widgets/WallpaperUnsplash';
+
+import {wallpaperComponents} from '@/widgets';
 
 export default {
 	components: {
-		WallpaperDefault,
-		WallpaperUnsplash: () => UnsplashWidget.getComponent()
+		WallpaperDefault
 	},
 	data() {
 		return {
 			canAnimate: false,
-			wallpaperError: false
+			wallpaperError: false,
+			wallpaperComponents,
+			currentWallpaper: 'WallpaperUnsplash'
 		}
 	},
 	computed: {

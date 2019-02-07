@@ -2,17 +2,32 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex);
 
-import { gridModule, activeWidgetsPersistPlugin } from './modules/grid/';
-import { settingsModule, settingsPersistPlugin } from './modules/settings';
+import { persistModule } from '@/utils/storeModuleHelpers';
+
+import settings from './settings';
+import activeWidgets from './activeWidgets';
 
 const store = new Vuex.Store({
 	strict: process.env.NODE_ENV !== 'development',
 
-	plugins: [settingsPersistPlugin, activeWidgetsPersistPlugin],
+	plugins: [
+		persistModule(
+			(state) => ({ ...state.settings }),
+			'settings',
+			'sp_settings',
+			{ deep: true, wait: 500, maxWait: 10000, immediate: true }
+		),
+		persistModule(
+			(state) => ({ wallpaperWidget: state.activeWidgets.wallpaperWidget, gridWidgets: state.activeWidgets.gridWidgets }),
+			'activeWidgets',
+			'sp_activeWidgets',
+			{ deep: true, wait: 1000, maxWait: 10000, immediate: false }
+		)
+	],
 
 	modules: {
-		grid: gridModule,
-		settings: settingsModule
+		settings,
+		activeWidgets
 	},
 
 	state: {

@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import storeModule from './store.js';
-import loadImage from './load-image.service.js';
+import {register, persist} from './store.js';
+import loadImage from '@/utils/loadImage';
 
 export default {
 	name: 'WallpaperUnsplash',
@@ -69,8 +69,10 @@ export default {
 		}
 	},
 	beforeMount() {
+		register(this.$store);
+		persist(this.$store);
+		
 		this.canAnimate = false;
-		this.$store.dispatch('unsplash/init');
 		setTimeout(() => {
 			this.canAnimate = true;
 		}, 200)

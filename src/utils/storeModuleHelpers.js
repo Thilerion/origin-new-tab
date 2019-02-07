@@ -20,7 +20,7 @@ const persistModule = (
 	}, wait, { maxWait });
 
 	return store => {
-		console.log(`[PersistModule]: created watcher from "${moduleName}".`);
+		// console.log(`[PersistModule]: created watcher from "${moduleName}".`);
 		return store.watch(reducerFn, callback, { deep, immediate });
 	}
 }

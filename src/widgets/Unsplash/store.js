@@ -102,7 +102,7 @@ const baseStore = {
 			const lastChange = state.data.lastCurrentIdxChange;
 
 			if (Date.now() - lastChange > refreshInterval) {
-				console.log(`[UnsplashStore]: refresh interval has passed (${Date.now() - lastChange} > ${refreshInterval}). Loading next wallpaper now.`);
+				// console.log(`[UnsplashStore]: refresh interval has passed (${Date.now() - lastChange} > ${refreshInterval}). Loading next wallpaper now.`);
 				dispatch('goToNextWallpaper');
 			}
 		},
@@ -151,17 +151,17 @@ const baseStore = {
 			const expired = getters.hasExpired;
 			if (hasLocalStorageData) {
 				if (expired) {
-					console.warn("Has local storage, but expired.");
+					// console.warn("Has local storage, but expired.");
 					// fetch data, but use current if it fails
 					hasFetched = await dispatch('fetchApiData');
 				} else if (!expired) {
-					console.warn("Has local storage, and data fresh.");
+					// console.warn("Has local storage, and data fresh.");
 					hasFetched = true;
 				}
 				hasData = true;
 			} else if (!hasLocalStorageData) {
 				// try to fetch, no fallback possible
-				console.warn("No local storage data");
+				// console.warn("No local storage data");
 				hasFetched = await dispatch('fetchApiData');
 				if (hasFetched) {
 					hasData = true;
@@ -177,7 +177,7 @@ const baseStore = {
 		 * Called by init() action, to set the finishedLoading and dataHasLoaded things
 		 */
 		finishInit({ dispatch, commit }, success) {
-			console.warn("Finishing init with hasData as: ", success);
+			// console.warn("Finishing init with hasData as: ", success);
 			
 			// Check if refreshInterval has passed since lastCurrentIdxChange, if next wallpaper should be loaded
 			dispatch('checkRefreshInterval');

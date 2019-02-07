@@ -23,6 +23,10 @@ import Movable from '@/mixins/Movable';
 export default {
 	mixins: [Movable({})],
 	props: {
+		idx: {
+			type: Number,
+			required: true
+		},
 		widget: {
 			type: Object,
 			required: true
@@ -46,7 +50,7 @@ export default {
 	},
 	data() {
 		return {
-			widgetSize: {
+			widgetPos: {
 				x: null,
 				y: null,
 				width: null,
@@ -54,18 +58,41 @@ export default {
 			}
 		}
 	},
-	methods: {
-		calculateGridSize() {
-
+	computed: {
+		originalRowStart() {
+			const delta = this.widgetPos.y - this.gridSize.y;
+			return 1 + (Math.round(delta / this.cellSize.height));
 		},
-		calculateWidgetSize() {
-			
+		originalColStart() {
+			const delta = this.widgetPos.x - this.gridSize.x;
+			return 1 + (Math.round(delta / this.cellSize.width));
+		}
+	},
+	methods: {
+		getWidgetSize() {
+			const el = this.$el;
+			const rect = el.getBoundingClientRect();
+			this.widgetPos = {
+				x: rect.x,
+				y: rect.y,
+				width: rect.width,
+				height: rect.height
+			}
+		},
+		updateWidgetGridPosition({x, y}) {
+			console.log({x, y});
+			this.$store.commit('setGridWidgetDimensions', {
+				idx: this.idx,
+				options: {
+					x: this.originalColStart + x,
+					y: this.originalRowStart + y
+				}
+			})
 		}
 	},
 	mounted() {
-		this.calculateGridSize();
-		this.calculateWidgetSize();
-	},	
+		this.getWidgetSize();
+	},
 	filters: {
 		removeWidgetStr(val) {
 			if (val.startsWith('Widget')) {

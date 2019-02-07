@@ -7,6 +7,7 @@
 		<BaseWidget
 			:editing="editing"
 			v-for="(widget, idx) in gridWidgets"
+			:idx="idx"
 			:widget="widget"
 			:gridSize="gridSize"
 			:cellSize="gridCellSize"
@@ -101,6 +102,7 @@ export default {
 			}
 		},
 		onCellResize(rect, el) {
+			console.log("Cell resize triggered!");
 			const w = roundNumber(rect.width);
 			const h = roundNumber(rect.height);
 			
@@ -110,6 +112,7 @@ export default {
 			}
 		},
 		onGridResize(rect, el) {
+			console.log("Grid resize triggered!");
 			this.gridSize = {
 				x: rect.left,
 				y: rect.top,

@@ -1,6 +1,8 @@
 <template>
-	<div class="grid" @dblclick="toggleEditing" :class="{editing}" v-resize="onResize">
+	<div class="grid" @dblclick="toggleEditing" :class="{editing}" v-resize="onGridResize">
 		<GridLines v-if="editing" />
+
+		<div class="cell-measure" ref="gridCell" v-resize="onCellResize"></div>
 		
 		<BaseWidget
 			:editing="editing"
@@ -87,7 +89,10 @@ export default {
 				this.selectedWidget = null;
 			}
 		},
-		onResize(target, contentRect) {
+		onCellResize(rect, el) {
+			
+		},
+		onGridResize(rect, el) {
 			
 		},
 		setGridDimensions() {
@@ -117,6 +122,13 @@ export default {
 	padding: .75rem .5rem;
 
 	/* font-size, align-items, justify-items, gap */
+}
+
+.cell-measure {
+	background: white;
+	grid-row: 1 / 2;
+	grid-column: 1 / 2;
+	z-index: -100;
 }
 </style>
 

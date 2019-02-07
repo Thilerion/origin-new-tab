@@ -4,8 +4,11 @@ import store from './store'
 
 import './assets/style/base.css';
 
-import onResizeDirective from '@/plugins/onResize';
-Vue.directive('resize', onResizeDirective);
+import resizeDirective from '@/plugins/onResize';
+Vue.use(resizeDirective, {
+	doThrottle: true,
+	throttleDuration: (1000 / 15)
+});
 
 Vue.config.productionTip = false
 

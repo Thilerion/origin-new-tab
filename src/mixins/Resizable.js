@@ -8,7 +8,7 @@ export default function resizable({
 			}
 		},
 		created() {
-			this.$_resizeHandles = [
+			this.resizeHandles = [
 				'top-left',
 				'top',
 				'top-right',

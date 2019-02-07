@@ -14,6 +14,17 @@
 			>{{widget.name | removeWidgetStr}}</div>
 
 		</div>
+
+		<template v-if="showResizeHandles">
+			<div
+				v-for="handle in resizeHandles"
+				:key="handle"
+				class="resize-handle"
+				:class="handle"
+			>
+
+			</div>
+		</template>
 	</div>
 </template>
 
@@ -71,7 +82,7 @@ export default {
 
 		showResizeHandles() {
 			// TODO: and only if canResize is true on widget config
-			return this.selected;
+			return this.selected && !!this.resizeHandles && Array.isArray(this.resizeHandles);
 		}
 	},
 	methods: {
@@ -118,6 +129,8 @@ export default {
 	/* --overlay-selected-color-hover: rgba(175, 223, 255, 0.9); */
 
 	--border-selected-color: rgb(53, 174, 255);
+	
+	--border-size: 4px;
 }
 
 .widget-base:hover {
@@ -144,7 +157,7 @@ export default {
 	width: 100%;
 	height: 100%;
 	background: var(--overlay-color);
-	border: 4px solid var(--overlay-color);
+	border: var(--border-size) solid var(--overlay-color);
 	user-select: none;
 }
 
@@ -162,13 +175,15 @@ export default {
 }
 
 .resize-handle {
-	--handle-size: 10px;
-	--half-handle-size: calc(-1 * var(--handle-size) / 2);
+	--handle-size: 12px;
+	--half-handle-size: calc(-1 * (var(--handle-size) - var(--border-size)) / 2);
 
 	position: absolute;
 	width: var(--handle-size);
 	height: var(--handle-size);
+	background-color: white;
 	border: 2px solid var(--border-selected-color);
+	border-radius: 2px;
 }
 
 .resize-handle.top,

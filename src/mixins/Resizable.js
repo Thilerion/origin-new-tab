@@ -80,7 +80,7 @@ export default function resizable({
 				const maxX = curWidth - minWidth;
 				const minX = Math.max((-curX), curWidth - maxWidth); 
 
-				const curHeight = this.initialGridPos.height - 1;
+				const curHeight = this.initialGridPos.height;
 				const maxHeight = this.displayConf.maxHeight || this.$store.state.grid.rows;
 				const minHeight = this.displayConf.minHeight || 1;
 

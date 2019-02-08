@@ -2,6 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
 
+import VueShortkey from 'vue-shortkey';
+Vue.use(VueShortkey, {
+	prevent: ['input', 'textarea', 'button']
+});
+
 import './assets/style/base.css';
 
 import resizeDirective from '@/plugins/onResize';

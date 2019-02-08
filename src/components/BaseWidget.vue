@@ -194,6 +194,7 @@ export default {
 <style>
 .widget-base {
 	--overlay-color: rgba(230, 230, 255, 0.8);
+	--overlay-border: rgba(109, 209, 255, 0.75);
 
 	--overlay-selected-color: rgba(175, 223, 255, 0.85);
 	/* --overlay-selected-color-hover: rgba(175, 223, 255, 0.9); */
@@ -227,8 +228,9 @@ export default {
 	width: 100%;
 	height: 100%;
 	background: var(--overlay-color);
-	border: var(--border-size) solid var(--overlay-color);
+	border: var(--border-size) solid var(--overlay-border);
 	user-select: none;
+	transition: all .5s ease;
 }
 
 .edit-overlay.selected {

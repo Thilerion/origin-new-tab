@@ -1,5 +1,11 @@
 <template>
-	<div class="grid" v-shortkey="['c']" @shortkey="toggleEditing" :class="{editing}" v-resize="onGridResize">
+	<div
+		class="grid"
+		v-shortkey="['c']"
+		@shortkey="toggleEditing"
+		:class="{editing}"
+		v-resize="onGridResize"
+	>
 		<GridLines v-if="editing" />
 
 		<div class="cell-measure" v-resize="onCellResize"></div>

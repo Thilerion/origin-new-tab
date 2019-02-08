@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="widget-base"
-		@mousedown.stop="onMoveStart"
+		@mousedown="onMoveStart"
 		:class="{
 			resizing,
 			moving

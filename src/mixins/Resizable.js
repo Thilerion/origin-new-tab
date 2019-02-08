@@ -33,12 +33,16 @@ export default function resizable({
 		computed: {
 			resizeResult() {
 				const {x, y, width, height} = this.resizeDelta;
-				return {
+				if (!this.resizing) {
+					return {x, y, width, height};
+				}
+				const res = {
 					x: x + this.initialGridPos.x,
 					y: y + this.initialGridPos.y,
 					width: width + this.initialGridPos.width,
 					height: height + this.initialGridPos.height
 				}
+				return res;
 			}
 		},
 		methods: {
@@ -74,7 +78,7 @@ export default function resizable({
 				const maxX = curWidth - minWidth;
 				const minX = Math.max((-curX), curWidth - maxWidth); 
 
-				const curHeight = this.initialGridPos.height;
+				const curHeight = this.initialGridPos.height - 1;
 				const maxHeight = this.displayConf.maxHeight || this.$store.state.grid.rows;
 				const minHeight = this.displayConf.minHeight || 1;
 
@@ -82,7 +86,7 @@ export default function resizable({
 				const maxY = curHeight - minHeight;
 				const minY = Math.max((-curY), curHeight - maxHeight);
 
-				console.log({curWidth, maxWidth, minWidth, curX, maxX, minX, curHeight, maxHeight, minHeight, curY, maxY, minY});
+				// console.log({curWidth, maxWidth, minWidth, curX, maxX, minX, curHeight, maxHeight, minHeight, curY, maxY, minY});
 
 				const gridDeltaX = Math.round(mouseDeltaX / this.cellSize.width);
 				const gridDeltaY = Math.round(mouseDeltaY / this.cellSize.height);
@@ -125,7 +129,7 @@ export default function resizable({
 					width: 0,
 					height: 0
 				}
-				this.getWidgetSize();
+				// this.getWidgetSize();
 			},
 			addResizeListeners() {
 				window.addEventListener('mousemove', this.onResizeUpdate);
@@ -152,7 +156,7 @@ export default function resizable({
 					}
 				}
 				if (changed) {
-					console.log({ ...newValue });
+					// console.log({ ...newValue });
 					this.updateWidgetGridSize({ ...newValue });
 				}
 			}

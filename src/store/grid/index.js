@@ -36,7 +36,6 @@ export const gridModule = {
 				if (w[option] != null) {
 					w[option] = options[option];
 				} else {
-					debugger;
 					console.warn(`Widget does not have option "${option}"...`);
 				}
 			}

@@ -120,7 +120,6 @@ export default {
 			}
 		},
 		updateWidgetGridPosition({x, y}) {
-			// debugger;
 			console.log({x, y});
 			this.$store.commit('setGridWidgetDimensions', {
 				idx: this.idx,
@@ -131,7 +130,6 @@ export default {
 			})
 		},
 		updateWidgetGridSize({x, y, width, height}) {
-			// debugger;
 			this.$store.commit('setGridWidgetDimensions', {
 				idx: this.idx,
 				options: {

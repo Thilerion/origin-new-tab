@@ -30,7 +30,11 @@ function validateActiveWidgets(savedState = {}) {
 		wallpaperWidgetValid = wallpaperWidget;
 	}
 
-	const validatedGridWidgets = validateGridWidgets(gridWidgets, gridComponentNames, displayConfigs);
+	const validatedGridWidgets = validateGridWidgets(
+		gridWidgets,
+		gridComponentNames,
+		displayConfigs
+	);
 
 	if (!validatedGridWidgets) {
 		// console.warn(`[ActiveWidgets]: no valid/active grid widgets found!`);
@@ -45,7 +49,11 @@ function validateActiveWidgets(savedState = {}) {
 	}
 }
 
-function validateGridWidgets(gridWidgets, componentNames, displayConfigs) {
+function validateGridWidgets(
+	gridWidgets,
+	componentNames,
+	displayConfigs
+) {
 	if (!gridWidgets ||
 		!Array.isArray(gridWidgets) ||
 		gridWidgets.length < 1
@@ -58,6 +66,11 @@ function validateGridWidgets(gridWidgets, componentNames, displayConfigs) {
 
 		const { validComponent, name } = validator.validateName(componentNames);
 		if (!validComponent) return valid;
+
+		// FILTER OUT DEV-ONLY WIDGETS (such as placeholderWidget)
+		if (process && process.env && process.env.NODE_ENV !== 'development' && displayConfigs[name] && displayConfigs[name].DEV_ONLY) {
+			return valid;
+		}
 
 		const validatedSettings = validator.validateSettings(displayConfigs[name], globalConfig);
 		if (!validatedSettings) return valid;

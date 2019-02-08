@@ -18,7 +18,9 @@ export function validateStoredSettings(stored, options) {
 				categoryData[setting] = local;
 			}
 		}
-		settings[category] = { ...categoryData };
+		if (Object.keys(categoryData).length > 0) {
+			settings[category] = { ...categoryData };
+		}
 	}
 	return settings;
 }

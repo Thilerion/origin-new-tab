@@ -20,7 +20,7 @@
 			:key="`${widget.name}-${idx}`"
 			:style="getWidgetGridPlacement(widget)"
 			:selected="selectedWidget === idx"
-			@click.native="toggleSelectWidget(widget, idx, $event)"
+			@selectWidget="toggleSelectWidget(widget, idx, $event)"
 		>
 
 			<component
@@ -94,11 +94,11 @@ export default {
 				'grid-column-end': (widget.x + widget.width)
 			}
 		},
-		toggleSelectWidget(widget, idx, event) {
-			if (this.editing) {
-				this.selectedWidget = idx;
-			} else if (!this.editing) {
+		toggleSelectWidget(widget, idx, bool) {
+			if (!this.editing) {
 				this.selectedWidget = null;
+			} else {
+				this.selectedWidget = bool ? idx : null;
 			}
 		},
 		toggleEditing() {

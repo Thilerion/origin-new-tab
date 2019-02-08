@@ -78,13 +78,16 @@ export default function movable({
 			onMoveEnd(e) {
 				this.onMoveUpdate(e);
 				this.removeMoveListeners();
-				this.moving = false;
 				console.log(`Total amount moved was: `, { ...this.moveDelta });
 				this.moveDelta = {
 					x: 0,
 					y: 0
 				}
 				this.getWidgetSize();
+				// to prevent click/select widget event from firing
+				setTimeout(() => {
+					this.moving = false;
+				}, 0);
 			},
 
 			addMoveListeners() {

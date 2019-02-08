@@ -46,7 +46,7 @@ export default function resizable({
 			}
 		},
 		methods: {
-			onResizeStart(handle, e) {
+			onResizeStart(e, handle) {
 				this.$_resizeOrigin = {
 					x: e.clientX,
 					y: e.clientY
@@ -122,14 +122,18 @@ export default function resizable({
 				this.removeResizeListeners();
 
 				this.$_resizeHandle = null;
-				this.resizing = false;
 				this.resizeDelta = {
 					x: 0,
 					y: 0,
 					width: 0,
 					height: 0
 				}
-				// this.getWidgetSize();
+				this.getWidgetSize();
+
+				// to prevent click/select widget event from firing
+				setTimeout(() => {
+					this.resizing = false;
+				}, 0);
 			},
 			addResizeListeners() {
 				window.addEventListener('mousemove', this.onResizeUpdate);

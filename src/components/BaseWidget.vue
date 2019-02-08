@@ -1,7 +1,8 @@
 <template>
 	<div
 		class="widget-base"
-		@mousedown="onMoveStart"
+		@mousedown="widgetMouseDownHandler($event, 'move')"
+		@click="widgetClickHandler"
 		:class="{
 			resizing,
 			moving
@@ -26,7 +27,7 @@
 				:key="handle"
 				class="resize-handle"
 				:class="handle"
-				@mousedown.stop="onResizeStart(handle, $event)"
+				@mousedown.stop.prevent="widgetMouseDownHandler($event, 'resize', handle)"
 			>
 
 			</div>
@@ -109,6 +110,38 @@ export default {
 		}
 	},
 	methods: {
+		widgetMouseDownHandler(e, action, handle) {
+			if (!this.selected && !!this.editing) {
+				console.log('Widget mousedown not triggered because widget not selected.');
+				return;
+			} else if (!this.editing) {
+				console.log('Widget mousedown not triggered because not in editing mode.');
+				return;
+			}
+
+			if (action === 'move') {
+				this.onMoveStart(e);
+				return false;
+			} else if (action === 'resize' && !!handle) {
+				this.onResizeStart(e, handle);
+				return false;
+			} else {
+				console.error('Widget mousedown not triggered; no valid action.', {action, handle});
+			}
+		},
+		widgetClickHandler(e) {
+			if (!this.editing) {
+				console.log("No select action; not in editing mode.");
+			} else if (!this.selected) {
+				console.log("Selecting...");
+				this.$emit('selectWidget', true);
+			} else if (this.selected && !this.resizing && !this.moving) {
+				console.log("Deselecting...");
+				this.$emit('selectWidget', false);
+			} else {
+				console.log("No select action; widget is moving or resizing.");
+			}
+		},
 		getWidgetSize() {
 			const el = this.$el;
 			const rect = el.getBoundingClientRect();

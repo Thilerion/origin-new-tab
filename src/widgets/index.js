@@ -1,10 +1,12 @@
 import * as Unsplash from './Unsplash';
 import * as Clock from './Clock';
+
 import standard from './_presets/standard';
 
 const WidgetTypes = {
 	Unsplash,
-	Clock
+	Clock,
+	Placeholder: process.env.NODE_ENV === 'development' ? require('./_Placeholder') : undefined
 };
 
 const getWidgetSettings = (widgets) => {
@@ -40,8 +42,8 @@ const getWidgetDisplayConfigs = (widgets) => {
 	let components = {};
 
 	for (const wName in widgets) {
-		if (widgets[wName].displayConfigs) {
-			components = { ...components, ...widgets[wName].displayConfigs };
+		if (widgets[wName].displayConfig) {
+			components = { ...components, ...widgets[wName].displayConfig };
 		}
 	}
 	return components;

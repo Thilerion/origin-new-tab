@@ -26,7 +26,7 @@
 				:key="handle"
 				class="resize-handle"
 				:class="handle"
-				@mousedown="onResizeStart(handle, $event)"
+				@mousedown.stop="onResizeStart(handle, $event)"
 			>
 
 			</div>
@@ -96,8 +96,8 @@ export default {
 				return {x: inStore.x, y: inStore.y, width: inStore.width, height: inStore.height};
 			}
 			return {
-				x: Math.round(x / this.cellSize.width),
-				y: Math.round(y / this.cellSize.height),
+				x: Math.round(x / this.cellSize.width) + 1,
+				y: Math.round(y / this.cellSize.height) + 1,
 				width: Math.round(width / this.cellSize.width),
 				height: Math.round(height / this.cellSize.height)
 			};

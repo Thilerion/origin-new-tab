@@ -32,11 +32,12 @@ export default function resizable({
 		},
 		computed: {
 			resizeResult() {
+				const {x, y, width, height} = this.resizeDelta;
 				return {
-					x: this.initialGridPos.x + this.resizeDelta.x,
-					y: this.initialGridPos.y + this.resizeDelta.y,
-					width: this.initialGridPos.width + this.resizeDelta.width,
-					height: this.initialGridPos.height + this.resizeDelta.height,
+					x: x + this.initialGridPos.x,
+					y: y + this.initialGridPos.y,
+					width: width + this.initialGridPos.width,
+					height: height + this.initialGridPos.height
 				}
 			}
 		},
@@ -53,45 +54,55 @@ export default function resizable({
 				this.addResizeListeners();
 			},
 			onResizeUpdate(e) {
+				e.preventDefault();
+				e.stopPropagation();
 				const handle = this.$_resizeHandle;
 
 				const mouseDeltaX = e.clientX - this.$_resizeOrigin.x;
 				const mouseDeltaY = e.clientY - this.$_resizeOrigin.y;
-
-				const gridDeltaX = Math.round(mouseDeltaX / this.cellSize.width);
-				const gridDeltaY = Math.round(mouseDeltaY / this.cellSize.height);
-
-				const curGridX = this.originalColStart;
-				const curGridY = this.originalRowStart;
-				const curGridWidth = this.initialGridPos.width;
-				const curGridHeight = this.initialGridPos.height;
-
-				const minGridDeltaX = -(curGridX);
-				const maxGridDeltaX = this.$store.state.grid.cols - (curGridX + curGridWidth);
-
-				const minGridDeltaY = -(curGridY);
-				const maxGridDeltaY = this.$store.state.grid.rows - (curGridY + curGridHeight);
-
-				const boundedGridDeltaX = clampNum(minGridDeltaX, gridDeltaX, maxGridDeltaX);
-				const boundedGridDeltaY = clampNum(minGridDeltaY, gridDeltaY, maxGridDeltaY);
 
 				let dx = 0;
 				let dy = 0;
 				let dWidth = 0;
 				let dHeight = 0;
 
+				const curWidth = this.initialGridPos.width;
+				const maxWidth = this.displayConf.maxWidth || this.$store.state.grid.cols;
+				const minWidth = this.displayConf.minWidth || 1;
+
+				const curX = this.initialGridPos.x;
+				const maxX = curWidth - minWidth;
+				const minX = Math.max((-curX), curWidth - maxWidth); 
+
+				const curHeight = this.initialGridPos.height;
+				const maxHeight = this.displayConf.maxHeight || this.$store.state.grid.rows;
+				const minHeight = this.displayConf.minHeight || 1;
+
+				const curY = this.initialGridPos.y;
+				const maxY = curHeight - minHeight;
+				const minY = Math.max((-curY), curHeight - maxHeight);
+
+				console.log({curWidth, maxWidth, minWidth, curX, maxX, minX, curHeight, maxHeight, minHeight, curY, maxY, minY});
+
+				const gridDeltaX = Math.round(mouseDeltaX / this.cellSize.width);
+				const gridDeltaY = Math.round(mouseDeltaY / this.cellSize.height);
 
 				if (handle.includes('left')) {
-					dx = boundedGridDeltaX;
-					dWidth = -boundedGridDeltaX;
+					const clampedX = clampNum(minX, gridDeltaX, maxX);
+					dx = clampedX;
+					dWidth = -clampedX;
 				} else if (handle.includes('right')) {
-					dWidth = boundedGridDeltaX;
+					// TODO: use widget max width here as well
+					const clampedX = clampNum(minWidth - curWidth, gridDeltaX, maxWidth - curWidth);
+					dWidth = clampedX;
 				}
 				if (handle.includes('top')) {
-					dy = boundedGridDeltaY;
-					dHeight = -boundedGridDeltaY;
+					const clampedY = clampNum(minY, gridDeltaY, maxY);
+					dy = clampedY;
+					dHeight = -clampedY;
 				} else if (handle.includes('bottom')) {
-					dHeight = boundedGridDeltaY;
+					const clampedY = clampNum(minHeight - curHeight, gridDeltaY, maxHeight - curHeight);
+					dHeight = clampedY;
 				}
 
 				this.resizeDelta = {

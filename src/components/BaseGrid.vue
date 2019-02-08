@@ -85,13 +85,17 @@ export default {
 		},
 
 		getWidgetGridPlacement(widget) {
+			// if (widget.name === "WidgetClock" && widget.width < 2) debugger;
 			return {
 				// 'grid-row': `${widget.row.join(' / ')}`,
 				// 'grid-column': `${widget.column.join(' / ')}`
-				'grid-row-start': widget.y,
-				'grid-column-start': widget.x,
-				'grid-row-end': (widget.y + widget.height),
-				'grid-column-end': (widget.x + widget.width)
+				// 'grid-row-start': widget.y,
+				// 'grid-column-start': widget.x,
+				// 'grid-row-end': (widget.y + widget.height),
+				// 'grid-column-end': (widget.x + widget.width)
+
+				'grid-row': `${widget.y} / span ${widget.height}`,
+				'grid-column': `${widget.x} / span ${widget.width}`
 			}
 		},
 		toggleSelectWidget(widget, idx, bool) {
@@ -140,13 +144,12 @@ export default {
 	top: 0; bottom: 0;
 	left: 0; right: 0;
 	overflow: hidden;
-
-	grid-template-columns: repeat(var(--cols), 1fr);
-	grid-template-rows: repeat(var(--rows), 1fr);
+	/* Minmax(0, 1fr) to prevent single-width/height items from increasing the size of the area
+		note: The default for 1fr is minmax(auto, 1fr) */
+	grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+	grid-template-rows: repeat(var(--rows), minmax(0, 1fr));
 
 	padding: .75rem .5rem;
-
-	/* font-size, align-items, justify-items, gap */
 }
 
 .cell-measure {

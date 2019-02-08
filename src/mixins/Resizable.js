@@ -49,7 +49,9 @@ export default function resizable({
 			onResizeStart(e, handle) {
 				this.$_resizeOrigin = {
 					x: e.clientX,
-					y: e.clientY
+					y: e.clientY,
+					cellWidth: this.cellSize.width,
+					cellHeight: this.cellSize.height
 				}
 				this.$_resizeHandle = handle;
 				this.resizing = true;
@@ -88,11 +90,12 @@ export default function resizable({
 
 				// console.log({curWidth, maxWidth, minWidth, curX, maxX, minX, curHeight, maxHeight, minHeight, curY, maxY, minY});
 
-				const gridDeltaX = Math.round(mouseDeltaX / this.cellSize.width);
-				const gridDeltaY = Math.round(mouseDeltaY / this.cellSize.height);
+				const gridDeltaX = Math.round(mouseDeltaX / this.$_resizeOrigin.cellWidth);
+				const gridDeltaY = Math.round(mouseDeltaY / this.$_resizeOrigin.cellHeight);
 
 				if (handle.includes('left')) {
 					const clampedX = clampNum(minX, gridDeltaX, maxX);
+					console.log({ resWidth: curWidth - clampedX });
 					dx = clampedX;
 					dWidth = -clampedX;
 				} else if (handle.includes('right')) {

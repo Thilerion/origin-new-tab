@@ -1,5 +1,5 @@
 <template>
-	<div class="grid" @dblclick="toggleEditing" :class="{editing}">
+	<div class="grid" v-shortkey="['c']" @shortkey="toggleEditing" :class="{editing}">
 		<GridLines v-if="editing" />
 		
 		<BaseWidget

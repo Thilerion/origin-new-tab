@@ -3,6 +3,7 @@
 		class="widget-base"
 		:class="{
 		}"
+		@mousedown="onMoveStart"
 	>
 
 		<slot />
@@ -34,6 +35,7 @@ import Resizable from '@/mixins/Resizable';
 
 export default {
 	// mixins: [Movable({}), Resizable({})],
+	mixins: [Movable],
 	props: {
 		idx: {
 			type: Number,
@@ -66,14 +68,46 @@ export default {
 	},
 	data() {
 		return {
-			
+			showResizeHandles: false
 		}
 	},
 	computed: {
 		
 	},
 	methods: {
-		
+		convertHorPxToGrid(x) {
+			return Math.round(x / this.cellSize.width);
+		},
+		convertVerPxToGrid(y) {
+			return Math.round(y / this.cellSize.height);
+		},
+		getWidgetSize() {
+			const el = this.$el;
+			const rect = el.getBoundingClientRect();
+			return {
+				left: rect.left,
+				right: rect.right,
+				top: rect.top,
+				bottom: rect.bottom
+			};
+		},
+		getWidgetPlaceOnGrid() {
+			return {
+				x: this.widget.x,
+				y: this.widget.y,
+				width: this.widget.width,
+				height: this.widget.height,
+
+				left: this.widget.x,
+				right: this.widget.x + this.widget.width,
+				top: this.widget.y,
+				bottom: this.widget.y + this.widget.height
+			}
+		},
+
+		updateWidgetMovement(x, y) {
+			this.$store.commit('setWidgetPosition', {idx: this.idx, x, y});
+		}
 	},
 	filters: {
 		removeWidgetStr(val) {

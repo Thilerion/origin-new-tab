@@ -22,27 +22,23 @@ export const gridModule = {
 	},
 
 	mutations: {
-		setGridWidgetDimensions(state, {
-			idx,
-			options
-		}) {
-			const w = state.gridWidgets[idx];
-			if (!w) {
-				console.error("Widget does not exist with index: ", idx);
+		setWidgetPosition(state, { idx, x, y }) {
+			if (idx == null || x == null || y == null) {
+				console.warn(`[GridStore]: missing values in setWidgetPosition mutation.`, { idx, x, y });
+				return;
+			} else if (x < 1 || y < 1 || x > state.cols + 1 || y > state.rows + 1) {
+				console.warn(`[GridStore]: values out of bounds in setWidgetPosition mutation.`, { idx, x, y });
 				return;
 			}
 
-			for (const option in options) {
-				if (w[option] != null) {
-					w[option] = options[option];
-				} else {
-					console.warn(`Widget does not have option "${option}"...`);
-				}
-			}
+			const w = state.gridWidgets[idx];
+			w.x = x;
+			w.y = y;
+			console.log('Mutation widget position to:', { x, y });
 		}
 	},
 
 	actions: {
-
+		
 	}
 }

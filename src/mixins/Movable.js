@@ -1,112 +1,101 @@
-export default function movable({
-	isMovable = true
-}) {
-	return {
-		data() {
-			return {
-				moveDelta: {
-					x: 0,
-					y: 0
-				},
-				moving: false
-			}
-		},
-		beforeDestroy() {
-			this.removeMoveListeners();
-		},
-		computed: {
-			maxDeltaX() {
-				return (this.gridSize.x + this.gridSize.width) - (this.widgetPos.x + this.widgetPos.width);
-			},
-			minDeltaX() {
-				return -(this.widgetPos.x - this.gridSize.x);
-			},
-			maxDeltaY() {
-				return (this.gridSize.y + this.gridSize.height) - (this.widgetPos.y + this.widgetPos.height);
-			},
-			minDeltaY() {
-				return -(this.widgetPos.y - this.gridSize.y);
-			},
-
-			trueMoveDeltaX() {
-				if (this.moveDelta.x < 0) {
-					return Math.max(this.moveDelta.x, this.minDeltaX);
-				} else if (this.moveDelta.x > 0) {
-					return Math.min(this.moveDelta.x, this.maxDeltaX);
-				}
-				return 0;
-			},
-			trueMoveDeltaY() {
-				if (this.moveDelta.y < 0) {
-					return Math.max(this.moveDelta.y, this.minDeltaY);
-				} else if (this.moveDelta.y > 0) {
-					return Math.min(this.moveDelta.y, this.maxDeltaY);
-				}
-				return 0;
-			},
-			trueMoveRows() {
-				return Math.round(this.trueMoveDeltaY / this.cellSize.height);
-			},
-			trueMoveCols() {
-				return Math.round(this.trueMoveDeltaX / this.cellSize.width);
-			},
-			trueMove() {
-				return {
-					x: this.trueMoveCols,
-					y: this.trueMoveRows
-				}
-			}
-		},
-		methods: {
-			onMoveStart(e) {
-				this.$_moveOrigin = {
-					x: e.clientX,
-					y: e.clientY
-				};
-				console.log('on move start from origin:', this.$_moveOrigin);
-				this.moving = true;
-				this.addMoveListeners();
-			},
-			onMoveUpdate(e) {
-				const dx = e.clientX - this.$_moveOrigin.x;
-				const dy = e.clientY - this.$_moveOrigin.y;
-				this.moveDelta = {
-					x: dx,
-					y: dy
-				}
-			},
-			onMoveEnd(e) {
-				this.onMoveUpdate(e);
-				this.removeMoveListeners();
-				console.log(`Total amount moved was: `, { ...this.moveDelta });
-				this.moveDelta = {
-					x: 0,
-					y: 0
-				}
-				this.getWidgetSize();
-				// to prevent click/select widget event from firing
-				setTimeout(() => {
-					this.moving = false;
-				}, 0);
-			},
-
-			addMoveListeners() {
-				window.addEventListener('mousemove', this.onMoveUpdate);
-				window.addEventListener('mouseup', this.onMoveEnd);
-			},
-
-			removeMoveListeners() {
-				window.removeEventListener('mousemove', this.onMoveUpdate);
-				window.removeEventListener('mouseup', this.onMoveEnd);
-			}
-		},
-		watch: {
-			trueMove(newValue, oldValue) {
-				if (newValue.x === oldValue.x && newValue.y === oldValue.y) {
-					return;
-				}
-				this.updateWidgetGridPosition(newValue);
+export default {
+	data() {
+		return {
+			initialPlaceOnGrid: {
+				...this.getWidgetPlaceOnGrid()
 			}
 		}
+	},
+	methods: {
+		onMoveStart(e) {
+			if (!this.editing) {
+				return;
+			}
+			if (!this.selected) {
+				this.$emit('selectWidget', true);
+			}
+
+			this.initialPlaceOnGrid = this.getWidgetPlaceOnGrid();
+
+			this.$_moveOrigin = {
+				x: e.clientX,
+				y: e.clientY
+			};
+			console.log("Started moving.");
+
+			this.createMoveListeners();
+		},
+		onMoveUpdate(e) {
+			if (!this.editing) {
+				this.removeMoveListeners();
+				return;
+			}
+
+			const dx = e.clientX - this.$_moveOrigin.x;
+			const dy = e.clientY - this.$_moveOrigin.y;
+
+			// Snap move amounts to grid
+			const dxGrid = this.convertHorPxToGrid(dx);
+			const dyGrid = this.convertVerPxToGrid(dy);
+
+			// If no movement is found, don't bother calculating the rest
+			if (!dxGrid && !dyGrid) {
+				return;
+			}
+
+			const clamped = this.validateMoveAmount(dxGrid, dyGrid);
+			
+			const newPos = {
+				x: this.initialPlaceOnGrid.x + clamped.dx,
+				y: this.initialPlaceOnGrid.y + clamped.dy
+			};
+
+			this.updateWidgetMovement(newPos.x, newPos.y);
+		},
+		onMoveEnd(e) {
+			// TODO: reset move delta?
+
+			this.onMoveUpdate(e);
+			this.removeMoveListeners();
+		},
+
+		validateMoveAmount(dxGrid, dyGrid) {
+			const dyMin = 1 - this.initialPlaceOnGrid.top;
+			const dxMin = 1 - this.initialPlaceOnGrid.left;
+
+			const dyMax = (this.$store.state.grid.rows + 1) - this.initialPlaceOnGrid.bottom;
+			const dxMax = (this.$store.state.grid.cols + 1) - this.initialPlaceOnGrid.right;
+
+			const clamped = {};
+
+			if (dxGrid < dxMin) {
+				clamped.dx = dxMin;
+			} else if (dxGrid > dxMax) {
+				clamped.dx = dxMax;
+			} else {
+				clamped.dx = dxGrid;
+			}
+			if (dyGrid < dyMin) {
+				clamped.dy = dyMin;
+			} else if (dyGrid > dyMax) {
+				clamped.dy = dyMax;
+			} else {
+				clamped.dy = dyGrid;
+			}
+
+			return clamped;
+		},
+
+		createMoveListeners() {
+			window.addEventListener('mousemove', this.onMoveUpdate);
+			window.addEventListener('mouseup', this.onMoveEnd);
+		},
+		removeMoveListeners() {
+			window.removeEventListener('mousemove', this.onMoveUpdate);
+			window.removeEventListener('mouseup', this.onMoveEnd);
+		}
+	},
+	beforeDestroy() {
+		this.removeMoveListeners();
 	}
 }

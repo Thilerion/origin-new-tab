@@ -76,15 +76,18 @@ export default {
 			this.updateWidgetMovement(newPos.x, newPos.y);
 		},
 		onMoveEnd(e) {
-			// TODO: reset move delta?
-
 			const { x, y } = this.initialPlaceOnGrid;
 			const before = { x, y };
 			const after = { x: this.widget.x, y: this.widget.y };
 			const delta = { x: after.x - before.x, y: after.y - before.y };
 
-			console.log(`Widget "${this.widget.name}" was moved:`);
-			console.table({before, after, delta});
+			// only log if changes made
+			if (delta.x || delta.y) {
+				console.log(`Widget "${this.widget.name}" was moved:`);
+				console.table({ before, after, delta });
+			} else {
+				console.log('Stopped moving.');
+			}
 
 			this.onMoveUpdate(e);
 			this.removeMoveListeners();

@@ -176,8 +176,13 @@ export default {
 			const before = { x, y, width, height };
 			const after = { x: s.x, y: s.y, width: s.width, height: s.height };
 
-			console.log(`Widget "${this.widget.name}" was resized:`);
-			console.table({before, after});
+			// only log if changes made
+			if (x - s.x || y - s.y || width - s.width || height - s.height) {
+				console.log(`Widget "${this.widget.name}" was resized:`);
+				console.table({ before, after });
+			} else {
+				console.log('Stopped resizing.');
+			}
 			
 			this.$nextTick(() => {
 				this.activeHandle = null;

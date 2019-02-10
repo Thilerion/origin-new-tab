@@ -22,23 +22,26 @@ export const gridModule = {
 	},
 
 	mutations: {
-		setWidgetPosition(state, { idx, x, y }) {
-			if (idx == null || x == null || y == null) {
-				console.warn(`[GridStore]: missing values in setWidgetPosition mutation.`, { idx, x, y });
-				return;
-			} else if (x < 1 || y < 1 || x > state.cols + 1 || y > state.rows + 1) {
-				console.warn(`[GridStore]: values out of bounds in setWidgetPosition mutation.`, { idx, x, y });
-				return;
-			}
-
-			const w = state.gridWidgets[idx];
-			w.x = x;
-			w.y = y;
-			console.log('Mutation widget position to:', { x, y });
+		editWidgetPosition(state, { idx, newWidget }) {
+			state.gridWidgets.splice(idx, 1, newWidget);
 		}
 	},
 
 	actions: {
-		
+		setWidgetPosition({ state, commit }, { type, idx, values = {} } = {}) {
+			const { x, y, width, height } = values;
+
+			const w = state.gridWidgets[idx];
+
+			if (type === 'move') {
+				console.log(`Moving widget (idx: ${idx}, name: ${w.name}) to [${x}, ${y}].`);
+				const newWidget = { ...w, x, y };
+				commit('editWidgetPosition', { idx, newWidget });
+			} else if (type === 'resize') {
+				console.log(`Resizing widget (idx: ${idx}, name: ${w.name}).`);
+				const newWidget = { ...w, x, y, width, height };
+				commit('editWidgetPosition', { idx, newWidget });
+			}
+		}
 	}
 }

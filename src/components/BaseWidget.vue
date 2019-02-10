@@ -24,6 +24,7 @@
 				:key="handle"
 				class="resize-handle"
 				:class="handle"
+				@mousedown.stop.prevent="onResizeStart($event, handle)"
 			></div>
 		</template>
 	</div>
@@ -35,7 +36,7 @@ import Resizable from '@/mixins/Resizable';
 
 export default {
 	// mixins: [Movable({}), Resizable({})],
-	mixins: [Movable],
+	mixins: [Movable, Resizable],
 	props: {
 		idx: {
 			type: Number,
@@ -68,11 +69,42 @@ export default {
 	},
 	data() {
 		return {
-			showResizeHandles: false
 		}
 	},
 	computed: {
-		
+		showResizeHandles() {
+			return this.editing && this.selected && this.config.canResize;
+		},
+		maxHeight() {
+			return this.config.maxHeight || this.rows;
+		},
+		maxWidth() {
+			return this.config.maxWidth || this.cols;
+		},
+		minHeight() {
+			return this.config.minHeight || this.rowStart;
+		},
+		minWidth() {
+			return this.config.minWidth || this.colStart;
+		},
+		cols() {
+			return this.$store.state.grid.cols;
+		},
+		rows() {
+			return this.$store.state.grid.rows;
+		},
+		colStart() {
+			return 1;
+		},
+		colEnd() {
+			return this.cols + 1;
+		},
+		rowStart() {
+			return 1;
+		},
+		rowEnd() {
+			return this.rows + 1;
+		}
 	},
 	methods: {
 		convertHorPxToGrid(x) {
@@ -106,7 +138,18 @@ export default {
 		},
 
 		updateWidgetMovement(x, y) {
-			this.$store.commit('setWidgetPosition', {idx: this.idx, x, y});
+			this.$store.dispatch('setWidgetPosition', {
+				type: 'move',
+				idx: this.idx,
+				values: {x, y}
+			});
+		},
+		updateWidgetSize({x, y, width, height}) {
+			this.$store.dispatch('setWidgetPosition', {
+				type: 'resize',
+				idx: this.idx,
+				values: {x, y, width, height}
+			});
 		}
 	},
 	filters: {

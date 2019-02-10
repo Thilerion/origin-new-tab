@@ -39,8 +39,10 @@ export default {
 			const dyGrid = this.convertVerPxToGrid(dy);
 
 			// If no movement is found, don't bother calculating the rest
+			// TODO: only if not continuosly updating, else moving back to original position is impossible
 			if (!dxGrid && !dyGrid) {
-				return;
+				console.log("No change in move dx and dy.");
+				// return;
 			}
 
 			const clamped = this.validateMoveAmount(dxGrid, dyGrid);

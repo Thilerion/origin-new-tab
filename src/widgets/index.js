@@ -1,11 +1,13 @@
 import * as Unsplash from './Unsplash';
 import * as Clock from './Clock';
+import * as News from './News';
 
 import standard from './_presets/standard';
 
 const WidgetTypes = {
 	Unsplash,
 	Clock,
+	News,
 	Placeholder: process.env.NODE_ENV === 'development' ? require('./_Placeholder') : undefined
 };
 

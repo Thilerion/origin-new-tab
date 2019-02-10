@@ -76,8 +76,11 @@ export default {
 	},
 	beforeCreate() {
 		register(this.$store);
-		persist(this.$store);
+		this.$_destroyStoreWatcher = persist(this.$store);
 		this.$store.dispatch('unsplash/init');
+	},
+	beforeDestroy() {
+		this.$_destroyStoreWatcher();
 	},
 	watch: {
 		errorLoading: {

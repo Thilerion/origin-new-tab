@@ -52,7 +52,7 @@ const createBaseMutations = ({
 	setDataHasLoaded(state, bool) {
 		state.dataHasLoaded = bool;
 	},
-	setData
+	setData,
 });
 
 /**

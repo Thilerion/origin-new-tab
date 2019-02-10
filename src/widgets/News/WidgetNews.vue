@@ -99,7 +99,7 @@ export default {
 	},
 	beforeCreate() {
 		register(this.$store);
-		persist(this.$store);
+		this.$_destroyStoreWatcher = persist(this.$store);
 		this.$store.dispatch('news/init');
 	},
 	beforeMount() {
@@ -107,6 +107,7 @@ export default {
 		this.startTimeout();
 	},
 	beforeDestroy() {
+		this.$_destroyStoreWatcher();
 		this.stopTimeout();
 	}
 }

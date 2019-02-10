@@ -1,7 +1,9 @@
 <template>
 	<div class="widget-news" v-if="canShow">
 		<div class="news-frame">
-			<button @click="prevArticle">&lt;</button>
+			<div class="scroll-btn-wrapper">
+				<button @click="prevArticle" class="scroll-btn">&lt;</button>
+			</div>
 			<div class="slider"
 				@mouseover="mouseover = true"
 				@mouseout="mouseover = false"
@@ -16,7 +18,9 @@
 					>{{articles[showItem].title}}</a>
 				</transition>				
 			</div>
-			<button @click="nextArticle">&gt;</button>
+			<div class="scroll-btn-wrapper">
+				<button @click="prevArticle" class="scroll-btn">&gt;</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -112,14 +116,16 @@ export default {
 .widget-news {
 	width: 100%;
 	height: 100%;
+	--bg: rgba(43, 43, 43, 0.2);
 }
 
 .news-frame {
-	background: black;
-	padding: 0.75em 0;
+	background: var(--bg);
+	background: linear-gradient(to right, transparent, var(--bg) 2rem, var(--bg) calc(100% - 2rem), transparent 100%);
+	padding: 0.25em 0;
 	width: 100%;
-
 	display: flex;
+	
 }
 
 .slider {
@@ -127,6 +133,7 @@ export default {
 	width: 100%;
 	overflow: hidden;
 	height: 2em;
+	mask-image: linear-gradient(90deg, transparent 0rem, black 2rem, black calc(100% - 2rem), transparent calc(100% - 0rem));
 }
 
 .news-item {
@@ -160,5 +167,21 @@ export default {
 .slide-right-enter {
 	transform: translateX(-100%);
 	opacity: 0.3;
+}
+
+.scroll-btn-wrapper {
+	width: 2em;
+	margin-top: -0.25em;
+	margin-bottom: -0.25em;
+	display: flex;
+}
+
+.scroll-btn {
+	all: unset;
+	font-size: 1.5em;
+	display: block;
+	line-height: 1.5em;
+	height: 1.5em;
+	margin: auto;
 }
 </style>

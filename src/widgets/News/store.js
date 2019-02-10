@@ -1,104 +1,71 @@
-import { ApiRequest } from '../common/api.service.js';
-import { mergeStoreData, createWidgetStore } from '@/utils/createWidgetStore';
+import {
+	createBaseState,
+	createBaseGetters,
+	createBaseMutations,
+	createBaseActions
+} from '../common/base-store.js';
+
+import {
+	mergeStoreData,
+	createWidgetStore
+} from '@/utils/createWidgetStore';
 
 const STORE_NAME = 'news';
 const STORAGE_KEY = 'sp_news';
 
+// Load data from localStorage, and merge with defaults
 const storeDataDefaults = {
 	articles: []
 }
+const mergedData = mergeStoreData(storeDataDefaults, STORAGE_KEY);
+
+// Create state, using the mergedData object
+const baseState = createBaseState({ data: mergedData });
+const baseGetters = createBaseGetters({
+	apiRequestParams(state, getters, rState) {
+		const lang = rState.settings.general.language;
+		return [
+			'news',
+			'/news',
+			{ lang }
+		];
+	},
+	hasLocalStorageData(state) {
+		return state.data.articles.length > 0;
+	}
+});
+const baseMutations = createBaseMutations({
+	setData(state, arr) {
+		state.data.articles = [...arr];
+	}
+});
+const baseActions = createBaseActions({
+	finishInit({commit}, success) {
+		commit('setDataHasLoaded', !!success);
+		commit('setFinishedLoading', true);
+	},
+	setApiData({ commit }, { data, expires }) {
+		commit('setData', data);
+		commit('setExpires', expires);
+	}
+})
 
 const baseStore = {
 	namespaced: true,
 	state: {
-		data: {},
-		expires: null,
-
-		finishedLoading: false,
-		dataHasLoaded: false
+		...baseState
 	},
 	getters: {
-		hasExpired: state => (state.expires - Date.now() < 0),
-
-		apiRequestParams(state, getters, rState) {
-			const lang = rState.settings.general.language;
-			return [
-				'news',
-				'/news',
-				{ lang }
-			];
-		},
-
-		showComponent(state) {
-			return state.finishedLoading && state.dataHasLoaded;
-		},
-		errorLoading(state) {
-			return state.finishedLoading && !state.dataHasLoaded;
-		}
+		...baseGetters
 	},
 	mutations: {
-		setArticles(state, arr) {
-			state.data.articles = [...arr];
-		},
-		setExpires(state, time) {
-			state.expires = time;
-		},
-		setFinishedLoading(state, bool) {
-			state.finishedLoading = bool;
-		},
-		setDataHasLoaded(state, bool) {
-			state.dataHasLoaded = bool;
-		}
+		...baseMutations
 	},
 	actions: {
-		async init({ state, getters, dispatch }) {
-			let hasFetched,
-				hasData;
-			
-			const hasLocalStorageData = state.data.articles.length > 0;
-			const expired = getters.hasExpired;
-
-			if (hasLocalStorageData) {
-				if (expired) {
-					hasFetched = await dispatch('fetchApiData');
-				} else if (!expired) {
-					hasFetched = true;
-				}
-				hasData = true;
-			} else {
-				hasFetched = await dispatch('fetchApiData');
-				if (hasFetched) {
-					hasData = true;
-				} else {
-					hasData = false;
-				}
-			}
-			dispatch('finishInit', await hasData);
-		},
-		finishInit({commit}, success) {
-			commit('setDataHasLoaded', !!success);
-			commit('setFinishedLoading', true);
-		},
-		async fetchApiData({ dispatch }) {
-			try {
-				const response = await dispatch('makeRequest');
-				const { data, expires } = response;
-				dispatch('setApiData', { data, expires });
-			} catch (e) {
-				return false;
-			}
-		},
-		makeRequest({ getters }) {
-			return ApiRequest(...getters.apiRequestParams);
-		},
-		setApiData({ commit }, { data, expires }) {
-			commit('setArticles', data);
-			commit('setExpires', expires);
-		}
-	}
+		...baseActions
+	},
 }
 
-const mergedData = mergeStoreData(storeDataDefaults, STORAGE_KEY);
 const { register, persist } = createWidgetStore(
 	baseStore,
 	mergedData,

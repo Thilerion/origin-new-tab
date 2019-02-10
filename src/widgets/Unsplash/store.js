@@ -1,5 +1,14 @@
-import { ApiRequest } from '../common/api.service.js';
-import { mergeStoreData, createWidgetStore } from '@/utils/createWidgetStore';
+import {
+	createBaseState,
+	createBaseGetters,
+	createBaseMutations,
+	createBaseActions
+} from '../common/base-store.js';
+
+import {
+	mergeStoreData,
+	createWidgetStore
+} from '@/utils/createWidgetStore';
 
 const STORE_NAME = 'unsplash';
 const STORAGE_KEY = 'sp_unsplash';
@@ -21,33 +30,61 @@ const storeDataDefaults = {
 	// Reason is to prevent trying to load new wallpapers when there are none
 	lastArrayChangeAmount: null
 };
+const mergedData = mergeStoreData(storeDataDefaults, STORAGE_KEY);
+
+const baseState = createBaseState({
+	data: mergedData
+});
+const baseGetters = createBaseGetters({
+	apiRequestParams(state, getters, rState) {
+		const collection = rState.settings.unsplash.collection;
+		const lang = rState.settings.general.language;
+		return [
+			'unsplash',
+			`/wallpapers/${collection}`,
+			{ lang }
+		];
+	},
+	hasLocalStorageData(state) {
+		return state.data.wallpapers.length > 0;
+	}
+});
+const baseMutations = createBaseMutations({
+	setData(state, arr) {
+		state.data.wallpapers = [...arr];
+		state.data.lastArrayChange = Date.now();
+	}
+});
+const baseActions = createBaseActions({
+	finishInit({ dispatch, commit }, success) {		
+		// Check if refreshInterval has passed since lastCurrentIdxChange, if next wallpaper should be loaded
+		dispatch('checkRefreshInterval');
+
+		commit('setDataHasLoaded', !!success);
+		commit('setFinishedLoading', true);
+	},
+	setApiData({ commit }, { data, expires }) {
+		commit('setData', data);
+		commit('setExpires', expires);
+
+		commit('setCurrentIdx', 0);
+		commit('setLastArrayChangeAmount', data.length);
+
+		commit('setFinishedLoading', true);
+		commit('setDataHasLoaded', true);
+	},
+});
 
 const baseStore = {
 	namespaced: true,
 	state: {
-		data: {},
-		expires: null,
-
-		finishedLoading: false,
-		dataHasLoaded: false
+		...baseState
 	},
 	getters: {
-		hasExpired: state => (state.expires - Date.now() < 0),
-
+		...baseGetters,
 		refreshInterval(state, getters, rState) {
 			return rState.settings.unsplash.refreshInterval;
 		},
-
-		apiRequestParams(state, getters, rState) {
-			const collection = rState.settings.unsplash.collection;
-			const lang = rState.settings.general.language;
-			return [
-				'unsplash',
-				`/wallpapers/${collection}`,
-				{ lang }
-			];
-		},
-
 		currentWallpaper: state => {
 			if (state.data.wallpapers.length) {
 				return state.data.wallpapers[state.data.currentIdx];
@@ -64,23 +101,10 @@ const baseStore = {
 			const nextIdx = getters.nextWallpaperIdx;
 			if (nextIdx == null) return;
 			return state.data.wallpapers[nextIdx];
-		},
-
-		showComponent(state) {
-			return state.finishedLoading && state.dataHasLoaded;
-		},
-		errorLoading(state) {
-			return state.finishedLoading && !state.dataHasLoaded;
 		}
 	},
 	mutations: {
-		setWallpapers(state, arr) {
-			state.data.wallpapers = [...arr];
-			state.data.lastArrayChange = Date.now();
-		},
-		setExpires(state, time) {
-			state.expires = time;
-		},
+		...baseMutations,
 		setCurrentIdx(state, idx) {
 			state.data.currentIdx = idx;
 			state.data.lastCurrentIdxChange = Date.now();
@@ -88,107 +112,25 @@ const baseStore = {
 		setLastArrayChangeAmount(state, amount) {
 			state.data.lastArrayChangeAmount = amount;
 		},
-		setFinishedLoading(state, bool) {
-			state.finishedLoading = bool;
-		},
-		setDataHasLoaded(state, bool) {
-			state.dataHasLoaded = bool;
-		}
 	},
 
 	actions: {
+		...baseActions,
 		checkRefreshInterval({state, getters, dispatch}) {
 			const refreshInterval = getters.refreshInterval;
 			const lastChange = state.data.lastCurrentIdxChange;
 
 			if (Date.now() - lastChange > refreshInterval) {
-				// console.log(`[UnsplashStore]: refresh interval has passed (${Date.now() - lastChange} > ${refreshInterval}). Loading next wallpaper now.`);
 				dispatch('goToNextWallpaper');
 			}
 		},
-
 		goToNextWallpaper({ getters, commit }) {
 			const idx = getters.nextWallpaperIdx;
 			commit('setCurrentIdx', idx);
-		},
-
-		setApiData({ commit }, { data, expires }) {
-			commit('setWallpapers', data);
-			commit('setExpires', expires);
-
-			commit('setCurrentIdx', 0);
-			commit('setLastArrayChangeAmount', data.length);
-
-			commit('setFinishedLoading', true);
-			commit('setDataHasLoaded', true);
-		},
-
-		makeRequest({ getters }) {
-			return ApiRequest(...getters.apiRequestParams);
-		},
-
-		async fetchApiData({ dispatch }) {
-			try {
-				const response = await dispatch('makeRequest');
-				const { data, expires } = response;
-				dispatch('setApiData', { data, expires });
-				return true;
-			} catch (e) {
-				// fetching was not successful
-				return false;
-			}
-		},
-
-		/**
-		 * Called by component, initiating a fetch or not
-		 */
-		async init({ state, getters, commit, dispatch }) {
-			let hasFetched;
-			let hasData;
-
-			const hasLocalStorageData = state.data.wallpapers.length > 0;
-
-			const expired = getters.hasExpired;
-			if (hasLocalStorageData) {
-				if (expired) {
-					// console.warn("Has local storage, but expired.");
-					// fetch data, but use current if it fails
-					hasFetched = await dispatch('fetchApiData');
-				} else if (!expired) {
-					// console.warn("Has local storage, and data fresh.");
-					hasFetched = true;
-				}
-				hasData = true;
-			} else if (!hasLocalStorageData) {
-				// try to fetch, no fallback possible
-				// console.warn("No local storage data");
-				hasFetched = await dispatch('fetchApiData');
-				if (hasFetched) {
-					hasData = true;
-				} else {
-					hasData = false;
-				}
-			}
-
-			dispatch('finishInit', await hasData);
-		},
-
-		/**
-		 * Called by init() action, to set the finishedLoading and dataHasLoaded things
-		 */
-		finishInit({ dispatch, commit }, success) {
-			// console.warn("Finishing init with hasData as: ", success);
-			
-			// Check if refreshInterval has passed since lastCurrentIdxChange, if next wallpaper should be loaded
-			dispatch('checkRefreshInterval');
-
-			commit('setDataHasLoaded', !!success);
-			commit('setFinishedLoading', true);
 		}
 	}
 }
 
-const mergedData = mergeStoreData(storeDataDefaults, STORAGE_KEY);
 const { register, persist } = createWidgetStore(
 	baseStore,
 	mergedData,

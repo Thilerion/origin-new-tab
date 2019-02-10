@@ -113,16 +113,6 @@ export default {
 		convertVerPxToGrid(y) {
 			return Math.round(y / this.cellSize.height);
 		},
-		getWidgetSize() {
-			const el = this.$el;
-			const rect = el.getBoundingClientRect();
-			return {
-				left: rect.left,
-				right: rect.right,
-				top: rect.top,
-				bottom: rect.bottom
-			};
-		},
 		getWidgetPlaceOnGrid() {
 			return {
 				x: this.widget.x,

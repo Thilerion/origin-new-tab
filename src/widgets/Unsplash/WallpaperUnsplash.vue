@@ -12,10 +12,14 @@
 
 <script>
 import {register, persist} from './store.js';
+
+import EnableWidgetStore from '@/mixins/EnableWidgetStore';
 import loadImage from '@/utils/loadImage';
 
 export default {
 	name: 'WallpaperUnsplash',
+	mixins: [EnableWidgetStore({
+		namespace: 'unsplash', register, persist})],
 	data() {
 		return {
 			canAnimate: false,
@@ -73,14 +77,6 @@ export default {
 		setTimeout(() => {
 			this.canAnimate = true;
 		}, 200)
-	},
-	beforeCreate() {
-		register(this.$store);
-		this.$_destroyStoreWatcher = persist(this.$store);
-		this.$store.dispatch('unsplash/init');
-	},
-	beforeDestroy() {
-		this.$_destroyStoreWatcher();
 	},
 	watch: {
 		errorLoading: {

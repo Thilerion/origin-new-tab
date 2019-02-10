@@ -139,7 +139,7 @@ export default {
 .news-item {
 	/* Padding to prevent masking */
 	padding: 0 1.25rem;
-	
+
 	display: inline-block;
 	width: 100%;
 	position: absolute;
@@ -150,6 +150,10 @@ export default {
 	white-space: nowrap;
 	overflow: hidden;
 	line-height: 2em;
+}
+
+.news-item:hover {
+	text-decoration: underline;
 }
 
 .slide-left-enter-active,
@@ -186,5 +190,6 @@ export default {
 	line-height: 1.5em;
 	height: 1.5em;
 	margin: auto;
+	cursor: pointer;
 }
 </style>

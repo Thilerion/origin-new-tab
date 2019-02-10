@@ -20,6 +20,7 @@
 			:key="`${widget.name}-${idx}`"
 			:style="getWidgetGridPlacement(widget)"
 			:selected="selectedWidget === idx"
+			:config="displayConfigs[widget.name]"
 			@selectWidget="toggleSelectWidget(widget, idx, $event)"
 		>
 
@@ -39,7 +40,7 @@ import {mapState, mapGetters} from 'vuex';
 import GridLines from './GridLines.vue';
 import BaseWidget from './BaseWidget.vue';
 
-import {gridComponents} from '@/widgets';
+import {gridComponents, displayConfigs} from '@/widgets';
 
 const roundNumber = (num, digits = 2) => {
 	const mult = 10 ** digits;
@@ -67,7 +68,8 @@ export default {
 				height: null
 			},
 
-			gridComponents
+			gridComponents,
+			displayConfigs
 		}
 	},
 	computed: {
@@ -85,15 +87,7 @@ export default {
 		},
 
 		getWidgetGridPlacement(widget) {
-			// if (widget.name === "WidgetClock" && widget.width < 2) debugger;
 			return {
-				// 'grid-row': `${widget.row.join(' / ')}`,
-				// 'grid-column': `${widget.column.join(' / ')}`
-				// 'grid-row-start': widget.y,
-				// 'grid-column-start': widget.x,
-				// 'grid-row-end': (widget.y + widget.height),
-				// 'grid-column-end': (widget.x + widget.width)
-
 				'grid-row': `${widget.y} / span ${widget.height}`,
 				'grid-column': `${widget.x} / span ${widget.width}`
 			}

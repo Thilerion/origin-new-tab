@@ -38,6 +38,7 @@ const getWidgetComponents = (widgets) => {
 	return { gridComponents: grid, wallpaperComponents: wallpaper };
 }
 
+// TODO: set default settings for when a widget is missing a setting such as minHeight
 const getWidgetDisplayConfigs = (widgets) => {
 	let widgetConfigs = Object.keys(widgets).reduce((acc, val) => {
 		const w = widgets[val] && widgets[val].displayConfig;

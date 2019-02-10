@@ -1,11 +1,7 @@
 <template>
 	<div
 		class="widget-base"
-		@mousedown="widgetMouseDownHandler($event, 'move')"
-		@click="widgetClickHandler"
 		:class="{
-			resizing,
-			moving
 		}"
 	>
 
@@ -27,10 +23,7 @@
 				:key="handle"
 				class="resize-handle"
 				:class="handle"
-				@mousedown.stop.prevent="widgetMouseDownHandler($event, 'resize', handle)"
-			>
-
-			</div>
+			></div>
 		</template>
 	</div>
 </template>
@@ -39,10 +32,8 @@
 import Movable from '@/mixins/Movable';
 import Resizable from '@/mixins/Resizable';
 
-import { displayConfigs } from '@/widgets';
-
 export default {
-	mixins: [Movable({}), Resizable({})],
+	// mixins: [Movable({}), Resizable({})],
 	props: {
 		idx: {
 			type: Number,
@@ -67,118 +58,22 @@ export default {
 		cellSize: {
 			type: Object,
 			required: true
+		},
+		config: {
+			type: Object,
+			required: true
 		}
 	},
 	data() {
 		return {
-			widgetPos: {
-				x: null,
-				y: null,
-				width: null,
-				height: null
-			},
-			displayConf: {}
+			
 		}
 	},
 	computed: {
-		originalRowStart() {
-			const delta = this.widgetPos.y - this.gridSize.y;
-			return 1 + (Math.round(delta / this.cellSize.height));
-		},
-		originalColStart() {
-			const delta = this.widgetPos.x - this.gridSize.x;
-			return 1 + (Math.round(delta / this.cellSize.width));
-		},
-
-		initialGridPos() {
-			const {x, y, width, height} = this.widgetPos;
-			if (x == null || y == null) {
-				const inStore = this.$store.state.grid.gridWidgets[this.idx];
-				return {x: inStore.x, y: inStore.y, width: inStore.width, height: inStore.height};
-			}
-			return {
-				x: Math.round(x / this.cellSize.width) + 1,
-				y: Math.round(y / this.cellSize.height) + 1,
-				width: Math.round(width / this.cellSize.width),
-				height: Math.round(height / this.cellSize.height)
-			};
-		},
-
-		showResizeHandles() {
-			// TODO: and only if canResize is true on widget config
-			return this.selected && !!this.resizeHandles && Array.isArray(this.resizeHandles);
-		}
+		
 	},
 	methods: {
-		widgetMouseDownHandler(e, action, handle) {
-			if (!this.selected && !!this.editing) {
-				console.log('Widget mousedown not triggered because widget not selected.');
-				return;
-			} else if (!this.editing) {
-				console.log('Widget mousedown not triggered because not in editing mode.');
-				return;
-			}
-
-			if (action === 'move') {
-				this.onMoveStart(e);
-				return false;
-			} else if (action === 'resize' && !!handle) {
-				this.onResizeStart(e, handle);
-				return false;
-			} else {
-				console.error('Widget mousedown not triggered; no valid action.', {action, handle});
-			}
-		},
-		widgetClickHandler(e) {
-			if (!this.editing) {
-				console.log("No select action; not in editing mode.");
-			} else if (!this.selected) {
-				console.log("Selecting...");
-				this.$emit('selectWidget', true);
-			} else if (this.selected && !this.resizing && !this.moving) {
-				console.log("Deselecting...");
-				this.$emit('selectWidget', false);
-			} else {
-				console.log("No select action; widget is moving or resizing.");
-			}
-		},
-		getWidgetSize() {
-			const el = this.$el;
-			const rect = el.getBoundingClientRect();
-			this.widgetPos = {
-				x: rect.x,
-				y: rect.y,
-				width: rect.width,
-				height: rect.height
-			}
-		},
-		updateWidgetGridPosition({x, y}) {
-			console.log({x, y});
-			this.$store.commit('setGridWidgetDimensions', {
-				idx: this.idx,
-				options: {
-					x: this.originalColStart + x,
-					y: this.originalRowStart + y
-				}
-			})
-		},
-		updateWidgetGridSize({x, y, width, height}) {
-			this.$store.commit('setGridWidgetDimensions', {
-				idx: this.idx,
-				options: {
-					x,
-					y,
-					width,
-					height
-				}
-			})
-		}
-	},
-	mounted() {
-		this.getWidgetSize();
-	},
-	created() {
-		this.displayConf = displayConfigs[this.widget.name];
+		
 	},
 	filters: {
 		removeWidgetStr(val) {

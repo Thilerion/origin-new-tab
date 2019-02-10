@@ -137,6 +137,9 @@ export default {
 }
 
 .news-item {
+	/* Padding to prevent masking */
+	padding: 0 1.25rem;
+	
 	display: inline-block;
 	width: 100%;
 	position: absolute;

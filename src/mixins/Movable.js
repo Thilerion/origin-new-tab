@@ -1,12 +1,35 @@
+import _isEqual from 'lodash.isequal';
+
 export default {
 	data() {
 		return {
 			initialPlaceOnGrid: {
 				...this.getWidgetPlaceOnGrid()
+			},
+			lastMoveDelta: {
+				x: null,
+				y: null
 			}
 		}
 	},
 	methods: {
+		hasMoveDeltaChanged(dxGrid, dyGrid) {
+			const isInitialMoveState = !dxGrid && !dyGrid && _isEqual(
+				this.initialPlaceOnGrid,
+				this.getWidgetPlaceOnGrid()
+			);
+			const equalMoveDelta = (
+				dxGrid === this.lastMoveDelta.x &&
+				dyGrid === this.lastMoveDelta.y
+			);
+
+			if (isInitialMoveState || equalMoveDelta) {
+				return false;
+			} else {
+				this.lastMoveDelta = { x: dxGrid, y: dyGrid };
+				return true;
+			}
+		},
 		onMoveStart(e) {
 			if (!this.editing) {
 				return;
@@ -39,10 +62,8 @@ export default {
 			const dyGrid = this.convertVerPxToGrid(dy);
 
 			// If no movement is found, don't bother calculating the rest
-			// TODO: only if not continuosly updating, else moving back to original position is impossible
-			if (!dxGrid && !dyGrid) {
-				console.log("No change in move dx and dy.");
-				// return;
+			if (!this.hasMoveDeltaChanged(dxGrid, dyGrid)) {
+				return;
 			}
 
 			const clamped = this.validateMoveAmount(dxGrid, dyGrid);
@@ -56,6 +77,14 @@ export default {
 		},
 		onMoveEnd(e) {
 			// TODO: reset move delta?
+
+			const { x, y } = this.initialPlaceOnGrid;
+			const before = { x, y };
+			const after = { x: this.widget.x, y: this.widget.y };
+			const delta = { x: after.x - before.x, y: after.y - before.y };
+
+			console.log(`Widget "${this.widget.name}" was moved:`);
+			console.table({before, after, delta});
 
 			this.onMoveUpdate(e);
 			this.removeMoveListeners();

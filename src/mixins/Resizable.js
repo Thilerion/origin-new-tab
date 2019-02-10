@@ -7,7 +7,7 @@ export default {
 			initialPlaceOnGrid: {
 				...this.getWidgetPlaceOnGrid()
 			},
-			lastGridDelta: {
+			lastResizeDelta: {
 				x: null,
 				y: null
 			}
@@ -17,6 +17,23 @@ export default {
 
 	},
 	methods: {
+		hasResizeDeltaChanged(dxGrid, dyGrid) {
+			const isInitialResizeState = !dxGrid && !dyGrid && _isEqual(
+				this.initialPlaceOnGrid,
+				this.getWidgetPlaceOnGrid()
+			);
+			const equalResizeDelta = (
+				dxGrid === this.lastResizeDelta.x &&
+				dyGrid === this.lastResizeDelta.y
+			);
+
+			if (isInitialResizeState || equalResizeDelta) {
+				return false;
+			} else {
+				this.lastResizeDelta = { x: dxGrid, y: dyGrid };
+				return true;
+			}
+		},
 		onResizeStart(e, handle) {
 			this.activeHandle = handle;
 
@@ -44,13 +61,8 @@ export default {
 			const dyGrid = this.convertVerPxToGrid(dyMouse);
 
 			// If no resize is found, don't bother calculating the rest
-			// TODO: only if not continuosly updating, else resizing back to original size is impossible
-			const isInitialResizeState = (!dxGrid && !dyGrid && _isEqual(this.initialPlaceOnGrid, this.getWidgetPlaceOnGrid()));
-
-			if (isInitialResizeState || (dxGrid === this.lastGridDelta.x && dyGrid === this.lastGridDelta.y)) {
+			if (!this.hasResizeDeltaChanged(dxGrid, dyGrid)) {
 				return;
-			} else {
-				this.lastGridDelta = { x: dxGrid, y: dyGrid };
 			}
 			
 			const dEdges = this.getEdgeDelta(dxGrid, dyGrid);
@@ -96,16 +108,7 @@ export default {
 				height: initPos.height + dHeight
 			};
 
-			if (newPos.x === this.widget.x &&
-				newPos.y === this.widget.y &&
-				newPos.width === this.widget.width &&
-				newPos.height === this.widget.height) {
-				console.log("Values are the same");
-				return;
-
-			} else {
-				this.updateWidgetSize(newPos);
-			}
+			this.updateWidgetSize(newPos);
 		},
 
 		validateLeftEdge(dLeft, origLeft, maxWidth, minWidth, origWidth) {
@@ -166,7 +169,15 @@ export default {
 			this.onResizeUpdate(e);
 
 			this.removeResizeListeners();
-			console.log("Stopped resizing.");
+
+			const { x, y, width, height } = this.initialPlaceOnGrid;
+			const s = this.widget;
+			
+			const before = { x, y, width, height };
+			const after = { x: s.x, y: s.y, width: s.width, height: s.height };
+
+			console.log(`Widget "${this.widget.name}" was resized:`);
+			console.table({before, after});
 			
 			this.$nextTick(() => {
 				this.activeHandle = null;

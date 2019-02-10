@@ -34,11 +34,9 @@ export const gridModule = {
 			const w = state.gridWidgets[idx];
 
 			if (type === 'move') {
-				console.log(`Moving widget (idx: ${idx}, name: ${w.name}) to [${x}, ${y}].`);
 				const newWidget = { ...w, x, y };
 				commit('editWidgetPosition', { idx, newWidget });
 			} else if (type === 'resize') {
-				console.log(`Resizing widget (idx: ${idx}, name: ${w.name}).`);
 				const newWidget = { ...w, x, y, width, height };
 				commit('editWidgetPosition', { idx, newWidget });
 			}

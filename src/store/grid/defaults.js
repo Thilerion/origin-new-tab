@@ -5,19 +5,20 @@ const standardPreset = presets.standard;
 // For each in array, check if the widget exists
 // If it does, use it as default, else use the absolute default
 const defaultWallpaperWidgets = [
-	'WallpaperUnsplash'
+	'WallpaperUnsplash',
+	'WallpaperDefault'
 ];
 
-// Use this wallpaper widget if none of the others is available
-const absoluteDefaultWallpaperWidgets = 'WallpaperDefault';
-
 export function getDefaultWallpaperWidget(availWidgets) {
-	for (let i = 0; i < defaultWallpaperWidgets.length; i++) {
+	const n = defaultWallpaperWidgets.length;
+
+	for (let i = 0; i < n - 1; i++) {
 		if (availWidgets.includes(defaultWallpaperWidgets[i])) {
 			return defaultWallpaperWidgets[i];
 		}
 	}
-	return absoluteDefaultWallpaperWidgets;
+	// Move WallpaperDefault if all others unavailable
+	return defaultWallpaperWidgets[n - 1];
 }
 
 export function getDefaultGridPreset(availWidgets) {

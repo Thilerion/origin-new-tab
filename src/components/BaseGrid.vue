@@ -90,12 +90,7 @@ export default {
 			gridOrder: state => state.grid.gridOrder
 		}),
 		sortedGridWidgets() {
-			const arr = [];
-			for (let i = 0; i < this.gridOrder.length; i++) {
-				const uid = this.gridOrder[i];
-				arr.push(this.gridWidgets.find(w => w.uid === uid));
-			}
-			return arr;
+			return this.gridOrder.map(uid => this.gridWidgets.find(w => w.uid === uid));
 		}
 	},
 	methods: {

@@ -8,7 +8,9 @@
 		@mousedown="onMoveStart"
 	>
 
-		<slot />
+		<div class="widget-overflow-wrapper">
+			<slot />
+		</div>
 
 		<div
 			class="edit-overlay"
@@ -228,6 +230,19 @@ export default {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.widget-overflow-wrapper {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.editing .widget-overflow-wrapper {
+	overflow: hidden;
 }
 
 .edit-overlay {

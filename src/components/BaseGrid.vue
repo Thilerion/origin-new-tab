@@ -221,8 +221,4 @@ export default {
 .widget {
 	user-select: none;
 }
-
-.editing .widget-base {
-	overflow: hidden;
-}
 </style>

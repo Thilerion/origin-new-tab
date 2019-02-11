@@ -18,7 +18,7 @@ const store = new Vuex.Store({
 			{ deep: true, wait: 500, maxWait: 10000, immediate: true }
 		),
 		persistModule(
-			(state) => ({ wallpaperWidget: state.grid.wallpaperWidget, gridWidgets: state.grid.gridWidgets }),
+			(state) => ({ wallpaperWidget: state.grid.wallpaperWidget, gridWidgets: state.grid.gridWidgets, gridOrder: state.grid.gridOrder }),
 			'grid',
 			gridStorageKey,
 			{ deep: true, wait: 1000, maxWait: 10000, immediate: false }

@@ -15,9 +15,8 @@ const gridComponentNames = Object.keys(gridComponents);
 const wallpaperComponentNames = Object.keys(wallpaperComponents);
 
 function validateActiveWidgets(savedState = {}) {
-	const { gridWidgets, wallpaperWidget } = (savedState || {});
+	const { gridWidgets, gridOrder, wallpaperWidget } = (savedState || {});
 
-	let gridWidgetsValid = [];
 	let wallpaperWidgetValid;
 
 	const noWallpaperWidget = !wallpaperWidget;
@@ -30,27 +29,32 @@ function validateActiveWidgets(savedState = {}) {
 		wallpaperWidgetValid = wallpaperWidget;
 	}
 
-	const validatedGridWidgets = validateGridWidgets(
+	let {
+		validatedWidgets: validatedGridWidgets,
+		validatedOrder
+	} = validateGridWidgets(
 		gridWidgets,
+		gridOrder,
 		gridComponentNames,
 		displayConfigs
 	);
 
 	if (!validatedGridWidgets) {
 		// console.warn(`[ActiveWidgets]: no valid/active grid widgets found!`);
-		gridWidgetsValid = getDefaultGridPreset(gridComponentNames);
-	} else {
-		gridWidgetsValid = [...validatedGridWidgets];
+		validatedGridWidgets = getDefaultGridPreset(gridComponentNames);
+		validatedOrder = validatedGridWidgets.map(w => w.uid);
 	}
 
 	return {
-		gridWidgets: gridWidgetsValid,
+		gridWidgets: validatedGridWidgets,
+		gridOrder: validatedOrder,
 		wallpaperWidget: wallpaperWidgetValid
 	}
 }
 
 function validateGridWidgets(
 	gridWidgets,
+	gridOrder = [],
 	componentNames,
 	displayConfigs
 ) {
@@ -83,7 +87,20 @@ function validateGridWidgets(
 		}
 	}, []);
 
-	return !!validatedWidgets.length && validatedWidgets;
+	const widgetUids = validatedWidgets.map(w => w.uid);
+
+	// Remove all widgets that no longer exist in validatedWidgets
+	const validatedOrder = gridOrder.filter(uid => widgetUids.includes(uid));
+
+	// Check if all widgetUids are in validatedOrder
+	widgetUids.forEach(uid => {
+		if (!validatedOrder.includes(uid)) {
+			// add to start of validatedOrderArray (most in the background)
+			validatedOrder.unshift(uid);
+		}
+	})
+
+	return !!validatedWidgets.length && { validatedWidgets, validatedOrder };
 }
 
 export { validateActiveWidgets };

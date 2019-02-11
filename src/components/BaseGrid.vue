@@ -222,7 +222,7 @@ export default {
 	user-select: none;
 }
 
-.editing .widget {
-	
+.editing .widget-base {
+	overflow: hidden;
 }
 </style>

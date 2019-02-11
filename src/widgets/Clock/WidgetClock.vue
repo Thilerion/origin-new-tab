@@ -61,6 +61,7 @@ export default {
 			const delay = msUntilNextMinute(this.time) + 40;
 			this.timeoutId = setTimeout(() => {
 				this.time = new Date();
+				this.startTimeout();
 			}, delay);
 		},
 		stopTimeout() {

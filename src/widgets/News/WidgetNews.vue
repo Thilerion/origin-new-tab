@@ -19,7 +19,7 @@
 				</transition>				
 			</div>
 			<div class="scroll-btn-wrapper">
-				<button @click="prevArticle" class="scroll-btn">&gt;</button>
+				<button @click="nextArticle" class="scroll-btn">&gt;</button>
 			</div>
 		</div>
 	</div>
@@ -94,10 +94,14 @@ export default {
 			if (oldValue == null) {
 				return;
 			}
-			if ((newValue < oldValue && !(newValue === 0 && oldValue === this.articles.length - 1)) || (oldValue === 0 && newValue === this.articles.length - 1)) {
+			const nArticles = this.articles.length - 1;
+
+			if (oldValue === nArticles && newValue === 0) {
+				this.slideDirection = 'left';
+			} else if (oldValue === 0 && newValue === nArticles) {
 				this.slideDirection = 'right';
 			} else {
-				this.slideDirection = 'left';
+				this.slideDirection = oldValue < newValue ? 'left' : 'right';
 			}
 		}
 	},

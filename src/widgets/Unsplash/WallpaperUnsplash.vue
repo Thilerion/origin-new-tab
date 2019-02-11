@@ -12,14 +12,15 @@
 
 <script>
 import {register, persist} from './store.js';
-
 import EnableWidgetStore from '@/mixins/EnableWidgetStore';
+
 import loadImage from '@/utils/loadImage';
 
 export default {
 	name: 'WallpaperUnsplash',
 	mixins: [EnableWidgetStore({
-		namespace: 'unsplash', register, persist})],
+		namespace: 'unsplash', register, persist
+	})],
 	data() {
 		return {
 			canAnimate: false,

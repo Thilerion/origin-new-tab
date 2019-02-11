@@ -27,9 +27,13 @@
 
 <script>
 import { register, persist } from './store.js';
+import EnableWidgetStore from '@/mixins/EnableWidgetStore';
 
 export default {
 	name: "WidgetNews",
+	mixins: [EnableWidgetStore({
+		namespace: 'news', register, persist
+	})],
 	data() {
 		return {
 			showItem: null,
@@ -97,17 +101,11 @@ export default {
 			}
 		}
 	},
-	beforeCreate() {
-		register(this.$store);
-		this.$_destroyStoreWatcher = persist(this.$store);
-		this.$store.dispatch('news/init');
-	},
 	beforeMount() {
 		this.loadRandomArticle();
 		this.startTimeout();
 	},
 	beforeDestroy() {
-		this.$_destroyStoreWatcher();
 		this.stopTimeout();
 	}
 }

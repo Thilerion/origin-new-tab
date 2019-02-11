@@ -18,13 +18,13 @@
 			:gridSize="gridSize"
 			:cellSize="gridCellSize"
 			:key="`${widget.name}-${idx}`"
-			:style="getWidgetGridPlacement(widget)"
+			:style="getWidgetGridPlacement(widget, idx)"
 			:selected="selectedWidget === idx"
 			:config="displayConfigs[widget.name]"
 			@selectWidget="toggleSelectWidget(widget, idx, $event)"
 			@updateCenterGuides="updateCenterGuides"
 			:ref="`baseWidget-${idx}`"
-			@click.native="initDetectWidgetOverlap(idx)"
+			@mousedown.native="initDetectWidgetOverlap(idx, widget.uid)"
 		>
 
 			<component
@@ -86,8 +86,17 @@ export default {
 		...mapState({
 			rows: state => state.grid.rows,
 			cols: state => state.grid.cols,
-			gridWidgets: state => state.grid.gridWidgets
-		})
+			gridWidgets: state => state.grid.gridWidgets,
+			gridOrder: state => state.grid.gridOrder
+		}),
+		sortedGridWidgets() {
+			const arr = [];
+			for (let i = 0; i < this.gridOrder.length; i++) {
+				const uid = this.gridOrder[i];
+				arr.push(this.gridWidgets.find(w => w.uid === uid));
+			}
+			return arr;
+		}
 	},
 	methods: {
 		setGridColsRows(cols, rows) {
@@ -99,7 +108,8 @@ export default {
 		getWidgetGridPlacement(widget) {
 			return {
 				'grid-row': `${widget.y} / span ${widget.height}`,
-				'grid-column': `${widget.x} / span ${widget.width}`
+				'grid-column': `${widget.x} / span ${widget.width}`,
+				'z-index': this.gridOrder.indexOf(widget.uid)
 			}
 		},
 		removeClickOutsideEvent() {

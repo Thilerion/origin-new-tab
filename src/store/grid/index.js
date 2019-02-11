@@ -24,6 +24,12 @@ export const gridModule = {
 	mutations: {
 		editWidgetPosition(state, { idx, newWidget }) {
 			state.gridWidgets.splice(idx, 1, newWidget);
+		},
+		editWidgetOrder(state, { uid, to }) {
+			const from = state.gridOrder.indexOf(uid);
+			console.log(`Moving ${uid} from ${from} to ${to}.`);
+			state.gridOrder.splice(from, 1);
+			state.gridOrder.splice(to, 0, uid);
 		}
 	},
 

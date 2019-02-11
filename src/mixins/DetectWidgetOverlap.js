@@ -8,9 +8,9 @@ export default {
 
 	},
 	methods: {
-		initDetectWidgetOverlap(idx) {
+		initDetectWidgetOverlap(idx, uid) {
 			if (this.selectedWidget === idx && this.editing) {
-				this.detectWidgetOverlap(idx);
+				this.detectWidgetOverlap(uid);
 			}
 		},
 		doesOverlap(w1, w2) {
@@ -27,8 +27,9 @@ export default {
 			);
 			return xOverlap && yOverlap;
 		},
-		detectWidgetOverlap(idx) {
-			const widgets = this.gridWidgets;
+		detectWidgetOverlap(uid) {
+			const widgets = this.sortedGridWidgets;
+			const idx = widgets.findIndex(w => w.uid === uid);
 
 			const { x: left, y: top, width, height } = widgets[idx];
 			const curWidget = {
@@ -37,6 +38,7 @@ export default {
 				right: left + width,
 				bottom: top + height
 			};
+
 
 			let highestOverlap = null;
 
@@ -47,8 +49,12 @@ export default {
 			}
 
 			if (highestOverlap) {
-				console.log("Element should be moved above ", highestOverlap);
-			} 
+				console.log({ name: widgets[idx].name, idx });
+				console.log({ name: widgets[highestOverlap].name, idx: highestOverlap });
+				// console.log("Element should be moved above ", highestOverlap);
+				const to = highestOverlap;
+				this.$store.commit('editWidgetOrder', { uid, to: to });
+			}
 		}
 	}
 }

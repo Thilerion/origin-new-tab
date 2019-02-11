@@ -24,6 +24,7 @@
 			@selectWidget="toggleSelectWidget(widget, idx, $event)"
 			@updateCenterGuides="updateCenterGuides"
 			:ref="`baseWidget-${idx}`"
+			@click.native="initDetectWidgetOverlap(idx)"
 		>
 
 			<component
@@ -42,6 +43,8 @@ import {mapState, mapGetters} from 'vuex';
 import GridLines from './GridLines.vue';
 import BaseWidget from './BaseWidget.vue';
 
+import DetectWidgetOverlap from '@/mixins/DetectWidgetOverlap.js';
+
 import {gridComponents, displayConfigs} from '@/widgets';
 
 const roundNumber = (num, digits = 2) => {
@@ -50,6 +53,7 @@ const roundNumber = (num, digits = 2) => {
 }
 
 export default {
+	mixins: [DetectWidgetOverlap],
 	components: {
 		GridLines,
 		BaseWidget

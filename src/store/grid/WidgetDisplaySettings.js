@@ -1,12 +1,17 @@
+import { createUID } from '@/utils/uid';
+
 export default class WidgetDisplaySetting {
 	constructor({
 		name,
+		uid,
 		x,
 		y,
 		width,
-		height
+		height,
 	}) {
 		this.name = name;
+		this.uid = uid;
+
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -59,11 +64,20 @@ export default class WidgetDisplaySetting {
 		return this.y >= 1 && (conf.rows == null || this.y < conf.rows);
 	}
 
+	validateUID() {
+		if (this.uid == null) {
+			console.log(`No UID detected in ${this.name}`);
+			this.uid = createUID(this.name);
+		}
+		return true;
+	}
+
 	validateSettings(componentConfig, globalConfig = {}) {
 		// override globalConfig with component-specific config
 		const conf = { ...globalConfig, ...componentConfig };
 
 		return (
+			this.validateUID() &&
 			this.validateWidth(conf) &&
 			this.validateHeight(conf) &&
 			this.validateX(conf) &&

@@ -1,4 +1,5 @@
 import { presets } from '@/widgets';
+import { createUID } from '../../utils/uid';
 const standardPreset = presets.standard;
 
 // For each in array, check if the widget exists
@@ -20,5 +21,16 @@ export function getDefaultWallpaperWidget(availWidgets) {
 }
 
 export function getDefaultGridPreset(availWidgets) {
-	return standardPreset.filter(widget => availWidgets.includes(widget.name));
+	return standardPreset.reduce((acc, widget) => { 
+		const name = widget.name;
+		if (!availWidgets.includes(name)) {
+			return acc;
+		}
+		if (!widget.uid) {
+			acc.push({ ...widget, uid: createUID(name) });
+		} else {
+			acc.push(widget);
+		}
+		return acc;
+	}, []);
 }

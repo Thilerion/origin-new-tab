@@ -62,21 +62,25 @@ function validateGridWidgets(
 	}
 
 	const validatedWidgets = gridWidgets.reduce((valid, curWidget) => {
-		const validator = new WidgetDisplaySetting(curWidget);
+		try {
+			const validator = new WidgetDisplaySetting(curWidget);
 
-		const { validComponent, name } = validator.validateName(componentNames);
-		if (!validComponent) return valid;
+			const { validComponent, name } = validator.validateName(componentNames);
+			if (!validComponent) return valid;
 
-		// FILTER OUT DEV-ONLY WIDGETS (such as placeholderWidget)
-		if (process && process.env && process.env.NODE_ENV !== 'development' && displayConfigs[name] && displayConfigs[name].DEV_ONLY) {
+			// FILTER OUT DEV-ONLY WIDGETS (such as placeholderWidget)
+			if (process && process.env && process.env.NODE_ENV !== 'development' && displayConfigs[name] && displayConfigs[name].DEV_ONLY) {
+				return valid;
+			}
+
+			const validatedSettings = validator.validateSettings(displayConfigs[name], globalConfig);
+			if (!validatedSettings) return valid;
+
+			valid.push(validatedSettings);
+			return valid;
+		} catch (e) {
 			return valid;
 		}
-
-		const validatedSettings = validator.validateSettings(displayConfigs[name], globalConfig);
-		if (!validatedSettings) return valid;
-
-		valid.push(validatedSettings);
-		return valid;
 	}, []);
 
 	return !!validatedWidgets.length && validatedWidgets;

@@ -9,7 +9,9 @@ export default {
 			lastMoveDelta: {
 				x: null,
 				y: null
-			}
+			},
+			movingActive: false,
+			setMovingActiveTimeout: null
 		}
 	},
 	methods: {
@@ -38,14 +40,19 @@ export default {
 				this.$emit('selectWidget', true);
 			}
 
-			this.initialPlaceOnGrid = this.getWidgetPlaceOnGrid();
+			// To prevent a single click from activating movingActive
+			if (!this.movingActive) {
+				this.setMovingActiveTimeout = setTimeout(() => {
+					console.log("Started moving.");
+					this.movingActive = true;
+				}, 150);
+			}
 
+			this.initialPlaceOnGrid = this.getWidgetPlaceOnGrid();
 			this.$_moveOrigin = {
 				x: e.clientX,
 				y: e.clientY
 			};
-			console.log("Started moving.");
-
 			this.createMoveListeners();
 		},
 		onMoveUpdate(e) {
@@ -76,6 +83,15 @@ export default {
 			this.updateWidgetMovement(newPos.x, newPos.y);
 		},
 		onMoveEnd(e) {
+			this.onMoveUpdate(e);
+
+			if (!this.movingActive) {
+				clearTimeout(this.setMovingActiveTimeout);
+				this.setMovingActiveTimeout = null;
+			}
+			this.movingActive = false;
+			this.removeMoveListeners();
+
 			const { x, y } = this.initialPlaceOnGrid;
 			const before = { x, y };
 			const after = { x: this.widget.x, y: this.widget.y };
@@ -85,12 +101,7 @@ export default {
 			if (delta.x || delta.y) {
 				console.log(`Widget "${this.widget.name}" was moved:`);
 				console.table({ before, after, delta });
-			} else {
-				console.log('Stopped moving.');
 			}
-
-			this.onMoveUpdate(e);
-			this.removeMoveListeners();
 		},
 
 		validateMoveAmount(dxGrid, dyGrid) {

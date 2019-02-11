@@ -6,7 +6,7 @@
 		:class="{editing}"
 		v-resize="onGridResize"
 	>
-		<GridLines v-if="editing" />
+		<GridLines v-if="editing" :showCenterGuides="showCenterGuides" />
 
 		<div class="cell-measure" v-resize="onCellResize"></div>
 		
@@ -57,6 +57,10 @@ export default {
 		return {
 			editing: false,
 			selectedWidget: null,
+			showCenterGuides: {
+				x: false,
+				y: false
+			},
 
 			gridSize: {
 				x: null,

@@ -10,7 +10,8 @@ export default {
 			lastResizeDelta: {
 				x: null,
 				y: null
-			}
+			},
+			resizingActive: false
 		}
 	},
 	computed: {
@@ -36,6 +37,7 @@ export default {
 		},
 		onResizeStart(e, handle) {
 			this.activeHandle = handle;
+			this.resizingActive = true;
 
 			this.initialPlaceOnGrid = this.getWidgetPlaceOnGrid();
 
@@ -167,6 +169,7 @@ export default {
 
 		onResizeEnd(e) {
 			this.onResizeUpdate(e);
+			this.resizingActive = false;
 
 			this.removeResizeListeners();
 

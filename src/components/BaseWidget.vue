@@ -2,6 +2,8 @@
 	<div
 		class="widget-base"
 		:class="{
+			moving: movingActive,
+			resizing: resizingActive
 		}"
 		@mousedown="onMoveStart"
 	>
@@ -168,6 +170,13 @@ export default {
 .widget-base:hover {
 	--overlay-color: rgba(230, 230, 255, 0.9);
 	--overlay-selected-color: rgba(175, 223, 255, 0.9);
+}
+
+.widget-base.moving {
+	--overlay-selected-color: rgba(169, 248, 138, 0.85);
+}
+.widget-base.resizing {
+	--overlay-selected-color: rgba(171, 138, 248, 0.85);
 }
 </style>
 

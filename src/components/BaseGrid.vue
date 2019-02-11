@@ -22,6 +22,7 @@
 			:selected="selectedWidget === idx"
 			:config="displayConfigs[widget.name]"
 			@selectWidget="toggleSelectWidget(widget, idx, $event)"
+			@updateCenterGuides="updateCenterGuides"
 			:ref="`baseWidget-${idx}`"
 		>
 
@@ -116,6 +117,7 @@ export default {
 		},
 		deselectWidgets() {
 			this.selectedWidget = null;
+			this.disableCenterGuides();
 			this.removeClickOutsideEvent();
 		},
 		toggleSelectWidget(widget, idx, bool) {
@@ -135,6 +137,12 @@ export default {
 			} else {
 				this.editing = true;
 			}
+		},
+		updateCenterGuides({x, y}) {
+			this.showCenterGuides = {x, y};
+		},
+		disableCenterGuides() {
+			this.showCenterGuides = {x: false, y: false};
 		},
 		onCellResize(rect, el) {
 			console.log("Cell resize triggered!");

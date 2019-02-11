@@ -105,6 +105,10 @@ export default {
 		},
 		rowEnd() {
 			return this.rows + 1;
+		},
+
+		manipulatingActive() {
+			return this.resizingActive || this.movingActive;
 		}
 	},
 	methods: {
@@ -134,6 +138,7 @@ export default {
 				idx: this.idx,
 				values: {x, y}
 			});
+			this.emitIfCentered(x, y, this.widget.width, this.widget.height);
 		},
 		updateWidgetSize({x, y, width, height}) {
 			this.$store.dispatch('setWidgetPosition', {
@@ -141,6 +146,43 @@ export default {
 				idx: this.idx,
 				values: {x, y, width, height}
 			});
+			this.emitIfCentered(x, y, width, height);
+		},
+		emitIfCentered(x, y, width, height) {
+			if (!this.resizingActive && !this.movingActive) {
+				return;
+			}
+
+			const evenWidth = width % 2 === 0;
+			const evenHeight = height % 2 === 0;
+
+			console.log({evenWidth, evenHeight});
+
+			let isCenteredX = false;
+			let isCenteredY = false;
+
+			if (evenWidth) {
+				const spaceLeft = x - this.colStart;
+				const spaceRight = this.colEnd - (x + width);
+				if (spaceLeft === spaceRight) isCenteredX = true;
+			}
+			if (evenHeight) {
+				const spaceTop = y - this.rowStart;
+				const spaceBottom = this.rowEnd - (y + height);
+				if (spaceTop === spaceBottom) isCenteredY = true;
+			}
+
+			this.$emit('updateCenterGuides', {x: isCenteredX, y: isCenteredY});
+		}
+	},
+	watch: {
+		manipulatingActive(newValue, oldValue) {
+			if (newValue === false && oldValue !== false) {
+				// Don't show center guides if not moving or resizing
+				this.$emit('updateCenterGuides', {x: false, y: false});
+			} else {
+				this.emitIfCentered(this.widget.x, this.widget.y, this.widget.width, this.widget.height);
+			}
 		}
 	},
 	filters: {

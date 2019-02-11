@@ -125,9 +125,11 @@ export default {
 			}
 		},
 		toggleEditing() {
-			this.editing = !this.editing;
-			if (!this.editing) {
-				this.selectedWidget = null;
+			if (this.editing) {
+				this.editing = false;
+				this.deselectWidgets();
+			} else {
+				this.editing = true;
 			}
 		},
 		onCellResize(rect, el) {

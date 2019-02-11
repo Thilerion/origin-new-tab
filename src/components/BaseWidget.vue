@@ -245,6 +245,10 @@ export default {
 	transition: all .5s ease;
 }
 
+.edit-overlay:hover {
+	cursor: pointer;
+}
+
 .edit-overlay.selected {
 	background: var(--overlay-selected-color);
 	border-color: var(--border-selected-color);

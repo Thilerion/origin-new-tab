@@ -54,6 +54,25 @@ export default {
 			if (curHour < 18) return msg[1];
 			return msg[2];
 		}
+	},
+	methods: {
+		startTimeout() {
+			// Wait until nextMinute + 40ms tolerance
+			const delay = msUntilNextMinute(this.time) + 40;
+			this.timeoutId = setTimeout(() => {
+				this.time = new Date();
+			}, delay);
+		},
+		stopTimeout() {
+			clearTimeout(this.timeoutId);
+			this.timeoutId = null;
+		}
+	},
+	beforeMount() {
+		this.startTimeout();
+	},
+	beforeDestroy() {
+		this.stopTimeout();
 	}
 }
 </script>

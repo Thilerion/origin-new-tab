@@ -22,6 +22,7 @@
 			:selected="selectedWidget === idx"
 			:config="displayConfigs[widget.name]"
 			@selectWidget="toggleSelectWidget(widget, idx, $event)"
+			:ref="`baseWidget-${idx}`"
 		>
 
 			<component
@@ -92,11 +93,35 @@ export default {
 				'grid-column': `${widget.x} / span ${widget.width}`
 			}
 		},
+		removeClickOutsideEvent() {
+			document.removeEventListener('mouseup', this.clickOutsideDeselect);
+		},
+		clickOutsideDeselect(e) {
+			let widgetWasClicked = false;
+			for (const wComp in this.$refs) {
+				const comp = this.$refs[wComp][0];
+				if (comp.$el === e.target || comp.$el.contains(e.target)) {
+					widgetWasClicked = true;
+					break;
+				}
+			}
+			if (!widgetWasClicked) {
+				console.log("Clicked outside widget. Deselecting now.");
+				this.deselectWidgets();
+			}
+		},
+		deselectWidgets() {
+			this.selectedWidget = null;
+			this.removeClickOutsideEvent();
+		},
 		toggleSelectWidget(widget, idx, bool) {
-			if (!this.editing) {
-				this.selectedWidget = null;
+			if (!this.editing || !bool || idx == null) {
+				this.deselectWidgets();
 			} else {
-				this.selectedWidget = bool ? idx : null;
+				if (this.selectedWidget == null) {
+					document.addEventListener('mouseup', this.clickOutsideDeselect);
+				}
+				this.selectedWidget = idx;
 			}
 		},
 		toggleEditing() {
@@ -127,6 +152,9 @@ export default {
 	},
 	created() {
 		this.setGridColsRows(this.cols, this.rows);
+	},
+	beforeDestroy() {
+		this.removeClickOutsideEvent();
 	}
 }
 </script>

@@ -35,7 +35,6 @@ import Movable from '@/mixins/Movable';
 import Resizable from '@/mixins/Resizable';
 
 export default {
-	// mixins: [Movable({}), Resizable({})],
 	mixins: [Movable, Resizable],
 	props: {
 		idx: {

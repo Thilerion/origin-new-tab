@@ -1,7 +1,10 @@
 import WallpaperUnsplash from './WallpaperUnsplash.vue';
+import WidgetUnsplashDetails from './WidgetUnsplashDetails.vue';
 import { REFRESH_INTERVALS } from './constants';
 
-export const gridComponents = {};
+export const gridComponents = {
+	WidgetUnsplashDetails
+};
 
 export const wallpaperComponents = {
 	WallpaperUnsplash
@@ -18,4 +21,13 @@ export const settings = {
 	}
 }
 
-export const displayConfig = {};
+export const displayConfig = {
+	WidgetUnsplashDetails: {
+		minWidth: 3,
+		maxWidth: null,
+		minHeight: 2,
+		maxHeight: 5,
+		canResize: true,
+		canMove: true
+	}
+};

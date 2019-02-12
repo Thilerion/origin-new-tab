@@ -12,5 +12,12 @@ export default [
 		width: 18,
 		y: 1,
 		height: 2,
+	},
+	{
+		name: "WidgetUnsplashDetails",
+		x: 1,
+		width: 12,
+		y: 18,
+		height: 3
 	}
 ];

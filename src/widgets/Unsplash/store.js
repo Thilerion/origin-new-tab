@@ -113,6 +113,9 @@ const store = {
 		setLastArrayChangeAmount(state, amount) {
 			state.data.lastArrayChangeAmount = amount;
 		},
+		hideWallpaper(state, id) {
+			state.data.hiddenIds.push(id);
+		}
 	},
 
 	actions: {
@@ -128,6 +131,11 @@ const store = {
 		goToNextWallpaper({ getters, commit }) {
 			const idx = getters.nextWallpaperIdx;
 			commit('setCurrentIdx', idx);
+		},
+		hideCurrentWallpaper({ getters, dispatch, commit }) {
+			const curId = getters.currentWallpaper.id;
+			dispatch('goToNextWallpaper');
+			commit('hideWallpaper', curId);
 		}
 	}
 }

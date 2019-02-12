@@ -43,7 +43,7 @@ const baseMutations = createBaseMutations({
 	}
 });
 const baseActions = createBaseActions({
-	finishInit({commit}, success) {
+	finishInit({ commit }, success) {
 		commit('setDataHasLoaded', !!success);
 		commit('setFinishedLoading', true);
 	},

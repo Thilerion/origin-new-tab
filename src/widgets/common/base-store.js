@@ -98,6 +98,7 @@ const createBaseActions = ({
 			const response = await dispatch('makeRequest');
 			const { data, expires } = response;
 			dispatch('setApiData', { data, expires });
+			return true;
 		} catch (e) {
 			return false;
 		}

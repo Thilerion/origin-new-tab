@@ -5,10 +5,11 @@ import { ApiRequest } from '../common/api.service.js';
  * @param data Default data OR localStorage merged data
  */
 const createBaseState = ({
-	data
+	data,
+	expires = null
 }) => ({
 	data,
-	expires: null,
+	expires,
 
 	finishedLoading: false,
 	dataHasLoaded: false

@@ -30,10 +30,11 @@ const storeDataDefaults = {
 	// Reason is to prevent trying to load new wallpapers when there are none
 	lastArrayChangeAmount: null
 };
-const mergedData = mergeStoreData(storeDataDefaults, STORAGE_KEY);
+const mergedState = mergeStoreData(storeDataDefaults, STORAGE_KEY);
 
 const baseState = createBaseState({
-	data: mergedData
+	data: mergedState.data,
+	expires: mergedState.expires
 });
 const baseGetters = createBaseGetters({
 	apiRequestParams(state, getters, rState) {
@@ -75,7 +76,7 @@ const baseActions = createBaseActions({
 	},
 });
 
-const baseStore = {
+const store = {
 	namespaced: true,
 	state: {
 		...baseState
@@ -132,8 +133,7 @@ const baseStore = {
 }
 
 const { register, persist } = createWidgetStore(
-	baseStore,
-	mergedData,
+	store,
 	STORE_NAME,
 	STORAGE_KEY,
 	(state) => ({ data: state[STORE_NAME].data, expires: state[STORE_NAME].expires })

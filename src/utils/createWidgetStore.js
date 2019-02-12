@@ -14,18 +14,13 @@ function mergeStoreData(dataDefaults, key) {
 	}
 
 	return {
-		state: {
-			data: { ...validatedData },
-			expires
-		}
+		data: { ...validatedData },
+		expires
 	};
 }
 
-function createWidgetStore(baseStore, toMerge, storeName, storeKey, reducerFn) {
-	const mergedState = { ...baseStore.state, ...toMerge.state };
-	const mergedStore = _merge(baseStore, { state: { ...mergedState } });
-
-	const register = registerModule(storeName, mergedStore);
+function createWidgetStore(baseStore, storeName, storeKey, reducerFn) {
+	const register = registerModule(storeName, baseStore);
 	const persist = persistModule(
 		reducerFn,
 		storeName,

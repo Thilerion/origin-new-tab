@@ -17,10 +17,13 @@ const STORAGE_KEY = 'sp_news';
 const storeDataDefaults = {
 	articles: []
 }
-const mergedData = mergeStoreData(storeDataDefaults, STORAGE_KEY);
+const mergedState = mergeStoreData(storeDataDefaults, STORAGE_KEY);
 
 // Create state, using the mergedData object
-const baseState = createBaseState({ data: mergedData });
+const baseState = createBaseState({
+	data: mergedState.data,
+	expires: mergedState.expires
+});
 const baseGetters = createBaseGetters({
 	apiRequestParams(state, getters, rState) {
 		const lang = rState.settings.general.language;
@@ -50,7 +53,7 @@ const baseActions = createBaseActions({
 	}
 })
 
-const baseStore = {
+const store = {
 	namespaced: true,
 	state: {
 		...baseState
@@ -67,8 +70,7 @@ const baseStore = {
 }
 
 const { register, persist } = createWidgetStore(
-	baseStore,
-	mergedData,
+	store,
 	STORE_NAME,
 	STORAGE_KEY,
 	(state) => ({ data: state[STORE_NAME].data, expires: state[STORE_NAME].expires })

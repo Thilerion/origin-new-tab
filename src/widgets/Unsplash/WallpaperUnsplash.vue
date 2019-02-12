@@ -1,7 +1,5 @@
 <template>
-	<transition
-		:name="transitionName"
-	>
+	<transition :name="transitionName">
 		<div
 			:style="[wallpaperStyle]"
 			:key="wallpaperSrc"
@@ -119,19 +117,16 @@ export default {
 </script>
 
 <style scoped>
-.fade-bg-enter-active {
+.fade-bg-enter-active, .fade-bg-leave-active {
 	transition: opacity 0.75s ease-in, transform 0.75s ease-out;
 }
 
-.fade-bg-leave-active {
-	transition: opacity 1s ease-in;
-}
-
-.fade-bg-enter, .fade-bg-leave-to {
+.fade-bg-leave-to {
 	opacity: 0;
 }
 
 .fade-bg-enter {
+	opacity: 0;
 	transform: scale(1.1);
 }
 </style>

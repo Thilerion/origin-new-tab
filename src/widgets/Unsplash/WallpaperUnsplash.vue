@@ -28,6 +28,8 @@ export default {
 	computed: {
 		transitionName() {
 			if (this.canAnimate) {
+				return 'fade-bg-slow';
+			} else {
 				return 'fade-bg';
 			}
 		},
@@ -118,14 +120,22 @@ export default {
 
 <style scoped>
 .fade-bg-enter-active, .fade-bg-leave-active {
-	transition: opacity 0.75s ease-in, transform 0.75s ease-out;
+	transition: opacity 0.15s ease-out;
 }
 
-.fade-bg-leave-to {
+.fade-bg-leave-to, .fade-bg-enter {
 	opacity: 0;
 }
 
-.fade-bg-enter {
+.fade-bg-slow-enter-active, .fade-bg-slow-leave-active {
+	transition: opacity 0.75s ease-in, transform 0.75s ease-out;
+}
+
+.fade-bg-slow-leave-to {
+	opacity: 0;
+}
+
+.fade-bg-slow-enter {
 	opacity: 0;
 	transform: scale(1.1);
 }

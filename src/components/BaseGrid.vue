@@ -198,7 +198,6 @@ export default {
 }
 
 .cell-measure {
-	background: white;
 	grid-row: 1 / 2;
 	grid-column: 1 / 2;
 	z-index: -100;

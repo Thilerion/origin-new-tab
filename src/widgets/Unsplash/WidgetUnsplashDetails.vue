@@ -5,18 +5,18 @@
 			<button			
 				@click="goToNextWallpaper"
 				class="icon-btn"
-			><IconSync class="icon"/></button>
+			><IconSync class="icon small"/></button>
 
 			<a :href="downloadUrl"
 				:target="downloadUrl ? '_blank' : undefined"
 				rel="noopener"
 				class="icon-btn"
-			><IconDownload class="icon"/></a>
+			><IconDownload class="icon small"/></a>
 
 			<button
 				@click="hideWallpaper"
 				class="icon-btn"
-			><IconClose class="icon"/></button>
+			><IconClose class="icon small"/></button>
 		</div>
 
 		<div class="user-info enable-select">
@@ -117,12 +117,6 @@ export default {
 }
 
 .icon-btn {
-	border-radius: 50%;
-	width: 24px;
-	height: 24px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	transition: background .15s;
 }
 
@@ -137,12 +131,5 @@ export default {
 .widget-unsplash-details:hover .controls {
 	opacity: 1;
 	transform: translateY(0);
-}
-
-.icon {
-	width: 18px;
-	height: 18px;
-	color: inherit;
-	fill: currentColor;
 }
 </style>

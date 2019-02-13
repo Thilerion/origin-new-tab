@@ -2,7 +2,7 @@
 	<div class="widget-news" v-if="canShow">
 		<div class="news-frame">
 			<div class="scroll-btn-wrapper">
-				<button @click="prevArticle" class="scroll-btn shadow-40">&lt;</button>
+				<button @click="prevArticle" class="icon-btn shadow-40"><IconArrowBack class="icon"/></button>
 			</div>
 			<div class="slider"
 				@mouseover="mouseover = true"
@@ -19,7 +19,7 @@
 				</transition>				
 			</div>
 			<div class="scroll-btn-wrapper">
-				<button @click="nextArticle" class="scroll-btn shadow-10">&gt;</button>
+				<button @click="nextArticle" class="icon-btn shadow-10"><IconArrowNext class="icon"/></button>
 			</div>
 		</div>
 	</div>
@@ -29,11 +29,18 @@
 import { register, persist } from './store.js';
 import EnableWidgetStore from '@/mixins/EnableWidgetStore';
 
+import IconArrowBack from '@/assets/icons/ui/md-arrow-prev.svg';
+import IconArrowNext from '@/assets/icons/ui/md-arrow-next.svg';
+
 export default {
 	name: "WidgetNews",
 	mixins: [EnableWidgetStore({
 		namespace: 'news', register, persist
 	})],
+	components: {
+		IconArrowBack,
+		IconArrowNext
+	},
 	data() {
 		return {
 			showItem: null,
@@ -181,18 +188,8 @@ export default {
 
 .scroll-btn-wrapper {
 	width: 2em;
-	margin-top: -0.25em;
-	margin-bottom: -0.25em;
 	display: flex;
-}
-
-.scroll-btn {
-	all: unset;
-	font-size: 1.5em;
-	display: block;
-	line-height: 1.5em;
-	height: 1.5em;
-	margin: auto;
-	cursor: pointer;
+	align-items: center;
+	justify-content: center;
 }
 </style>

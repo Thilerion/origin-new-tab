@@ -31,12 +31,20 @@ const store = new Vuex.Store({
 	},
 
 	state: {
-		
+		showSettingsOverlay: false		
 	},
 
 	getters: {},
 
-	mutations: {},
+	mutations: {		
+		setShowSettingsOverlay(state, show) {
+			if (show == null) {
+				state.showSettingsOverlay = !state.showSettingsOverlay;
+			} else {
+				state.showSettingsOverlay = show;
+			}
+		}
+	},
 
 	actions: {}
 });

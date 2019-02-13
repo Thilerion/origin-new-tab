@@ -25,7 +25,7 @@ export default {
 	},
 	computed: {
 		enableSettingsModal() {
-			return this.$store.state.settings.showSettingsOverlay;
+			return this.$store.state.showSettingsOverlay;
 		}
 	},
 	mounted() {		

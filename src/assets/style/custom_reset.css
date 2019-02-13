@@ -36,7 +36,7 @@ button {
 	font-family: inherit;
 }
 
-button.icon-btn {
+.icon-btn {
 	margin: 0;
 	padding: 0;
 	background: none;

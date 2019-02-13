@@ -2,24 +2,44 @@
 	<div class="widget-unsplash-details">
 
 		<div class="controls">
-			<button @click="goToNextWallpaper">Next</button>
+			<button			
+				@click="goToNextWallpaper"
+				class="icon-btn"
+			><IconSync class="icon"/></button>
+
 			<a :href="downloadUrl"
 				:target="downloadUrl ? '_blank' : undefined"
 				rel="noopener"
-			>DL</a>
-			<button @click="hideWallpaper">X</button>
+				class="icon-btn"
+			><IconDownload class="icon"/></a>
+
+			<button
+				@click="hideWallpaper"
+				class="icon-btn"
+			><IconClose class="icon"/></button>
 		</div>
 
 		<div class="user-info">
-			<a href="" class="user-link user-name">Michael van Meerwijk</a>
-			<a href="" class="user-link user-location">Rotterdam, Nederland</a>
+			<a v-if="userName" :href="urlUser" class="user-link user-name">Photo by {{userName}}</a>
+			<p v-if="photoLocation" class="user-link user-location">{{photoLocation}}</p>
 		</div>
 
 	</div>
 </template>
 
 <script>
+import IconSync from '@/assets/icons/ui/md-sync.svg';
+import IconDownload from '@/assets/icons/ui/md-download.svg';
+import IconClose from '@/assets/icons/ui/md-close.svg';
+
+import _get from 'lodash.get';
+
 export default {
+	components: {
+		IconSync,
+		IconDownload,
+		IconClose
+	},
 	computed: {
 		currentWallpaper() {
 			return this.$store.getters['unsplash/currentWallpaper'];
@@ -35,6 +55,15 @@ export default {
 				console.error("Could not enable the download url.", e);
 				return "";
 			}
+		},
+		urlUser() {
+			return _get(this.currentWallpaper, 'urlUser', '');
+		},
+		userName() {
+			return _get(this.currentWallpaper, 'user', '');
+		},
+		photoLocation() {
+			return _get(this.currentWallpaper, 'location', '');
 		}
 	},
 	methods: {
@@ -53,14 +82,17 @@ export default {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	padding-top: 0.5em;
+	padding-top: 0.25em;
 }
 
 .user-link {
 	text-decoration: none;
-	opacity: 0.7;
-	transition: opacity 0.15s ease;
 	line-height: 1.3;
+}
+
+.user-link {
+	opacity: 0.8;
+	transition: opacity 0.15s ease;
 }
 
 .user-link:hover {
@@ -76,5 +108,44 @@ export default {
 	font-size: 0.667em;
 	padding-top: 2px;
 	letter-spacing: 0.3px;
+}
+
+.controls {
+	transform: translateY(0.75em);
+	opacity: 0;
+	transition: all .3s ease;
+	transition-property: opacity, transform;
+	display: flex;
+}
+
+.icon-btn {
+	border-radius: 50%;
+	width: 24px;
+	height: 24px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: background .15s;
+}
+
+.icon-btn:not(:last-child) {
+	margin-right: 2px;
+}
+
+.icon-btn:hover {
+	background: rgba(255, 255, 255, 0.3);
+}
+
+.widget-unsplash-details:hover .controls {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.icon {
+	width: 18px;
+	height: 18px;
+	color: inherit;
+	fill: currentColor;
+	filter: drop-shadow(0 0 2px rgba(0,0,0,.1)) drop-shadow(1px 1px 1px rgba(0,0,0,.25));
 }
 </style>

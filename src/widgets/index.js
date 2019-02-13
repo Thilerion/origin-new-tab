@@ -14,7 +14,7 @@ const WidgetTypes = {
 const getWidgetSettings = (widgets) => {
 	const obj = {};
 	for (const [wName, wVal] of Object.entries(widgets)) {
-		if (wVal.settings != null) obj[wName] = wVal.settings;
+		if (wVal && wVal.settings) obj[wName] = wVal.settings;
 	}
 	return obj;
 }
@@ -24,6 +24,7 @@ const getWidgetComponents = (widgets) => {
 	const wallpaper = {};
 
 	for (const wName in widgets) {
+		if (!widgets[wName]) continue;
 		if (widgets[wName].gridComponents) {
 			const comps = widgets[wName].gridComponents;
 			for (const compName in comps) {

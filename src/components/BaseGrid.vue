@@ -45,7 +45,7 @@ import {mapState, mapGetters} from 'vuex';
 
 import GridLines from './GridLines.vue';
 import BaseWidget from './BaseWidget.vue';
-import SettingsButton from './SettingsButton.vue';
+import SettingsButton from './settings/SettingsButton.vue';
 
 import DetectWidgetOverlap from '@/mixins/DetectWidgetOverlap.js';
 

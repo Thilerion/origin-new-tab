@@ -2,22 +2,30 @@
 	<div id="app" :class="{ready: pageReady}">
 		<BaseBackground />
 		<BaseGrid />
+		<SettingsModal v-if="enableSettingsModal" />
 	</div>
 </template>
 
 <script>
 import BaseBackground from '@/components/BaseBackground.vue';
 import BaseGrid from '@/components/BaseGrid.vue';
+import SettingsModal from '@/components/settings/SettingsModal.vue';
 
 export default {
 	name: "app",
 	components: {
 		BaseBackground,
-		BaseGrid
+		BaseGrid,
+		SettingsModal
 	},
 	data() {
 		return {
 			pageReady: false
+		}
+	},
+	computed: {
+		enableSettingsModal() {
+			return this.$store.state.settings.showSettingsOverlay;
 		}
 	},
 	mounted() {		

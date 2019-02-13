@@ -31,7 +31,8 @@ export const settingsModule = {
 	namespaced: false,
 
 	state: {
-		...validatedSettings
+		...validatedSettings,
+		showSettingsOverlay: false
 	},
 	getters: {
 
@@ -39,6 +40,9 @@ export const settingsModule = {
 	mutations: {
 		setUsername(state, name) {
 			state.general.username = name;
+		},
+		setShowSettingsOverlay(state, show) {
+			state.showSettingsOverlay = show;
 		}
 	},
 	actions: {

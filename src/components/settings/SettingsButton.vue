@@ -1,6 +1,6 @@
 <template>
 	<div class="btn-wrapper">
-		<button class="icon-btn">
+		<button class="icon-btn" @click="openSettings">
 			<IconSettings class="icon" />
 		</button>
 	</div>
@@ -12,6 +12,11 @@ import IconSettings from '@/assets/icons/ui/md-settings.svg';
 export default {
 	components: {
 		IconSettings
+	},
+	methods: {
+		openSettings() {
+			this.$store.commit('setShowSettingsOverlay', true);
+		}
 	}
 }
 </script>

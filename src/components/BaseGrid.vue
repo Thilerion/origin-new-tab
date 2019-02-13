@@ -216,8 +216,4 @@ export default {
 	--cols: 10;
 	--rows: 5;
 }
-
-.widget {
-	user-select: none;
-}
 </style>

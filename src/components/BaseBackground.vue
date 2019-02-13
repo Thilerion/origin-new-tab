@@ -1,5 +1,5 @@
 <template>
-	<div class="background-wrapper">
+	<div class="background-wrapper" :class="{vignette: showVignette}">
 		<component
 			v-if="wallpaperComponent"
 			:is="wallpaperComponent"
@@ -22,6 +22,7 @@ export default {
 	},
 	data() {
 		return {
+			showVignette: true,
 			wallpaperError: false,
 			wallpaperComponents
 		}
@@ -72,6 +73,10 @@ export default {
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
-	/* z-index: -1; */
+}
+
+.vignette .background-image {
+	box-shadow: inset 0 0 45vmin 15vmin rgba(0, 0, 0, 0.2);
+	filter: contrast(0.9) brightness(0.95);
 }
 </style>

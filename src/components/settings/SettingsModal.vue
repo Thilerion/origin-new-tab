@@ -14,7 +14,13 @@
 			<div class="settings">
 				<nav class="settings-inner settings-nav">
 					<ul class="nav-menu">
-						
+						<li
+							v-for="cat in settingCategoryOrder"
+							:key="cat.value"
+							class="nav-item"
+							:class="{active: activeCat === cat.value}"
+							@click="activeCat = cat.value"
+						>{{cat.name}}</li>
 					</ul>
 				</nav>
 				<div class="settings-inner settings-content">
@@ -30,13 +36,27 @@ export default {
 	data() {
 		return {
 			enterDuration: 450,
-			leaveDuration: 250
+			leaveDuration: 250,
+			activeCat: 'general'
+		}
+	},
+	computed: {
+		settingsOptions() {
+			return this.$store.getters.settingsOptions;
+		},
+		settingCategoryOrder() {
+			return this.$store.getters.settingCategoryOrder.filter(val => {
+				return Object.keys(this.settingsOptions).includes(val.value);
+			});
 		}
 	},
 	methods: {
 		closeSettings() {
 			this.$store.commit('setShowSettingsOverlay', false);
 		}
+	},
+	mounted() {
+		console.log(this.settingsOptions);
 	}
 }
 </script>
@@ -91,6 +111,7 @@ export default {
 	min-width: 12.5rem;
 	max-width: 17rem;
 	flex: 1 2 25%;
+	font-size: 1.125rem;
 }
 
 .settings-content {
@@ -100,6 +121,21 @@ export default {
 
 .nav-menu {
 	list-style: none;
+}
+
+.nav-item {
+	cursor: pointer;
+	padding: 0.5rem 0.5rem;
+	line-height: 1.5rem;
+	font-weight: 600;
+	opacity: 0.65;
+	transition: .15s ease;
+	transition-property: opacity, background;
+}
+
+.nav-item:hover, .nav-item.active {
+	background: rgba(0, 0, 0, 0.05);
+	opacity: 1;
 }
 
 /* TRANSITION */

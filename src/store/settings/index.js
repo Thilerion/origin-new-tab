@@ -4,7 +4,7 @@ import { getFromStorage, saveToStorage } from '@/utils/lsHelpers';
 
 // SETTING OPTIONS
 import { general } from './generalSettings';
-import { settings } from '@/widgets';
+import { settings, settingCategoryOrder } from '@/widgets';
 
 // VALIDATE AND MERGE SETTINGS
 import { validateStoredSettings } from './createSettingsData';
@@ -34,7 +34,8 @@ export const settingsModule = {
 		...validatedSettings,
 	},
 	getters: {
-
+		settingsOptions: () => settingOptions,
+		settingCategoryOrder: () => settingCategoryOrder
 	},
 	mutations: {
 		setUsername(state, name) {

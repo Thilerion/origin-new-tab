@@ -7,9 +7,16 @@ import standard from './_presets/standard';
 const WidgetTypes = {
 	Unsplash,
 	Clock,
-	News,
-	Placeholder: process.env.NODE_ENV === 'development' ? require('./_Placeholder') : undefined
+	News
 };
+
+// TODO: allow combining of multiple widget settings in one category
+const settingCategoryOrder = [
+	{ name: 'General', value: 'general' },
+	{ name: 'Clock', value: 'clock' },
+	{ name: 'Wallpaper', value: 'unsplash' },
+	{ name: 'News', value: 'news' }
+]
 
 const getWidgetSettings = (widgets) => {
 	const obj = {};
@@ -62,4 +69,4 @@ const presets = {
 	standard
 }
 
-export { gridComponents, wallpaperComponents, settings, displayConfigs, presets };
+export { gridComponents, wallpaperComponents, settings, settingCategoryOrder, displayConfigs, presets };

@@ -35,7 +35,8 @@
 			</transition>
 
 		</BaseWidget>
-		
+
+		<SettingsButton :style="settingsButtonGrid" />		
 	</div>
 </template>
 
@@ -44,6 +45,7 @@ import {mapState, mapGetters} from 'vuex';
 
 import GridLines from './GridLines.vue';
 import BaseWidget from './BaseWidget.vue';
+import SettingsButton from './SettingsButton.vue';
 
 import DetectWidgetOverlap from '@/mixins/DetectWidgetOverlap.js';
 
@@ -58,7 +60,8 @@ export default {
 	mixins: [DetectWidgetOverlap],
 	components: {
 		GridLines,
-		BaseWidget
+		BaseWidget,
+		SettingsButton
 	},
 	data() {
 		return {
@@ -93,6 +96,12 @@ export default {
 		}),
 		sortedGridWidgets() {
 			return this.gridOrder.map(uid => this.gridWidgets.find(w => w.uid === uid));
+		},
+		settingsButtonGrid() {
+			return {
+				'grid-row': `${this.rows} / span 1`,
+				'grid-column': `${this.cols} / span 1`
+			}
 		}
 	},
 	methods: {

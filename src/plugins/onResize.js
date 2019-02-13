@@ -1,10 +1,8 @@
 import _throttle from 'lodash.throttle';
+import _debounce from 'lodash.debounce';
+import _merge from 'lodash.merge';
 
 // TODO: polyfill for firefox
-
-let ro;
-// Keep track of the callbacks for each individual element the directive is applied to
-let roCallbacks = new WeakMap();
 
 function parseOptions(opts) {
 	if (!opts.value || typeof opts.value !== 'function') {
@@ -14,13 +12,13 @@ function parseOptions(opts) {
 	return true;
 }
 
-const onResizeDirective = {
-	inserted(el, binding) {
-		
-	},
-
-	unbind(el) {
-		
+function createThrottledCallback(fn, type, options = {}) {
+	if (type === 'debounce') {
+		return _debounce(fn, options.wait, options.options);
+	} else if (type === 'throttle') {
+		return _throttle(fn, options.wait, options.options);
+	} else {
+		return fn;
 	}
 }
 
@@ -29,19 +27,25 @@ const plugin = {
 	roCallbacks: new WeakMap(),
 	
 	globalOptions: {
-		doThrottle: true,
-		throttleDuration: 500
+		throttleType: 'debounce', // debounce or throttle or null
+		throttleOpts: {
+			wait: 100,
+			options: {
+				maxWait: 1000
+			}
+		}
 	},
 
 	opts: {},
 
 	install(Vue, options = {}) {
-		const {
-			doThrottle = plugin.globalOptions.doThrottle,
-			throttleDuration = plugin.globalOptions.throttleDuration
-		} = options;
-
-		plugin.opts = { doThrottle, throttleDuration };
+		if (options.throttleType === undefined) {
+			plugin.opts = { ...plugin.globalOptions };
+		} else if (options.throttleType === null) {
+			plugin.opts = { throttleType: null };
+		} else {
+			plugin.opts = _merge(plugin.globalOptions, options);
+		}
 		
 		Vue.directive('resize', {
 
@@ -51,7 +55,8 @@ const plugin = {
 				}
 		
 				const cb = binding.value;
-				const throttledCb = plugin.opts.doThrottle ? _throttle(cb, plugin.opts.throttleDuration) : cb;
+				const throttledCb = plugin.opts.throttleType ?
+					createThrottledCallback(cb, plugin.opts.throttleType, plugin.opts.throttleOpts) : cb;
 		
 				if (!plugin.ro) {
 					plugin.ro = new ResizeObserver(entries => {

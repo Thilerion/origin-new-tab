@@ -11,8 +11,13 @@ import './assets/style/base.css';
 
 import resizeDirective from '@/plugins/onResize';
 Vue.use(resizeDirective, {
-	doThrottle: true,
-	throttleDuration: (1000 / 15)
+	throttleType: 'debounce',
+	throttleOpts: {
+		wait: 200,
+		options: {
+			maxWait: 1000
+		}
+	}
 });
 
 Vue.config.productionTip = false

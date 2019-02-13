@@ -42,7 +42,11 @@ export const settingsModule = {
 			state.general.username = name;
 		},
 		setShowSettingsOverlay(state, show) {
-			state.showSettingsOverlay = show;
+			if (show == null) {
+				state.showSettingsOverlay = !state.showSettingsOverlay;
+			} else {
+				state.showSettingsOverlay = show;
+			}
 		}
 	},
 	actions: {

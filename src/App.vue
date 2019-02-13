@@ -1,5 +1,5 @@
 <template>
-	<div id="app" :class="{ready: pageReady}">
+	<div id="app" :class="{ready: pageReady}" v-shortkey="['ctrl', ',']" @shortkey="$store.commit('setShowSettingsOverlay')">
 		<BaseBackground />
 		<BaseGrid />
 		<SettingsModal v-if="enableSettingsModal" />

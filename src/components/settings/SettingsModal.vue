@@ -5,7 +5,11 @@
 			enter: enterDuration,
 			leave: leaveDuration
 	}">
-		<div class="settings-overlay">
+		<div
+			class="settings-overlay"
+			v-shortkey="['esc']"
+			@shortkey="closeSettings"
+		>
 			<div class="lightbox" @click="closeSettings"></div>
 			<div class="settings">
 				<div class="content">

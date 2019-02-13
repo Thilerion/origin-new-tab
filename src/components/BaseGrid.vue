@@ -27,10 +27,12 @@
 			@mousedown.native="initDetectWidgetOverlap(idx, widget.uid)"
 		>
 
+			<transition name="widget-fade">
 			<component
 				class="widget"
 				:is="gridComponents[widget.name]"
 			/>
+			</transition>
 
 		</BaseWidget>
 		
@@ -207,6 +209,14 @@ export default {
 .cell-measure.double {
 	grid-row-end: 3;
 	grid-column-end: 3;
+}
+
+.widget-fade-enter-active, .widget-fade-leave-active {
+	transition: opacity .4s ease-out;
+}
+
+.widget-fade-enter, .widget-fade-leave-to {
+	opacity: 0;
 }
 </style>
 

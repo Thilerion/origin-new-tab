@@ -19,6 +19,8 @@ Vue.use(resizeDirective, {
 		}
 	}
 });
+import pageVisibilityDirective from '@/plugins/pageVisibility';
+Vue.use(pageVisibilityDirective);
 
 Vue.config.productionTip = false
 

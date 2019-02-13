@@ -5,7 +5,7 @@ import _merge from 'lodash.merge';
 // TODO: polyfill for firefox
 
 function parseOptions(opts) {
-	if (!opts.value || typeof opts.value !== 'function') {
+	if (!opts.value && typeof opts.value !== 'function') {
 		console.error(`[OnResize Directive]: value is not a function (typeof ${typeof opts.value})`);
 		return false;
 	}

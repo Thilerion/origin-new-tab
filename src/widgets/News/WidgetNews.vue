@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-news" v-if="canShow">
+	<div class="widget-news" v-if="canShow" v-page-visibility="onVisibilityChange">
 		<div class="news-frame">
 			<div class="scroll-btn-wrapper">
 				<button @click="prevArticle" class="icon-btn shadow-40"><IconArrowBack class="icon"/></button>
@@ -94,6 +94,15 @@ export default {
 		restartTimeout() {
 			this.stopTimeout();
 			this.startTimeout();
+		},
+		onVisibilityChange(visible) {
+			if (!visible) {
+				console.log("Stopping timeout. Page not visible.");
+				this.stopTimeout();
+			} else if (visible) {
+				console.log("Restarting timeout. Page is visible again.");
+				this.restartTimeout();
+			}
 		}
 	},
 	watch: {

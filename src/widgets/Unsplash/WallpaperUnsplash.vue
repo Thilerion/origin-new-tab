@@ -30,7 +30,8 @@ export default {
 			if (this.canAnimate) {
 				return 'fade-bg-slow';
 			} else {
-				return 'fade-bg';
+				// return 'fade-bg';
+				return;
 			}
 		},
 		wallpaperStyle() {

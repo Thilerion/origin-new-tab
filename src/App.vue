@@ -1,5 +1,5 @@
 <template>
-	<div id="app">
+	<div id="app" :class="{ready: pageReady}">
 		<BaseBackground />
 		<BaseGrid />
 	</div>
@@ -15,14 +15,29 @@ export default {
 		BaseBackground,
 		BaseGrid
 	},
-	computed: {
-
+	data() {
+		return {
+			pageReady: false
+		}
 	},
-	methods: {
-
+	mounted() {		
+		requestAnimationFrame(() => {
+			this.pageReady = true;
+		})
 	}
 };
 </script>
+
+<style scoped>
+#app {
+	opacity: 0;
+	transition: opacity .25s ease;
+}
+
+#app.ready {
+	opacity: 1;
+}
+</style>
 
 <style>
 .base-wallpaper {

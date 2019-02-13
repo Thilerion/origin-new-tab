@@ -12,12 +12,13 @@
 		>
 			<div class="lightbox" @click="closeSettings"></div>
 			<div class="settings">
-				<div class="content">
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus quia, quaerat consequatur, facere perferendis nisi, architecto esse cumque pariatur enim eligendi voluptate eaque suscipit ullam? Aut a magni vero repellendus.</p>
-					<p>Deleniti quae impedit ullam quis nulla incidunt laudantium distinctio, necessitatibus animi sequi praesentium aperiam. Praesentium ab iure ducimus hic. Nemo, cum assumenda deleniti magnam error nihil nobis praesentium ipsa cumque?</p>
-					<p>Reiciendis animi alias rem, asperiores ipsam sit consectetur, quos maiores quod aut doloremque ut laborum aliquam nam neque libero voluptatem. Repellat quidem, ex aperiam possimus culpa voluptatibus praesentium cumque. Quae.</p>
-					<p>Voluptatem molestiae recusandae tempore perferendis, sint maxime ipsa vel nulla dolore quam incidunt aut sunt tempora numquam labore hic illo sit, aperiam voluptatibus ut in. Quam, numquam reprehenderit? Voluptatem, reiciendis!</p>
-					<p>Cumque explicabo veritatis voluptates fugit debitis? Possimus porro odio id commodi incidunt fugit, vel pariatur? Debitis vitae amet asperiores facere. Corporis sint adipisci possimus dolores, non voluptate consequuntur eum natus!</p>
+				<nav class="settings-inner settings-nav">
+					<ul class="nav-menu">
+						
+					</ul>
+				</nav>
+				<div class="settings-inner settings-content">
+					
 				</div>
 			</div>
 		</div>
@@ -64,11 +65,10 @@ export default {
 
 .settings {
 	border-radius: 3px;
+	overflow: hidden;
 	position: relative;
 	background: #f7f7f7;
 	color: #333;
-
-	padding: 1rem;
 	
 	min-width: 50rem;
 	width: 60vw;
@@ -76,11 +76,35 @@ export default {
 
 	min-height: 25rem;
 	height: 52vh;
+
+	display: flex;
+}
+
+.settings-inner {
+	padding: 1rem;
+	overflow: auto;
+}
+
+.settings-nav {
+	background: hsl(0, 0%, 94%);
+	border-right: 1px solid rgba(0, 0, 0, 0.1);
+	min-width: 12.5rem;
+	max-width: 17rem;
+	flex: 1 2 25%;
+}
+
+.settings-content {
+	flex: 5 1 75%;
+}
+
+
+.nav-menu {
+	list-style: none;
 }
 
 /* TRANSITION */
 
-.fade-overlay-leave-to > *, .fade-overlay-enter > *, .fade-overlay-leave-to .content, .fade-overlay-enter .content {
+.fade-overlay-leave-to > *, .fade-overlay-enter > *, .fade-overlay-leave-to .settings-inner, .fade-overlay-enter .settings-inner {
 	opacity: 0;
 }
 
@@ -98,7 +122,7 @@ export default {
 	transition: opacity 0.3s ease 0.15s, transform 0.35s ease-in-out;
 }
 
-.fade-overlay-leave-active .content {
+.fade-overlay-leave-active .settings-inner {
 	transition: opacity 0.15s ease .15s;
 }
 
@@ -114,7 +138,7 @@ export default {
 	transition-property: opacity, transform;
 }
 
-.fade-overlay-leave-active .content {
+.fade-overlay-leave-active .settings-inner {
 	transition: opacity 0.15s ease-out;
 }
 </style>

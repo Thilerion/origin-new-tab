@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-unsplash-details">
+	<div class="widget-unsplash-details shadow-80">
 
 		<div class="controls">
 			<button			
@@ -19,7 +19,7 @@
 			><IconClose class="icon"/></button>
 		</div>
 
-		<div class="user-info">
+		<div class="user-info enable-select">
 			<a v-if="userName" :href="urlUser" class="user-link user-name">Photo by {{userName}}</a>
 			<p v-if="photoLocation" class="user-link user-location">{{photoLocation}}</p>
 		</div>
@@ -90,21 +90,19 @@ export default {
 	line-height: 1.3;
 }
 
-.user-link {
-	opacity: 0.8;
-	transition: opacity 0.15s ease;
-}
-
-.user-link:hover {
+.user-name:hover {
 	opacity: 1;
 }
 
 .user-name {
 	letter-spacing: 0.2px;
 	font-size: 0.875em;
+	opacity: 0.85;
+	transition: opacity 0.15s ease;
 }
 
 .user-location {
+	opacity: 0.7;
 	font-size: 0.667em;
 	padding-top: 2px;
 	letter-spacing: 0.3px;
@@ -146,6 +144,5 @@ export default {
 	height: 18px;
 	color: inherit;
 	fill: currentColor;
-	filter: drop-shadow(0 0 2px rgba(0,0,0,.1)) drop-shadow(1px 1px 1px rgba(0,0,0,.25));
 }
 </style>

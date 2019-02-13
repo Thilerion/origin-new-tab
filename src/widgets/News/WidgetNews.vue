@@ -2,7 +2,7 @@
 	<div class="widget-news" v-if="canShow">
 		<div class="news-frame">
 			<div class="scroll-btn-wrapper">
-				<button @click="prevArticle" class="scroll-btn">&lt;</button>
+				<button @click="prevArticle" class="scroll-btn shadow-40">&lt;</button>
 			</div>
 			<div class="slider"
 				@mouseover="mouseover = true"
@@ -11,7 +11,7 @@
 				<transition :name="transitionName">
 					<a v-if="showItem != null"
 						:href="articles[showItem].url"
-						class="news-item"
+						class="news-item shadow-10"
 						:key="showItem"
 						target="_blank"
 						rel="noopener"
@@ -19,7 +19,7 @@
 				</transition>				
 			</div>
 			<div class="scroll-btn-wrapper">
-				<button @click="nextArticle" class="scroll-btn">&gt;</button>
+				<button @click="nextArticle" class="scroll-btn shadow-10">&gt;</button>
 			</div>
 		</div>
 	</div>

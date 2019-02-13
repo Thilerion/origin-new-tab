@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-clock">
+	<div class="widget-clock shadow-40-wide">
 		<div class="time">{{formattedTime}}</div>
 		<div
 			class="date"

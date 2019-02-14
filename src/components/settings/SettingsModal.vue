@@ -24,7 +24,7 @@
 					</ul>
 				</nav>
 				<div class="settings-inner settings-content">
-					
+					<SettingsForm :category="activeCat" :settings="settingsOptions[activeCat]" />
 				</div>
 			</div>
 		</div>
@@ -32,7 +32,12 @@
 </template>
 
 <script>
+import SettingsForm from './SettingsForm.vue';
+
 export default {
+	components: {
+		SettingsForm
+	},
 	data() {
 		return {
 			enterDuration: 450,

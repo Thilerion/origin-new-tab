@@ -1,15 +1,24 @@
 <template>
 	<div>
-		<label for="date">Show date</label>
-		<input type="checkbox" name="date" id="date" v-model="showDate">
+		<FormToggle
+			name="date"
+			v-model="showDate"
+		>Show date</FormToggle>
 
-		<label for="greeting">Show text greeting</label>
-		<input type="checkbox" name="greeting" id="greeting" v-model="showTextGreeting">
+		<FormToggle
+			name="greeting"
+			v-model="showTextGreeting"
+		>Show text greeting</FormToggle>
 	</div>
 </template>
 
 <script>
+import FormToggle from '@/components/form/FormToggle.vue';
+
 export default {
+	components: {
+		FormToggle
+	},
 	props: {
 		settingOptions: {
 			type: Object,

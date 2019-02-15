@@ -77,7 +77,8 @@ export default class WidgetDisplaySetting {
 		if (!this.alignY) {
 			this.alignY = conf.alignY || conf.alignYDefault;
 		}
-		return conf.widgetAlignment.includes(this.alignX) && conf.widgetAlignment.includes(this.alignY);
+		// TODO: different alignment options per widget
+		return conf.alignXOptions.includes(this.alignX) && conf.alignYOptions.includes(this.alignY);
 	}
 
 	validateUID() {

@@ -21,9 +21,9 @@ export const TIME_FORMATS = [
 	'h m a'
 ];
 
-export const W_ALIGNMENTS = {
-	left: 'flex-start',
-	right: 'flex-end',
-	center: 'center',
-	stretch: 'stretch',
+export const ALIGN = {
+	start: 'align_start',
+	end: 'align_end',
+	center: 'align_center',
+	stretch: 'align_stretch',
 }

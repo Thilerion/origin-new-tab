@@ -8,7 +8,10 @@
 		@mousedown="onMoveStart"
 	>
 
-		<div class="widget-overflow-wrapper">
+		<div
+			class="widget-overflow-wrapper" 
+			:style="widgetAlignment"
+		>
 			<slot />
 		</div>
 
@@ -39,6 +42,8 @@
 <script>
 import Movable from '@/mixins/Movable';
 import Resizable from '@/mixins/Resizable';
+
+import {ALIGN} from '@/constants';
 
 export default {
 	mixins: [Movable, Resizable],
@@ -113,6 +118,25 @@ export default {
 
 		manipulatingActive() {
 			return this.resizingActive || this.movingActive;
+		},
+
+		widgetAlignment() {
+			let align, justify;
+
+			if (this.widget.alignY === ALIGN.start) align = 'flex-start';
+			else if (this.widget.alignY === ALIGN.end) align = 'flex-end';
+			else if (this.widget.alignY === ALIGN.center) align = 'center';
+			else if (this.widget.alignY === ALIGN.stretch) align = 'stretch';
+
+			if (this.widget.alignX === ALIGN.start) justify = 'flex-start';
+			else if (this.widget.alignX === ALIGN.end) justify = 'flex-end';
+			else if (this.widget.alignX === ALIGN.center) justify = 'center';
+			else if (this.widget.alignX === ALIGN.stretch) justify = 'stretch';
+
+			return {
+				'align-items': align,
+				'justify-content': justify,
+			};
 		}
 	},
 	methods: {

@@ -1,6 +1,0 @@
-export const REFRESH_INTERVALS = {
-	ALWAYS: 0,
-	MIN_30: 30 * 60 * 1000,
-	HOURLY: 1 * 60 * 60 * 1000,
-	DAILY: 20 * 60 * 60 * 1000
-};

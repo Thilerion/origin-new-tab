@@ -1,10 +1,13 @@
 import WidgetNews from './WidgetNews.vue';
+export { default as settingsComponent } from './SettingsNews.vue'
 
 export const gridComponents = {
 	WidgetNews
 };
 
 export const wallpaperComponents = {};
+
+// export const settingsComponent = SettingsNews;
 
 export const settings = {
 	slideInterval: {

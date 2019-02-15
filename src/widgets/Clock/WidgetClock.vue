@@ -4,7 +4,7 @@
 		<div
 			class="date"
 			v-if="showDate"
-		>{{formatDateLocaleString}}</div>
+		>{{formattedDate}}</div>
 		<div
 			class="greeting"
 			v-if="showTextGreeting"

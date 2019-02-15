@@ -25,9 +25,15 @@
 				</nav>
 				<div class="settings-inner settings-content">
 					<header class="settings-header">
-						<h1>{{activeCategoryName}}</h1>
+						<h1 class="settings-title">{{activeCategoryName}}</h1>
+						<button
+							@click="closeSettings"
+							class="icon-btn settings-close-btn"
+						><IconClose class="icon"/></button>
 					</header>
-					<SettingsForm :category="activeCatId" :settings="settingsOptions[activeCatId]" />
+					<main class="settings-main">
+						<SettingsForm :category="activeCatId" :settings="settingsOptions[activeCatId]" />
+					</main>
 				</div>
 			</div>
 		</div>
@@ -36,10 +42,12 @@
 
 <script>
 import SettingsForm from './SettingsForm.vue';
+import IconClose from '@/assets/icons/ui/md-close.svg';
 
 export default {
 	components: {
-		SettingsForm
+		SettingsForm,
+		IconClose
 	},
 	data() {
 		return {
@@ -121,18 +129,12 @@ export default {
 	min-width: 12.5rem;
 	max-width: 17rem;
 	flex: 1 2 25%;
-	font-size: 1.125rem;
+	font-size: 1rem;
 }
-
-.settings-content {
-	flex: 5 1 75%;	
-	padding: 1rem;
-}
-
 
 .nav-menu {
 	list-style: none;
-	padding-top: 2rem;
+	padding-top: 1rem;
 }
 
 .nav-item {
@@ -148,6 +150,36 @@ export default {
 .nav-item:hover, .nav-item.active {
 	background: rgba(0, 0, 0, 0.05);
 	opacity: 1;
+}
+
+.settings-content {
+	flex: 5 1 75%;
+}
+
+.settings-header {
+	display: flex;
+	align-items: flex-start;
+	padding: 0.75rem;
+	padding-left: 1.5rem;
+}
+
+.settings-title {
+	flex: 1;
+	font-size: 1.5rem;
+	padding-top: 0.75rem;
+}
+
+.settings-close-btn {
+	width: 32px;
+	height: 32px;
+	flex: 0 0 32px;
+}
+.settings-close-btn:hover {
+	background: rgba(0, 0, 0, 0.05);
+}
+
+.settings-main {
+	padding: 0.75rem 1.5rem;
 }
 
 /* TRANSITION */

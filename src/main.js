@@ -4,7 +4,7 @@ import store from './store'
 
 import VueShortkey from 'vue-shortkey';
 Vue.use(VueShortkey, {
-	prevent: ['input', 'textarea', 'button']
+	// prevent: ['input', 'textarea', 'button']
 });
 
 import './assets/style/base.css';
@@ -21,6 +21,9 @@ Vue.use(resizeDirective, {
 });
 import pageVisibilityDirective from '@/plugins/pageVisibility';
 Vue.use(pageVisibilityDirective);
+
+import focusDirective from '@/plugins/focus';
+Vue.use(focusDirective);
 
 import BaseFadeTransition from '@/components/BaseFadeTransition.vue';
 Vue.component('BaseFadeTransition', BaseFadeTransition);

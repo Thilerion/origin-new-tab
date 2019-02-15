@@ -7,11 +7,13 @@
 	}">
 		<div
 			class="settings-overlay"
-			v-shortkey="['esc']"
-			@shortkey="closeSettings"
 		>
 			<div class="lightbox" @click="closeSettings"></div>
-			<div class="settings">
+			<div class="settings"
+				v-focus="true"
+				v-shortkey="['esc']"
+				@shortkey="closeSettings"
+			>
 				<nav class="settings-inner settings-nav">
 					<ul class="nav-menu">
 						<li
@@ -100,6 +102,10 @@ export default {
 		const el = this.$el;
 		el.style.setProperty('--enter-dur', `${this.enterDuration}ms`);
 		el.style.setProperty('--leave-dur', `${this.leaveDuration}ms`);
+
+		document.addEventListener('keypress', (e) => {
+			console.log(e.key);
+		})
 	}
 }
 </script>
@@ -160,6 +166,10 @@ export default {
 	max-height: 27rem;
 
 	display: flex;
+}
+
+.settings:focus {
+	outline: none;
 }
 
 .settings-inner {

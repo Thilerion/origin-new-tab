@@ -22,9 +22,13 @@ import { validateStoredSettings } from './createSettingsData';
 
 export const STORAGE_KEY = 'sp_settings';
 
-const settingOptions = keysToLowerCase({ general, dashboard, ...settings });
+// The settings from localStorage that need to be validated
+const userSettingOptions = keysToLowerCase({ general, ...settings });
+// The settings from localStorage, combined with different settingOptions for the dynamic Settings components
+const settingOptions = { dashboard, ...userSettingOptions };
+
 const localSettingsData = getFromStorage(STORAGE_KEY);
-const validatedSettings = validateStoredSettings(localSettingsData, settingOptions);
+const validatedSettings = validateStoredSettings(localSettingsData, userSettingOptions);
 
 saveToStorage(STORAGE_KEY, validatedSettings);
 
@@ -35,9 +39,7 @@ export const settingsModule = {
 		...validatedSettings,
 	},
 	getters: {
-		settingsOptions: () => ({
-			...settingOptions
-		}),
+		settingsOptions: () => settingOptions,
 		settingCategoryOrder: () => [
 			{ name: 'General', value: 'general' },
 			{ name: 'Dashboard', value: 'dashboard' },

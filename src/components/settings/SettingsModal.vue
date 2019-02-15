@@ -32,7 +32,8 @@
 						><IconClose class="icon"/></button>
 					</header>
 					<main class="settings-main">
-						<SettingsForm :category="activeCatId" :settings="settingsOptions[activeCatId]" />
+						<!-- <SettingsForm :category="activeCatId" :settings="settingsOptions[activeCatId]" /> -->
+						<SettingsGeneral />
 					</main>
 				</div>
 			</div>
@@ -42,11 +43,13 @@
 
 <script>
 import SettingsForm from './SettingsForm.vue';
+import SettingsGeneral from './SettingsGeneral.vue';
 import IconClose from '@/assets/icons/ui/md-close.svg';
 
 export default {
 	components: {
 		SettingsForm,
+		SettingsGeneral,
 		IconClose
 	},
 	data() {

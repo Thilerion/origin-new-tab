@@ -5,6 +5,8 @@
 @import './custom-scrollbar.css';
 @import './input_styles.css';
 
+@import './form.css';
+
 body, html, #app {
 	background-color: black;
 }

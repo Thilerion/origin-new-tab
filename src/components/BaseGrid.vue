@@ -1,6 +1,8 @@
 <template>
+<div class="grid-wrapper">
 	<div
 		class="grid"
+		ref="grid"
 		v-shortkey="['c']"
 		@shortkey="toggleEditing"
 		:class="{editing}"
@@ -23,7 +25,7 @@
 			:config="displayConfigs[widget.name]"
 			@selectWidget="toggleSelectWidget(widget, idx, $event)"
 			@updateCenterGuides="updateCenterGuides"
-			:ref="`baseWidget-${idx}`"
+			ref="widgets"
 			@mousedown.native="initDetectWidgetOverlap(idx, widget.uid)"
 		>
 
@@ -38,12 +40,17 @@
 
 		<SettingsButton :style="settingsButtonGrid" />		
 	</div>
+	<transition name="slide">
+	<GridEditingSidebar class="grid-sidebar" :selected="gridWidgets[selectedWidget]" v-if="editing" />
+	</transition>
+</div>
 </template>
 
 <script>
 import {mapState, mapGetters} from 'vuex';
 
 import GridLines from './GridLines.vue';
+import GridEditingSidebar from './GridEditingSidebar.vue';
 import BaseWidget from './BaseWidget.vue';
 import SettingsButton from './settings/SettingsButton.vue';
 
@@ -60,6 +67,7 @@ export default {
 	mixins: [DetectWidgetOverlap],
 	components: {
 		GridLines,
+		GridEditingSidebar,
 		BaseWidget,
 		SettingsButton
 	},
@@ -123,16 +131,19 @@ export default {
 		},
 		clickOutsideDeselect(e) {
 			let widgetWasClicked = false;
-			for (const wComp in this.$refs) {
-				const comp = this.$refs[wComp][0];
+			console.log(this.$refs);
+			for (const comp of this.$refs.widgets) {
 				if (comp.$el === e.target || comp.$el.contains(e.target)) {
 					widgetWasClicked = true;
 					break;
 				}
 			}
-			if (!widgetWasClicked) {
+			console.log(this.$refs);
+			if (!widgetWasClicked && this.$refs.grid.contains(e.target)) {
 				console.log("Clicked outside widget. Deselecting now.");
 				this.deselectWidgets();
+			} else if (!widgetWasClicked) {
+				console.log("clicked outside but not in grid");
 			}
 		},
 		deselectWidgets() {
@@ -194,12 +205,29 @@ export default {
 </script>
 
 <style scoped>
-.grid {
-	display: grid;
+.grid-wrapper {
+	display: flex;
 	position: fixed;
 	top: 0; bottom: 0;
 	left: 0; right: 0;
 	overflow: hidden;
+}
+
+.grid-sidebar {
+	flex: 0 0 auto;
+}
+
+.slide-enter-active, .slide-leave-active {
+	transition: width .2s ease;
+}
+
+.slide-enter, .slide-leave-to {
+	width: 0;
+}
+
+.grid {
+	flex: 1;
+	display: grid;
 	/* Minmax(0, 1fr) to prevent single-width/height items from increasing the size of the area
 		note: The default for 1fr is minmax(auto, 1fr) */
 	grid-template-columns: repeat(var(--cols), minmax(0, 1fr));

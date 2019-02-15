@@ -32,6 +32,15 @@ export const gridModule = {
 			state.gridOrder.splice(from, 1);
 			state.gridOrder.splice(to, 0, uid);
 		},
+		editWidgetAlignment(state, { uid, dir, alignment }) {
+			//TODO: validate if possible alignment for widget
+			const idx = state.gridWidgets.findIndex(w => w.uid === uid);
+			const w = { ...state.gridWidgets[idx] };
+			const prop = dir === 'x' ? 'alignX' : 'alignY';
+			
+			w[prop] = alignment;
+			state.gridWidgets.splice(idx, 1, w);
+		},
 		setGridWidgets(state, gridWidgets) {
 			state.gridWidgets = [...gridWidgets];
 		},

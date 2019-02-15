@@ -18,13 +18,16 @@
 							v-for="cat in settingCategoryOrder"
 							:key="cat.value"
 							class="nav-item"
-							:class="{active: activeCat === cat.value}"
-							@click="activeCat = cat.value"
+							:class="{active: activeCatId === cat.value}"
+							@click="activeCatId = cat.value"
 						>{{cat.name}}</li>
 					</ul>
 				</nav>
 				<div class="settings-inner settings-content">
-					<SettingsForm :category="activeCat" :settings="settingsOptions[activeCat]" />
+					<header class="settings-header">
+						<h1>{{activeCategoryName}}</h1>
+					</header>
+					<SettingsForm :category="activeCatId" :settings="settingsOptions[activeCatId]" />
 				</div>
 			</div>
 		</div>
@@ -42,10 +45,13 @@ export default {
 		return {
 			enterDuration: 450,
 			leaveDuration: 250,
-			activeCat: 'general'
+			activeCatId: 'general'
 		}
 	},
 	computed: {
+		activeCategoryName() {
+			return this.settingCategoryOrder.find(cat => cat.value === this.activeCatId).name;
+		},
 		settingsOptions() {
 			return this.$store.getters.settingsOptions;
 		},
@@ -106,7 +112,6 @@ export default {
 }
 
 .settings-inner {
-	padding: 1rem;
 	overflow: auto;
 }
 
@@ -120,17 +125,19 @@ export default {
 }
 
 .settings-content {
-	flex: 5 1 75%;
+	flex: 5 1 75%;	
+	padding: 1rem;
 }
 
 
 .nav-menu {
 	list-style: none;
+	padding-top: 2rem;
 }
 
 .nav-item {
 	cursor: pointer;
-	padding: 0.5rem 0.5rem;
+	padding: 0.5rem 0.75rem 0.5rem 1.25rem;
 	line-height: 1.5rem;
 	font-weight: 600;
 	opacity: 0.65;

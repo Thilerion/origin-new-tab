@@ -32,8 +32,10 @@
 						><IconClose class="icon"/></button>
 					</header>
 					<main class="settings-main">
-						<!-- <SettingsForm :category="activeCatId" :settings="settingsOptions[activeCatId]" /> -->
-						<SettingsGeneral />
+						<SettingsGeneral
+							v-if="activeCatId === 'general'"
+							:settingOptions="settingsOptions.general"
+						/>
 					</main>
 				</div>
 			</div>
@@ -42,13 +44,11 @@
 </template>
 
 <script>
-import SettingsForm from './SettingsForm.vue';
 import SettingsGeneral from './SettingsGeneral.vue';
 import IconClose from '@/assets/icons/ui/md-close.svg';
 
 export default {
 	components: {
-		SettingsForm,
 		SettingsGeneral,
 		IconClose
 	},
@@ -76,9 +76,6 @@ export default {
 		closeSettings() {
 			this.$store.commit('setShowSettingsOverlay', false);
 		}
-	},
-	mounted() {
-		console.log(this.settingsOptions);
 	}
 }
 </script>

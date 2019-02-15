@@ -1,6 +1,6 @@
 <template>
-	<fieldset class="radio-group">
-		<legend class="radio-group-label">{{label}}</legend>
+	<fieldset class="radio-group form-item">
+		<legend class="radio-group-label form-label">{{label}}</legend>
 
 		<div
 			v-for="option in options"

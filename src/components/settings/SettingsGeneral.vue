@@ -16,8 +16,14 @@
 			v-model="language"
 		/>
 
-		<label for="timeFormat">Time Format</label>
-		<input type="checkbox" name="timeFormat" id="timeFormat">
+		<FormRadioGroup
+			label="Time format"
+			:options="[
+				{value: 'HH:mm', name: '24-hour'},
+				{value: 'h:mm a', name: '12-hour'}
+			]"
+			v-model="timeFormat"
+		/>
 	</div>
 </template>
 
@@ -30,20 +36,59 @@ export default {
 		FormRadioGroup,
 		FormInput,
 	},
-	data() {
-		return {
-			language: 'en',
-			username: 'Michael'
+	props: {
+		settingOptions: {
+			type: Object,
+			required: true
+		}
+	},
+	computed: {
+		settings() {
+			return this.$store.state.settings.general;
+		},
+		username: {
+			get() {
+				return this.settings.username;
+			},
+			set(value) {
+				this.updateSetting('username', value);
+			}
+		},
+		language: {
+			get() {
+				return this.settings.language;
+			},
+			set(value) {
+				this.updateSetting('language', value);
+			}
+		},
+		timeFormat: {
+			get() {
+				return this.settings.timeFormat;
+			},
+			set(value) {
+				this.updateSetting('timeFormat', value);
+			}
 		}
 	},
 	methods: {
-		logInput(e, b) {
-			console.log(e, b);
-		} 
+		updateSetting(key, value) {
+			this.$store.commit('updateSettings', {key: 'general', settings: {
+				[key]: value
+			}})
+		}
 	}
 }
 </script>
 
 <style scoped>
+.form-item {
+	margin-bottom: 1rem;
+}
+</style>
 
+<style>
+.form-label {
+	margin-bottom: 0.25rem;
+}
 </style>

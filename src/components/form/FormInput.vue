@@ -1,6 +1,6 @@
 <template>
 	<div class="form-item" :class="{inline: !stacked}">
-		<label :for="name" class="input-label">{{label}}</label>
+		<label :for="name" class="input-label form-label">{{label}}</label>
 		<input type="text" class="input" :name="name" :id="name" v-bind="$attrs" :value="value" @input="$emit('input', $event.target.value)">
 	</div>
 </template>

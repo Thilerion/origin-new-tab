@@ -1,6 +1,7 @@
 // UTILS
 import keysToLowerCase from '@/utils/keysToLowerCase';
 import { getFromStorage, saveToStorage } from '@/utils/lsHelpers';
+import _merge from 'lodash.merge';
 
 // SETTING OPTIONS
 import { general } from './generalSettings';
@@ -38,8 +39,13 @@ export const settingsModule = {
 		settingCategoryOrder: () => settingCategoryOrder
 	},
 	mutations: {
-		setUsername(state, name) {
-			state.general.username = name;
+		updateSettings(state, { key, settings }) {
+			if (!state[key]) {
+				console.warn(`No settings for "${key}" found!`);
+				return;
+			}
+
+			state[key] = _merge(state[key], settings);
 		}
 	},
 	actions: {

@@ -1,7 +1,11 @@
 <template>
 	<div>
-		<label for="username">Username</label>
-		<input type="text" name="username" id="username" class="input" autocomplete="given-name">
+		<FormInput
+			name="username"
+			label="Username"
+			v-model="username"
+			autocomplete="given-name"
+		/>
 
 		<FormRadioGroup
 			label="Language"
@@ -19,15 +23,23 @@
 
 <script>
 import FormRadioGroup from '../form/FormRadioGroup.vue';
+import FormInput from '../form/FormInput.vue';
 
 export default {
 	components: {
-		FormRadioGroup
+		FormRadioGroup,
+		FormInput,
 	},
 	data() {
 		return {
-			language: 'en'
+			language: 'en',
+			username: 'Michael'
 		}
+	},
+	methods: {
+		logInput(e, b) {
+			console.log(e, b);
+		} 
 	}
 }
 </script>

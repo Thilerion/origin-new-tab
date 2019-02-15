@@ -60,7 +60,7 @@ export default {
 	},
 	data() {
 		return {
-			enterDuration: 500,
+			enterDuration: 350,
 			leaveDuration: 250,
 			activeCatId: 'general'
 		}
@@ -82,9 +82,32 @@ export default {
 		closeSettings() {
 			this.$store.commit('setShowSettingsOverlay', false);
 		}
+	},
+	mounted() {
+		const el = this.$el;
+		el.style.setProperty('--enter-dur', `${this.enterDuration}ms`);
+		el.style.setProperty('--leave-dur', `${this.leaveDuration}ms`);
 	}
 }
 </script>
+
+<style>
+.settings-overlay {
+	--enter-dur: 2500ms;
+	--leave-dur: 2500ms;
+
+	--enter-dur2: calc(0.2 * var(--enter-dur));
+	--enter-dur3: calc(0.3 * var(--enter-dur));
+	--enter-dur4: calc(0.4 * var(--enter-dur));
+	--enter-dur6: calc(0.6 * var(--enter-dur));
+	--enter-dur7: calc(0.7 * var(--enter-dur));
+
+	--leave-dur2: calc(0.2 * var(--leave-dur));
+	--leave-dur6: calc(0.6 * var(--leave-dur));
+	--leave-dur8: calc(0.8 * var(--leave-dur));
+}
+</style>
+
 
 <style scoped>
 .settings-overlay {
@@ -204,37 +227,41 @@ export default {
 	opacity: 0;
 }
 
-.fade-overlay-enter > .settings, .fade-overlay-leave-to > .settings {
+.fade-overlay-enter > .settings {
+	transform: scale(1.05);
+}
+
+.fade-overlay-leave-to > .settings {
 	transform: scale(1.1);
 }
 
 /* ENTER */
 
 .fade-overlay-enter-active > .lightbox {
-	transition: 0.35s ease;
+	transition: var(--enter-dur7) ease;
 }
 
 .fade-overlay-enter-active > .settings {
-	transition: opacity 0.3s ease 0.15s, transform 0.35s ease-in-out;
+	transition: opacity var(--enter-dur6) ease var(--enter-dur3), transform var(--enter-dur7) ease-in-out;
 }
 
 .fade-overlay-enter-active .settings-inner {
-	transition: opacity 0.2s ease .3s;
+	transition: opacity var(--enter-dur2) ease var(--enter-dur6);
 }
 
 /* LEAVE */
 
 .fade-overlay-leave-active > .lightbox {
-	transition: 0.2s ease-out 0.05s;
+	transition: var(--leave-dur8) ease-out var(--leave-dur2);
 	transition-property: opacity;
 }
 
 .fade-overlay-leave-active > .settings {
-	transition: 0.25s ease-out;
+	transition: var(--leave-dur) ease-out;
 	transition-property: opacity, transform;
 }
 
 .fade-overlay-leave-active .settings-inner {
-	transition: opacity 0.15s ease-out;
+	transition: opacity var(--leave-dur6) ease-out;
 }
 </style>

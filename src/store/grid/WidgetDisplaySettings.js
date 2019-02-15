@@ -8,6 +8,8 @@ export default class WidgetDisplaySetting {
 		y,
 		width,
 		height,
+		alignX,
+		alignY
 	}) {
 		this.name = name;
 		this.uid = uid;
@@ -16,6 +18,9 @@ export default class WidgetDisplaySetting {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+
+		this.alignX = alignX;
+		this.alignY = alignY;
 	}
 
 	// Checks if the widget name is a widget that is registered in the app
@@ -64,6 +69,17 @@ export default class WidgetDisplaySetting {
 		return this.y >= 1 && (conf.rows == null || this.y < conf.rows);
 	}
 
+	validateAlignment(conf) {
+		if (!this.alignX) {
+			// use widget default alignment
+			this.alignX = conf.alignX || conf.alignXDefault;
+		}
+		if (!this.alignY) {
+			this.alignY = conf.alignY || conf.alignYDefault;
+		}
+		return conf.widgetAlignment.includes(this.alignX) && conf.widgetAlignment.includes(this.alignY);
+	}
+
 	validateUID() {
 		if (this.uid == null) {
 			console.log(`No UID detected in ${this.name}`);
@@ -82,6 +98,7 @@ export default class WidgetDisplaySetting {
 			this.validateHeight(conf) &&
 			this.validateX(conf) &&
 			this.validateY(conf) &&
+			this.validateAlignment(conf) &&
 			this.data
 		);		
 	}

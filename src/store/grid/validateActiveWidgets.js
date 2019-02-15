@@ -3,11 +3,14 @@ import WidgetDisplaySetting from './WidgetDisplaySettings';
 // Finds a default wallpaper widget using the list of available widgets
 import { getDefaultWallpaperWidget, getDefaultGridPreset } from './defaults.js';
 
-import { GRID_COLS, GRID_ROWS } from '@/constants';
+import { GRID_COLS, GRID_ROWS, W_ALIGNMENTS } from '@/constants';
 
 const globalConfig = {
 	rows: GRID_ROWS,
-	columns: GRID_COLS
+	columns: GRID_COLS,
+	widgetAlignment: Object.keys(W_ALIGNMENTS),
+	alignXDefault: 'center',
+	alignYDefault: 'center'
 }
 
 // Names for each grid and wallpaper widget

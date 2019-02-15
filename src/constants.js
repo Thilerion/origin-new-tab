@@ -20,3 +20,10 @@ export const TIME_FORMATS = [
 	'h:m a',
 	'h m a'
 ];
+
+export const W_ALIGNMENTS = {
+	left: 'flex-start',
+	right: 'flex-end',
+	center: 'center',
+	stretch: 'stretch',
+}

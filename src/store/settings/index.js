@@ -4,7 +4,7 @@ import { getFromStorage, saveToStorage } from '@/utils/lsHelpers';
 import _merge from 'lodash.merge';
 
 // SETTING OPTIONS
-import { general } from './generalSettings';
+import { general, dashboard } from './baseSettings';
 import { settings, settingCategoryOrder } from '@/widgets';
 
 // VALIDATE AND MERGE SETTINGS
@@ -22,7 +22,7 @@ import { validateStoredSettings } from './createSettingsData';
 
 export const STORAGE_KEY = 'sp_settings';
 
-const settingOptions = keysToLowerCase({ general, ...settings });
+const settingOptions = keysToLowerCase({ general, dashboard, ...settings });
 const localSettingsData = getFromStorage(STORAGE_KEY);
 const validatedSettings = validateStoredSettings(localSettingsData, settingOptions);
 
@@ -35,8 +35,14 @@ export const settingsModule = {
 		...validatedSettings,
 	},
 	getters: {
-		settingsOptions: () => settingOptions,
-		settingCategoryOrder: () => settingCategoryOrder
+		settingsOptions: () => ({
+			...settingOptions
+		}),
+		settingCategoryOrder: () => [
+			{ name: 'General', value: 'general' },
+			{ name: 'Dashboard', value: 'dashboard' },
+			...settingCategoryOrder
+		]
 	},
 	mutations: {
 		updateSettings(state, { key, settings }) {

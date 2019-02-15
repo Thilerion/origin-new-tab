@@ -22,6 +22,9 @@ Vue.use(resizeDirective, {
 import pageVisibilityDirective from '@/plugins/pageVisibility';
 Vue.use(pageVisibilityDirective);
 
+import BaseFadeTransition from '@/components/BaseFadeTransition.vue';
+Vue.component('BaseFadeTransition', BaseFadeTransition);
+
 Vue.config.productionTip = false
 
 new Vue({

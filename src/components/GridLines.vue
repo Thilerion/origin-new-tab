@@ -1,4 +1,5 @@
 <template>
+<BaseFadeTransition type="fade">
 	<div class="grid-lines">
 		<div class="horizontal-wrapper">
 			<div
@@ -17,6 +18,7 @@
 		<div class="center-guide horizontal" :class="{show: showCenterGuides.x}"></div>
 		<div class="center-guide vertical" :class="{show: showCenterGuides.y}"></div>
 	</div>
+</BaseFadeTransition>
 </template>
 
 <script>

@@ -4,6 +4,13 @@ import * as News from './News';
 
 import standard from './_presets/standard';
 
+const presets = {
+	standard: {
+		name: 'Standard',
+		value: standard
+	}
+}
+
 const WidgetTypes = {
 	Unsplash,
 	Clock,
@@ -12,7 +19,6 @@ const WidgetTypes = {
 
 // TODO: allow combining of multiple widget settings in one category
 const settingCategoryOrder = [
-	{ name: 'General', value: 'general' },
 	{ name: 'Clock', value: 'clock' },
 	{ name: 'Wallpaper', value: 'unsplash' },
 	{ name: 'News', value: 'news' }
@@ -65,8 +71,5 @@ const getWidgetDisplayConfigs = (widgets) => {
 const { gridComponents, wallpaperComponents } = getWidgetComponents(WidgetTypes);
 const settings = getWidgetSettings(WidgetTypes);
 const displayConfigs = getWidgetDisplayConfigs(WidgetTypes);
-const presets = {
-	standard
-}
 
 export { gridComponents, wallpaperComponents, settings, settingCategoryOrder, displayConfigs, presets };

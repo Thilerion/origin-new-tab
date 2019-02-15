@@ -12,6 +12,7 @@
 			<slot />
 		</div>
 
+		<BaseFadeTransition type="fade" enterDuration="300" leaveDuration="0">
 		<div
 			class="edit-overlay"
 			:class="{selected}"
@@ -21,6 +22,7 @@
 			>{{widget.name | removeWidgetStr}}</div>
 
 		</div>
+		</BaseFadeTransition>
 
 		<template v-if="showResizeHandles">
 			<div

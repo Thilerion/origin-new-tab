@@ -1,5 +1,7 @@
 import { getFromStorage, saveToStorage } from '@/utils/lsHelpers';
 import { validateActiveWidgets } from './validateActiveWidgets';
+import { validateGridPreset } from './defaults';
+import { presets, gridComponents } from '@/widgets';
 
 import { GRID_ROWS, GRID_COLS } from '@/constants';
 
@@ -18,7 +20,6 @@ export const gridModule = {
 	},
 
 	getters: {
-
 	},
 
 	mutations: {
@@ -30,6 +31,12 @@ export const gridModule = {
 			console.log(`Moving ${uid} from ${from} to ${to}.`);
 			state.gridOrder.splice(from, 1);
 			state.gridOrder.splice(to, 0, uid);
+		},
+		setGridWidgets(state, gridWidgets) {
+			state.gridWidgets = [...gridWidgets];
+		},
+		setGridOrder(state, gridOrder) {
+			state.gridOrder = [...gridOrder];
 		}
 	},
 
@@ -46,6 +53,14 @@ export const gridModule = {
 				const newWidget = { ...w, x, y, width, height };
 				commit('editWidgetPosition', { idx, newWidget });
 			}
+		},
+		applyGridPreset({ commit }, presetName) {
+			const layout = presets[presetName].value;
+			const availWidgets = Object.keys(gridComponents);
+			const validated = validateGridPreset(layout, availWidgets);
+
+			commit('setGridWidgets', validated);
+			commit('setGridOrder', validated.map(w => w.uid));
 		}
 	}
 }

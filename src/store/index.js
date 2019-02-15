@@ -31,7 +31,8 @@ const store = new Vuex.Store({
 	},
 
 	state: {
-		showSettingsOverlay: false		
+		showSettingsOverlay: false,
+		editingGrid: false
 	},
 
 	getters: {},
@@ -42,6 +43,13 @@ const store = new Vuex.Store({
 				state.showSettingsOverlay = !state.showSettingsOverlay;
 			} else {
 				state.showSettingsOverlay = show;
+			}
+		},
+		setEditingGrid(state, editing) {
+			if (editing == null) {
+				state.editingGrid = !state.editingGrid;
+			} else {
+				state.editingGrid = editing;
 			}
 		}
 	},

@@ -108,12 +108,3 @@ body {
 	width: 18px;
 	height: 18px;
 }
-
-.icon-btn {
-	border-radius: 50%;
-	width: 24px;
-	height: 24px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}

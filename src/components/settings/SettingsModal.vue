@@ -36,6 +36,10 @@
 							v-if="activeCatId === 'general'"
 							:settingOptions="settingsOptions.general"
 						/>
+						<SettingsDashboard
+							v-else-if="activeCatId === 'dashboard'"
+							:settingOptions="settingsOptions.dashboard"
+						/>
 					</main>
 				</div>
 			</div>
@@ -45,11 +49,13 @@
 
 <script>
 import SettingsGeneral from './SettingsGeneral.vue';
+import SettingsDashboard from './SettingsDashboard.vue';
 import IconClose from '@/assets/icons/ui/md-close.svg';
 
 export default {
 	components: {
 		SettingsGeneral,
+		SettingsDashboard,
 		IconClose
 	},
 	data() {
@@ -181,6 +187,15 @@ export default {
 
 .settings-main {
 	padding: 0.75rem 1.5rem;
+}
+
+/* GLOBAL SETTINGS STYLING */
+.settings >>> .form-item {
+	margin-bottom: 1rem;
+}
+
+.settings >>> .form-label {
+	margin-bottom: 0.25rem;
 }
 
 /* TRANSITION */

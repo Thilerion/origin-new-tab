@@ -65,7 +65,6 @@ export default {
 	},
 	data() {
 		return {
-			editing: false,
 			selectedWidget: null,
 			showCenterGuides: {
 				x: false,
@@ -92,7 +91,8 @@ export default {
 			rows: state => state.grid.rows,
 			cols: state => state.grid.cols,
 			gridWidgets: state => state.grid.gridWidgets,
-			gridOrder: state => state.grid.gridOrder
+			gridOrder: state => state.grid.gridOrder,
+			editing: state => state.editingGrid
 		}),
 		sortedGridWidgets() {
 			return this.gridOrder.map(uid => this.gridWidgets.find(w => w.uid === uid));
@@ -152,10 +152,10 @@ export default {
 		},
 		toggleEditing() {
 			if (this.editing) {
-				this.editing = false;
+				this.$store.commit('setEditingGrid', false);
 				this.deselectWidgets();
 			} else {
-				this.editing = true;
+				this.$store.commit('setEditingGrid', true);
 			}
 		},
 		updateCenterGuides({x, y}) {

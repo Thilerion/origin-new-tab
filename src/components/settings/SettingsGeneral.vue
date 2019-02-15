@@ -77,15 +77,3 @@ export default {
 	}
 }
 </script>
-
-<style scoped>
-.form-item {
-	margin-bottom: 1rem;
-}
-</style>
-
-<style>
-.form-label {
-	margin-bottom: 0.25rem;
-}
-</style>

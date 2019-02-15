@@ -21,8 +21,8 @@ export function getDefaultWallpaperWidget(availWidgets) {
 	return defaultWallpaperWidgets[n - 1];
 }
 
-export function getDefaultGridPreset(availWidgets) {
-	return standardPreset.reduce((acc, widget) => { 
+export function validateGridPreset(preset, availWidgets) {
+	return preset.reduce((acc, widget) => {
 		const name = widget.name;
 		if (!availWidgets.includes(name)) {
 			return acc;
@@ -34,4 +34,9 @@ export function getDefaultGridPreset(availWidgets) {
 		}
 		return acc;
 	}, []);
+}
+
+export function getDefaultGridPreset(availWidgets) {
+	const preset = standardPreset.value;
+	return validateGridPreset(preset, availWidgets);
 }

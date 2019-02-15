@@ -1,3 +1,5 @@
+import { presets } from '@/widgets';
+
 export const general = {
 	username: {
 		name: 'username',
@@ -22,3 +24,12 @@ export const general = {
 		]
 	}
 };
+
+export const dashboard = {
+	preset: {
+		name: 'preset',
+		options: [
+			...Object.keys(presets).map(presetName => ({ name: presets[presetName].name, value: presetName }))
+		]
+	}
+}

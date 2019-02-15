@@ -78,6 +78,7 @@ export default {
 			this.restartTimeout();
 		},
 		startTimeout() {
+			if (this.slideInterval < 0) return;
 			this.timeout = setTimeout(() => {
 				if (this.mouseover) {
 					console.log("Hovering news item. Restarting timeout.");
@@ -119,11 +120,20 @@ export default {
 			} else {
 				this.slideDirection = oldValue < newValue ? 'left' : 'right';
 			}
+		},
+		slideInterval(newValue, oldValue) {
+			if (newValue < 0) {
+				this.stopTimeout();
+			} else if (newValue > 0 && newValue !== oldValue) {
+				this.restartTimeout();
+			}
 		}
 	},
 	beforeMount() {
 		this.loadRandomArticle();
-		this.startTimeout();
+		if (this.slideInterval >= 0) {
+			this.startTimeout();
+		}
 	},
 	beforeDestroy() {
 		this.stopTimeout();

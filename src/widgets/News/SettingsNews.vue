@@ -1,12 +1,19 @@
 <template>
 	<div>
-		news
+		<FormSelect
+			name="slideInterval"
+			label="News item slide interval"
+			:options="settingOptions.slideInterval.options"
+			v-model="slideInterval"
+		/>
 	</div>
 </template>
 
 <script>
+import FormSelect from '@/components/form/FormSelect.vue';
 export default {
 	components: {
+		FormSelect
 	},
 	props: {
 		settingOptions: {
@@ -18,10 +25,12 @@ export default {
 		settings() {
 			return this.$store.state.settings.news;
 		},
-		showDate: {
+		slideInterval: {
 			get() {
+				return this.settings.slideInterval;
 			},
 			set(value) {
+				this.updateSetting('slideInterval', value);
 			}
 		}
 	},

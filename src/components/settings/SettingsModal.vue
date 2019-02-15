@@ -102,10 +102,6 @@ export default {
 		const el = this.$el;
 		el.style.setProperty('--enter-dur', `${this.enterDuration}ms`);
 		el.style.setProperty('--leave-dur', `${this.leaveDuration}ms`);
-
-		document.addEventListener('keypress', (e) => {
-			console.log(e.key);
-		})
 	}
 }
 </script>

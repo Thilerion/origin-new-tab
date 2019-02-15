@@ -40,6 +40,11 @@
 							v-else-if="activeCatId === 'dashboard'"
 							:settingOptions="settingsOptions.dashboard"
 						/>
+						<component 
+							v-else-if="settingsComponents[activeCatId]"
+							:is="settingsComponents[activeCatId]"
+							:settingOptions="settingsOptions[activeCatId]"
+						/>
 					</main>
 				</div>
 			</div>
@@ -52,6 +57,8 @@ import SettingsGeneral from './SettingsGeneral.vue';
 import SettingsDashboard from './SettingsDashboard.vue';
 import IconClose from '@/assets/icons/ui/md-close.svg';
 
+import { settingsComponents } from '@/widgets';
+
 export default {
 	components: {
 		SettingsGeneral,
@@ -62,7 +69,13 @@ export default {
 		return {
 			enterDuration: 350,
 			leaveDuration: 250,
-			activeCatId: 'general'
+			activeCatId: 'general',
+			
+			settingsComponents: {
+				general: SettingsGeneral,
+				dashboard: SettingsDashboard,
+				...settingsComponents
+			}
 		}
 	},
 	computed: {

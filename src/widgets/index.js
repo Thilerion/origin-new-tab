@@ -54,6 +54,18 @@ const getWidgetComponents = (widgets) => {
 	return { gridComponents: grid, wallpaperComponents: wallpaper };
 }
 
+const getSettingsComponents = (widgets) => {
+	const comps = {};
+
+	for (const wName in widgets) {
+		if (!widgets[wName]) continue;
+		if (widgets[wName].settingsComponent) {
+			comps[wName.toLowerCase()] = widgets[wName].settingsComponent;
+		}
+	}
+	return comps;
+}
+
 // TODO: set default settings for when a widget is missing a setting such as minHeight
 const getWidgetDisplayConfigs = (widgets) => {
 	let widgetConfigs = Object.keys(widgets).reduce((acc, val) => {
@@ -69,7 +81,8 @@ const getWidgetDisplayConfigs = (widgets) => {
 }
 
 const { gridComponents, wallpaperComponents } = getWidgetComponents(WidgetTypes);
+const settingsComponents = getSettingsComponents(WidgetTypes);
 const settings = getWidgetSettings(WidgetTypes);
 const displayConfigs = getWidgetDisplayConfigs(WidgetTypes);
 
-export { gridComponents, wallpaperComponents, settings, settingCategoryOrder, displayConfigs, presets };
+export { gridComponents, wallpaperComponents, settings, settingsComponents, settingCategoryOrder, displayConfigs, presets };

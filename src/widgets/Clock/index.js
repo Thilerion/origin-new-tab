@@ -1,4 +1,5 @@
 import WidgetClock from './WidgetClock.vue';
+import SettingsClock from './SettingsClock.vue';
 
 export const gridComponents = {
 	WidgetClock
@@ -6,6 +7,8 @@ export const gridComponents = {
 
 export const wallpaperComponents = {
 }
+
+export const settingsComponent = SettingsClock;
 
 export const settings = {
 	showDate: {

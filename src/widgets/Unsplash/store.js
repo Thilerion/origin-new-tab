@@ -136,6 +136,9 @@ const store = {
 			const curId = getters.currentWallpaper.id;
 			dispatch('goToNextWallpaper');
 			commit('hideWallpaper', curId);
+		},
+		loadNewCollection({ dispatch }) {
+			return dispatch('fetchApiData');	
 		}
 	}
 }

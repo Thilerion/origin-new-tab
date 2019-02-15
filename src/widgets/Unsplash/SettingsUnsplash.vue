@@ -38,6 +38,7 @@ export default {
 			set(value) {
 				const str = `${value}`;
 				this.updateSetting('collection', str);
+				this.loadNewCollection();				
 			}
 		},
 		refreshInterval: {
@@ -57,6 +58,11 @@ export default {
 					[key]: value
 				}
 			})
+		},
+		// TODO: show if error with loading (store.state.unsplash.apiError?)
+		async loadNewCollection() {
+			const success = await this.$store.dispatch('unsplash/loadNewCollection');
+			console.log({success});
 		}
 	}
 }

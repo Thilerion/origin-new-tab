@@ -51,7 +51,7 @@ export default {
 	},
 	data() {
 		return {
-			enterDuration: 450,
+			enterDuration: 500,
 			leaveDuration: 250,
 			activeCatId: 'general'
 		}
@@ -202,8 +202,8 @@ export default {
 	transition: opacity 0.3s ease 0.15s, transform 0.35s ease-in-out;
 }
 
-.fade-overlay-leave-active .settings-inner {
-	transition: opacity 0.15s ease .15s;
+.fade-overlay-enter-active .settings-inner {
+	transition: opacity 0.2s ease .3s;
 }
 
 /* LEAVE */

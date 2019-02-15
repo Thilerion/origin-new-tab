@@ -1,7 +1,7 @@
 <template>
 	<div class="form-item" :class="{inline: !stacked}">
 		<label :for="name" class="input-label form-label">{{label}}</label>
-		<input type="text" class="input" :name="name" :id="name" v-bind="$attrs" :value="value" @input="$emit('input', $event.target.value)">
+		<input type="text" class="input" :name="name" :id="name" v-bind="$attrs" :value="value" @input="$emit('input', $event.target.value)" @keypress.enter="defocus">
 	</div>
 </template>
 
@@ -24,6 +24,11 @@ export default {
 		value: {
 			type: String,
 			default: ''
+		}
+	},
+	methods: {
+		defocus(e) {
+			e.target.blur();
 		}
 	}
 }

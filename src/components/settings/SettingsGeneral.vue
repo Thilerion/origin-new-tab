@@ -9,19 +9,13 @@
 
 		<FormRadioGroup
 			label="Language"
-			:options="[
-				{value: 'en', name: 'English'},
-				{value: 'nl', name: 'Nederlands'}
-			]"
+			:options="settingOptions.language.options"
 			v-model="language"
 		/>
 
 		<FormRadioGroup
 			label="Time format"
-			:options="[
-				{value: 'HH:mm', name: '24-hour'},
-				{value: 'h:mm a', name: '12-hour'}
-			]"
+			:options="settingOptions.timeFormat.options"
 			v-model="timeFormat"
 		/>
 	</div>
@@ -73,9 +67,12 @@ export default {
 	},
 	methods: {
 		updateSetting(key, value) {
-			this.$store.commit('updateSettings', {key: 'general', settings: {
-				[key]: value
-			}})
+			this.$store.commit('updateSettings', {
+				key: 'general',
+				settings: {
+					[key]: value
+				}
+			})
 		}
 	}
 }

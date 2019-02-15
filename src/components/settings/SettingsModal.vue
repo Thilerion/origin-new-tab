@@ -113,8 +113,9 @@ export default {
 	width: 60vw;
 	max-width: 65rem;
 
-	min-height: 25rem;
-	height: 52vh;
+	min-height: 20rem;
+	height: 35vh;
+	max-height: 27rem;
 
 	display: flex;
 }

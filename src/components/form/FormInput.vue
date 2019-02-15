@@ -48,6 +48,7 @@ export default {
 	height: 2.25em;
 	font-size: 1rem;
 	line-height: 1.5;
+	width: 15em;
 }
 
 .input:active, .input:focus {

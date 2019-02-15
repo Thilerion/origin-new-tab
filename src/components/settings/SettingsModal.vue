@@ -157,9 +157,7 @@ export default {
 	background: #f7f7f7;
 	color: #333;
 	
-	min-width: 50rem;
-	width: 60vw;
-	max-width: 65rem;
+	width: 45rem;
 
 	min-height: 20rem;
 	height: 35vh;

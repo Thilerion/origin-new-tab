@@ -14,16 +14,20 @@
 		</div>
 	</div>
 	<div class="align-widget" v-if="selected != null">
-		<h2>Align</h2>
-		<h3>Horizontal</h3>
-		<button @click="alignWidget('x', ALIGN.start)">Left</button>
-		<button @click="alignWidget('x', ALIGN.center)">Center</button>
-		<button @click="alignWidget('x', ALIGN.end)">Right</button>
+		<h2 class="align-title">Align content</h2>
+		<h3 class="align-subtitle">Horizontal</h3>
+		<div class="align-buttons">
+		<button class="button" :class="{current: selected.alignX === ALIGN.start}" @click="alignWidget('x', ALIGN.start)">Left</button>
+		<button class="button" :class="{current: selected.alignX === ALIGN.center}" @click="alignWidget('x', ALIGN.center)">Center</button>
+		<button class="button" :class="{current: selected.alignX === ALIGN.end}" @click="alignWidget('x', ALIGN.end)">Right</button>
+		</div>
 
-		<h3>Vertical</h3>
-		<button @click="alignWidget('y', ALIGN.start)">Top</button>
-		<button @click="alignWidget('y', ALIGN.center)">Center</button>
-		<button @click="alignWidget('y', ALIGN.end)">Bottom</button>
+		<h3 class="align-subtitle">Vertical</h3>
+		<div class="align-buttons">
+		<button class="button" :class="{current: selected.alignY === ALIGN.start}" @click="alignWidget('y', ALIGN.start)">Top</button>
+		<button class="button" :class="{current: selected.alignY === ALIGN.center}" @click="alignWidget('y', ALIGN.center)">Center</button>
+		<button class="button" :class="{current: selected.alignY === ALIGN.end}" @click="alignWidget('y', ALIGN.end)">Bottom</button>
+		</div>
 	</div>
 </div>
 </template>
@@ -74,6 +78,16 @@ export default {
 	font-size: 1.125rem;
 }
 
+.align-title {
+	font-size: 1.125rem;
+	padding: 1.5rem 1rem 0.5rem;
+}
+
+.align-subtitle {
+	font-size: 1rem;
+	padding: 0.5rem 1rem;
+}
+
 .widgets-list {
 	display: flex;
 	flex-direction: column-reverse;
@@ -87,5 +101,21 @@ export default {
 
 .widget-info:hover, .widget-info.selected {
 	background: rgba(0, 0, 0, 0.08);
+}
+
+.align-buttons {
+	padding: 0 1rem;
+	display: flex;
+	justify-content: space-between;
+}
+
+.align-buttons > .button {
+	font-size: 0.875rem;
+	flex: 0 0 30%;
+}
+
+.button.current {
+	background-color: #333;
+	color: white;
 }
 </style>

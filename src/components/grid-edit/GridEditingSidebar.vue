@@ -1,5 +1,18 @@
 <template>
 <div class="edit-sidebar">
+	<div class="current-widgets">
+		<h2 class="widgets-title">Current widgets</h2>
+		<div class="widgets-list">
+			<WidgetInfo
+				v-for="widget in sortedWidgets"
+				:key="widget.uid"
+				v-bind="widget"
+				class="widget-info"
+				:class="{selected: widget === selected}"
+				@click.native="$emit('selectWidget', widget.uid, true)"
+			/>
+		</div>
+	</div>
 	<div class="align-widget" v-if="selected != null">
 		<h2>Align</h2>
 		<h3>Horizontal</h3>
@@ -17,9 +30,16 @@
 
 <script>
 import { ALIGN } from '@/constants';
+
+import WidgetInfo from './WidgetInfo.vue';
+
 export default {
 	props: {
-		selected: Object
+		selected: Object,
+		sortedWidgets: Array
+	},
+	components: {
+		WidgetInfo
 	},
 	data() {
 		return {
@@ -45,5 +65,27 @@ export default {
 	background: hsla(0, 0%, 97%, 0.9);
 	height: 100%;
 	color: #333;
+	border-left: 1px solid #bbb;
+}
+
+.widgets-title {
+	padding: 1rem;
+	border-bottom: 1px solid #bbb;
+	font-size: 1.125rem;
+}
+
+.widgets-list {
+	display: flex;
+	flex-direction: column-reverse;
+}
+
+.widget-info {
+	padding: 1rem;
+	border-bottom: 1px solid #bbb;
+	cursor: pointer;
+}
+
+.widget-info:hover, .widget-info.selected {
+	background: rgba(0, 0, 0, 0.08);
 }
 </style>

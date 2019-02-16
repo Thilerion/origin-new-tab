@@ -23,10 +23,9 @@
 			:style="getWidgetGridPlacement(widget, idx)"
 			:selected="selectedWidget === idx"
 			:config="displayConfigs[widget.name]"
-			@selectWidget="toggleSelectWidget(widget, idx, $event)"
+			@selectWidget="toggleSelectWidget(widget.uid, $event)"
 			@updateCenterGuides="updateCenterGuides"
 			ref="widgets"
-			@mousedown.native="initDetectWidgetOverlap(idx, widget.uid)"
 		>
 
 			<transition name="widget-fade">
@@ -41,7 +40,13 @@
 		<SettingsButton :style="settingsButtonGrid" />		
 	</div>
 	<transition name="slide">
-	<GridEditingSidebar class="grid-sidebar" :selected="gridWidgets[selectedWidget]" v-if="editing" />
+		<GridEditingSidebar
+			class="grid-sidebar"
+			:selected="gridWidgets[selectedWidget]"
+			v-if="editing"
+			:sortedWidgets="sortedGridWidgets"
+			@selectWidget="toggleSelectWidget"
+		/>
 	</transition>
 </div>
 </template>
@@ -50,7 +55,7 @@
 import {mapState, mapGetters} from 'vuex';
 
 import GridLines from './GridLines.vue';
-import GridEditingSidebar from './GridEditingSidebar.vue';
+import GridEditingSidebar from './grid-edit/GridEditingSidebar.vue';
 import BaseWidget from './BaseWidget.vue';
 import SettingsButton from './settings/SettingsButton.vue';
 
@@ -62,6 +67,8 @@ const roundNumber = (num, digits = 2) => {
 	const mult = 10 ** digits;
 	return Math.round(num * mult) / mult;
 }
+
+//TODO: enable detect overlap
 
 export default {
 	mixins: [DetectWidgetOverlap],
@@ -151,13 +158,14 @@ export default {
 			this.disableCenterGuides();
 			this.removeClickOutsideEvent();
 		},
-		toggleSelectWidget(widget, idx, bool) {
-			if (!this.editing || !bool || idx == null) {
+		toggleSelectWidget(uid, bool) {
+			if (!this.editing || !bool || uid == null) {
 				this.deselectWidgets();
 			} else {
 				if (this.selectedWidget == null) {
 					document.addEventListener('mouseup', this.clickOutsideDeselect);
 				}
+				const idx = this.gridWidgets.findIndex(w => w.uid === uid);
 				this.selectedWidget = idx;
 			}
 		},

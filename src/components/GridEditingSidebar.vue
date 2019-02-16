@@ -6,13 +6,11 @@
 		<button @click="alignWidget('x', ALIGN.start)">Left</button>
 		<button @click="alignWidget('x', ALIGN.center)">Center</button>
 		<button @click="alignWidget('x', ALIGN.end)">Right</button>
-		<button @click="alignWidget('x', ALIGN.stretch)">Stretch</button>
 
 		<h3>Vertical</h3>
 		<button @click="alignWidget('y', ALIGN.start)">Top</button>
 		<button @click="alignWidget('y', ALIGN.center)">Center</button>
 		<button @click="alignWidget('y', ALIGN.end)">Bottom</button>
-		<button @click="alignWidget('y', ALIGN.stretch)">Stretch</button>
 	</div>
 </div>
 </template>
@@ -44,7 +42,7 @@ export default {
 .edit-sidebar {
 	min-width: 0;
 	width: 250px;
-	background: #f7f7f7;
+	background: hsla(0, 0%, 97%, 0.9);
 	height: 100%;
 	color: #333;
 }

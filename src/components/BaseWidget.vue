@@ -126,12 +126,10 @@ export default {
 			if (this.widget.alignY === ALIGN.start) align = 'flex-start';
 			else if (this.widget.alignY === ALIGN.end) align = 'flex-end';
 			else if (this.widget.alignY === ALIGN.center) align = 'center';
-			else if (this.widget.alignY === ALIGN.stretch) align = 'stretch';
 
 			if (this.widget.alignX === ALIGN.start) justify = 'flex-start';
 			else if (this.widget.alignX === ALIGN.end) justify = 'flex-end';
 			else if (this.widget.alignX === ALIGN.center) justify = 'center';
-			else if (this.widget.alignX === ALIGN.stretch) justify = 'stretch';
 
 			return {
 				'align-items': align,

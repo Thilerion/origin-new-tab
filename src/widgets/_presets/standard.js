@@ -16,7 +16,7 @@ export default [
 		width: 18,
 		y: 1,
 		height: 2,
-		alignX: ALIGN.stretch,
+		alignX: ALIGN.center,
 		alignY: ALIGN.start
 	},
 	{

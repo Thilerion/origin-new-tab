@@ -25,5 +25,4 @@ export const ALIGN = {
 	start: 'align_start',
 	end: 'align_end',
 	center: 'align_center',
-	stretch: 'align_stretch',
 }

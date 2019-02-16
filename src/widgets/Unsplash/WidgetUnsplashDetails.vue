@@ -97,14 +97,15 @@ export default {
 .user-name {
 	letter-spacing: 0.2px;
 	font-size: 0.875em;
-	opacity: 0.85;
+	opacity: 0.7;
 	transition: opacity 0.15s ease;
 }
 
 .user-location {
-	opacity: 0.7;
+	opacity: 0.6;
 	font-size: 0.667em;
 	padding-top: 2px;
+	padding-bottom: 2px;
 	letter-spacing: 0.3px;
 }
 

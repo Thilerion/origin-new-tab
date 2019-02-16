@@ -12,6 +12,7 @@
 				@click.native="$emit('selectWidget', widget.uid, true)"
 			/>
 		</div>
+		<div class="widget-info add-widget">+ Add widget</div>
 	</div>
 	<div class="align-widget" v-if="selected != null">
 		<h2 class="align-title">Align content</h2>
@@ -99,6 +100,11 @@ export default {
 	cursor: pointer;
 }
 
+.add-widget {
+	font-style: italic;
+	opacity: 0.8;
+}
+
 .widget-info:hover, .widget-info.selected {
 	background: rgba(0, 0, 0, 0.08);
 }
@@ -110,7 +116,7 @@ export default {
 }
 
 .align-buttons > .button {
-	font-size: 0.875rem;
+	font-size: 0.75rem;
 	flex: 0 0 30%;
 }
 

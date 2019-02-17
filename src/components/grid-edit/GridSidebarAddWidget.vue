@@ -30,12 +30,17 @@ export default {
 	methods: {
 		onDragStart(widgetType, e) {
 			const {w, h} = this.getInitialSize(widgetType);
+
+			const offsetX = e.offsetX;
+			const offsetY = e.offsetY - (e.target.clientHeight / 2);
+
 			const data = {
 				widget: widgetType,
 				width: w,
-				height: h
+				height: h,
+				offsetX: offsetX,
+				offsetY: offsetY
 			};
-			console.log(data);
 			this.$store.commit('initNewWidgetDrag', data);
 		},
 		onDragEnd() {

@@ -239,17 +239,40 @@ export default {
 			grid.addEventListener('dragleave', this.onDragLeave);
 			grid.addEventListener('drop', this.onDrop);
 		},
+		calculateGridPosition(x, y) {
+			const colStart = Math.round(x / this.gridCellSize.width);
+			const rowStart = Math.round(y / this.gridCellSize.height);
+
+			let valX = colStart;
+			let valY = rowStart;
+
+			if (colStart < 1) {
+				valX = 1;
+			} else if (colStart > this.cols + 1) {
+				valX = this.cols + 1;
+			}
+			if (rowStart < 1) {
+				valY = 1;
+			} else if (rowStart > this.rows + 1) {
+				valY = this.rows + 1;
+			}
+			return {x: valX, y: valY};
+		},
 		onDragOver(e) {
 			e.preventDefault();
-			// TODO: update location of widget outline
-
+			const clientX = e.clientX - this.draggedWidget.offsetX;
+			const clientY = e.clientY - this.draggedWidget.offsetY;
+			const {x, y} = this.calculateGridPosition(clientX, clientY);
+			const valX = Math.min(x, (this.cols + 1) - this.draggedWidget.width);
+			const valY = Math.min(y, (this.rows + 1) - this.draggedWidget.height);
+			this.newWidgetOutline.x = valX;
+			this.newWidgetOutline.y = valY;
 		},
 		onDragEnter(e) {
 			e.preventDefault();
 			console.log('drag enter');
 			this.newWidgetOutline.show = true;
-			this.newWidgetOutline.x = 1;
-			this.newWidgetOutline.y = 1;
+			this.onDragOver(e);
 			this.newWidgetOutline.width = this.draggedWidget.width;
 			this.newWidgetOutline.height = this.draggedWidget.height;
 		},

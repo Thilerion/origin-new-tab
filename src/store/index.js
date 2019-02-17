@@ -37,7 +37,9 @@ const store = new Vuex.Store({
 			dragging: false,
 			type: '',
 			width: null,
-			height: null
+			height: null,
+			offsetX: 0,
+			offsetY: 0
 		}
 	},
 
@@ -60,13 +62,15 @@ const store = new Vuex.Store({
 				state.editingGrid = editing;
 			}
 		},
-		initNewWidgetDrag(state, { widget, width, height }) {
+		initNewWidgetDrag(state, { widget, width, height, offsetX, offsetY }) {
 			console.log('init new widget drag');
 			state.dragAddNewWidget = {
 				dragging: true,
 				type: widget,
 				width,
-				height
+				height,
+				offsetX,
+				offsetY
 			}
 		},
 		stopNewWidgetDrag(state) {
@@ -74,7 +78,9 @@ const store = new Vuex.Store({
 				dragging: false,
 				type: '',
 				width: null,
-				height: null
+				height: null,
+				offsetX: 0,
+				offsetY: 0
 			};
 		}
 	},

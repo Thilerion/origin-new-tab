@@ -242,6 +242,7 @@ export default {
 		onDragOver(e) {
 			e.preventDefault();
 			// TODO: update location of widget outline
+
 		},
 		onDragEnter(e) {
 			e.preventDefault();
@@ -249,17 +250,13 @@ export default {
 			this.newWidgetOutline.show = true;
 			this.newWidgetOutline.x = 1;
 			this.newWidgetOutline.y = 1;
-			this.newWidgetOutline.width = 5;
-			this.newWidgetOutline.height = 2;
+			this.newWidgetOutline.width = this.draggedWidget.width;
+			this.newWidgetOutline.height = this.draggedWidget.height;
 		},
 		onDragLeave(e) {
 			e.preventDefault();
 			console.log('drag leave');
 			this.newWidgetOutline.show = false;
-			this.newWidgetOutline.x = 1;
-			this.newWidgetOutline.y = 1;
-			this.newWidgetOutline.width = 5;
-			this.newWidgetOutline.height = 2;
 		},
 		onDrop(e) {
 			console.log("Dropped widget!", e);
@@ -296,6 +293,7 @@ export default {
 	},
 	beforeDestroy() {
 		this.removeClickOutsideEvent();
+		this.disableDropzone();
 	}
 }
 </script>

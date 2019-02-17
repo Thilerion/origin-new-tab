@@ -87,6 +87,7 @@ export const gridModule = {
 			});
 			console.log(validated);
 			commit('addWidget', validated);
+			return validated.uid;
 		}
 	}
 }

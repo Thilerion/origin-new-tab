@@ -21,7 +21,9 @@ import { displayConfigs } from '@/widgets';
 export default {
 	computed: {
 		available() {
-			return this.$store.getters.unusedGridWidgets;
+			// TODO: allow some widgets to be placed multiple times
+			// return this.$store.getters.unusedGridWidgets;
+			return this.$store.state.grid.allGridWidgetTypes;
 		},
 		currentlyDragging() {
 			return this.$store.state.dragAddNewWidget.type;

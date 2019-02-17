@@ -286,7 +286,7 @@ export default {
 			const {x, y, width, height} = this.newWidgetOutline;
 			const widgetType = this.draggedWidget.type;
 			console.log({x, y, width, height, widgetType});
-			this.$store.dispatch('addNewWidget', {x, y, width, height, widgetType});
+			this.$store.dispatch('addNewWidget', {x, y, width, height, widgetType}).then(uid => this.toggleSelectWidget(uid, true));
 		},
 		disableDropzone() {
 			console.log("disabling dropzone");

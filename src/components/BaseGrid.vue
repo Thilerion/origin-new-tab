@@ -283,6 +283,10 @@ export default {
 		},
 		onDrop(e) {
 			console.log("Dropped widget!", e);
+			const {x, y, width, height} = this.newWidgetOutline;
+			const widgetType = this.draggedWidget.type;
+			console.log({x, y, width, height, widgetType});
+			this.$store.dispatch('addNewWidget', {x, y, width, height, widgetType});
 		},
 		disableDropzone() {
 			console.log("disabling dropzone");

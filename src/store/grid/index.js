@@ -1,5 +1,5 @@
 import { getFromStorage, saveToStorage } from '@/utils/lsHelpers';
-import { validateActiveWidgets } from './validateActiveWidgets';
+import { validateActiveWidgets, createNewWidget } from './validateActiveWidgets';
 import { validateGridPreset } from './defaults';
 import { presets, gridComponents } from '@/widgets';
 
@@ -52,6 +52,10 @@ export const gridModule = {
 		},
 		setGridOrder(state, gridOrder) {
 			state.gridOrder = [...gridOrder];
+		},
+		addWidget(state, widget) {
+			state.gridWidgets.push(widget);
+			state.gridOrder.push(widget.uid);
 		}
 	},
 
@@ -76,6 +80,13 @@ export const gridModule = {
 
 			commit('setGridWidgets', validated);
 			commit('setGridOrder', validated.map(w => w.uid));
+		},
+		addNewWidget({ commit }, { x, y, width, height, widgetType }) {
+			const validated = createNewWidget({
+				x, y, width, height, name: widgetType
+			});
+			console.log(validated);
+			commit('addWidget', validated);
 		}
 	}
 }

@@ -107,4 +107,16 @@ function validateGridWidgets(
 	return !!validatedWidgets.length && { validatedWidgets, validatedOrder };
 }
 
-export { validateActiveWidgets };
+function createNewWidget({x, y, width, height, name}) {
+	const validator = new WidgetDisplaySetting({
+		x,
+		y,
+		width,
+		height,
+		name
+	});
+	const validatedSettings = validator.validateSettings(displayConfigs[name], globalConfig);
+	return validatedSettings;
+}
+
+export { validateActiveWidgets, createNewWidget };

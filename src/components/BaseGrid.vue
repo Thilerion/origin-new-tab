@@ -41,7 +41,7 @@
 			class="widget-outline"
 			v-if="newWidgetOutline.show"
 			:style="widgetOutlinePlacement"
-		><div class="outline-type">{{draggedWidget.type}}</div></div>
+		><div class="outline-type">{{draggedWidget.type.slice(6)}}</div></div>
 
 		<SettingsButton :style="settingsButtonGrid" />		
 	</div>
@@ -333,7 +333,7 @@ export default {
 }
 
 .grid.dropzone {
-	background: rgba(95, 248, 248, 0.1);
+	/* background: rgba(95, 248, 248, 0.1); */
 }
 
 /* Needed to disable dragleave on child elements */

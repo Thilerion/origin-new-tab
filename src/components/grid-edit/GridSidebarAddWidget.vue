@@ -5,6 +5,7 @@
 			v-for="widget in available"
 			:key="widget"
 			class="widget-types"
+			:class="{dragging: currentlyDragging === widget}"
 			draggable
 			@dragstart="onDragStart(widget, $event)"
 			@dragend="onDragEnd"
@@ -21,6 +22,9 @@ export default {
 	computed: {
 		available() {
 			return this.$store.getters.unusedGridWidgets;
+		},
+		currentlyDragging() {
+			return this.$store.state.dragAddNewWidget.type;
 		}
 	},
 	methods: {
@@ -56,5 +60,9 @@ export default {
 	cursor: pointer;
 	padding: 1rem;
 	margin: 0 1rem 1rem;
+}
+
+.dragging {
+	border-style: dashed;
 }
 </style>

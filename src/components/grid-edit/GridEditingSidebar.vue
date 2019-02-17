@@ -12,8 +12,9 @@
 				@click.native="$emit('selectWidget', widget.uid, true)"
 			/>
 		</div>
-		<div class="widget-info add-widget">+ Add widget</div>
+		<div class="widget-info add-widget-btn" v-if="!addingWidget" @click="showAddWidget">+ Add widget</div>
 	</div>
+
 	<div class="align-widget" v-if="selected != null">
 		<h2 class="align-title">Align content</h2>
 		<h3 class="align-subtitle">Horizontal</h3>
@@ -30,6 +31,8 @@
 		<button class="button" :class="{current: selected.alignY === ALIGN.end}" @click="alignWidget('y', ALIGN.end)">Bottom</button>
 		</div>
 	</div>
+
+	<GridSidebarAddWidget class="add-widget" v-else-if="addingWidget"/>
 </div>
 </template>
 
@@ -37,6 +40,7 @@
 import { ALIGN } from '@/constants';
 
 import WidgetInfo from './WidgetInfo.vue';
+import GridSidebarAddWidget from './GridSidebarAddWidget.vue';
 
 export default {
 	props: {
@@ -44,11 +48,13 @@ export default {
 		sortedWidgets: Array
 	},
 	components: {
-		WidgetInfo
+		WidgetInfo,
+		GridSidebarAddWidget
 	},
 	data() {
 		return {
-			ALIGN: {...ALIGN}
+			ALIGN: {...ALIGN},
+			addingWidget: false,
 		}
 	},
 	methods: {
@@ -58,6 +64,24 @@ export default {
 				dir,
 				alignment
 			})
+		},
+		showAddWidget() {
+			if (this.addingWidget) {
+				this.addingWidget = false;
+			} else {
+				this.addingWidget = true;
+				this.$emit('selectWidget', null, false);
+			}
+		}
+	},
+	watch: {
+		selected(newValue, oldValue) {
+			if (oldValue == null && newValue != null) {
+				if (this.addingWidget) {
+					console.warn('Widget selected while "addingWidget"; disabling the addWidget component.');
+					this.addingWidget = false;
+				}
+			}
 		}
 	}
 }
@@ -79,7 +103,7 @@ export default {
 	font-size: 1.125rem;
 }
 
-.align-title {
+.align-title, .add-widget >>> .add-title {
 	font-size: 1.125rem;
 	padding: 1.5rem 1rem 0.5rem;
 }
@@ -100,7 +124,7 @@ export default {
 	cursor: pointer;
 }
 
-.add-widget {
+.add-widget-btn {
 	font-style: italic;
 	opacity: 0.8;
 }

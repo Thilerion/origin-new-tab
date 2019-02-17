@@ -109,6 +109,9 @@ export default {
 			gridOrder: state => state.grid.gridOrder,
 			editing: state => state.editingGrid
 		}),
+		enableNewWidgetDropzone() {
+			return this.$store.getters.enableNewWidgetDropzone;
+		},
 		sortedGridWidgets() {
 			return this.gridOrder.map(uid => this.gridWidgets.find(w => w.uid === uid));
 		},
@@ -200,6 +203,15 @@ export default {
 				y: rect.top,
 				width: roundNumber(rect.width),
 				height: roundNumber(rect.height),
+			}
+		}
+	},
+	watch: {
+		enableNewWidgetDropzone(newValue, oldValue) {
+			if (newValue && !oldValue) {
+				console.log("Grid should enable dropzone");
+			} else if (!newValue && oldValue) {
+				console.log("Grid should DISABLE dropzone");
 			}
 		}
 	},

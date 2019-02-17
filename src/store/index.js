@@ -32,10 +32,18 @@ const store = new Vuex.Store({
 
 	state: {
 		showSettingsOverlay: false,
-		editingGrid: false
+		editingGrid: false,
+		dragAddNewWidget: {
+			dragging: false,
+			type: '',
+			width: null,
+			height: null
+		}
 	},
 
-	getters: {},
+	getters: {
+		enableNewWidgetDropzone: state => state.dragAddNewWidget.dragging
+	},
 
 	mutations: {		
 		setShowSettingsOverlay(state, show) {
@@ -51,10 +59,29 @@ const store = new Vuex.Store({
 			} else {
 				state.editingGrid = editing;
 			}
+		},
+		initNewWidgetDrag(state, { widget, width, height }) {
+			console.log('init new widget drag');
+			state.dragAddNewWidget = {
+				dragging: true,
+				type: widget,
+				width,
+				height
+			}
+		},
+		stopNewWidgetDrag(state) {
+			state.dragAddNewWidget = {
+				dragging: false,
+				type: '',
+				width: null,
+				height: null
+			};
 		}
 	},
 
-	actions: {}
+	actions: {
+		
+	}
 });
 
 export default store;

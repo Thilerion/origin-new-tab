@@ -5,6 +5,9 @@
 			v-for="widget in available"
 			:key="widget"
 			class="widget-types"
+			draggable
+			@dragstart="onDragStart(widget, $event)"
+			@dragend="onDragEnd"
 		>
 			{{widget}}
 		</div>
@@ -15,11 +18,6 @@
 import { displayConfigs } from '@/widgets';
 
 export default {
-	props: {
-		dragging: {
-			type: String
-		}
-	},
 	computed: {
 		available() {
 			return this.$store.getters.unusedGridWidgets;
@@ -34,6 +32,10 @@ export default {
 				height: h
 			};
 			console.log(data);
+			this.$store.commit('initNewWidgetDrag', data);
+		},
+		onDragEnd() {
+			this.$store.commit('stopNewWidgetDrag');
 		},
 		getInitialSize(widgetType) {
 			// in order of preference, use initialSize, minSize, or 1

@@ -56,6 +56,13 @@ export const gridModule = {
 		addWidget(state, widget) {
 			state.gridWidgets.push(widget);
 			state.gridOrder.push(widget.uid);
+		},
+		deleteWidget(state, uid) {
+			const idxGrid = state.gridWidgets.findIndex(w => w.uid === uid);
+			state.gridWidgets.splice(idxGrid, 1);
+
+			const idxOrder = state.gridOrder.indexOf(uid);
+			state.gridOrder.splice(idxOrder, 1);
 		}
 	},
 

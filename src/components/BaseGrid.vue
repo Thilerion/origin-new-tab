@@ -5,7 +5,7 @@
 		ref="grid"
 		v-shortkey="['c']"
 		@shortkey="toggleEditing"
-		:class="{editing}"
+		:class="{editing, dropzone: newWidgetOutline.show}"
 		v-resize="onGridResize"
 	>
 		<GridLines v-if="editing" :showCenterGuides="showCenterGuides" />
@@ -36,6 +36,12 @@
 			</transition>
 
 		</BaseWidget>
+
+		<div
+			class="widget-outline"
+			v-if="newWidgetOutline.show"
+			:style="widgetOutlinePlacement"
+		><div class="outline-type">{{draggedWidget.type}}</div></div>
 
 		<SettingsButton :style="settingsButtonGrid" />		
 	</div>
@@ -85,6 +91,13 @@ export default {
 				x: false,
 				y: false
 			},
+			newWidgetOutline: {
+				show: false,
+				x: null,
+				y: null,
+				width: null,
+				height: null
+			},
 
 			gridSize: {
 				x: null,
@@ -119,6 +132,19 @@ export default {
 			return {
 				'grid-row': `${this.rows} / span 1`,
 				'grid-column': `${this.cols} / span 1`
+			}
+		},
+		draggedWidget() {
+			return this.$store.state.dragAddNewWidget;
+		},
+		widgetOutlinePlacement() {
+			if (!this.newWidgetOutline.show) return {};
+
+			const {x, y, width, height} = this.newWidgetOutline;
+			return {
+				'grid-row': `${y} / span ${height}`,
+				'grid-column': `${x} / span ${width}`,
+				'z-index': 100
 			}
 		}
 	},
@@ -204,14 +230,64 @@ export default {
 				width: roundNumber(rect.width),
 				height: roundNumber(rect.height),
 			}
+		},
+		initDropzone() {
+			console.log("initiating dropzone");
+			const grid = this.$refs.grid;
+			grid.addEventListener('dragenter', this.onDragEnter);
+			grid.addEventListener('dragover', this.onDragOver);
+			grid.addEventListener('dragleave', this.onDragLeave);
+			grid.addEventListener('drop', this.onDrop);
+		},
+		onDragOver(e) {
+			e.preventDefault();
+			// TODO: update location of widget outline
+		},
+		onDragEnter(e) {
+			e.preventDefault();
+			console.log('drag enter');
+			this.newWidgetOutline.show = true;
+			this.newWidgetOutline.x = 1;
+			this.newWidgetOutline.y = 1;
+			this.newWidgetOutline.width = 5;
+			this.newWidgetOutline.height = 2;
+		},
+		onDragLeave(e) {
+			e.preventDefault();
+			console.log('drag leave');
+			this.newWidgetOutline.show = false;
+			this.newWidgetOutline.x = 1;
+			this.newWidgetOutline.y = 1;
+			this.newWidgetOutline.width = 5;
+			this.newWidgetOutline.height = 2;
+		},
+		onDrop(e) {
+			console.log("Dropped widget!", e);
+		},
+		disableDropzone() {
+			console.log("disabling dropzone");
+			const grid = this.$refs.grid;
+			grid.removeEventListener('dragenter', this.onDragEnter);
+			grid.removeEventListener('dragover', this.onDragOver);
+			grid.removeEventListener('dragleave', this.onDragLeave);
+			grid.removeEventListener('drop', this.onDrop);
+			this.newWidgetOutline = {
+				show: false,
+				x: null,
+				y: null,
+				width: null,
+				height: null
+			}
 		}
 	},
 	watch: {
 		enableNewWidgetDropzone(newValue, oldValue) {
 			if (newValue && !oldValue) {
 				console.log("Grid should enable dropzone");
+				this.initDropzone();
 			} else if (!newValue && oldValue) {
 				console.log("Grid should DISABLE dropzone");
+				this.disableDropzone();
 			}
 		}
 	},
@@ -254,6 +330,25 @@ export default {
 	grid-template-rows: repeat(var(--rows), minmax(0, 1fr));
 
 	padding: .75rem .5rem;
+}
+
+.grid.dropzone {
+	background: rgba(95, 248, 248, 0.1);
+}
+
+/* Needed to disable dragleave on child elements */
+.grid.dropzone > * {
+	pointer-events: none;
+}
+
+.widget-outline {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	background: #e6e6ffcc;
+	border: 4px solid yellow;
 }
 
 .cell-measure {

@@ -16,10 +16,16 @@ export const gridModule = {
 	state: {
 		...validatedState,
 		rows: GRID_ROWS,
-		cols: GRID_COLS
+		cols: GRID_COLS,
+
+		allGridWidgetTypes: Object.keys(gridComponents)
 	},
 
 	getters: {
+		usedGridWidgets: state => state.gridWidgets.map(w => w.name),
+		unusedGridWidgets: (state, getters) => state.allGridWidgetTypes.filter(type => {
+			return !getters.usedGridWidgets.includes(type);
+		})
 	},
 
 	mutations: {

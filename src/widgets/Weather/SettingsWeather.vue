@@ -1,12 +1,16 @@
 <template>
-	<div>
-		
-	</div>
+	<FormRadioGroup
+		label="Units"
+		:options="settingOptions.units.options"
+		v-model="units"
+	/>
 </template>
 
 <script>
+import FormRadioGroup from '@/components/form/FormRadioGroup.vue';
 export default {
 	components: {
+		FormRadioGroup
 	},
 	props: {
 		settingOptions: {
@@ -18,7 +22,14 @@ export default {
 		settings() {
 			return this.$store.state.settings.weather;
 		},
-		
+		units: {
+			get() {
+				return this.settings.units;
+			},
+			set(value) {
+				this.updateSetting('units', value);
+			}
+		}
 	},
 	methods: {
 		updateSetting(key, value) {

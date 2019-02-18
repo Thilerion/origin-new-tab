@@ -58,7 +58,7 @@ const store = {
 		// CUSTOM MIXINS
 		apiRequestParams(state, getters, rState) {
 			const lang = rState.settings.general.language;
-			const units = rState.settings.general.units || 'ca';
+			const units = rState.settings.weather.units || 'ca';
 			const { latitude, longitude } = state.data.position;
 			if (!lang || !units || !latitude || !longitude) {
 				console.warn('Error in weather apiRequestParams', { lang, units, latitude, longitude });

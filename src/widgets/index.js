@@ -2,6 +2,7 @@ import * as Unsplash from './Unsplash';
 import * as Clock from './Clock';
 import * as News from './News';
 import * as Weather from './Weather';
+import * as Quote from './Quote';
 
 import standard from './_presets/standard';
 
@@ -16,7 +17,8 @@ const WidgetTypes = {
 	Unsplash,
 	Clock,
 	News,
-	Weather
+	Weather,
+	Quote
 };
 
 // TODO: allow combining of multiple widget settings in one category
@@ -24,7 +26,8 @@ const settingCategoryOrder = [
 	{ name: 'Clock', value: 'clock' },
 	{ name: 'Wallpaper', value: 'unsplash' },
 	{ name: 'News', value: 'news' },
-	{ name: 'Weather', value: 'weather' }
+	{ name: 'Weather', value: 'weather' },
+	{ name: 'Quote', value: 'quote' }
 ]
 
 const getWidgetSettings = (widgets) => {

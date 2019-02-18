@@ -36,5 +36,14 @@ export default [
 		height: 2,
 		alignX: ALIGN.end,
 		alignY: ALIGN.start
+	},
+	{
+		name: "WidgetQuote",
+		x: 12,
+		width: 18,
+		y: 3,
+		height: 2,
+		alignX: ALIGN.center,
+		alignY: ALIGN.center
 	}
 ];

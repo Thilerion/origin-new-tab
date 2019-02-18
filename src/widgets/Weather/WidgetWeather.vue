@@ -1,7 +1,13 @@
 <template>
 	<div class="widget-weather" v-if="canShow && currently">
-		<Climacon v-if="currently.icon" :icon="currently.icon" />
-		<div class="temperature">{{currently.temperature | roundNumber}}&deg;</div>
+		<div class="main">
+			<Climacon
+				class="weather-icon"
+				v-if="currently.icon"
+				:icon="currently.icon"
+			/>
+			<div class="temperature">{{currently.temperature | roundNumber}}&deg;</div>
+		</div>
 		<div class="location">{{formattedAddress}}</div>
 	</div>
 </template>
@@ -36,7 +42,7 @@ export default {
 		},
 		formattedAddress() {
 			try {
-				return this.$store.state.weather.data.position.address.formattedAddress;
+				return this.$store.state.weather.data.position.address.city;
 			} catch(e) {
 				return '';
 			}
@@ -55,13 +61,29 @@ export default {
 
 <style scoped>
 .widget-weather {
-	width: 100%;
-	height: 100%;
+
 }
 
-.icon *, .icon {
-	width: 32px;
-	height: 32px;
-	color: white;
+.main {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding-bottom: 0.1em;
+	line-height: 2.5em;
+}
+
+.temperature {
+	text-align: right;
+	font-size: 2.25em;
+	margin-left: 0.1em;
+}
+
+.location {
+	text-align: center;
+	font-weight: 300;
+	font-size: 0.7em;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+	opacity: 0.9;
 }
 </style>

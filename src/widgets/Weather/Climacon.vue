@@ -1,5 +1,5 @@
 <template>
-	<component class="climacon" :style="climaconStyle" :is="climaconIcon" />
+	<component class="climacon" :style="climaconStyle" :is="climaconIcon" :class="icon" />
 </template>
 
 
@@ -49,7 +49,7 @@ export default {
 		},
 		size: {
 			type: String,
-			default: '3em'
+			default: '2.5em'
 		}
 	},
 	computed: {
@@ -78,7 +78,7 @@ export default {
 }
 
 .climacon path {
-	transform: scale(1.5) translate(-22.5%, -10%);
+	transform: scale(1.6) translate(-22.5%, -15%);
 }
 
 path.rain, path.fog, path.sleet, path.rain, path.snow {

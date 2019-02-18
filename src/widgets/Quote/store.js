@@ -28,8 +28,8 @@ const baseGetters = createBaseGetters({
 		const category = rState.settings.quote.category;
 		return [
 			'quote',
-			'/quote',
-			{ category }
+			`/quote/${category}`,
+			{  }
 		];
 	},
 	hasLocalStorageData(state) {

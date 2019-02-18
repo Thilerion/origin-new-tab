@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-weather" v-if="canShow && currently">
+	<div class="widget-weather" v-if="canShow && currently" @click="toggleExpanded">
 		<div class="main">
 			<Climacon
 				class="weather-icon"
@@ -9,6 +9,8 @@
 			<div class="temperature">{{currently.temperature | roundNumber}}&deg;</div>
 		</div>
 		<div class="location">{{formattedAddress}}</div>
+
+		<WidgetWeatherExpanded :show="showExpanded" />
 	</div>
 </template>
 
@@ -17,6 +19,7 @@ import { register, persist } from './store.js';
 import EnableWidgetStore from '@/mixins/EnableWidgetStore';
 
 import Climacon from './Climacon.vue';
+import WidgetWeatherExpanded from './WidgetWeatherExpanded.vue'
 
 export default {
 	name: "WidgetWeather",
@@ -24,10 +27,12 @@ export default {
 		namespace: 'weather', register, persist
 	})],
 	components: {
-		Climacon
+		Climacon,
+		WidgetWeatherExpanded
 	},
 	data() {
 		return {
+			showExpanded: false
 		}
 	},
 	computed: {
@@ -49,7 +54,9 @@ export default {
 		}
 	},
 	methods: {
-		
+		toggleExpanded() {
+			this.showExpanded = !this.showExpanded;
+		}
 	},
 	filters: {
 		roundNumber(n) {

@@ -23,14 +23,12 @@ export default {
 
 <style scoped>
 .btn-wrapper {
-	position: absolute;
-	bottom: 0.25rem;
-	right: 0.25rem;
+	position: relative;
+	bottom: -0.5rem;
+	right: -0.5rem;
 	display: flex;
 	align-items: flex-end;
 	justify-content: flex-end;
-	/* Padding for alignment due to uneven padding on grid */
-	/* padding-right: .25rem; */
 }
 
 .icon-btn {

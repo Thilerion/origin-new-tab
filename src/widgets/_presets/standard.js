@@ -3,29 +3,38 @@ import { ALIGN } from '@/constants';
 export default [
 	{
 		name: "WidgetClock",
-		x: 12,
-		width: 18,
-		y: 6,
+		x: 8,
+		y: 7,
+		width: 26,
 		height: 6,
 		alignX: ALIGN.center,
 		alignY: ALIGN.center
 	},
 	{
-		name: "WidgetNews",
-		x: 12,
-		width: 18,
-		y: 1,
-		height: 2,
-		alignX: ALIGN.center,
-		alignY: ALIGN.start
-	},
-	{
 		name: "WidgetUnsplashDetails",
 		x: 1,
-		width: 12,
-		y: 18,
-		height: 3,
+		y: 19,
+		width: 11,
+		height: 2,
 		alignX: ALIGN.start,
 		alignY: ALIGN.end
+	},
+	{
+		name: "WidgetNews",
+		x: 9,
+		y: 1,
+		width: 24,
+		height: 1,
+		alignX: ALIGN.center,
+		alignY: ALIGN.center
+	},
+	{
+		name: "WidgetWeather",
+		x: 34,
+		y: 1,
+		width: 7,
+		height: 2,
+		alignX: ALIGN.end,
+		alignY: ALIGN.start
 	}
 ];

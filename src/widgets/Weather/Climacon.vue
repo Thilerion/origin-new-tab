@@ -1,5 +1,5 @@
 <template>
-	<component :is="climaconIcon" />
+	<component class="climacon" :style="climaconStyle" :is="climaconIcon" />
 </template>
 
 
@@ -46,6 +46,10 @@ export default {
 		icon: {
 			type: String,
 			required: true
+		},
+		size: {
+			type: String,
+			default: '3em'
 		}
 	},
 	computed: {
@@ -56,11 +60,36 @@ export default {
 				console.warn(`Icon with name "${this.icon}" has no svg component mapping.`);
 				return iconComponentMap['partly-cloudy-day'];
 			}
+		},
+		climaconStyle() {
+			return {
+				width: this.size,
+				height: this.size
+			}
 		}
 	}
 }
 </script>
 
 <style>
+.climacon {
+	color: inherit;
+	fill: currentColor;
+}
 
+.climacon path {
+	transform: scale(1.5) translate(-22.5%, -10%);
+}
+
+path.rain, path.fog, path.sleet, path.rain, path.snow {
+	transform: scale(1.5) translate(-22.5%, -20%);
+}
+
+path.cloudy, path.clear-day, path.wind {
+	transform: scale(1.5) translate(-22.5%, -15%);
+}
+
+path.clear-night {
+	transform: scale(1.75) translate(-27.5%, -20%);
+}
 </style>

@@ -7,8 +7,8 @@ module.exports = {
 		svgRule
 			.use("vue-svg-loader")
 			.loader("vue-svg-loader")
-			.options({
-				svgo: false
-			});
+			// .options({
+			// 	svgo: false
+			// });
 	}
 };

@@ -1,11 +1,8 @@
 <template>
-	<div class="widget-weather" v-if="canShow">
-		<div class="forecast" v-if="currently">
-			<span class="temperature">{{currently.temperature}}&deg;C</span>
-			<span class="summary">{{currently.summary}}</span>
-			<span class="icon-name">{{currently.icon}}</span>
-			<span class="icon"><Climacon :icon="currently.icon" /></span>
-		</div>
+	<div class="widget-weather" v-if="canShow && currently">
+		<Climacon v-if="currently.icon" :icon="currently.icon" />
+		<div class="temperature">{{currently.temperature | roundNumber}}&deg;</div>
+		<div class="location">{{formattedAddress}}</div>
 	</div>
 </template>
 
@@ -47,7 +44,12 @@ export default {
 	},
 	methods: {
 		
-	}
+	},
+	filters: {
+		roundNumber(n) {
+			return Math.round(n);
+		}
+	},
 }
 </script>
 

@@ -1,7 +1,10 @@
 <template>
-	<div class="widget-quote shadow-40" v-if="canShow">
-		<span class="quote">{{quote | removeDot}}</span>
-		<span class="author">{{author}}</span>
+	<div class="widget-quote shadow-40" v-if="canShow" :key="quote">
+		<span class="main">
+			<span class="quote">{{quote | removeDot}}</span>
+			<span class="author">{{author}}</span>
+		</span>
+		<button @click="getNewQuote" class="reload-quote icon-btn"><IconSync class="icon small"/></button>
 	</div>
 </template>
 
@@ -9,13 +12,15 @@
 import { register, persist } from './store.js';
 import EnableWidgetStore from '@/mixins/EnableWidgetStore';
 
+import IconSync from '@/assets/icons/ui/md-sync.svg';
+
 export default {
 	name: "WidgetQuote",
 	mixins: [EnableWidgetStore({
 		namespace: 'quote', register, persist
 	})],
 	components: {
-
+		IconSync
 	},
 	data() {
 		return {
@@ -33,6 +38,11 @@ export default {
 			return this.$store.state.quote.data.author;
 		}
 	},
+	methods: {
+		getNewQuote() {
+			this.$store.dispatch('quote/getNewQuote');
+		}
+	},
 	filters: {
 		removeDot(str = "") {
 			if (str.endsWith('.')) {
@@ -47,7 +57,14 @@ export default {
 .widget-quote {
 	text-align: center;
 	display: flex;
+	flex-direction: row;
+	align-items: center;	
+}
+
+.main {
+	display: flex;
 	flex-direction: column;
+	padding-left: 1.5em;
 }
 
 .quote {
@@ -62,5 +79,15 @@ export default {
 .author {
 	letter-spacing: 0.4px;
 	margin-left: auto;
+}
+
+.reload-quote {
+	flex: 0 0 1.5em;
+	opacity: 0;
+	transition: opacity .25s ease;
+}
+
+.widget-quote:hover .reload-quote {
+	opacity: 0.9;
 }
 </style>

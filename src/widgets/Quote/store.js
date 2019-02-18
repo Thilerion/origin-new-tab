@@ -65,7 +65,11 @@ const store = {
 		...baseMutations
 	},
 	actions: {
-		...baseActions
+		...baseActions,
+		getNewQuote({commit, dispatch}) {
+			commit('setExpires', Date.now());
+			dispatch('fetchApiData');
+		}
 	},
 }
 

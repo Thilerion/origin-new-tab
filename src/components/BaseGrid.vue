@@ -354,7 +354,7 @@ export default {
 	grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
 	grid-template-rows: repeat(var(--rows), minmax(0, 1fr));
 
-	padding: .75rem .5rem;
+	padding: .75rem;
 }
 
 .grid.dropzone {

@@ -3,10 +3,18 @@ import { localeMessages } from '@/widgets';
 
 const baseMessages = {
 	en: {
-		
+		settings: {
+			username: 'Username',
+			language: 'Language',
+			timeFormat: 'Time format'
+		}
 	},
 	nl: {
-		
+		settings: {
+			username: 'Naam',
+			language: 'Taal',
+			timeFormat: 'Tijdnotatie'
+		}
 	}
 };
 

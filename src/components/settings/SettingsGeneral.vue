@@ -2,19 +2,19 @@
 	<div>
 		<FormInput
 			name="username"
-			label="Username"
+			:label="$t('settings.username')"
 			v-model="username"
 			autocomplete="given-name"
 		/>
 
 		<FormRadioGroup
-			label="Language"
+			:label="$t('settings.language')"
 			:options="settingOptions.language.options"
 			v-model="language"
 		/>
 
 		<FormRadioGroup
-			label="Time format"
+			:label="$t('settings.timeFormat')"
 			:options="settingOptions.timeFormat.options"
 			v-model="timeFormat"
 		/>

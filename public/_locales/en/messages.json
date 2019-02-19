@@ -7,5 +7,8 @@
 	},
 	"extDescription": {
 		"message": "Chrome New Tab/startpage extension, currently in development."
+	},
+	"extTitle": {
+		"message": "New Tab"
 	}
 }

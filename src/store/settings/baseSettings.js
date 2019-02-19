@@ -1,4 +1,6 @@
 import { presets } from '@/widgets';
+import { LANGUAGES } from '@/constants';
+import { getDefaultLocale } from '@/utils/locale';
 
 export const general = {
 	username: {
@@ -7,12 +9,9 @@ export const general = {
 	},
 	language: {
 		name: 'language',
-		getDefault: () => 'en',
+		getDefault: () => getDefaultLocale(),
 
-		options: [
-			{ name: 'English', value: 'en' },
-			{ name: 'Nederlands', value: 'nl' }
-		]
+		options: LANGUAGES
 	},
 	timeFormat: {
 		name: 'timeFormat',

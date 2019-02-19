@@ -8,7 +8,13 @@ export const API_URL = process.env.NODE_ENV === 'development'
 export const WIDGET_TYPE_BG = 'wallpaper-widget';
 export const WIDGET_TYPE_GRID = 'grid-widget';
 
-export const LANGUAGES = ['en', 'nl'];
+export const LANGUAGES = [
+	{ name: 'English', value: 'en' },
+	{ name: 'Nederlands', value: 'nl' }
+];
+
+export const LANGUAGE_VALUES = LANGUAGES.map(lang => lang.value);
+export const LANGUAGE_DEFAULT = 'en';
 
 export const TIME_FORMATS = [
 	'HH:mm',

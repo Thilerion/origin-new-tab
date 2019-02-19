@@ -7,7 +7,7 @@ export default function loadImage(url) {
 		let loaded = () => {
 			clearTimeout(loadTimer);
 			loadTimer = null;
-			resolve(url);
+			resolve({ url, image });
 		}
 
 		function errorLoading(e) {

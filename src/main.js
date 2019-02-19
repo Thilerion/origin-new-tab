@@ -4,7 +4,7 @@ import store from './store'
 
 import VueShortkey from 'vue-shortkey';
 Vue.use(VueShortkey, {
-	prevent: ['input', 'textarea', 'button']
+	prevent: ['input', 'textarea']
 });
 
 import './assets/style/base.css';

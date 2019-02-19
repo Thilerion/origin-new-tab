@@ -10,7 +10,7 @@
 		</div>
 		<div class="location">{{formattedAddress}}</div>
 
-		<WidgetWeatherExpanded :show="showExpanded" />
+		<WidgetWeatherExpanded :show="showExpanded" :daily="daily" />
 	</div>
 </template>
 
@@ -45,6 +45,9 @@ export default {
 		currently() {
 			return this.forecast && this.forecast.currently;
 		},
+		daily() {
+			return this.forecast && this.forecast.daily;
+		},
 		formattedAddress() {
 			try {
 				return this.$store.state.weather.data.position.address.city;
@@ -68,7 +71,7 @@ export default {
 
 <style scoped>
 .widget-weather {
-
+	cursor: pointer;
 }
 
 .main {

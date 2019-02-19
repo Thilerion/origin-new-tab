@@ -54,6 +54,7 @@ export default {
 			},
 			set(value) {
 				this.updateSetting('language', value);
+				this.$i18n.locale = value;
 			}
 		},
 		timeFormat: {

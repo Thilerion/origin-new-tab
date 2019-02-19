@@ -2,21 +2,9 @@ import Vue from 'vue';
 import store from '@/store';
 import { getLocaleFromStore } from '@/utils/locale';
 import VueI18n from 'vue-i18n';
+import messages from './messages.js';
 
 Vue.use(VueI18n);
-
-const messages = {
-	en: {
-		message: {
-			hello: 'hello world'
-		}
-	},
-	nl: {
-		message: {
-			hello: 'hallo wereld'
-		}
-	}
-};
 
 const i18n = new VueI18n({
 	locale: getLocaleFromStore(store),

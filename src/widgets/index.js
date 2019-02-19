@@ -89,9 +89,28 @@ const getWidgetDisplayConfigs = (widgets) => {
 	return widgetConfigs;
 }
 
+const getWidgetLocaleMessages = (widgets) => {
+	let widgetLocales = {};
+	
+	for (const wName in widgets) {
+		if (!widgets[wName] || !widgets[wName].localeMessages) continue;
+		// widgetLocales[wName] = widgets[wName].localeMessages;
+		const name = wName.toLowerCase();
+		const msgs = widgets[wName].localeMessages;
+
+		for (const lang in msgs) {
+			if (!widgetLocales[lang]) widgetLocales[lang] = {};
+			widgetLocales[lang][name] = msgs[lang];
+		}
+	}
+
+	return widgetLocales;
+}
+
 const { gridComponents, wallpaperComponents } = getWidgetComponents(WidgetTypes);
 const settingsComponents = getSettingsComponents(WidgetTypes);
 const settings = getWidgetSettings(WidgetTypes);
 const displayConfigs = getWidgetDisplayConfigs(WidgetTypes);
+const localeMessages = getWidgetLocaleMessages(WidgetTypes);
 
-export { gridComponents, wallpaperComponents, settings, settingsComponents, settingCategoryOrder, displayConfigs, presets };
+export { gridComponents, wallpaperComponents, settings, settingsComponents, settingCategoryOrder, displayConfigs, presets, localeMessages };

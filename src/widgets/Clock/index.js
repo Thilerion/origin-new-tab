@@ -1,6 +1,8 @@
 import WidgetClock from './WidgetClock.vue';
 import SettingsClock from './SettingsClock.vue';
 
+export { default as localeMessages } from './_locale';
+
 export const gridComponents = {
 	WidgetClock
 }

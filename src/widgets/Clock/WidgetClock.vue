@@ -8,7 +8,7 @@
 		<div
 			class="greeting"
 			v-if="showTextGreeting"
-		>{{timeOfDayMsg}}, <span class="username">{{username}}</span>.</div>
+		>{{$t(`clock.timeOfDay[${timeOfDayMsg}]`)}}, <span class="username">{{username}}</span>.</div>
 	</div>
 </template>
 
@@ -42,17 +42,10 @@ export default {
 		// TODO: i18n
 		timeOfDayMsg() {
 			const curHour = this.time.getHours();
-			const msg = [
-				'Good morning',
-				'Hi',
-				'Good evening',
-				'Good night'
-			];
-
-			if (curHour < 5) return msg[3];
-			if (curHour < 12) return msg[0];
-			if (curHour < 18) return msg[1];
-			return msg[2];
+			if (curHour < 5) return 3;
+			if (curHour < 12) return 0;
+			if (curHour < 18) return 1;
+			return 2;
 		}
 	},
 	methods: {

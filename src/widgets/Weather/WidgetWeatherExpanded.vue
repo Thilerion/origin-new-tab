@@ -3,7 +3,7 @@
 		<transition name="slide">
 			<div class="weather-expanded-inner" v-if="show">
 				<ul class="daily-list">
-					<li class="daily-item" v-for="(day, daysFromNow) in forecast" :key="daysFromNow">
+					<li class="daily-item" v-for="(day, daysFromNow) in forecast" :key="daysFromNow" :style="listItemBg(daysFromNow)">
 						<Climacon class="climacon-small" :icon="day.icon" size="2em" />
 						<div class="date">{{formatDate(day.time)}}</div>
 						<div class="temperatures">
@@ -64,6 +64,14 @@ export default {
 			if (diff === 1) return 'Morgen';
 			
 			return format(new Date(ms), 'dd D MMM', {locale: locales[locale]});
+		},
+		listItemBg(idx) {
+			const BG_COLORS = ['#333333','#434343','#525252','#636363','#747474','#868686','#989898','#aaaaaa'];
+			const n = Number(idx);
+			const opacity = Math.round((190 * ((15 - n) / 14))).toString(16);
+			return {
+				background: `${BG_COLORS[idx]}${opacity}`
+			}
 		}
 	},
 	filters: {
@@ -87,7 +95,7 @@ export default {
 }
 
 .weather-expanded-inner {
-	background: rgba(0, 0, 0, 0.8);
+	background: rgba(0, 0, 0, 0.4);
 	pointer-events: unset;
 	border-radius: 4px;
 }

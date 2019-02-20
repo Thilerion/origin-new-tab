@@ -6,7 +6,11 @@ export default {
 			'Good evening',
 			'Good night'
 		],
-		settingName: 'Clock'
+		settingName: 'Clock',
+		settings: {
+			showDate: 'Show date',
+			showGreeting: 'Show text greeting'
+		}
 	},
 	nl: {
 		timeOfDay: [
@@ -15,6 +19,10 @@ export default {
 			'Goedenavond',
 			'Goedenacht'
 		],
-		settingName: 'Klok'
+		settingName: 'Klok',
+		settings: {
+			showDate: 'Laat datum zien',
+			showGreeting: 'Laat welkomstgroet zien'
+		}
 	}
 }

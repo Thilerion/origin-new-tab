@@ -3,12 +3,12 @@
 		<FormToggle
 			name="date"
 			v-model="showDate"
-		>Show date</FormToggle>
+		>{{$t('clock.settings.showDate')}}</FormToggle>
 
 		<FormToggle
 			name="greeting"
 			v-model="showTextGreeting"
-		>Show text greeting</FormToggle>
+		>{{$t('clock.settings.showGreeting')}}</FormToggle>
 	</div>
 </template>
 

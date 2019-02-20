@@ -12,7 +12,11 @@ export default {
 				daily: 'Daily',
 				never: 'Never (only manual)'
 			}
-		}
+		},
+		photoBy: 'Photo by',
+		next: 'Next photo',
+		download: 'Download photo',
+		hide: 'Hide photo'
 	},
 	nl: {
 		settingName: 'Achtergrond',
@@ -27,6 +31,10 @@ export default {
 				daily: 'Dagelijks',
 				never: 'Nooit (alleen handmatig)'
 			}
-		}
+		},
+		photoBy: 'Foto gemaakt door',
+		next: 'Volgende foto',
+		download: 'Download foto',
+		hide: 'Verberg foto'
 	}
 }

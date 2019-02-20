@@ -5,22 +5,25 @@
 			<button			
 				@click="goToNextWallpaper"
 				class="icon-btn"
+				:title="$t('unsplash.next')"
 			><IconSync class="icon small"/></button>
 
 			<a :href="downloadUrl"
 				:target="downloadUrl ? '_blank' : undefined"
 				rel="noopener"
 				class="icon-btn"
+				:title="$t('unsplash.download')"
 			><IconDownload class="icon small"/></a>
 
 			<button
 				@click="hideWallpaper"
 				class="icon-btn"
+				:title="$t('unsplash.hide')"
 			><IconClose class="icon small"/></button>
 		</div>
 
 		<div class="user-info enable-select">
-			<a v-if="userName" :href="urlUser" class="user-link user-name">Photo by {{userName}}</a>
+			<a v-if="userName" :href="urlUser" class="user-link user-name">{{$t('unsplash.photoBy')}} {{userName}}</a>
 			<p v-if="photoLocation" class="user-link user-location">{{photoLocation}}</p>
 		</div>
 

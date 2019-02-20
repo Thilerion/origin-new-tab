@@ -81,7 +81,8 @@ export const gridModule = {
 			}
 		},
 		applyGridPreset({ commit }, presetName) {
-			const layout = presets[presetName].value;
+			const name = presetName.toLowerCase();
+			const layout = presets[name].value;
 			const availWidgets = Object.keys(gridComponents);
 			const validated = validateGridPreset(layout, availWidgets);
 

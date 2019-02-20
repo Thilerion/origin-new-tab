@@ -30,7 +30,7 @@ export const dashboard = {
 	preset: {
 		name: 'preset',
 		options: [
-			...Object.keys(presets).map(presetName => ({ name: presets[presetName].name, value: presetName }))
+			...Object.values(presets)
 		]
 	}
 }

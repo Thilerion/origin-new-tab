@@ -8,7 +8,12 @@ const baseMessages = {
 			language: 'Language',
 			timeFormat: 'Time format',
 			timeFormat24: '24-hour',
-			timeFormat12: '12-hour'
+			timeFormat12: '12-hour',
+			configureLayout: 'Configure dashboard layout',
+			choosePreset: 'Choose preset layout',
+			presets: {
+				standard: 'Standard'
+			}
 		},
 		settingCategory: {
 			general: 'General',
@@ -21,7 +26,12 @@ const baseMessages = {
 			language: 'Taal',
 			timeFormat: 'Tijdnotatie',
 			timeFormat24: '24-uurs',
-			timeFormat12: '12-uurs'
+			timeFormat12: '12-uurs',
+			configureLayout: 'Dashboard layout aanpassen',
+			choosePreset: 'Kies voorinstelling',
+			presets: {
+				standard: 'Standaard'
+			}
 		},
 		settingCategory: {
 			general: 'Algemeen',

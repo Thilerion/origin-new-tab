@@ -10,7 +10,8 @@ import standard from './_presets/standard';
 const presets = {
 	standard: {
 		name: 'Standard',
-		value: standard
+		value: standard,
+		localePath: 'settings.presets.standard'
 	}
 }
 

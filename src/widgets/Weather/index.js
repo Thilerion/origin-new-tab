@@ -18,8 +18,8 @@ export const settings = {
 		getDefault: () => 'ca',
 
 		options: [
-			{ name: 'Metric', value: 'ca' },
-			{ name: 'Imperial', value: 'us' }
+			{ name: 'Metric', value: 'ca', localePath: 'weather.settings.metric' },
+			{ name: 'Imperial', value: 'us', localePath: 'weather.settings.imperial' },
 		]
 	}
 }

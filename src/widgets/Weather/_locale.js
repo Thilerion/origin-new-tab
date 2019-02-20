@@ -1,8 +1,18 @@
 export default {
 	en: {
-		settingName: 'Weather'
+		settingName: 'Weather',
+		settings: {
+			units: 'Units',
+			metric: 'Metric',
+			imperial: 'Imperial'
+		}
 	},
 	nl: {
-		settingName: 'Weer'
+		settingName: 'Weer',
+		settings: {
+			units: 'Eenheden',
+			metric: 'Metrisch',
+			imperial: 'Engels'
+		}
 	}
 }

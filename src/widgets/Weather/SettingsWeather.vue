@@ -1,6 +1,6 @@
 <template>
 	<FormRadioGroup
-		label="Units"
+		:label="$t('weather.settings.units')"
 		:options="settingOptions.units.options"
 		v-model="units"
 	/>

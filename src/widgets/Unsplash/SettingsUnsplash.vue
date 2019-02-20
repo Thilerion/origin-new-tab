@@ -2,13 +2,13 @@
 	<div>
 		<FormSelect
 			name="collection"
-			label="Collection"
+			:label="$t('unsplash.settings.collection')"
 			:options="settingOptions.collection.options"
 			v-model="collection"
 		/>
 		<FormSelect
 			name="refreshInterval"
-			label="New Wallpaper Photo Interval"
+			:label="$t('unsplash.settings.newPhotoInterval')"
 			:options="settingOptions.refreshInterval.options"
 			v-model="refreshInterval"
 		/>

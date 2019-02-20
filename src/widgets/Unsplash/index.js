@@ -17,7 +17,7 @@ export const settings = {
 		getDefault: () => '220388,460827',
 
 		options: [
-			{ name: 'Featured', value: '220388,460827' },
+			{ name: 'Featured', value: '220388,460827', localePath: 'unsplash.settings.featured' },
 			{ name: 'Landscape Light', value: '477172' },
 			{ name: 'Spectrum', value: '540518' },
 			{ name: 'Reflections', value: '334800' },
@@ -32,11 +32,11 @@ export const settings = {
 		getDefault: () => 0,
 
 		options: [
-			{ name: 'Every tab', value: 0 },
-			{ name: '30 minutes', value: 30 * 60 * 1000 },
-			{ name: 'Hourly', value: 60 * 60 * 1000 },
-			{ name: 'Daily', value: 20 * 60 * 60 * 1000 },
-			{ name: 'Never', value: Infinity }
+			{ name: 'Every tab', value: 0, localePath: 'unsplash.settings.intervalOptions.everyTab' },
+			{ name: '30 minutes', value: 30 * 60 * 1000, localePath: 'unsplash.settings.intervalOptions.halfHour' },
+			{ name: 'Hourly', value: 60 * 60 * 1000, localePath: 'unsplash.settings.intervalOptions.hourly' },
+			{ name: 'Daily', value: 20 * 60 * 60 * 1000, localePath: 'unsplash.settings.intervalOptions.daily' },
+			{ name: 'Never', value: Infinity, localePath: 'unsplash.settings.intervalOptions.never' },
 		]
 	}
 }

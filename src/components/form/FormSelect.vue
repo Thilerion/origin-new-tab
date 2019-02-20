@@ -2,7 +2,7 @@
 	<div class="select form-item">
 		<label class="form-label select-label" v-if="label" :for="name">{{label}}</label>
 		<select :id="name" :name="name" :value="value" @input="$emit('input', $event.target.value)" v-bind="$attrs">
-			<option v-for="option in options" :value="option.value" :key="option.name">{{option.name}}</option>
+			<option v-for="option in options" :value="option.value" :key="option.name">{{translate(option)}}</option>
 		</select>
 		<div class="select-arrow">
 			<IconArrowDown class="icon" />
@@ -33,6 +33,12 @@ export default {
 		value: {
 			type: [String, Number],
 			required: true
+		}
+	},
+	methods: {
+		translate(obj) {
+			if (obj.localePath) return this.$t(obj.localePath);
+			return obj.name;
 		}
 	}
 }

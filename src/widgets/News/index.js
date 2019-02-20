@@ -14,13 +14,13 @@ export const settings = {
 		getDefault: () => 6000, // 6 sec per item
 
 		options: [
-			{ name: '2 seconds', value: 2000 },
-			{ name: '4 seconds', value: 4000 },
-			{ name: '6 seconds', value: 6000 },
-			{ name: '8 seconds', value: 8000 },
-			{ name: '10 seconds', value: 10000 },
-			{ name: '12 seconds', value: 12000 },
-			{ name: 'Never (only manual)', value: -1 }
+			{ name: '2 seconds', value: 2000, localePath: 'news.settings.slideOptions[0]' },
+			{ name: '4 seconds', value: 4000, localePath: 'news.settings.slideOptions[1]' },
+			{ name: '6 seconds', value: 6000, localePath: 'news.settings.slideOptions[2]' },
+			{ name: '8 seconds', value: 8000, localePath: 'news.settings.slideOptions[3]' },
+			{ name: '10 seconds', value: 10000, localePath: 'news.settings.slideOptions[4]' },
+			{ name: '12 seconds', value: 12000, localePath: 'news.settings.slideOptions[5]' },
+			{ name: 'Never (only manual)', value: -1, localePath: 'news.settings.slideOptions[6]' },
 		]
 	}
 }

@@ -2,7 +2,7 @@
 	<div>
 		<FormSelect
 			name="slideInterval"
-			label="News item slide interval"
+			:label="$t('news.settings.slideInterval')"
 			:options="settingOptions.slideInterval.options"
 			v-model="slideInterval"
 		/>

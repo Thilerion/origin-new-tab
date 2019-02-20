@@ -5,7 +5,10 @@ export default {
 			units: 'Units',
 			metric: 'Metric',
 			imperial: 'Imperial'
-		}
+		},
+		today: 'Today',
+		tomorrow: 'Tomorrow',
+		dateFormatter: ''
 	},
 	nl: {
 		settingName: 'Weer',
@@ -13,6 +16,9 @@ export default {
 			units: 'Eenheden',
 			metric: 'Metrisch',
 			imperial: 'Engels'
-		}
+		},
+		today: 'Today',
+		tomorrow: 'Tomorrow',
+		dateFormatter: ''
 	}
 }

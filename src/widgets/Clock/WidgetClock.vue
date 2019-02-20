@@ -37,7 +37,8 @@ export default {
 			return formatTime(this.time, this.timeFormat);
 		},
 		formattedDate() {
-			return toLocaleDate(this.time, this.language);
+			const locale = this.$i18n.locale;
+			return toLocaleDate(this.time, locale);
 		},
 		// TODO: i18n
 		timeOfDayMsg() {

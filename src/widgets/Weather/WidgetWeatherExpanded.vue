@@ -56,12 +56,12 @@ export default {
 	methods: {
 		formatDate(time, language) {
 			// TODO: language
-			const locale = language || this.$store.state.settings.general.language || 'nl';
+			const locale = this.$i18n.locale;
 			const ms = time * 1000;
 			const diff = differenceInCalendarDays(new Date(ms), new Date());
 
-			if (diff === 0) return 'Vandaag';
-			if (diff === 1) return 'Morgen';
+			if (diff === 0) return this.$t('weather.today');
+			if (diff === 1) return this.$t('weather.tomorrow');
 			
 			return format(new Date(ms), 'dd D MMM', {locale: locales[locale]});
 		},

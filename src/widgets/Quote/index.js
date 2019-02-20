@@ -15,9 +15,9 @@ export const settings = {
 		getDefault: () => 'motivinspirational',
 
 		options: [
-			{ name: 'Motivinspirational', value: 'motivinspirational' },
-			{ name: 'Famous people', value: 'famous' },
-			{ name: 'Movies', value: 'movies' },
+			{ name: 'Motivinspirational', value: 'motivinspirational', localePath: 'quote.settings.categoryOptions.motivinspirational' },
+			{ name: 'Famous people', value: 'famous', localePath: 'quote.settings.categoryOptions.famous' },
+			{ name: 'Movies', value: 'movies', localePath: 'quote.settings.categoryOptions.movies' },
 		]
 	}
 }

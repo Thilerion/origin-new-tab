@@ -1,7 +1,7 @@
 <template>
 	<FormSelect
 		name="category"
-		label="Category"
+		:label="$t('quote.settings.category')"
 		:options="settingOptions.category.options"
 		v-model="category"
 	/>

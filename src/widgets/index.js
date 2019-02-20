@@ -25,12 +25,12 @@ const WidgetTypes = {
 
 // TODO: allow combining of multiple widget settings in one category
 const settingCategoryOrder = [
-	{ name: 'Clock', value: 'clock' },
-	{ name: 'Wallpaper', value: 'unsplash' },
-	{ name: 'News', value: 'news' },
-	{ name: 'Weather', value: 'weather' },
-	{ name: 'Quote', value: 'quote' },
-	{ name: 'Quick Links', value: 'quicklinks' }
+	{ name: 'Clock', value: 'clock', localePath: 'clock.settingName' },
+	{ name: 'Wallpaper', value: 'unsplash', localePath: 'unsplash.settingName' },
+	{ name: 'News', value: 'news', localePath: 'news.settingName' },
+	{ name: 'Weather', value: 'weather', localePath: 'weather.settingName' },
+	{ name: 'Quote', value: 'quote', localePath: 'quote.settingName' },
+	{ name: 'Quick Links', value: 'quicklinks', localePath: 'quicklinks.settingName' }
 ]
 
 const getWidgetSettings = (widgets) => {

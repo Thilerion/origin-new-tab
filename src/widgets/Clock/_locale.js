@@ -5,7 +5,8 @@ export default {
 			'Hello',
 			'Good evening',
 			'Good night'
-		]
+		],
+		settingName: 'Clock'
 	},
 	nl: {
 		timeOfDay: [
@@ -13,6 +14,7 @@ export default {
 			'Hallo',
 			'Goedenavond',
 			'Goedenacht'
-		]
+		],
+		settingName: 'Klok'
 	}
 }

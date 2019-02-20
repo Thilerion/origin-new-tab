@@ -41,8 +41,8 @@ export const settingsModule = {
 	getters: {
 		settingsOptions: () => settingOptions,
 		settingCategoryOrder: () => [
-			{ name: 'General', value: 'general' },
-			{ name: 'Dashboard', value: 'dashboard' },
+			{ name: 'General', value: 'general', localePath: 'settingCategory.general' },
+			{ name: 'Dashboard', value: 'dashboard', localePath: 'settingCategory.dashboard' },
 			...settingCategoryOrder
 		]
 	},

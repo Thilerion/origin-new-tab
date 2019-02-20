@@ -18,7 +18,7 @@
 			<label
 				:for="option.value"
 				class="label-radio"
-			>{{option.name}}</label>
+			>{{option.localePath ? $t(option.localePath) : option.name}}</label>
 		</div>
 	</fieldset>
 </template>

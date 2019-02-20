@@ -2,6 +2,8 @@ import { presets } from '@/widgets';
 import { LANGUAGES } from '@/constants';
 import { getDefaultLocale } from '@/utils/locale';
 
+// import { i18n } from '@/i18n';
+
 export const general = {
 	username: {
 		name: 'username',
@@ -18,8 +20,8 @@ export const general = {
 		getDefault: () => 'HH:mm',
 
 		options: [
-			{ name: '24-hour', value: 'HH:mm' },
-			{ name: '12-hour', value: 'h:mm a' }
+			{ name: '24-hour', value: 'HH:mm', localePath: 'settings.timeFormat24' },
+			{ name: '12-hour', value: 'h:mm a', localePath: 'settings.timeFormat12' }
 		]
 	}
 };

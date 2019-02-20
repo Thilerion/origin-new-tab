@@ -1,6 +1,7 @@
 import WidgetQuote from './WidgetQuote.vue';
 
 export { default as settingsComponent } from './SettingsQuote.vue';
+export { default as localeMessages } from './_locale';
 
 export const gridComponents = {
 	WidgetQuote

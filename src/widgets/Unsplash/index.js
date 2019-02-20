@@ -1,6 +1,7 @@
 import WallpaperUnsplash from './WallpaperUnsplash.vue';
 import WidgetUnsplashDetails from './WidgetUnsplashDetails.vue';
 export { default as settingsComponent } from './SettingsUnsplash.vue';
+export { default as localeMessages } from './_locale';
 
 export const gridComponents = {
 	WidgetUnsplashDetails

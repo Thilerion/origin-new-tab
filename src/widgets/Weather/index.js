@@ -1,5 +1,6 @@
 import WidgetWeather from './WidgetWeather.vue';
 export { default as settingsComponent } from './SettingsWeather.vue'
+export { default as localeMessages } from './_locale';
 
 export const gridComponents = {
 	WidgetWeather

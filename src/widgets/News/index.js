@@ -1,5 +1,6 @@
 import WidgetNews from './WidgetNews.vue';
 export { default as settingsComponent } from './SettingsNews.vue'
+export { default as localeMessages } from './_locale';
 
 export const gridComponents = {
 	WidgetNews

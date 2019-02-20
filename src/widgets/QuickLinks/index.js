@@ -1,5 +1,6 @@
 import WidgetQuickLinks from './WidgetQuickLinks.vue';
 import SettingsQuickLinks from './SettingsQuickLinks.vue';
+export { default as localeMessages } from './_locale';
 
 export const gridComponents = {
 	WidgetQuickLinks

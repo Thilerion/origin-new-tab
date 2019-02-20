@@ -22,7 +22,7 @@
 							class="nav-item"
 							:class="{active: activeCatId === cat.value}"
 							@click="activeCatId = cat.value"
-						>{{cat.name}}</li>
+						>{{getLocaleCatName(cat)}}</li>
 					</ul>
 				</nav>
 				<div class="settings-inner settings-content">
@@ -82,7 +82,9 @@ export default {
 	},
 	computed: {
 		activeCategoryName() {
-			return this.settingCategoryOrder.find(cat => cat.value === this.activeCatId).name;
+			const cat = this.settingCategoryOrder.find(cat => cat.value === this.activeCatId);
+			if (cat.localePath) return this.$t(cat.localePath);
+			return cat.name;
 		},
 		settingsOptions() {
 			return this.$store.getters.settingsOptions;
@@ -96,7 +98,11 @@ export default {
 	methods: {
 		closeSettings() {
 			this.$store.commit('setShowSettingsOverlay', false);
-		}
+		},
+		getLocaleCatName(cat) {
+			if (cat.localePath) return this.$t(cat.localePath);
+			return cat.name;
+		} 
 	},
 	mounted() {
 		const el = this.$el;

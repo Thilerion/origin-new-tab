@@ -1,13 +1,13 @@
 <template>
 	<div>
 		<FormRangeSlider
-			label="Amount"
+			:label="$t('quicklinks.settings.amount')"
 			name="amount"
 			:options="settingOptions.amount.options"
 			v-model="amount"
 		/>
 		<FormRangeSlider
-			label="Items per row"
+			:label="$t('quicklinks.settings.itemsPerRow')"
 			name="amountPerRow"
 			:options="settingOptions.amountPerRow.options"
 			v-model="amountPerRow"

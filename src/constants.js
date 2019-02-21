@@ -32,3 +32,6 @@ export const ALIGN = {
 	end: 'align_end',
 	center: 'align_center',
 }
+
+export const ALGOLIA_APP_ID = 'plMM2UT5MYTT';
+export const ALGOLIA_SEARCH_KEY = '08ee84eb95a7daed88c2047f2ceb593f';

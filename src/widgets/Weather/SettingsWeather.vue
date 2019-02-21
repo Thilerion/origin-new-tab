@@ -4,9 +4,10 @@
 		name="useCustomLocation"
 		v-model="useCustomLocation"
 	>Use custom location</FormToggle>
-	<FormInput
+	<FormPlacesInput
 		name="customLocation"
-		v-model="customLocation"
+		:value="customLocation.value"
+		@newLocation="customLocation = $event"
 		:disabled="!useCustomLocation"
 		placeholder="Search location"
 	/>
@@ -21,13 +22,13 @@
 <script>
 import FormRadioGroup from '@/components/form/FormRadioGroup.vue';
 import FormToggle from '@/components/form/FormToggle.vue';
-import FormInput from '@/components/form/FormInput.vue';
+import FormPlacesInput from '@/components/form/FormPlacesInput.vue';
 
 export default {
 	components: {
 		FormRadioGroup,
 		FormToggle,
-		FormInput,
+		FormPlacesInput,
 	},
 	props: {
 		settingOptions: {
@@ -72,6 +73,15 @@ export default {
 					[key]: value
 				}
 			})
+		}
+	},
+	beforeDestroy() {
+		if (!this.useCustomLocation) {
+			return;
+		}
+		if (!this.customLocation.latitude || !this.customLocation.longitude) {
+			console.log('Use custom location is TRUE, but no custom location is set; updating useCustomLocation to FALSE.');
+			this.useCustomLocation = false;
 		}
 	}
 }

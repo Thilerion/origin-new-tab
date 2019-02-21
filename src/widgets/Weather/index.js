@@ -15,7 +15,7 @@ export const settings = {
 	},
 	customLocation: {
 		name: 'customLocation',
-		getDefault: () => ''
+		getDefault: () => ({})
 	},
 	units: {
 		name: 'units',

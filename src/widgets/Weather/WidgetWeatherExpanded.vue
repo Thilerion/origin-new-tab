@@ -45,7 +45,6 @@ export default {
 		forecast() {
 			return this.daily.reduce((acc, day) => {
 				const diff = differenceInCalendarDays(new Date(day.time * 1000), new Date());
-				console.log(diff);
 				if (diff >= 0 && diff < 7) {
 					acc[diff] = day;
 				}
@@ -54,8 +53,7 @@ export default {
 		}
 	},
 	methods: {
-		formatDate(time, language) {
-			// TODO: language
+		formatDate(time) {
 			const locale = this.$i18n.locale;
 			const ms = time * 1000;
 			const diff = differenceInCalendarDays(new Date(ms), new Date());

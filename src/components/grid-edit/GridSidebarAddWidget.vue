@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<h2 class="add-title">Add new widget</h2>
+		<h3 class="add-title">{{$t('addWidget')}}</h3>
+		<div class="add-widget-info">{{$t('addWidgetInfo')}}</div>
 		<div
 			v-for="widget in available"
 			:key="widget"
@@ -10,7 +11,7 @@
 			@dragstart="onDragStart(widget, $event)"
 			@dragend="onDragEnd"
 		>
-			{{widget}}
+			{{$t(`widgetName.${widget}`)}}
 		</div>
 	</div>
 </template>
@@ -65,11 +66,15 @@ export default {
 	border: 1px solid rgb(180, 180, 180);
 	border-radius: 4px;
 	cursor: pointer;
-	padding: 1rem;
-	margin: 0 1rem 1rem;
+	padding: 0.6em;
+	margin: 0 1rem 0.75em;
 }
 
 .dragging {
 	border-style: dashed;
+}
+
+.add-widget-info {
+	padding: 0.5em 1rem;
 }
 </style>

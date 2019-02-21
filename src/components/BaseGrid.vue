@@ -52,6 +52,7 @@
 			v-if="editing"
 			:sortedWidgets="sortedGridWidgets"
 			@selectWidget="toggleSelectWidget"
+			@done="toggleEditing"
 		/>
 	</transition>
 </div>

@@ -18,7 +18,19 @@ const baseMessages = {
 		settingCategory: {
 			general: 'General',
 			dashboard: 'Dashboard'
-		}
+		},
+		widgetName: {
+			Weather: 'Weather',
+			Quote: 'Quote',
+			Clock: 'Clock',
+			QuickLinks: 'Quick Links',
+			WallpaperDetails: 'Wallpaper Details',
+			News: 'News'
+		},
+		configureDashboard: 'Configure Dashboard',
+		currentWidgets: 'Current widgets',
+		addWidget: 'Add widget',
+		addWidgetInfo: 'Click and drag to dashboard to add widget.'
 	},
 	nl: {
 		settings: {
@@ -36,7 +48,19 @@ const baseMessages = {
 		settingCategory: {
 			general: 'Algemeen',
 			dashboard: 'Dashboard'
-		}
+		},
+		widgetName: {
+			Weather: 'Weer',
+			Quote: 'Citaat',
+			Clock: 'Klok',
+			QuickLinks: 'Snelkoppelingen',
+			WallpaperDetails: 'Achtergrond Details',
+			News: 'Nieuws'
+		},
+		configureDashboard: 'Dashboard aanpassen',
+		currentWidgets: 'Huidige widgets',
+		addWidget: 'Widget toevoegen',
+		addWidgetInfo: 'Klik en sleep naar het dashboard om een widget toe te voegen.'
 	}
 };
 

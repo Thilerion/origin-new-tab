@@ -1,6 +1,6 @@
 <template>
 	<div class="widget-info">
-		<span class="name">{{name | removeWidgetStr}}</span>
+		<span class="name">{{$t(`widgetName.${name}`)}}</span>
 		<button class="icon-btn" @click="deleteWidget"><IconClose class="icon small" /></button>
 	</div>
 </template>
@@ -26,14 +26,6 @@ export default {
 	methods: {
 		deleteWidget() {
 			this.$store.commit('deleteWidget', this.uid);
-		}
-	},
-	filters: {
-		removeWidgetStr(val) {
-			if (val.startsWith('Widget')) {
-				return val.slice(6);
-			}
-			return val;
 		}
 	}
 }

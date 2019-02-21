@@ -1,7 +1,11 @@
 <template>
 <div class="edit-sidebar">
+	<div class="sidebar-title">
+		<h2>{{$t('configureDashboard')}}</h2>
+		<button class="button" @click="$emit('done')"><IconDone class="icon" /> <span>Done</span></button>
+	</div>
 	<div class="current-widgets">
-		<h2 class="widgets-title">Current widgets</h2>
+		<h3 class="widgets-title">{{$t('currentWidgets')}}</h3>
 		<div class="widgets-list">
 			<WidgetInfo
 				v-for="widget in sortedWidgets"
@@ -12,19 +16,19 @@
 				@click.native="$emit('selectWidget', widget.uid, true)"
 			/>
 		</div>
-		<div class="widget-info add-widget-btn" v-if="!addingWidget" @click="showAddWidget">+ Add widget</div>
+		<div class="widget-info add-widget-btn" v-if="!addingWidget" @click="showAddWidget">+ {{$t('addWidget')}}</div>
 	</div>
 
 	<div class="align-widget" v-if="selected != null">
-		<h2 class="align-title">Align content</h2>
-		<h3 class="align-subtitle">Horizontal</h3>
+		<h3 class="align-title">Align content</h3>
+		<h4 class="align-subtitle">Horizontal</h4>
 		<div class="align-buttons">
 		<button class="button" :class="{current: selected.alignX === ALIGN.start}" @click="alignWidget('x', ALIGN.start)">Left</button>
 		<button class="button" :class="{current: selected.alignX === ALIGN.center}" @click="alignWidget('x', ALIGN.center)">Center</button>
 		<button class="button" :class="{current: selected.alignX === ALIGN.end}" @click="alignWidget('x', ALIGN.end)">Right</button>
 		</div>
 
-		<h3 class="align-subtitle">Vertical</h3>
+		<h4 class="align-subtitle">Vertical</h4>
 		<div class="align-buttons">
 		<button class="button" :class="{current: selected.alignY === ALIGN.start}" @click="alignWidget('y', ALIGN.start)">Top</button>
 		<button class="button" :class="{current: selected.alignY === ALIGN.center}" @click="alignWidget('y', ALIGN.center)">Center</button>
@@ -41,6 +45,7 @@ import { ALIGN } from '@/constants';
 
 import WidgetInfo from './WidgetInfo.vue';
 import GridSidebarAddWidget from './GridSidebarAddWidget.vue';
+import IconDone from '@/assets/icons/ui/md-done.svg';
 
 export default {
 	props: {
@@ -49,7 +54,8 @@ export default {
 	},
 	components: {
 		WidgetInfo,
-		GridSidebarAddWidget
+		GridSidebarAddWidget,
+		IconDone
 	},
 	data() {
 		return {
@@ -95,21 +101,28 @@ export default {
 	height: 100%;
 	color: #333;
 	border-left: 1px solid #bbb;
+	font-size: 0.85rem;
+	overflow: auto;
+}
+
+.sidebar-title {
+	background: hsla(0, 0%, 98%, 1);
+	padding: 1rem;
+	border-bottom: 1px solid #bbb;
+	font-size: 1rem;
 }
 
 .widgets-title {
 	padding: 1rem;
-	border-bottom: 1px solid #bbb;
-	font-size: 1.125rem;
+	font-size: 1.125em;
 }
 
 .align-title, .add-widget >>> .add-title {
-	font-size: 1.125rem;
-	padding: 1.5rem 1rem 0.5rem;
+	font-size: 1.125em;
+	padding: 1.5em 1em 0.5em;
 }
 
 .align-subtitle {
-	font-size: 1rem;
 	padding: 0.5rem 1rem;
 }
 
@@ -119,7 +132,7 @@ export default {
 }
 
 .widget-info {
-	padding: 1rem;
+	padding: 0.5em 1rem;
 	border-bottom: 1px solid #bbb;
 	cursor: pointer;
 }
@@ -147,5 +160,17 @@ export default {
 .button.current {
 	background-color: #333;
 	color: white;
+}
+
+.button {
+	font-size: 0.9em;
+	line-height: 1em;
+	display: flex;
+	align-items: center;
+	margin-top: 1em;
+}
+
+.button > span {
+	margin-left: 5px;
 }
 </style>

@@ -22,7 +22,7 @@
 			v-if="editing">
 
 			<div class="widget-name"
-			>{{widget.name | removeWidgetStr}}</div>
+			>{{$t(`widgetName.${widget.name}`)}}</div>
 
 		</div>
 		</BaseFadeTransition>

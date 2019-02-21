@@ -3,7 +3,7 @@ export { default as settingsComponent } from './SettingsNews.vue'
 export { default as localeMessages } from './_locale';
 
 export const gridComponents = {
-	WidgetNews
+	News: WidgetNews
 };
 
 export const wallpaperComponents = {};
@@ -26,7 +26,7 @@ export const settings = {
 }
 
 export const displayConfig = {
-	WidgetNews: {
+	News: {
 		minWidth: 5,
 		maxWidth: null,
 		minHeight: 1,

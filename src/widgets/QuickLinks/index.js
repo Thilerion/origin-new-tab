@@ -3,7 +3,7 @@ import SettingsQuickLinks from './SettingsQuickLinks.vue';
 export { default as localeMessages } from './_locale';
 
 export const gridComponents = {
-	WidgetQuickLinks
+	QuickLinks: WidgetQuickLinks
 }
 
 export const wallpaperComponents = {
@@ -35,7 +35,7 @@ export const settings = {
 }
 
 export const displayConfig = {
-	WidgetQuickLinks: {
+	QuickLinks: {
 		minWidth: 5,
 		maxWidth: null,
 		minHeight: 2,

@@ -3,7 +3,7 @@ export { default as settingsComponent } from './SettingsWeather.vue'
 export { default as localeMessages } from './_locale';
 
 export const gridComponents = {
-	WidgetWeather
+	Weather: WidgetWeather
 };
 
 export const wallpaperComponents = {};
@@ -25,7 +25,7 @@ export const settings = {
 }
 
 export const displayConfig = {
-	WidgetWeather: {
+	Weather: {
 		minWidth: 5,
 		maxWidth: null,
 		minHeight: 1,

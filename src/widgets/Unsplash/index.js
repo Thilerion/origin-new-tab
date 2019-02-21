@@ -4,7 +4,7 @@ export { default as settingsComponent } from './SettingsUnsplash.vue';
 export { default as localeMessages } from './_locale';
 
 export const gridComponents = {
-	WidgetUnsplashDetails
+	WallpaperDetails: WidgetUnsplashDetails
 };
 
 export const wallpaperComponents = {
@@ -42,7 +42,7 @@ export const settings = {
 }
 
 export const displayConfig = {
-	WidgetUnsplashDetails: {
+	WallpaperDetails: {
 		minWidth: 3,
 		maxWidth: null,
 		minHeight: 2,

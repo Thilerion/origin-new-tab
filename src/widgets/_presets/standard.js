@@ -2,7 +2,7 @@ import { ALIGN } from '@/constants';
 
 export default [
 	{
-		name: "WidgetClock",
+		name: "Clock",
 		x: 8,
 		y: 7,
 		width: 26,
@@ -11,7 +11,7 @@ export default [
 		alignY: ALIGN.center
 	},
 	{
-		name: "WidgetUnsplashDetails",
+		name: "WallpaperDetails",
 		x: 1,
 		y: 19,
 		width: 11,
@@ -20,7 +20,7 @@ export default [
 		alignY: ALIGN.end
 	},
 	{
-		name: "WidgetNews",
+		name: "News",
 		x: 9,
 		y: 1,
 		width: 24,
@@ -29,7 +29,7 @@ export default [
 		alignY: ALIGN.center
 	},
 	{
-		name: "WidgetWeather",
+		name: "Weather",
 		x: 34,
 		y: 1,
 		width: 7,
@@ -38,7 +38,7 @@ export default [
 		alignY: ALIGN.start
 	},
 	{
-		name: "WidgetQuote",
+		name: "Quote",
 		x: 12,
 		width: 18,
 		y: 3,

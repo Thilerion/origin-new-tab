@@ -4,7 +4,7 @@ import SettingsClock from './SettingsClock.vue';
 export { default as localeMessages } from './_locale';
 
 export const gridComponents = {
-	WidgetClock
+	Clock: WidgetClock
 }
 
 export const wallpaperComponents = {
@@ -24,7 +24,7 @@ export const settings = {
 }
 
 export const displayConfig = {
-	WidgetClock: {
+	Clock: {
 		minWidth: 1,
 		maxWidth: 40,
 		canResize: true,

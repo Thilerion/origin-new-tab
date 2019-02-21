@@ -4,7 +4,7 @@ export { default as settingsComponent } from './SettingsQuote.vue';
 export { default as localeMessages } from './_locale';
 
 export const gridComponents = {
-	WidgetQuote
+	Quote: WidgetQuote
 };
 
 export const wallpaperComponents = {};
@@ -23,7 +23,7 @@ export const settings = {
 }
 
 export const displayConfig = {
-	WidgetQuote: {
+	Quote: {
 		minWidth: 6,
 		maxWidth: null,
 		minHeight: 1,

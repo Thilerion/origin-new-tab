@@ -5,10 +5,11 @@
 			class="date"
 			v-if="showDate"
 		>{{formattedDate}}</div>
+
 		<div
 			class="greeting"
 			v-if="showTextGreeting"
-		>{{$t(`clock.timeOfDay[${timeOfDayMsg}]`)}}, <span class="username">{{username}}</span>.</div>
+		>{{$t(`clock.timeOfDay[${timeOfDayMsg}]`)}}, <span v-if="username" class="username">{{username}}</span><input @blur="saveUsername" @keypress.enter="saveUsername" class="input-username" v-model="usernameTemp" type="text" v-else v-focus>.</div>
 	</div>
 </template>
 
@@ -22,7 +23,9 @@ export default {
 		return {
 			time: new Date(),
 
-			timeoutId: null
+			timeoutId: null,
+
+			usernameTemp: ''
 		}
 	},
 	computed: {
@@ -47,7 +50,7 @@ export default {
 			if (curHour < 12) return 0;
 			if (curHour < 18) return 1;
 			return 2;
-		}
+		},
 	},
 	methods: {
 		startTimeout() {
@@ -61,6 +64,16 @@ export default {
 		stopTimeout() {
 			clearTimeout(this.timeoutId);
 			this.timeoutId = null;
+		},
+		saveUsername() {
+			if (!this.usernameTemp) return;
+
+			this.$store.commit('updateSettings', {
+				key: 'general',
+				settings: {
+					username: `${this.usernameTemp}`
+				}
+			})
 		}
 	},
 	beforeMount() {
@@ -92,5 +105,22 @@ export default {
 .greeting {
 	font-size: 3em;
 	margin-top: 0.25em;
+}
+
+.input-username {
+	width: 7em;
+	background: none;
+	padding: 6px;
+	border: 3px solid transparent;
+	outline: none;
+	border-bottom-color: white;
+	color: white;
+	caret-color: white;
+	border-radius: 6px 6px 0 0 ;
+}
+
+.input-username:active, .input-username:focus {
+	border-bottom-color: cyan;
+	background-color: rgba(255, 255, 255, 0.3);
 }
 </style>

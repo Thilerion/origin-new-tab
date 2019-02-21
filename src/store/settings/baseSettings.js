@@ -7,7 +7,7 @@ import { getDefaultLocale } from '@/utils/locale';
 export const general = {
 	username: {
 		name: 'username',
-		getDefault: () => 'My Username',
+		getDefault: () => '',
 	},
 	language: {
 		name: 'language',

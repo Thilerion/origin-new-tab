@@ -121,8 +121,6 @@ const store = {
 	},
 	actions: {
 		async init({ state, getters, commit, dispatch }) {
-			const useCustomLocation = getters.customCoordinates;
-			console.log(useCustomLocation);
 			const curLocation = await dispatch('getCoordinates');
 
 			const foundCurLocation = curLocation && curLocation.latitude != null;
@@ -202,9 +200,15 @@ const store = {
 		},
 
 		// FULLY CUSTOM
-		async getCoordinates({ }) {
-			const coordinates = await getLocation();
-			return coordinates;
+		async getCoordinates({ state, getters }) {
+			const useCustom = getters.useCustomLocation;
+			const customCoordinates = getters.customCoordinates;
+			if (useCustom && customCoordinates.latitude && customCoordinates.longitude) {
+				return { ...customCoordinates };
+			} else {
+				const coordinates = await getLocation();
+				return coordinates;
+			}
 		}
 	}
 }

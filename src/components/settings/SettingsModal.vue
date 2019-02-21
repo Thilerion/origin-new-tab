@@ -162,8 +162,8 @@ export default {
 	width: 45rem;
 
 	min-height: 20rem;
-	height: 35vh;
-	max-height: 27rem;
+	height: 45vh;
+	max-height: 30rem;
 
 	display: flex;
 }
@@ -173,7 +173,23 @@ export default {
 }
 
 .settings-inner {
-	overflow: auto;
+	overflow-y: scroll;
+}
+
+.settings-inner::-webkit-scrollbar {
+	background-color: #f7f7f7;
+    width: 12px;
+}
+.settings-inner::-webkit-scrollbar-track {
+	background-color: #f7f7f7;
+}
+.settings-inner::-webkit-scrollbar-thumb {
+	background-color: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    border: 2px solid #f7f7f7;
+}
+.settings-inner::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(0,0,0,0.4);
 }
 
 .settings-nav {

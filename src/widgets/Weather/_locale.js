@@ -7,8 +7,7 @@ export default {
 			imperial: 'Imperial'
 		},
 		today: 'Today',
-		tomorrow: 'Tomorrow',
-		dateFormatter: ''
+		tomorrow: 'Tomorrow'
 	},
 	nl: {
 		settingName: 'Weer',
@@ -17,8 +16,7 @@ export default {
 			metric: 'Metrisch',
 			imperial: 'Engels'
 		},
-		today: 'Today',
-		tomorrow: 'Tomorrow',
-		dateFormatter: ''
+		today: 'Vandaag',
+		tomorrow: 'Morgen'
 	}
 }

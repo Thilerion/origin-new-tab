@@ -12,11 +12,7 @@ const STORAGE_KEY = 'sp_weather';
 const storeDataDefaults = {
 	forecast: {
 		currently: {},
-		daily: [],
-		coordinates: {
-			latitude: null,
-			longitude: null
-		}
+		daily: []
 	},
 	position: {
 		latitude: null,

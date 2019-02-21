@@ -13,6 +13,10 @@ export const settings = {
 		name: 'useCustomLocation',
 		getDefault: () => false
 	},
+	customLocation: {
+		name: 'customLocation',
+		getDefault: () => ''
+	},
 	units: {
 		name: 'units',
 		getDefault: () => 'ca',

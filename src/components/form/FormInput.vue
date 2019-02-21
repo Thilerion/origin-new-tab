@@ -56,4 +56,14 @@ export default {
 	border-color: rgb(112, 174, 255);
 	box-shadow: 0 0 0 0.125em rgba(112, 174, 255, 0.3);
 }
+
+.input:disabled {
+	background: hsl(0, 0%, 90%);
+	box-shadow: none;
+	border-color: #bbb;
+}
+
+.input::placeholder {
+	opacity: 0.5;
+}
 </style>

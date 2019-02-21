@@ -56,11 +56,18 @@ export default {
 					this.$set(this.favicons, idx, url);
 				})
 			})
+		},
+		async init() {
+			try {
+				const quickLinks = await getTopSites();
+				this.quickLinks = quickLinks;
+				this.mapFavicons();
+			} catch(e) {}
+			
 		}
 	},
 	created() {
-		this.quickLinks = getTopSites();
-		this.mapFavicons();
+		this.init();
 	}
 }
 </script>

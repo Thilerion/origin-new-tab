@@ -199,7 +199,6 @@ const store = {
 		// FULLY CUSTOM
 		async getCoordinates({ }) {
 			const coordinates = await getLocation();
-			console.log('Coordinates retrieved in getCoordinates action.', {...coordinates});
 			return coordinates;
 		}
 	}

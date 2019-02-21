@@ -12,7 +12,6 @@ async function getCoordinates() {
 		const position = await getPosition();
 		const latitude = position.coords.latitude;
 		const longitude = position.coords.longitude;
-		console.log({ latitude, longitude });
 		return { latitude, longitude };
 	} catch (e) {
 		const code = e.code;

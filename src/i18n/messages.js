@@ -41,5 +41,4 @@ const baseMessages = {
 };
 
 const messages = _merge(baseMessages, localeMessages);
-console.log(messages);
 export default messages;

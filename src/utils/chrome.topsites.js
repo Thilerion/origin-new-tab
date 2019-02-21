@@ -58,21 +58,4 @@ function getTopSites() {
 	})
 }
 
-// function getTopSites() {
-// 	let topSites = [];
-
-// 	if (chrome && chrome.topSites && chrome.topSites.get) {
-// 		chrome.topSites.get((arr) => {
-// 			topSites = [...arr];
-// 		})
-// 	} else if (window && process.env.NODE_ENV === 'development') {
-// 		console.warn("chrome.topSites is not available. Loading test data for topSites.");
-// 		topSites = [...TEST_TOPSITE_DATA];
-// 	} else {
-// 		console.error("NODE_ENV is not 'development', but chrome.topSites is not available. Could not load topSites.");
-// 	}
-
-// 	return topSites;
-// }
-
 export default getTopSites;

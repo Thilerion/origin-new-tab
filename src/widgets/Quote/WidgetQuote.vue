@@ -58,12 +58,11 @@ export default {
 	grid-template-areas: 
 				"quote btn-reload"
 				"author btn";
-	grid-column-gap: 0.5em;
+	grid-gap: 0.25em;
 }
 
 .quote {
 	font-size: 1.25em;
-	margin-bottom: 0.25em;
 	letter-spacing: 0.1px;
 	word-spacing: 0.7px;
 	display: inline-block;

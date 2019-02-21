@@ -1,9 +1,7 @@
 <template>
 	<div class="widget-quote shadow-40" v-if="canShow" :key="quote">
-		<span class="main">
-			<span class="quote">“ {{quote | removeDot}} ”</span>
-			<span class="author">~ {{author}}</span>
-		</span>
+		<span class="quote">“ {{quote | removeDot}} ”</span>
+		<span class="author">~ {{author}}</span>
 		<button @click="getNewQuote" class="reload-quote icon-btn"><IconSync class="icon small"/></button>
 	</div>
 </template>
@@ -56,15 +54,11 @@ export default {
 <style scoped>
 .widget-quote {
 	text-align: center;
-	display: flex;
-	flex-direction: row;
-	align-items: center;	
-}
-
-.main {
-	display: flex;
-	flex-direction: column;
-	padding-left: 1.5em;
+	display: grid;
+	grid-template-areas: 
+				"quote btn-reload"
+				"author btn";
+	grid-column-gap: 0.5em;
 }
 
 .quote {
@@ -74,6 +68,7 @@ export default {
 	word-spacing: 0.7px;
 	display: inline-block;
 	padding-right: 0.25em;
+	grid-area: quote;
 }
 
 .author {
@@ -81,12 +76,15 @@ export default {
 	letter-spacing: 0.4px;
 	margin-left: auto;
 	opacity: 0.9;
+	grid-area: author;
 }
 
 .reload-quote {
 	flex: 0 0 1.5em;
 	opacity: 0;
 	transition: opacity .25s ease;
+	grid-area: btn-reload;
+	align-self: center;
 }
 
 .widget-quote:hover .reload-quote {

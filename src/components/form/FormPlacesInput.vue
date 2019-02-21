@@ -124,4 +124,14 @@ export default {
 .ap-cursor .ap-suggestion-icon svg {
 	transform: scale(0.8) translateY(4px);
 }
+
+.ap-footer {
+	opacity: 0.5;
+	font-size: 10px;
+	line-height: 10px;
+	padding-top: 10px;
+}
+.ap-footer:hover {
+	opacity: 0.7;
+}
 </style>

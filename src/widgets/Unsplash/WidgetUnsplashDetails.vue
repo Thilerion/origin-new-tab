@@ -15,11 +15,11 @@
 				:title="$t('unsplash.download')"
 			><IconDownload class="icon small"/></a>
 
-			<button
+			<!-- <button
 				@click="hideWallpaper"
 				class="icon-btn"
 				:title="$t('unsplash.hide')"
-			><IconClose class="icon small"/></button>
+			><IconClose class="icon small"/></button> -->
 		</div>
 
 		<div class="user-info enable-select">
@@ -33,7 +33,7 @@
 <script>
 import IconSync from '@/assets/icons/ui/md-sync.svg';
 import IconDownload from '@/assets/icons/ui/md-download.svg';
-import IconClose from '@/assets/icons/ui/md-close.svg';
+// import IconClose from '@/assets/icons/ui/md-close.svg';
 
 import _get from 'lodash.get';
 
@@ -41,7 +41,7 @@ export default {
 	components: {
 		IconSync,
 		IconDownload,
-		IconClose
+		// IconClose
 	},
 	computed: {
 		currentWallpaper() {
@@ -73,9 +73,9 @@ export default {
 		goToNextWallpaper() {
 			this.$store.dispatch('unsplash/goToNextWallpaper');
 		},
-		hideWallpaper() {
-			this.$store.dispatch('unsplash/hideCurrentWallpaper');
-		}
+		// hideWallpaper() {
+		// 	this.$store.dispatch('unsplash/hideCurrentWallpaper');
+		// }
 	}
 }
 </script>
@@ -99,17 +99,19 @@ export default {
 
 .user-name {
 	letter-spacing: 0.2px;
-	font-size: 0.875em;
+	font-size: 0.8em;
+	line-height: 1.4em;
+	letter-spacing: 0.03em;
 	opacity: 0.7;
 	transition: opacity 0.15s ease;
 }
 
 .user-location {
 	opacity: 0.6;
-	font-size: 0.667em;
+	font-size: 0.6em;
 	padding-top: 2px;
 	padding-bottom: 2px;
-	letter-spacing: 0.3px;
+	letter-spacing: 0.06em;
 }
 
 .controls {

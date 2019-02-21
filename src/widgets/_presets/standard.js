@@ -45,5 +45,14 @@ export default [
 		height: 2,
 		alignX: ALIGN.center,
 		alignY: ALIGN.center
+	},
+	{
+		name: "QuickLinks",
+		x: 9,
+		width: 24,
+		y: 17,
+		height: 4,
+		alignX: ALIGN.center,
+		alignY: ALIGN.end
 	}
 ];

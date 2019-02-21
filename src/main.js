@@ -3,6 +3,10 @@ import App from './App.vue'
 import store from './store';
 import { i18n } from '@/i18n';
 
+if (chrome && chrome.i18n && chrome.i18n.getMessage) {
+	document.title = chrome.i18n.getMessage("extTitle");
+}
+
 import VueShortkey from 'vue-shortkey';
 Vue.use(VueShortkey, {
 	prevent: ['input', 'textarea']

@@ -1,83 +1,51 @@
 <template>
-	<div id="app">
-		<StartWallpaper class="base-wallpaper"/>
-		<StartGrid class="base-grid" />
-		<transition name="settings-transition">	
-			<StartSettings class="base-settings" v-if="showSettings" />
-		</transition>
+	<div id="app" :class="{ready: pageReady}" v-shortkey="['ctrl', ',']" @shortkey="$store.commit('setShowSettingsOverlay')">
+		<BaseBackground />
+		<BaseGrid />
+		<SettingsModal v-if="enableSettingsModal" />
 	</div>
 </template>
 
 <script>
-import StartWallpaper from "./components/Wallpaper.vue";
-import StartGrid from './components/Grid.vue'
-const StartSettings = () => import(
-	/* webpackChunkName: "settings" */ './components/settings/Settings.vue');
-
-import {mapState, mapGetters} from 'vuex';
-import {changeLocale} from '@/i18n';
+import BaseBackground from '@/components/BaseBackground.vue';
+import BaseGrid from '@/components/BaseGrid.vue';
+import SettingsModal from '@/components/settings/SettingsModal.vue';
 
 export default {
 	name: "app",
 	components: {
-		StartWallpaper,
-		StartGrid,
-		StartSettings
+		BaseBackground,
+		BaseGrid,
+		SettingsModal
+	},
+	data() {
+		return {
+			pageReady: false
+		}
 	},
 	computed: {
-		...mapState(['showSettings']),
-		...mapGetters(['fontSize', 'language'])
-	},
-	methods: {
-		setDocumentFontSize(px = null) {
-			const doc = document.documentElement;
-			if (px === null) {
-				doc.style.setProperty('--font-size', '100%');
-			} else {
-				doc.style.setProperty('--font-size', `${px}px`);
-			}			
-		},
-
-		keyboardDownEvent(e) {
-			if (e.key === "a" && e.ctrlKey) {
-				console.log("No select all!");
-				e.preventDefault();
-				e.stopPropagation();
-			}
-		},
-		keyboardUpEvent(e) {
-			
-		},
-		setKeyboardShortcuts() {
-			document.addEventListener('keydown', this.keyboardDownEvent);
-			document.addEventListener('keyup', this.keyboardUpEvent);
-		},
-		removeKeyboardShortcuts() {
-			document.removeEventListener('keydown', this.keyboardDownEvent);
-			document.removeEventListener('keyup', this.keyboardUpEvent);
+		enableSettingsModal() {
+			return this.$store.state.showSettingsOverlay;
 		}
 	},
-	watch: {
-		fontSize(newValue, oldValue) {
-			this.setDocumentFontSize(newValue);
-		},
-		language: {
-			handler(newValue, oldValue) {
-				console.log("New locale: " + newValue);
-				changeLocale(newValue);
-			},
-			immediate: true
-		}
-	},
-	created() {
-		this.setDocumentFontSize(this.fontSize);
-		this.setKeyboardShortcuts();
-	},
-	beforeDestroy() {
-		this.removeKeyboardShortcuts();
+	mounted() {		
+		requestAnimationFrame(() => {
+			this.pageReady = true;
+		})
 	}
 };
 </script>
+
+<style scoped>
+#app {
+	opacity: 0;
+	transition: opacity .25s ease;
+}
+
+#app.ready {
+	opacity: 1;
+}
+</style>
 
 <style>
 .base-wallpaper {

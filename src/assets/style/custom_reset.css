@@ -1,6 +1,6 @@
-html {
+html, body {
 	--font-size: 100%;
-	font-size: var(--font-size);
+	font-size: var(--font-size)!important;
 	box-sizing: border-box;
 }
 
@@ -26,22 +26,55 @@ a {
 	color: currentColor;
 }
 
-button {
-	cursor: pointer;
+.button, .icon-btn {
+	-webkit-appearance: none;
 	outline: none;
-	text-transform: uppercase;
-	font-size: 87.5%;
-	font-weight: 700;
-	letter-spacing: 0.5px;
-	font-family: inherit;
+	background-color: transparent;
+	
+	color: inherit;
+	cursor: pointer;
+
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	position: relative;
+	
+	box-shadow: none;
+	white-space: nowrap;
+	transition: .1s ease;
+	transition-property: background, border-color, opacity;
 }
 
-button.icon-btn {
+.button {
+	border: 1px solid #bbb;
+	text-transform: unset;
+	font-weight: normal;
+	border-radius: 4px;
+	font-size: 1rem;
+	height: 2.25em;
+	line-height: 1.5;
+	padding: calc(.375em - 1px) calc(.625em - 1px);
+}
+
+.button:hover {
+	background-color: rgba(0, 0, 0, 0.05);
+	border-color: hsl(0, 0%, 67%);
+}
+
+.button:active {
+	background-color: rgba(0, 0, 0, 0.1);
+	border-color: hsl(0, 0%, 40%);
+}
+
+.icon-btn {
 	margin: 0;
 	padding: 0;
-	background: none;
 	border: none;
-	color: inherit;
+
+	border-radius: 50%;
+	width: 24px;
+	height: 24px;
 }
 
 div, span, article, aside, footer, header, nav, section, table, thead, tbody, tfoot, tr, th, td {

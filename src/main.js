@@ -1,24 +1,36 @@
 import Vue from 'vue'
 import App from './App.vue'
-import store from './store/'
+import store from './store';
+import { i18n } from '@/i18n';
 
-import {i18n} from './i18n';
+import VueShortkey from 'vue-shortkey';
+Vue.use(VueShortkey, {
+	prevent: ['input', 'textarea']
+});
 
 import './assets/style/base.css';
 
-import StartSvgIcon from './components/shared/SvgIcon';
-Vue.component('StartSvgIcon', StartSvgIcon);
-
-import StartTransitionExpand from './components/shared/TransitionExpand';
-Vue.component('StartTransitionExpand', StartTransitionExpand);
-
-Vue.directive('focus', {
-	inserted(el) {
-		el.focus();
+import resizeDirective from '@/plugins/onResize';
+Vue.use(resizeDirective, {
+	throttleType: 'debounce',
+	throttleOpts: {
+		wait: 200,
+		options: {
+			maxWait: 1000
+		}
 	}
-})
+});
+import pageVisibilityDirective from '@/plugins/pageVisibility';
+Vue.use(pageVisibilityDirective);
 
-Vue.config.productionTip = false
+import focusDirective from '@/plugins/focus';
+Vue.use(focusDirective);
+
+import BaseFadeTransition from '@/components/BaseFadeTransition.vue';
+Vue.component('BaseFadeTransition', BaseFadeTransition);
+
+Vue.config.productionTip = false;
+Vue.config.performance = true;
 
 new Vue({
 	store,

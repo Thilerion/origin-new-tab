@@ -1,43 +1,93 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+Vue.use(Vuex);
 
-import wallpaper from './modules/Wallpaper'
-import quote from './modules/Quote'
-import weather from './modules/Weather'
-import news from './modules/News'
-import calendar from './modules/Calendar'
+import { persistModule } from '@/utils/storeModuleHelpers';
 
-Vue.use(Vuex)
-
-import { settingsOptions } from '@/store/libs/defaultUserSettings';
-import createPersistedState from './libs/persist';
-
-import mutations from './mutations';
-import actions from './actions';
-import { state, getters } from './state';
-
+import { settingsModule, STORAGE_KEY as settingsStorageKey } from './settings';
+import { gridModule, STORAGE_KEY as gridStorageKey } from './grid';
 
 const store = new Vuex.Store({
 	strict: process.env.NODE_ENV !== 'development',
 
-	plugins: [createPersistedState('sp_', settingsOptions.widgets.storageModules)],
+	plugins: [
+		persistModule(
+			(state) => ({ ...state.settings }),
+			'settings',
+			settingsStorageKey,
+			{ deep: true, wait: 500, maxWait: 10000, immediate: true }
+		),
+		persistModule(
+			(state) => ({ wallpaperWidget: state.grid.wallpaperWidget, gridWidgets: state.grid.gridWidgets, gridOrder: state.grid.gridOrder }),
+			'grid',
+			gridStorageKey,
+			{ deep: true, wait: 1000, maxWait: 10000, immediate: false }
+		)
+	],
 
 	modules: {
-		wallpaper,
-		quote,
-		weather,
-		news,
-		calendar
+		settings: settingsModule,
+		grid: gridModule
 	},
 
-	state,
+	state: {
+		showSettingsOverlay: false,
+		editingGrid: false,
+		dragAddNewWidget: {
+			dragging: false,
+			type: '',
+			width: null,
+			height: null,
+			offsetX: 0,
+			offsetY: 0
+		}
+	},
 
-	getters,
+	getters: {
+		enableNewWidgetDropzone: state => state.dragAddNewWidget.dragging
+	},
 
-	mutations,
+	mutations: {		
+		setShowSettingsOverlay(state, show) {
+			if (show == null) {
+				state.showSettingsOverlay = !state.showSettingsOverlay;
+			} else {
+				state.showSettingsOverlay = show;
+			}
+		},
+		setEditingGrid(state, editing) {
+			if (editing == null) {
+				state.editingGrid = !state.editingGrid;
+			} else {
+				state.editingGrid = editing;
+			}
+		},
+		initNewWidgetDrag(state, { widget, width, height, offsetX, offsetY }) {
+			console.log('init new widget drag');
+			state.dragAddNewWidget = {
+				dragging: true,
+				type: widget,
+				width,
+				height,
+				offsetX,
+				offsetY
+			}
+		},
+		stopNewWidgetDrag(state) {
+			state.dragAddNewWidget = {
+				dragging: false,
+				type: '',
+				width: null,
+				height: null,
+				offsetX: 0,
+				offsetY: 0
+			};
+		}
+	},
 
-	actions
-
-})
+	actions: {
+		
+	}
+});
 
 export default store;

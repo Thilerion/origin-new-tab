@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import store from './store'
+import store from './store';
 import { i18n } from '@/i18n';
 
 import VueShortkey from 'vue-shortkey';
@@ -29,7 +29,8 @@ Vue.use(focusDirective);
 import BaseFadeTransition from '@/components/BaseFadeTransition.vue';
 Vue.component('BaseFadeTransition', BaseFadeTransition);
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+Vue.config.performance = true;
 
 new Vue({
 	store,

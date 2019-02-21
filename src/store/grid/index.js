@@ -1,4 +1,4 @@
-import { getFromStorage, saveToStorage } from '@/utils/lsHelpers';
+import { getFromStorage, saveToStorage } from '@/utils/storage';
 import { validateActiveWidgets, createNewWidget } from './validateActiveWidgets';
 import { validateGridPreset } from './defaults';
 import { presets, gridComponents } from '@/widgets';

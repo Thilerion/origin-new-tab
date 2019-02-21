@@ -1,6 +1,6 @@
 // UTILS
 import keysToLowerCase from '@/utils/keysToLowerCase';
-import { getFromStorage, saveToStorage } from '@/utils/lsHelpers';
+import { getFromStorage, saveToStorage } from '@/utils/storage';
 import _merge from 'lodash.merge';
 
 // SETTING OPTIONS

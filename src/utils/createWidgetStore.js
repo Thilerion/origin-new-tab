@@ -1,5 +1,5 @@
 import { persistModule, registerModule } from '@/utils/storeModuleHelpers';
-import { getFromStorage } from '@/utils/lsHelpers';
+import { getFromStorage } from '@/utils/storage';
 import _merge from 'lodash.merge';
 
 function mergeStoreData(dataDefaults, key) {

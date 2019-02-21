@@ -1,5 +1,5 @@
 import _debounce from 'lodash.debounce';
-import { saveToStorage } from '@/utils/lsHelpers';
+import { saveToStorage } from '@/utils/storage';
 
 const persistModule = (
 	reducerFn,

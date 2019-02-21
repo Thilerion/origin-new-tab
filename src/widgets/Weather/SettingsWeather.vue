@@ -31,6 +31,20 @@ export default {
 		FormToggle,
 		FormPlacesInput,
 	},
+	data() {
+		return {
+			initialCustom: {},
+
+			resetCustomLocationData: {
+				street: null,
+				city: null,
+				country: null,
+				latitude: null,
+				longitude: null,
+				value: null
+			}
+		}
+	},
 	props: {
 		settingOptions: {
 			type: Object,
@@ -79,24 +93,55 @@ export default {
 			this.customLocation = {...value};
 		},
 		clearCustomLocation() {
-			this.customLocation = {
-				street: null,
-				city: null,
-				country: null,
-				latitude: null,
-				longitude: null,
-				value: null
-			};
+			this.customLocation = {...this.resetCustomLocationData}
+		},
+		requestWeatherDataUpdate() {
+			this.$store.dispatch('weather/updateWithNewLocation');
+		},
+		shouldWeatherDataUpdate(data) {
+			const oldData = JSON.stringify(this.initialCustom);
+			const newData = JSON.stringify(data);
+
+			if (oldData === newData) {
+				console.log('No changes in data');
+				return;
+			}
+
+			const before = this.initialCustom;
+			const after = data;
+
+			const hasCustomCoords = (after.latitude != null && after.longitude != null);
+
+			if (after.useCustomLocation && !before.useCustomLocation) {
+				if (!hasCustomCoords) {
+					// Use custom, but no location chosen, so set useCustom to false
+					console.log('Reverting useCustomLocation change, setting to FALSE');
+					this.useCustomLocation = false;
+					this.clearCustomLocation();
+				} else {
+					// A location has been chosen, update weather
+					console.log('Weather settings have changed, now using custom location');
+					this.requestWeatherDataUpdate();
+				}
+			} else if (!after.useCustomLocation && before.useCustomLocation) {
+				// Update weather, using the browser location data
+				console.log('Weather settings have changed, now using browser location');
+				this.requestWeatherDataUpdate();
+			} else if (before.useCustomLocation && after.useCustomLocation && (before.latitude !== after.latitude || before.longitude !== after.longitude)) {
+				// Coordinates have changed, update weather
+				console.log('Weather settings have changed, now using a different custom location');
+				this.requestWeatherDataUpdate();
+			}
 		}
 	},
+	beforeMount() {
+		this.initialCustom = {...this.customLocation, useCustomLocation: this.useCustomLocation};
+	},
 	beforeDestroy() {
-		if (!this.useCustomLocation) {
-			return;
-		}
-		if (!this.customLocation.latitude || !this.customLocation.longitude) {
-			console.log('Use custom location is TRUE, but no custom location is set; updating useCustomLocation to FALSE.');
-			this.useCustomLocation = false;
-		}
+		this.shouldWeatherDataUpdate({
+			...this.customLocation,
+			useCustomLocation: this.useCustomLocation
+		})
 	}
 }
 </script>

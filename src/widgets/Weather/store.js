@@ -209,6 +209,27 @@ const store = {
 				const coordinates = await getLocation();
 				return coordinates;
 			}
+		},
+
+		async updateWithNewLocation({ commit, dispatch }) {
+			console.log('Updating weather store with new data, from new location.');
+			commit('setExpires', Date.now());
+
+			const curLocation = await dispatch('getCoordinates');
+			const foundCurLocation = curLocation && curLocation.latitude != null;
+
+			if (!foundCurLocation) {
+				console.error("Can't update weather data with new location, can't find location.");
+				return;
+			}
+
+			commit('setLocation', curLocation);
+
+			const newDataRetrieved = await dispatch('fetchApiData');
+			if (!newDataRetrieved) {
+				console.error("Can't update weather data, server request failed.");
+				return;
+			}
 		}
 	}
 }

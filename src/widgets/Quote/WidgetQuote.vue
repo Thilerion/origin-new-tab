@@ -1,8 +1,8 @@
 <template>
 	<div class="widget-quote shadow-40" v-if="canShow" :key="quote">
 		<span class="main">
-			<span class="quote">{{quote | removeDot}}</span>
-			<span class="author">{{author}}</span>
+			<span class="quote">“ {{quote | removeDot}} ”</span>
+			<span class="author">~ {{author}}</span>
 		</span>
 		<button @click="getNewQuote" class="reload-quote icon-btn"><IconSync class="icon small"/></button>
 	</div>
@@ -77,8 +77,10 @@ export default {
 }
 
 .author {
+	font-size: 0.9em;
 	letter-spacing: 0.4px;
 	margin-left: auto;
+	opacity: 0.9;
 }
 
 .reload-quote {

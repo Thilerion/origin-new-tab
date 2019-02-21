@@ -29,6 +29,7 @@ export default {
 
 .toggle-label {
 	flex: 1;
+	cursor: pointer;
 }
 
 .toggle-input {
@@ -43,10 +44,9 @@ export default {
 	width: var(--w);
 	height: 18px;
 	border-radius: 5px;
-
+	cursor: pointer;
 	display: inline-block;
 	position: relative;
-	cursor: pointer;
 	outline: none;
 	background-color: rgba(68, 68, 68, 0.4);
 

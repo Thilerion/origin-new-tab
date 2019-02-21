@@ -9,11 +9,11 @@ const ApiLogger = {
 	},
 
 	success(moduleName, data) {
-		console.log(`%cRequest complete from module '${moduleName}, with the following data:\n'`, ApiLogger._baseStyle(ApiLogger._successBg), data);
+		console.log(`%cRequest complete from module '${moduleName}', with the following data:\n`, ApiLogger._baseStyle(ApiLogger._successBg), data);
 	},
 
 	error(moduleName, error) {
-		console.log(`%cRequest FAILED from module '${moduleName}, with the following error:\n'`, ApiLogger._baseStyle(ApiLogger._errorBg), error);
+		console.log(`%cRequest FAILED from module '${moduleName}', with the following error:\n`, ApiLogger._baseStyle(ApiLogger._errorBg), error);
 	}
 }
 

@@ -104,6 +104,11 @@ export default {
 
 			if (oldData === newData) {
 				console.log('No changes in data');
+				if (data.useCustomLocation && (!data.latitude || !data.longitude)) {
+					console.log('However, "useCustomLocation" should be disabled.');
+					this.useCustomLocation = false;
+					this.clearCustomLocation();
+				}
 				return;
 			}
 

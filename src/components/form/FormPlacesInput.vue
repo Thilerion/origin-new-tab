@@ -1,5 +1,7 @@
 <template>
 	<div class="form-item">
+		<div v-if="limitError" class="form-error">Too many requests. Please try again later.</div>
+		<div class="form-error" v-else-if="unexpectedError">An unexpected error occured trying to retrieve location data. Please try again later.</div>
 		<input type="search" class="input" :name="name" :id="name" :placeholder="placeholder" ref="algoliaInput" v-bind="$attrs">
 	</div>
 </template>
@@ -25,6 +27,8 @@ export default {
 	},
 	data() {
 		return {
+			limitError: false,
+			unexpectedError: false
 		}
 	},
 	methods: {
@@ -56,6 +60,13 @@ export default {
 		places.on('change', this.setNewLocation);
 		places.on('clear', () => {
 			this.$emit('clear');
+		})
+		places.on('limit', msg => {
+			this.limitError = true;
+		})
+		places.on('error', msg => {
+			console.error(msg);
+			this.unexpectedError = true;
 		})
 
 		places.setVal(this.value);
@@ -104,6 +115,13 @@ export default {
 
 .input::placeholder {
 	opacity: 0.5;
+}
+
+.form-error {
+	color: red;
+	font-size: 11px;
+	margin-top: -1em;
+	margin-bottom: 0.5em;
 }
 </style>
 

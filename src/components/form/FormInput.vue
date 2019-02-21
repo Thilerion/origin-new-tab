@@ -1,6 +1,6 @@
 <template>
 	<div class="form-item" :class="{inline: !stacked}">
-		<label :for="name" class="input-label form-label">{{label}}</label>
+		<label :for="name" class="input-label form-label"><slot/></label>
 		<input type="text" class="input" :name="name" :id="name" v-bind="$attrs" :value="value" @input="$emit('input', $event.target.value)" @keypress.enter="defocus">
 	</div>
 </template>
@@ -9,10 +9,6 @@
 export default {
 	inheritAttrs: false,
 	props: {
-		label: {
-			type: String,
-			required: true
-		},
 		name: {
 			type: String,
 			required: true

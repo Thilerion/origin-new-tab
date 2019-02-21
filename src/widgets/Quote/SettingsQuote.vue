@@ -1,10 +1,9 @@
 <template>
 	<FormSelect
 		name="category"
-		:label="$t('quote.settings.category')"
 		:options="settingOptions.category.options"
 		v-model="category"
-	/>
+	>{{$t('quote.settings.category')}}</FormSelect>
 </template>
 
 <script>

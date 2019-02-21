@@ -2,16 +2,14 @@
 	<div>
 		<FormSelect
 			name="collection"
-			:label="$t('unsplash.settings.collection')"
 			:options="settingOptions.collection.options"
 			v-model="collection"
-		/>
+		>{{$t('unsplash.settings.collection')}}</FormSelect>
 		<FormSelect
 			name="refreshInterval"
-			:label="$t('unsplash.settings.newPhotoInterval')"
 			:options="settingOptions.refreshInterval.options"
 			v-model="refreshInterval"
-		/>
+		>{{$t('unsplash.settings.newPhotoInterval')}}</FormSelect>
 	</div>
 </template>
 

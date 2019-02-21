@@ -1,6 +1,6 @@
 <template>
 	<div class="select form-item">
-		<label class="form-label select-label" v-if="label" :for="name">{{label}}</label>
+		<label class="form-label select-label" v-if="$slots.default" :for="name"><slot/></label>
 		<select :id="name" :name="name" :value="value" @input="$emit('input', $event.target.value)" v-bind="$attrs">
 			<option v-for="option in options" :value="option.value" :key="option.name">{{translate(option)}}</option>
 		</select>
@@ -22,9 +22,6 @@ export default {
 		name: {
 			type: String,
 			required: true
-		},
-		label: {
-			type: String
 		},
 		options: {
 			type: Array,

@@ -2,10 +2,9 @@
 	<div>
 		<FormSelect
 			name="slideInterval"
-			:label="$t('news.settings.slideInterval')"
 			:options="settingOptions.slideInterval.options"
 			v-model="slideInterval"
-		/>
+		>{{$t('news.settings.slideInterval')}}</FormSelect>
 	</div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
 	<div class="form-item">
-		<label :for="name" class="input-label">{{label}}</label>
+		<label :for="name" class="input-label"><slot/></label>
 		<div class="slider-wrapper">
 			<input
 				type="range"
@@ -24,9 +24,6 @@ export default {
 		name: {
 			type: String,
 			required: true
-		},
-		label: {
-			type: String
 		},
 		options: {
 			type: Object,

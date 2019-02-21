@@ -2,10 +2,9 @@
 	<div>
 		<FormInput
 			name="username"
-			:label="$t('settings.username')"
 			v-model="username"
 			autocomplete="given-name"
-		/>
+		>{{$t('settings.username')}}</FormInput>
 
 		<FormRadioGroup
 			:label="$t('settings.language')"

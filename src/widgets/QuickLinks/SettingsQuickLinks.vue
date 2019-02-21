@@ -1,17 +1,15 @@
 <template>
 	<div>
 		<FormRangeSlider
-			:label="$t('quicklinks.settings.amount')"
 			name="amount"
 			:options="settingOptions.amount.options"
 			v-model="amount"
-		/>
+		>{{$t('quicklinks.settings.amount')}}</FormRangeSlider>
 		<FormRangeSlider
-			:label="$t('quicklinks.settings.itemsPerRow')"
 			name="amountPerRow"
 			:options="settingOptions.amountPerRow.options"
 			v-model="amountPerRow"
-		/>
+		>{{$t('quicklinks.settings.itemsPerRow')}}</FormRangeSlider>
 	</div>
 </template>
 

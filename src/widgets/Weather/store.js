@@ -80,6 +80,13 @@ const store = {
 
 		hasCoordinates(state) {
 			return state.data.position.latitude != null && state.data.position.longitude != null;
+		},
+		useCustomLocation(state, getters, rState) {
+			return rState.settings.weather.useCustomLocation;
+		},
+		customCoordinates(state, getters, rState) {
+			const { latitude, longitude } = rState.settings.weather.customLocation;
+			return { latitude, longitude };
 		}
 
 	},
@@ -114,6 +121,8 @@ const store = {
 	},
 	actions: {
 		async init({ state, getters, commit, dispatch }) {
+			const useCustomLocation = getters.customCoordinates;
+			console.log(useCustomLocation);
 			const curLocation = await dispatch('getCoordinates');
 
 			const foundCurLocation = curLocation && curLocation.latitude != null;

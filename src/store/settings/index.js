@@ -53,7 +53,8 @@ export const settingsModule = {
 				return;
 			}
 
-			state[key] = _merge(state[key], settings);
+			const mergedSettings = _merge(state[key], settings);
+			state[key] = { ...state[key], ...mergedSettings };
 		}
 	},
 	actions: {

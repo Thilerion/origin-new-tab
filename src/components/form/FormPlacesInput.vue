@@ -1,6 +1,6 @@
 <template>
 	<div class="form-item">
-		<input type="search" class="input" :name="name" :id="name" :placeholder="placeholder" ref="algoliaInput" v-bind="$attrs" :value="trueValue">
+		<input type="search" class="input" :name="name" :id="name" :placeholder="placeholder" ref="algoliaInput" v-bind="$attrs">
 	</div>
 </template>
 
@@ -25,21 +25,16 @@ export default {
 	},
 	data() {
 		return {
-			trueValue: ''
 		}
 	},
 	methods: {
 		setNewLocation(val) {
-			console.log(val);
 			const city = val.suggestion.type === 'city' ? val.suggestion.name : val.suggestion.city;
 			const country = val.suggestion.country;
 			const street = val.suggestion.type === 'address' ? val.suggestion.name : null;
 			const latitude = val.suggestion.latlng.lat;
 			const longitude = val.suggestion.latlng.lng;
 			const value = val.suggestion.value;
-			console.log({street, city, country, latitude, longitude, value});
-
-			this.trueValue = value;
 
 			this.$emit('newLocation', {street, city, country, latitude, longitude, value});
 		}
@@ -59,8 +54,11 @@ export default {
 		this.$_places = places;
 
 		places.on('change', this.setNewLocation);
+		places.on('clear', () => {
+			this.$emit('clear');
+		})
 
-		this.trueValue = this.value;
+		places.setVal(this.value);
 	},
 	beforeDestroy() {
 		if (this.$_places && this.$_places.destroy) {

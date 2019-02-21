@@ -7,7 +7,8 @@
 	<FormPlacesInput
 		name="customLocation"
 		:value="customLocation.value"
-		@newLocation="customLocation = $event"
+		@newLocation="setCustomLocation"
+		@clear="clearCustomLocation"
 		:disabled="!useCustomLocation"
 		placeholder="Search location"
 	/>
@@ -73,6 +74,19 @@ export default {
 					[key]: value
 				}
 			})
+		},
+		setCustomLocation(value) {
+			this.customLocation = {...value};
+		},
+		clearCustomLocation() {
+			this.customLocation = {
+				street: null,
+				city: null,
+				country: null,
+				latitude: null,
+				longitude: null,
+				value: null
+			};
 		}
 	},
 	beforeDestroy() {

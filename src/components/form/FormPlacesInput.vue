@@ -106,3 +106,22 @@ export default {
 	opacity: 0.5;
 }
 </style>
+
+<style>
+.ap-dropdown-menu {
+	font-size: 14px;
+}
+
+.ap-suggestion {
+	height: 36px;
+	line-height: 36px;
+}
+
+.ap-suggestion-icon svg {
+	transform: scale(0.75) translateY(6px);
+}
+
+.ap-cursor .ap-suggestion-icon svg {
+	transform: scale(0.8) translateY(4px);
+}
+</style>

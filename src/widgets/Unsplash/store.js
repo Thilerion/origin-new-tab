@@ -79,7 +79,8 @@ const baseActions = createBaseActions({
 const store = {
 	namespaced: true,
 	state: {
-		...baseState
+		...baseState,
+		showingDefault: false
 	},
 	getters: {
 		...baseGetters,
@@ -115,6 +116,13 @@ const store = {
 		},
 		hideWallpaper(state, id) {
 			state.data.hiddenIds.push(id);
+		},
+		setShowingDefault(state, bool) {
+			if (bool == null) {
+				state.showingDefault = !state.showingDefault;
+			} else {
+				state.showingDefault = bool;
+			}
 		}
 	},
 

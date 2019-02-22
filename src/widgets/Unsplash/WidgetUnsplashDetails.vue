@@ -43,8 +43,19 @@ export default {
 		IconDownload,
 		// IconClose
 	},
+	data() {
+		return {
+			defaultInfo: {}
+		}
+	},
 	computed: {
+		showDefault() {
+			return this.$store.state.unsplash.showingDefault;
+		},
 		currentWallpaper() {
+			if (this.showDefault) {
+				return this.defaultInfo;
+			}
 			return this.$store.getters['unsplash/currentWallpaper'];
 		},
 		downloadUrl() {
@@ -55,7 +66,6 @@ export default {
 					return `${this.currentWallpaper.url}?utm_source=23899&utm_medium=referral&force=true`;
 				}
 			} catch(e) {
-				console.error("Could not enable the download url.", e);
 				return "";
 			}
 		},
@@ -73,9 +83,21 @@ export default {
 		goToNextWallpaper() {
 			this.$store.dispatch('unsplash/goToNextWallpaper');
 		},
+		async loadDefaultWallpaperInfo() {
+			const info = await import(/*webpackChunkName: 'defaultWallpaperInfo'*/'@/assets/wallpaper/default_wallpaper_info.json');
+			this.defaultInfo = {...this.defaultInfo, ...info};
+			return info;
+		}
 		// hideWallpaper() {
 		// 	this.$store.dispatch('unsplash/hideCurrentWallpaper');
 		// }
+	},
+	watch: {
+		showDefault(newValue, oldValue) {
+			if (newValue) {
+				this.loadDefaultWallpaperInfo();
+			}
+		}
 	}
 }
 </script>

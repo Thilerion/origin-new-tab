@@ -42,6 +42,7 @@ export default {
 	methods: {
 		wallpaperErrorEvent() {
 			this.wallpaperError = true;
+			this.$store.commit('unsplash/setShowingDefault', true);
 		}
 	}
 }

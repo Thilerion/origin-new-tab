@@ -10,6 +10,7 @@
 				:min="options.min"
 				:max="options.max"
 				:step="options.step"
+				:value="value"
 				v-bind="$attrs"
 				@input="$emit('input', $event.target.value)">
 			<div class="slider-value">{{value}}</div>

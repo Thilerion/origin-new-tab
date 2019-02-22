@@ -76,7 +76,7 @@ export default {
 }
 
 .vignette .background-image {
-	box-shadow: inset 0 0 40vmin 10vmin rgba(0, 0, 0, 0.3);
-	filter: contrast(0.9) brightness(0.90);
+	box-shadow: inset 0 0 30vmin 10vmin rgba(0, 0, 0, 0.4);
+	filter: contrast(0.85) brightness(0.87);
 }
 </style>

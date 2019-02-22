@@ -47,6 +47,7 @@ a {
 }
 
 .button {
+	background-color: hsl(0, 0%, 95%);
 	border: 1px solid #bbb;
 	text-transform: unset;
 	font-weight: normal;
@@ -58,12 +59,12 @@ a {
 }
 
 .button:hover {
-	background-color: rgba(0, 0, 0, 0.05);
+	background-color: hsl(0, 0%, 92%);
 	border-color: hsl(0, 0%, 67%);
 }
 
 .button:active {
-	background-color: rgba(0, 0, 0, 0.1);
+	background-color: hsl(0, 0%, 89%);
 	border-color: hsl(0, 0%, 40%);
 }
 

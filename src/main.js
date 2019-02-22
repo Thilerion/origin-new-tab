@@ -24,8 +24,6 @@ Vue.use(resizeDirective, {
 		}
 	}
 });
-import pageVisibilityDirective from '@/plugins/pageVisibility';
-Vue.use(pageVisibilityDirective);
 
 import focusDirective from '@/plugins/focus';
 Vue.use(focusDirective);

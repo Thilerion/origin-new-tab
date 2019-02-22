@@ -2,11 +2,12 @@
 	<div class="widget-news" v-if="canShow">
 		<div class="news-frame">
 			<div class="scroll-btn-wrapper">
-				<button @click="prevArticle" class="icon-btn shadow-40"><IconArrowBack class="icon"/></button>
+				<button @click="prevArticle(true)" class="icon-btn shadow-40"><IconArrowBack class="icon"/></button>
 			</div>
 			<div class="slider"
 				@mouseover="mouseover = true"
 				@mouseout="mouseover = false"
+				:style="transitionDurationStyle"
 			>
 				<transition :name="transitionName">
 					<a v-if="showItem != null"
@@ -19,7 +20,7 @@
 				</transition>				
 			</div>
 			<div class="scroll-btn-wrapper">
-				<button @click="nextArticle" class="icon-btn shadow-10"><IconArrowNext class="icon"/></button>
+				<button @click="nextArticle(true)" class="icon-btn shadow-10"><IconArrowNext class="icon"/></button>
 			</div>
 		</div>
 	</div>
@@ -46,7 +47,10 @@ export default {
 			showItem: null,
 			slideDirection: 'left',
 			mouseover: false,
-			timeout: null
+			timeout: null,
+
+			increasedSpeed: false,
+			transitionDuration: 2000
 		}
 	},
 	computed: {
@@ -57,10 +61,22 @@ export default {
 			return this.$store.state.news.data.articles;
 		},
 		slideInterval() {
-			return this.$store.state.settings.news.slideInterval;
+			return Number(this.$store.state.settings.news.slideInterval);
 		},
 		transitionName() {
 			return `slide-${this.slideDirection || 'left'}`
+		},
+		computedDuration() {
+			if (this.increasedSpeed) {
+				return 800;
+			} else {
+				return this.transitionDuration;
+			}
+		},
+		transitionDurationStyle() {
+			return {
+				'--transition-duration': `${this.computedDuration}ms`
+			}
 		}
 	},
 	methods: {
@@ -69,16 +85,27 @@ export default {
 			const rnd = Math.floor(Math.random() * n);
 			this.showItem = rnd;
 		},
-		nextArticle() {
-			this.showItem = (this.showItem + 1) % this.articles.length;
-			this.restartTimeout();
+		nextArticle(manual = false) {
+			if (manual) this.increasedSpeed = true;
+			else if (this.increasedSpeed) this.increasedSpeed = false;
+			requestAnimationFrame(() => {
+				this.showItem = (this.showItem + 1) % this.articles.length;
+				this.restartTimeout();
+			})			
 		},
-		prevArticle() {
-			this.showItem = this.showItem === 0 ? this.articles.length - 1 : this.showItem - 1;
-			this.restartTimeout();
+		prevArticle(manual = false) {
+			if (manual) this.increasedSpeed = true;
+			else if (this.increasedSpeed) this.increasedSpeed = false;
+			requestAnimationFrame(() => {
+				this.showItem = this.showItem === 0 ? this.articles.length - 1 : this.showItem - 1;
+				this.restartTimeout();
+			})
 		},
 		startTimeout() {
 			if (this.slideInterval < 0) return;
+
+			const delay = this.slideInterval + this.transitionDuration;
+
 			this.timeout = setTimeout(() => {
 				if (this.mouseover) {
 					console.log("Hovering news item. Restarting timeout.");
@@ -89,7 +116,7 @@ export default {
 				} else {
 					this.nextArticle();
 				}
-			}, this.slideInterval);
+			}, delay);
 		},
 		stopTimeout() {
 			clearTimeout(this.timeout);
@@ -173,6 +200,8 @@ export default {
 	white-space: nowrap;
 	overflow: hidden;
 	line-height: 2em;
+
+	will-change: transform, opacity;
 }
 
 .news-item:hover {
@@ -183,7 +212,7 @@ export default {
 .slide-left-leave-active,
 .slide-right-enter-active,
 .slide-right-leave-active {
-	transition: all 1.2s ease-in-out;
+	transition: all var(--transition-duration) ease-in-out;
 	transition-property: transform opacity;
 }
 

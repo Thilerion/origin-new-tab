@@ -14,7 +14,7 @@
 				v-shortkey="['esc']"
 				@shortkey="closeSettings"
 			>
-				<nav class="settings-inner settings-nav">
+				<nav class="settings-inner settings-nav scroll">
 					<ul class="nav-menu">
 						<li
 							v-for="cat in settingCategoryOrder"
@@ -25,7 +25,7 @@
 						>{{getLocaleCatName(cat)}}</li>
 					</ul>
 				</nav>
-				<div class="settings-inner settings-content">
+				<div class="settings-inner settings-content scroll">
 					<header class="settings-header">
 						<h1 class="settings-title">{{activeCategoryName}}</h1>
 						<button
@@ -170,26 +170,6 @@ export default {
 
 .settings:focus {
 	outline: none;
-}
-
-.settings-inner {
-	overflow-y: scroll;
-}
-
-.settings-inner::-webkit-scrollbar {
-	background-color: #f7f7f7;
-    width: 12px;
-}
-.settings-inner::-webkit-scrollbar-track {
-	background-color: #f7f7f7;
-}
-.settings-inner::-webkit-scrollbar-thumb {
-	background-color: rgba(0,0,0,0.3);
-    border-radius: 12px;
-    border: 2px solid #f7f7f7;
-}
-.settings-inner::-webkit-scrollbar-thumb:hover {
-	background-color: rgba(0,0,0,0.4);
 }
 
 .settings-nav {

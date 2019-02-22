@@ -3,14 +3,14 @@
 	<FormToggle
 		name="useCustomLocation"
 		v-model="useCustomLocation"
-	>Use custom location</FormToggle>
+	>{{$t('weather.settings.useCustomLocation')}}</FormToggle>
 	<FormPlacesInput
 		name="customLocation"
 		:value="customLocation.value"
 		@newLocation="setCustomLocation"
 		@clear="clearCustomLocation"
 		:disabled="!useCustomLocation"
-		placeholder="Search location"
+		:placeholder="$t('weather.settings.searchLocation')"
 	/>
 	<FormRadioGroup
 		:label="$t('weather.settings.units')"

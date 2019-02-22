@@ -4,7 +4,9 @@ export default {
 		settings: {
 			units: 'Units',
 			metric: 'Metric',
-			imperial: 'Imperial'
+			imperial: 'Imperial',
+			useCustomLocation: 'Use custom location',
+			searchLocation: 'Search location (city/street)'
 		},
 		today: 'Today',
 		tomorrow: 'Tomorrow'
@@ -14,7 +16,9 @@ export default {
 		settings: {
 			units: 'Eenheden',
 			metric: 'Metrisch',
-			imperial: 'Engels'
+			imperial: 'Engels',
+			useCustomLocation: 'Gebruik aangepaste locatie',
+			searchLocation: 'Zoek locatie (stad/straat)'
 		},
 		today: 'Vandaag',
 		tomorrow: 'Morgen'

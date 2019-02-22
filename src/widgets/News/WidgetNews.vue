@@ -183,7 +183,7 @@ export default {
 	width: 100%;
 	overflow: hidden;
 	height: 2em;
-	mask-image: linear-gradient(90deg, transparent 0rem, black 2rem, black calc(100% - 2rem), transparent calc(100% - 0rem));
+	mask-image: linear-gradient(90deg, transparent 0rem, black 1.5rem, black calc(100% - 1.5rem), transparent calc(100% - 0rem));
 }
 
 .news-item {

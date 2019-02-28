@@ -2,7 +2,7 @@ import _throttle from 'lodash.throttle';
 import _debounce from 'lodash.debounce';
 import _merge from 'lodash.merge';
 
-// TODO: polyfill for firefox
+import ResizeObserver from 'resize-observer-polyfill';
 
 function parseOptions(opts) {
 	if (!opts.value && typeof opts.value !== 'function') {

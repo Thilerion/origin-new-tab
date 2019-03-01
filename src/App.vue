@@ -28,6 +28,20 @@ export default {
 			return this.$store.state.showSettingsOverlay;
 		}
 	},
+	created() {
+		if (document.location.hash.includes('settings')) {
+			this.$store.commit('setShowSettingsOverlay');
+			setTimeout(() => {
+				let title;
+				try {
+					title = chrome.i18n.getMessage("extTitle");
+				} catch(e) {
+					title = document.title;
+				}
+				history.replaceState("", title, ".");
+			}, 100)
+		}
+	},
 	mounted() {		
 		requestAnimationFrame(() => {
 			this.pageReady = true;

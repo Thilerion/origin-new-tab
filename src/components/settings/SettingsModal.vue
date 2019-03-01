@@ -24,6 +24,23 @@
 							@click="activeCatId = cat.value"
 						>{{getLocaleCatName(cat)}}</li>
 					</ul>
+					<ul class="nav-menu-secondary">
+						<li
+							class="nav-item nav-item-secondary"
+							@click="activeCatId = 'help'"
+							:class="{active: activeCatId === 'help'}"
+						>{{$t('settings.help')}}</li>
+						<li
+							class="nav-item nav-item-secondary"
+							@click="activeCatId = 'whatsNew'"
+							:class="{active: activeCatId === 'whatsNew'}"
+						>{{$t('settings.whatsNew')}}</li>
+						<li
+							class="nav-item nav-item-secondary"
+							@click="activeCatId = 'about'"
+							:class="{active: activeCatId === 'about'}"
+						>{{$t('settings.about')}}</li>
+					</ul>
 				</nav>
 				<div class="settings-inner settings-content scroll">
 					<header class="settings-header">
@@ -34,8 +51,12 @@
 						><IconClose class="icon"/></button>
 					</header>
 					<main class="settings-main">
+						<component
+							v-if="secondaryMenuItems.includes(activeCatId)"
+							:is="secondaryComponents[activeCatId]"
+						/>
 						<SettingsGeneral
-							v-if="activeCatId === 'general'"
+							v-else-if="activeCatId === 'general'"
 							:settingOptions="settingsOptions.general"
 						/>
 						<SettingsDashboard
@@ -57,6 +78,11 @@
 <script>
 import SettingsGeneral from './SettingsGeneral.vue';
 import SettingsDashboard from './SettingsDashboard.vue';
+
+import SettingsHelp from './SettingsHelp.vue';
+import SettingsWhatsNew from './SettingsWhatsNew.vue';
+import SettingsAbout from './SettingsAbout.vue';
+
 import IconClose from '@/assets/icons/ui/md-close.svg';
 
 import { settingsComponents } from '@/widgets';
@@ -65,6 +91,9 @@ export default {
 	components: {
 		SettingsGeneral,
 		SettingsDashboard,
+		SettingsHelp,
+		SettingsWhatsNew,
+		SettingsAbout,
 		IconClose
 	},
 	data() {
@@ -77,14 +106,36 @@ export default {
 				general: SettingsGeneral,
 				dashboard: SettingsDashboard,
 				...settingsComponents
+			},
+			secondaryMenuItems: [
+				'help',
+				'whatsNew',
+				'about'
+			],
+			secondaryComponents: {
+				help: SettingsHelp,
+				whatsNew: SettingsWhatsNew,
+				about: SettingsAbout
 			}
 		}
 	},
 	computed: {
+		activeCategoryNamePrimary() {
+			try {
+				const cat = this.settingCategoryOrder.find(cat => cat.value === this.activeCatId);
+				if (cat.localePath) return this.$t(cat.localePath);
+				return cat.name;
+			} catch(e) {
+				return '';
+			}
+		},
+		activeCategoryNameSecondary() {
+			if (this.secondaryMenuItems.includes(this.activeCatId)) {
+				return this.$t(`settings.${this.activeCatId}`);
+			}
+		},
 		activeCategoryName() {
-			const cat = this.settingCategoryOrder.find(cat => cat.value === this.activeCatId);
-			if (cat.localePath) return this.$t(cat.localePath);
-			return cat.name;
+			return this.activeCategoryNamePrimary || this.activeCategoryNameSecondary;
 		},
 		settingsOptions() {
 			return this.$store.getters.settingsOptions;
@@ -181,8 +232,15 @@ export default {
 	font-size: 1rem;
 }
 
-.nav-menu {
+.nav-menu, .nav-menu-secondary {
 	list-style: none;
+}
+
+.nav-menu-secondary {
+	padding: 0.5rem 0;
+}
+
+.nav-menu {
 	padding-top: 1rem;
 }
 
@@ -191,9 +249,16 @@ export default {
 	padding: 0.5rem 0.75rem 0.5rem 1.25rem;
 	line-height: 1.5rem;
 	font-weight: 600;
-	opacity: 0.65;
+	opacity: 0.7;
 	transition: .15s ease;
 	transition-property: opacity, background;
+}
+
+.nav-item.nav-item-secondary {
+	padding: 0.2rem 0.75rem 0.2rem 1.25rem;
+	line-height: 1.4rem;
+	font-size: 0.9rem;
+	opacity: 0.5;
 }
 
 .nav-item:hover, .nav-item.active {

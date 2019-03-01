@@ -13,7 +13,10 @@ const baseMessages = {
 			choosePreset: 'Choose preset layout',
 			presets: {
 				standard: 'Standard'
-			}
+			},
+			help: 'Help',
+			whatsNew: "What's new",
+			about: 'About'
 		},
 		settingCategory: {
 			general: 'General',
@@ -43,7 +46,10 @@ const baseMessages = {
 			choosePreset: 'Kies voorinstelling',
 			presets: {
 				standard: 'Standaard'
-			}
+			},
+			help: 'Hulp',
+			whatsNew: "Nieuwe functies",
+			about: 'Over'
 		},
 		settingCategory: {
 			general: 'Algemeen',

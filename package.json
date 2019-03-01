@@ -15,22 +15,22 @@
     "lodash.isequal": "^4.5.0",
     "lodash.merge": "^4.6.1",
     "lodash.throttle": "^4.1.1",
-    "places.js": "^1.15.5",
-    "vue": "^2.6.2",
-    "vue-i18n": "^8.8.0",
+    "places.js": "^1.16.1",
+    "vue": "^2.6.7",
+    "vue-i18n": "^8.8.2",
     "vue-shortkey": "^3.1.6",
     "vuex": "^3.1.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.4.0",
-    "@vue/cli-plugin-unit-jest": "^3.4.0",
-    "@vue/cli-service": "^3.4.0",
+    "@vue/cli-plugin-babel": "^3.4.1",
+    "@vue/cli-plugin-unit-jest": "^3.4.1",
+    "@vue/cli-service": "^3.4.1",
     "@vue/test-utils": "^1.0.0-beta.20",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "resize-observer-polyfill": "^1.5.1",
     "vue-svg-loader": "^0.12.0",
-    "vue-template-compiler": "^2.6.2"
+    "vue-template-compiler": "^2.6.7"
   },
   "browserslist": [
     "last 2 Chrome versions",

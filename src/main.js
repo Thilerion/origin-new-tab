@@ -3,6 +3,13 @@ import App from './App.vue'
 import store from './store';
 import { i18n } from '@/i18n';
 
+import Shortcut from '@/utils/keyShortcuts';
+const s = new Shortcut().init();
+s.add({ keys: ['c'], fn: () => console.log('C KEY WAS PRESSED!') });
+s.add({ keys: ['c', 'a'], fn: () => console.log('C and A KEY WAS PRESSED!') });
+s.add({ keys: ['b'], scope: 'base', fn: () => console.log('b was pressed in base scope') });
+console.log(s.listenForKeys);
+
 if (window && window.chrome && chrome.i18n && chrome.i18n.getMessage) {
 	document.title = chrome.i18n.getMessage("extTitle");
 }

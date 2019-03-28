@@ -9,11 +9,7 @@
 			class="settings-overlay"
 		>
 			<div class="lightbox" @click="closeSettings"></div>
-			<div class="settings"
-				v-focus="true"
-				v-shortkey="['esc']"
-				@shortkey="closeSettings"
-			>
+			<div class="settings">
 				<nav class="settings-inner settings-nav scroll">
 					<ul class="nav-menu">
 						<li

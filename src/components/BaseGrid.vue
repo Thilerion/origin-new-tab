@@ -3,8 +3,6 @@
 	<div
 		class="grid"
 		ref="grid"
-		v-shortkey="['c']"
-		@shortkey="toggleEditing"
 		:class="{editing, dropzone: newWidgetOutline.show}"
 		v-resize="onGridResize"
 	>

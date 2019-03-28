@@ -7,11 +7,6 @@ if (window && window.chrome && chrome.i18n && chrome.i18n.getMessage) {
 	document.title = chrome.i18n.getMessage("extTitle");
 }
 
-import VueShortkey from 'vue-shortkey';
-Vue.use(VueShortkey, {
-	prevent: ['input', 'textarea']
-});
-
 import './assets/style/base.css';
 
 import resizeDirective from '@/plugins/onResize';

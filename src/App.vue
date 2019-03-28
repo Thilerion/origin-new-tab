@@ -1,8 +1,8 @@
 <template>
-	<div id="app" :class="{ready: pageReady}" v-shortkey="['ctrl', ',']" @shortkey="$store.commit('setShowSettingsOverlay')">
+	<div id="app" :class="{ready: pageReady}">
 		<BaseBackground />
 		<BaseGrid />
-		<SettingsModal v-if="enableSettingsModal" />
+		<SettingsModal v-if="showSettings" />
 	</div>
 </template>
 
@@ -24,8 +24,8 @@ export default {
 		}
 	},
 	computed: {
-		enableSettingsModal() {
-			return this.$store.state.showSettingsOverlay;
+		showSettings() {
+			return this.$store.state.ui.showSettings;
 		}
 	},
 	created() {

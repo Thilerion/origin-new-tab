@@ -31,8 +31,6 @@ const store = new Vuex.Store({
 	},
 
 	state: {
-		showSettingsOverlay: false,
-		editingGrid: false,
 		dragAddNewWidget: {
 			dragging: false,
 			type: '',
@@ -40,6 +38,10 @@ const store = new Vuex.Store({
 			height: null,
 			offsetX: 0,
 			offsetY: 0
+		},
+		ui: {
+			showSettings: false,
+			showGridEditing: false
 		}
 	},
 
@@ -50,16 +52,16 @@ const store = new Vuex.Store({
 	mutations: {		
 		setShowSettingsOverlay(state, show) {
 			if (show == null) {
-				state.showSettingsOverlay = !state.showSettingsOverlay;
+				state.ui.showSettings = !state.ui.showSettings;
 			} else {
-				state.showSettingsOverlay = show;
+				state.ui.showSettings = show;
 			}
 		},
 		setEditingGrid(state, editing) {
 			if (editing == null) {
-				state.editingGrid = !state.editingGrid;
+				state.ui.showGridEditing = !state.ui.showGridEditing;
 			} else {
-				state.editingGrid = editing;
+				state.ui.showGridEditing = editing;
 			}
 		},
 		initNewWidgetDrag(state, { widget, width, height, offsetX, offsetY }) {

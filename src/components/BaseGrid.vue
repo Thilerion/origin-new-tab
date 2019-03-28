@@ -121,7 +121,7 @@ export default {
 			cols: state => state.grid.cols,
 			gridWidgets: state => state.grid.gridWidgets,
 			gridOrder: state => state.grid.gridOrder,
-			editing: state => state.editingGrid
+			editing: state => state.ui.showGridEditing
 		}),
 		enableNewWidgetDropzone() {
 			return this.$store.getters.enableNewWidgetDropzone;

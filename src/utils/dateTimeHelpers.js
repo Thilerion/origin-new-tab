@@ -12,6 +12,12 @@ export const toLocaleDate = (dateObj, language) => dateObj.toLocaleDateString(la
 	day: 'numeric'
 });
 
+export const toShortLocaleDate = (dateObj, language) => dateObj.toLocaleDateString(language, {
+	year: 'numeric',
+	month: 'short',
+	day: 'numeric'
+});
+
 export const nextMinute = (dateObj) => {
 	return startOfMinute(addMinutes(dateObj, 1));
 }

@@ -3,7 +3,7 @@
 		<section class="log-item" v-for="(logItem, i) in sortedLog" :key="i">
 			<div class="log-header">
 				<h2 class="log-title"><span class="log-version">v{{logItem.version}}</span> - {{logItem.title}}</h2>
-				<div class="log-date">{{logItem.date | toDateString}}</div>
+				<div class="log-date">{{formatDate(logItem.date)}}</div>
 			</div>
 			<ul class="log-points-list">
 				<li class="log-point" v-for="(item, j) in logItem.items" :key="j">{{item}}</li>
@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import {toShortLocaleDate} from '@/utils/dateTimeHelpers';
+
 export default {
 	data() {
 		return {
@@ -37,6 +39,10 @@ export default {
 				this.logArray = [...log.default];
 				this.loaded = true;
 			})
+		},
+		formatDate(val) {
+			const date = new Date(val);
+			return toShortLocaleDate(date, this.language);
 		}
 	},
 	mounted() {
@@ -45,12 +51,6 @@ export default {
 	watch: {
 		language(newValue, oldValue) {
 			console.log(`[WhatsNew component]: language changed from ${oldValue} to ${newValue}.`);
-		}
-	},
-	filters: {
-		toDateString(val) {
-			// TODO: localeDateString
-			return val;
 		}
 	}
 }
